@@ -1,0 +1,4 @@
+./DB_secret/secret_OSSW_DB.js
+node_modules
+dist/*
+*.log
