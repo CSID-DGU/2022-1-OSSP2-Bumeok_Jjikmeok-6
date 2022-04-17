@@ -2,7 +2,7 @@ const passport = require('passport');
 
 let LocalStrategy = require('passport-local').Strategy;
 
-const pool_k = require('../DB_open/open_OSSW_DB');
+const OSSW_DB_pool = require('../DB_open/open_OSSW_DB');
 
 const crypto = require('crypto');
 
@@ -12,26 +12,22 @@ passport.use(new LocalStrategy(
         passwordField: 'pwd'
     },
     async (id, pwd, done) => {
-        console.log('제발')
-    const connection = await pool_k.getConnection(async conn => conn)
+    const connection = await OSSW_DB_pool.getConnection(async conn => conn)
     try {
+
         const hash = crypto.createHash('sha256');
         hash.update(pwd);
-        let hash_password = hash.digest('hex');
+        let hash_password = hash.digest('hex'); // 비밀번호 단방향 암호화
+
         const STRING = 'SELECT * FROM Auth WHERE id=? and pwd=?'; 
 
         const [DB] = await connection.query(STRING, [id, hash_password]);
         console.log(DB);
-        console.log('10')
-        if (Array.isArray(DB) && DB.length !== 0)
-        {
-            console.log('20')
+
+        if (Array.isArray(DB) && DB.length !== 0) {
             return done(null, DB);
         }
-            
-        else    
-        {
-            console.log('30')
+        else {
             return done(null, false);
         }
             

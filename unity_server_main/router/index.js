@@ -43,7 +43,6 @@ passport.deserializeUser((id, done) => { // 페이지를 접근할 때마다 호
 });
 
 router.route('/log_in')
-.get(kuku.failure)
 .post(Auth.isLocalAuthenticated, kuku.log_in)
 
 
