@@ -37,14 +37,7 @@ public class SignUp : MonoBehaviour
     {
         StartCoroutine(SignUp_Enum());
     }
-    IEnumerator Kuku()
-    {
-        Debug.Log("제발");
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost:5000/logout");
-        yield return www.SendWebRequest();
-
-        Debug.Log(www);
-    }
+  
     IEnumerator SignUp_Enum()
     {
         WWWForm form = new WWWForm();
@@ -62,6 +55,7 @@ public class SignUp : MonoBehaviour
             (www.result == UnityWebRequest.Result.DataProcessingError))
         {
             Debug.Log(www.error);
+            infoText.text = www.error;
             yield break;
         }
 
@@ -77,26 +71,6 @@ public class SignUp : MonoBehaviour
             infoText.text = "회원가입 성공!";
         }
         yield return null;
-    }
- 
-    IEnumerator ServerShowUser()
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("userid", PlayerPrefs.GetInt("userid"));
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost:3000/show_user", form);
-        yield return www.SendWebRequest();
-        if (www.isNetworkError)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Debug.Log(www.downloadHandler.text);
-            LoadData data = JsonUtility.FromJson<LoadData>(www.downloadHandler.text);
-            Debug.Log("name:" + data.name + ",score:" + data.score + ",level:" + data.level);
-            infoText.text = "name:" + data.name + "\\nscore:" + data.score + "\\nlevel:" + data.level;
-           
-        }
     }
     //PlayerPrefs.SetInt("userid", data.userid);
     //PlayerPrefs.SetString("username", data.username);

@@ -10,7 +10,7 @@ exports.log_in = async (req, res) => {
     try {
         if (req.user === undefined) 
             return new Error('회원 정보 없음!')
-        return res.send(req.user)
+        return res.send(req.user[0])
     } catch(err) {
         return res.status(400).send(err.message)
     }
