@@ -22,6 +22,7 @@ public class ParticleAutoDestroyer : MonoBehaviour
     {
         if (!particle.isPlaying)
         {
+            Debug.Log("이거 이상한데");
             Destroy(gameObject);
         }
     }

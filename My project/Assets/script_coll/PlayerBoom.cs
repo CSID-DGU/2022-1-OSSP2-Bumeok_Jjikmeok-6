@@ -10,6 +10,9 @@ public class PlayerBoom : MonoBehaviour
     float boomDelay = 0.5f;
     Animator animator;
 
+    [SerializeField]
+    float damage = 100;
+
 
     private void Awake()
     {
@@ -49,15 +52,22 @@ public class PlayerBoom : MonoBehaviour
             e.GetComponent<Enemy>().OnDie();
         } // 모든 적 파괴
 
-        foreach(var e in meteorites)
+        foreach (var e in meteorites)
         {
             e.GetComponent<Meteorite>().OnDie();
         } // 모든 운석 파괴
 
         GameObject[] projectils = GameObject.FindGameObjectsWithTag("BossProjectile");
-        foreach(var e in projectils)
+        foreach (var e in projectils)
         {
             e.GetComponent<EnemyProjectile>().OnDie();
+        }
+
+        GameObject boss = GameObject.FindGameObjectWithTag("Boss");
+
+       if (boss != null)
+        {
+            boss.GetComponent<BossHP>().TakeDamage(damage);
         }
 
         //// 폭탄 오브젝트 본인도 삭제

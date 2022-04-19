@@ -8,6 +8,7 @@ TagManager:
   - Meteorite
   - Items
   - BossProjectile
+  - Boss
   layers:
   - Default
   - TransparentFX

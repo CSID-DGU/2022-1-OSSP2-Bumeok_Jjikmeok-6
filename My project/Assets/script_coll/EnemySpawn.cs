@@ -27,11 +27,15 @@ public class EnemySpawn : MonoBehaviour
     GameObject boss;
 
     [SerializeField]
+    private GameObject panelBossHP;
+
+    [SerializeField]
     int maxEnemyCount = 100;
 
     private void Awake()
     {
         textBossWarning.SetActive(false);
+        panelBossHP.SetActive(false);
         boss.SetActive(false);
     }
 
@@ -70,6 +74,7 @@ public class EnemySpawn : MonoBehaviour
         textBossWarning.SetActive(true);
         yield return new WaitForSeconds(1.0f);
         textBossWarning.SetActive(false);
+        panelBossHP.SetActive(true);
         boss.SetActive(true);
         boss.GetComponent<Boss>().ChangeState(BossState.MoveToAppearPoint);
     }

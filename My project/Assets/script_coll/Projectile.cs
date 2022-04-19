@@ -19,6 +19,11 @@ public class Projectile : MonoBehaviour
 
             Destroy(gameObject);
         }
+        if (collision.CompareTag("Boss"))
+        {
+            collision.GetComponent<BossHP>().TakeDamage(damage);
+            Destroy(gameObject);
+        }
     }
     // Update is called once per frame
     void Update()
