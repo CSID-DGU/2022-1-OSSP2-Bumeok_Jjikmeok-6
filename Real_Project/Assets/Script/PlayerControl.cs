@@ -19,6 +19,8 @@ public class PlayerControl : HP_Info
         set { score = value; }
         get { return score; }
     }
+
+    public bool Unbeatable_Player = false;
  
     [SerializeField]
     KeyCode keyCodeAttack = KeyCode.Space;
@@ -27,7 +29,7 @@ public class PlayerControl : HP_Info
     KeyCode keyCodeBoom = KeyCode.Z;
 
     [SerializeField]
-    Slider slider;
+    Slider HPslider;
 
     SpriteRenderer spriteRenderer;
 
@@ -37,12 +39,19 @@ public class PlayerControl : HP_Info
     [SerializeField]
     StageData stageData;
 
+    [SerializeField]
+    GameObject eee;
+
+    //Animator animator;
+
     new private void Awake()
     {
         base.Awake();
+        Instantiate(eee, new Vector3(0, 0, 0), Quaternion.identity);
         movement2D = GetComponent<Movement2D>();
         weapon = GetComponent<Weapon>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        //animator = GetComponent<Animator>();
         movement2D.enabled = false;
         weapon.enabled = false;
         score = 0;
@@ -60,12 +69,40 @@ public class PlayerControl : HP_Info
     public void TakeDamage(float attack_rate)
     {
         CurrentHP -= attack_rate;
-        slider.value = CurrentHP / MaxHP;
-        StartCoroutine("Hit");
+        Debug.Log(CurrentHP);
+        HPslider.value = CurrentHP / MaxHP;
         if (CurrentHP <= 0)
         {
             Destroy(gameObject);
         }
+        StartCoroutine("OnTrap");
+    }
+    IEnumerator OnTrap()
+    {
+        yield return StartCoroutine("Hit");
+        yield return StartCoroutine("UnBeatable_Apply");
+    }
+    IEnumerator UnBeatable_Apply()
+    {
+        Unbeatable_Player = true;
+        yield return null;
+
+        int countTime = 0;
+
+        while(countTime < 10)
+        {
+            if (countTime % 2 == 0)
+                spriteRenderer.color = new Color32(255, 255, 255, 90);
+            else
+                spriteRenderer.color = new Color32(255, 255, 255, 150);
+            countTime++;
+
+            yield return new WaitForSeconds(0.2f);
+        }
+        spriteRenderer.color = new Color32(255, 255, 255, 255);
+
+        Unbeatable_Player = false;
+        yield return null;
     }
     IEnumerator Hit()
     {
@@ -86,7 +123,7 @@ public class PlayerControl : HP_Info
                 StartCoroutine("FadeText");
                 for (int i = 0; i <= CurrentHP; i++)
                 {
-                    slider.value = i / MaxHP;
+                    HPslider.value = i / MaxHP;
                     yield return new WaitForSeconds(0.02f);
                 }
                 yield return new WaitForSeconds(3f);
@@ -126,6 +163,14 @@ public class PlayerControl : HP_Info
         if (Input.GetKeyDown(keyCodeBoom))
         {
             weapon.StartBoom();
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            //animator.SetTrigger("Change");
+        }
+        else
+        {
+            //animator.SetTrigger("Origin");
         }
     }
     void LateUpdate()

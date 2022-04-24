@@ -42,9 +42,14 @@ public class W3_Boom : MonoBehaviour
     public void OnBoom()
     {
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject boss = GameObject.FindGameObjectWithTag("Boss");
         foreach(var e in enemy)
         {
             e.GetComponent<Enemy>().OnDie();
+        }
+        if (boss != null)
+        {
+            boss.GetComponent<Boss>().TakeDamage(30);
         }
         Destroy(gameObject);
     }

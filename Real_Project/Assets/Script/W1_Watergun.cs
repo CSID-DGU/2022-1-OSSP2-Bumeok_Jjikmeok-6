@@ -24,6 +24,11 @@ public class W1_Watergun : MonoBehaviour
             collision.GetComponent<Enemy>().TakeDamage(gun_damage);
             Destroy(gameObject);
         }
+        if (collision.CompareTag("Boss"))
+        {
+            collision.GetComponent<Boss>().TakeDamage(gun_damage);
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame

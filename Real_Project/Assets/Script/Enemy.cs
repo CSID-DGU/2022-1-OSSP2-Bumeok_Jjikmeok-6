@@ -26,12 +26,15 @@ public class Enemy : HP_Info
         playerControl = GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Playerrr"))
         {
-            collision.GetComponent<PlayerControl>().TakeDamage(attack_rate);
-            Destroy(gameObject);
+            if (!collision.GetComponent<PlayerControl>().Unbeatable_Player)
+            {
+                collision.GetComponent<PlayerControl>().TakeDamage(attack_rate);
+                Destroy(gameObject);
+            }
         }
     }
     public void TakeDamage(float damage)

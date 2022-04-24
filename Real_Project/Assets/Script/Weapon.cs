@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour
 {
@@ -16,13 +17,13 @@ public class Weapon : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI BoomCountText;
-    // Start is called before the first frame update
 
     private void Awake()
     {
         BoomCountText.text = "폭탄 : " + BoomCount;
         BoomCountText.color = new Color(BoomCountText.color.r, BoomCountText.color.g, BoomCountText.color.b, 0);
     }
+  
     void Start()
     {
         StartCoroutine("FadeText");
@@ -63,8 +64,14 @@ public class Weapon : MonoBehaviour
         }
     }
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         
+    }
+
+    // Update is called once per frame
+    void LateUpdate() // 여기서 위치를 이동시키는 거군
+    {
+
     }
 }
