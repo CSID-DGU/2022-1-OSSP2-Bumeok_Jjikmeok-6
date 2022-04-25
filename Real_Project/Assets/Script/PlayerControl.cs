@@ -20,6 +20,9 @@ public class PlayerControl : HP_Info
         get { return score; }
     }
 
+    [SerializeField]
+    AnimationCurve curve;
+
     public bool Unbeatable_Player = false;
  
     [SerializeField]
@@ -42,8 +45,10 @@ public class PlayerControl : HP_Info
     [SerializeField]
     GameObject eee;
 
-    //Animator animator;
+    Animator animator;
 
+    //[SerializeField]
+    //int LifeTime = 5;
     new private void Awake()
     {
         base.Awake();
@@ -51,7 +56,7 @@ public class PlayerControl : HP_Info
         movement2D = GetComponent<Movement2D>();
         weapon = GetComponent<Weapon>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         movement2D.enabled = false;
         weapon.enabled = false;
         score = 0;
@@ -68,6 +73,14 @@ public class PlayerControl : HP_Info
     }
     public void TakeDamage(float attack_rate)
     {
+        //LifeTime--;
+        //if (LifeTime <= 0)
+        //{
+        //    Debug.Log("¾Ó?");
+        //    Destroy(gameObject);
+        //}
+
+        //StartCoroutine("Wow");
         CurrentHP -= attack_rate;
         Debug.Log(CurrentHP);
         HPslider.value = CurrentHP / MaxHP;
@@ -77,6 +90,22 @@ public class PlayerControl : HP_Info
         }
         StartCoroutine("OnTrap");
     }
+    //IEnumerator Wow()
+    //{
+
+    //    Debug.Log("ÀÀ?");
+    //    float boomDelay = 0.5f;
+    //    float current = 0;
+    //    float percent = 0;
+    //    while (percent < 1)
+    //    {
+    //        Debug.Log(percent);
+    //        current += Time.deltaTime;
+    //        percent = current / boomDelay;
+    //        transform.position = Vector3.Slerp(transform.position, new Vector3(transform.position.x - 0.5f, transform.position.y - 0.5f, 0), curve.Evaluate(percent));
+    //        yield return null;
+    //    }
+    //}
     IEnumerator OnTrap()
     {
         yield return StartCoroutine("Hit");
@@ -112,9 +141,11 @@ public class PlayerControl : HP_Info
     }
     IEnumerator Move_first()
     {
+        transform.position = new Vector3(-9, 0, 0);
+        yield return null;
         while (true)
         {
-            transform.position += Vector3.right * (Time.deltaTime * 1.5f);
+            transform.position += Vector3.right * (Time.deltaTime * 2f);
             yield return null;
             if (transform.position.x >= -4.6)
             {
@@ -166,11 +197,11 @@ public class PlayerControl : HP_Info
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            //animator.SetTrigger("Change");
+            animator.SetBool("HasExit", true);
         }
-        else
+        if (Input.GetKeyUp(KeyCode.LeftArrow) && Input.GetKeyUp(KeyCode.UpArrow))
         {
-            //animator.SetTrigger("Origin");
+            animator.SetBool("HasExit", false);
         }
     }
     void LateUpdate()

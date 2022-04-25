@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss_Weapon : MonoBehaviour
+public class Enemy_Weapon : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     [SerializeField]
     float damage = 9;
 
@@ -20,7 +18,7 @@ public class Boss_Weapon : MonoBehaviour
             }
         }
     }
-
+    // Start is called before the first frame update
     void Start()
     {
         

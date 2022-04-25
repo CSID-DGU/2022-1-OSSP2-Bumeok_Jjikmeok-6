@@ -28,6 +28,8 @@ public class EnemyAndBossSpawn : MonoBehaviour
     [SerializeField]
     GameObject BossHPSliderLeft;
 
+  
+
 
     int EnemyLimit = 10;
 
@@ -42,8 +44,8 @@ public class EnemyAndBossSpawn : MonoBehaviour
     }
     IEnumerator Deley()
     {  
-        yield return StartCoroutine("Enemy_Random_made");
-        yield return StartCoroutine("Warning");
+        //yield return StartCoroutine("Enemy_Random_made");
+        //yield return StartCoroutine("Warning");
         yield return StartCoroutine("Boss_Appear");
     }
 
@@ -56,7 +58,7 @@ public class EnemyAndBossSpawn : MonoBehaviour
             float yy = Random.Range(-4, 2);
             GameObject enemyClone = Instantiate(enemy, new Vector3(7.5f, yy, 1), Quaternion.identity);
             SpawnEnemyHPSlider(enemyClone);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.9f);
 
             CNT++;
             if (CNT >= EnemyLimit)
@@ -99,7 +101,8 @@ public class EnemyAndBossSpawn : MonoBehaviour
                 sliderClone.transform.position = new Vector3(0.6f, -4.3f, 0);
                 sliderClone.transform.localScale = Vector3.one; // 계층 설정으로 바뀐 크기를 기존의 크기로 재설정
                 sliderClone.GetComponent<BossHPSliderViewer>().F_HPFull(BossClone.GetComponent<Boss>());
-                BossClone.GetComponent<Boss>().Phase_Start(BossState.Phase01);
+                yield return new WaitForSeconds(2f);
+                BossClone.GetComponent<Boss>().Phase_Start();
                 //yield return new WaitForSeconds(100f);
                 yield break;
             }

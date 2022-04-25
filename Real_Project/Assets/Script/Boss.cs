@@ -18,11 +18,8 @@ public class Boss : HP_Info
     [SerializeField]
     GameObject Die_Explosion;
 
-    BossState bossState = BossState.Phase01;
-
-    float[] Move_Array1 = new float[18] { 0, 0, 0, -6, 2, 0, -7, -3, 0, 7, 2, 0, 0, -4, 0, 0, 0, 0 };
-    float[] Move_Array2 = new float[18] { 0, 0, 0, -7, -3, 0, 0, 4, 0, 6, -4, 0, -6, 2, 0, 0, 0, 0 };
-    float[] Move_Array3 = new float[18] { 0, 0, 0, 0, 4, 0, -6, -4, 0, 6, 3, 0, -6, 2, 0, 0, 0, 0 };
+    float[,] Boss_Random_Move = new float[9, 3] { { 7, 2, 0 }, { -7, 2, 0 }, { -7, -2, 0 }, { 7, -2, 0 }, { 3.5f, 1, 0 },
+    { -3.5f, 1, 0 }, { -3.5f, -1, 0 }, { 3.5f, 1, 0 }, { 0, 0, 0 }};
 
     PlayerControl playerControl;
 
@@ -31,9 +28,7 @@ public class Boss : HP_Info
     SpriteRenderer spriteRenderer;
 
     [SerializeField]
-    GameObject Lightning;
-
-    BossHPSliderViewer bossHPSliderViewer;
+    GameObject[] Boss_Weapon;
 
     new private void Awake()
     {
@@ -43,7 +38,7 @@ public class Boss : HP_Info
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void OnTriggerStay2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
        
         if (collision.CompareTag("Playerrr"))
@@ -76,45 +71,76 @@ public class Boss : HP_Info
         Instantiate(Die_Explosion, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
-    public void Phase_Start(BossState newState)
-
+    public void Phase_Start()
     {
-        StopCoroutine(bossState.ToString());
-        bossState = newState;
-        StartCoroutine(bossState.ToString());
+        StartCoroutine("Repeat_Phase");
+    }
+    IEnumerator Repeat_Phase()
+    {
+        while(true)
+        {
+            yield return StartCoroutine("Phase01");
+            yield return StartCoroutine("Phase02");
+        }
     }
     IEnumerator Phase01()
     {
-       
-        int Boss_Random_Move = Random.Range(0, 3);
-
-        switch (Boss_Random_Move)
-        {
-            case 0:
-                yield return StartCoroutine(Boss_Random_Move_F(Move_Array1));
-                break;
-            case 1:
-                yield return StartCoroutine(Boss_Random_Move_F(Move_Array2));
-                break;
-            case 2:
-                yield return StartCoroutine(Boss_Random_Move_F(Move_Array3));
-                break;
-        }
+        yield return StartCoroutine(Boss_Move(Boss_Random_Move));
         
-        GameObject L1 = Instantiate(Lightning, transform.position, Quaternion.identity);
+        Instantiate(Boss_Weapon[0], transform.position, Quaternion.identity);
 
-        GameObject L2 = Instantiate(Lightning, transform.position, Quaternion.Euler(new Vector3(0, 0, -60)));
+        GameObject L2 = Instantiate(Boss_Weapon[0], transform.position, Quaternion.Euler(new Vector3(0, 0, -60)));
         L2.GetComponent<Movement2D>().MoveTo(new Vector3(1, -0.5714f, 0));
 
-        GameObject L3 = Instantiate(Lightning, transform.position, Quaternion.Euler(new Vector3(0, 0, -180)));
+        GameObject L3 = Instantiate(Boss_Weapon[0], transform.position, Quaternion.Euler(new Vector3(0, 0, -180)));
         L3.GetComponent<Movement2D>().MoveTo(new Vector3(-1, -0.5714f, 0));
 
-        GameObject L4 = Instantiate(Lightning, transform.position, Quaternion.Euler(new Vector3(0, 0, 120)));
+        GameObject L4 = Instantiate(Boss_Weapon[0], transform.position, Quaternion.Euler(new Vector3(0, 0, 120)));
         L4.GetComponent<Movement2D>().MoveTo(new Vector3(-1, 0.5714f, 0));
+
+        yield return new WaitForSeconds(2f);
+
+        GameObject L5 = Instantiate(Boss_Weapon[2], new Vector3(0, 3, 0), Quaternion.Euler(new Vector3(0, 0, -9)));
+        GameObject L6 = Instantiate(Boss_Weapon[2], new Vector3(0, -4, 0), Quaternion.Euler(new Vector3(0, 0, -9)));
+        GameObject L7 = Instantiate(Boss_Weapon[3], new Vector3(-8, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)));
+        GameObject L8 = Instantiate(Boss_Weapon[3], new Vector3(6.6f, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)));
+        yield return new WaitForSeconds(2.5f);
+        Destroy(L5); Destroy(L6); Destroy(L7); Destroy(L8);
+
+        while (true)
+        {
+            transform.position += Vector3.right * (Time.deltaTime * 8f);
+            yield return null;
+
+            if (transform.position.x >= 7)
+                yield break;
+        }
     }
-    IEnumerator Boss_Random_Move_F(float[] arr)
-    { 
-        for (int i = 0; i < 6; i++)
+    IEnumerator Phase02()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            Instantiate(Boss_Weapon[1], transform.position, Quaternion.identity);
+
+            GameObject C2 = Instantiate(Boss_Weapon[1], transform.position, Quaternion.identity);
+            C2.GetComponent<Movement2D>().MoveTo(new Vector3(-1, 0.5714f, 0));
+
+            GameObject C3 = Instantiate(Boss_Weapon[1], transform.position, Quaternion.identity);
+            C3.GetComponent<Movement2D>().MoveTo(new Vector3(-1, -0.5714f, 0));
+
+            GameObject C4 = Instantiate(Boss_Weapon[1], transform.position, Quaternion.identity);
+            C4.GetComponent<Movement2D>().MoveTo(new Vector3(-1, 0.2857f, 0));
+
+            GameObject C5 = Instantiate(Boss_Weapon[1], transform.position, Quaternion.identity);
+            C5.GetComponent<Movement2D>().MoveTo(new Vector3(-1, -0.2857f, 0));
+
+            yield return new WaitForSeconds(0.15f);
+        }
+        yield break;
+    }
+    IEnumerator Boss_Move(float[,] Boss_Move_float)
+    {
+        for (int i = 0; i < 9; i++)
         {
             float current = 0;
             float percent = 0;
@@ -123,10 +149,11 @@ public class Boss : HP_Info
                 current += Time.deltaTime;
                 percent = current / boomDelay;
 
-                transform.position = Vector3.Lerp(transform.position, new Vector3(arr[0 + i * 3], arr[1 + i * 3], arr[2 + i * 3]), curve.Evaluate(percent));
+                transform.position = Vector3.Lerp(transform.position, new Vector3(Boss_Move_float[i, 0], Boss_Move_float[i, 1], Boss_Move_float[i, 2]), curve.Evaluate(percent));
                 yield return null;
             }
         }
+        yield break;
     }
     void Start()
     {

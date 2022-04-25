@@ -21,7 +21,10 @@ public class PrefabOutOfArea : MonoBehaviour
             (transform.position.y > stageData.LimitMax.y + destroyWeight) ||
             (transform.position.x < stageData.LimitMin.x - destroyWeight) ||
             (transform.position.x > stageData.LimitMax.x + destroyWeight))
+        {
             Destroy(gameObject);
+        }
+           
     }
 
     // Update is called once per frame

@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07029b59c310ce148a311ab8ad8d07e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
+  moveSpeed: 2
   moveDirection: {x: -1, y: 0, z: 0}
 --- !u!58 &1237595746762495752
 CircleCollider2D:
@@ -160,6 +160,8 @@ MonoBehaviour:
   attack_rate: 1
   ScorePerEnemy: 50
   Die_Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
+  Enemy_Weapon:
+  - {fileID: 566935688652192511, guid: 69e3b015d8d6e424698b474e4044d1aa, type: 3}
 --- !u!95 &107024717335685559
 Animator:
   serializedVersion: 3
