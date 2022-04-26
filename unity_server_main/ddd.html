@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="http://localhost:3000/sign_up" method="post">
+        <input type="text" id="id" name="id" placeholder="id">
+        <br/>
+
+        <input type="text" id="pwd" name="pwd" placeholder="pwd">
+        <br/>
+
+        <input type="text" id="pwd_again" name="pwd_again" placeholder="pwd">
+        <br/>
+
+        <input type="submit" value="제출">
+    </form>
+    <br/><br/>
+    <form action="http://localhost:3000/log_in" method="post">
+         
+        <input type="text" id="id" name="id" placeholder="id">
+        <br/>
+
+        <input type="text" id="pwd" name="pwd" placeholder="pwd">
+        <br/>
+        
+        <input type="submit" value="로그인">
+    </form>
+    <br/><br/>
+    <form action="http://localhost:3000/log_out" method="get">
+        <input type="submit" value="로그아웃">
+    </form>
+</body>
+</html>
