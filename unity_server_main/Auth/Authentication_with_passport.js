@@ -32,11 +32,13 @@ passport.use(new LocalStrategy(
         }
             
     } catch (err) {
-        return done(null, err)
+        return done(err)
     } 
 }))
 
 exports.isLocalAuthenticated = passport.authenticate('local', {
-    failureRedirect: '/log_in', // 로그인 실패 --> log_in.GET Method로 이동
+    failureRedirect: '/log_fail', // 로그인 실패 --> log_fail.GET Method로 이동
 }), (req, res) => {
     req.session.save(() => { res.redirect('/') })}
+
+

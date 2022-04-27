@@ -54,5 +54,8 @@ router.route('/sign_up')
 router.route('/Get_Rank')
 .get(router_func.Get_Rank)
 
+router.route('/log_fail')
+.get(router_func.log_fail)
+
 
 module.exports = router

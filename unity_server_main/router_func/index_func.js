@@ -10,8 +10,9 @@ exports.log_in = async (req, res) => {
     try {
         if (req.user === undefined) 
             return new Error('회원 정보 없음!')
-        return res.send(req.user[0])
+        return res.status(200).send({user_info : req.user[0], success_message: "로그인 성공!"})
     } catch(err) {
+        console.log('엥')
         return res.status(400).send(err.message)
     }
     
@@ -25,6 +26,8 @@ exports.log_out = async (req, res) => {
 exports.sign_up = async(req, res) => {
     try {
 
+        if (req.body.id.length === 0 || req.body.pwd.length === 0)
+            throw new Error('아이디와 비밀번호 입력을 안 하셨네요!')
         if (!id_crabz.test(req.body.id))
             throw new Error("회원 가입 시 아이디는 영문 소문자 + 숫자 조합 5~20자 이내만 가능합니다.")
     
@@ -44,6 +47,7 @@ exports.sign_up = async(req, res) => {
             throw new Error("이미 ID가 있습니다.")
 
         const [DB2] = await connection.query('INSERT INTO Auth (id, pwd) values (?, ?)', [req.body.id, hash_password])
+
         return res.status(200).send("회원가입 성공")
 
     } catch(err){
@@ -64,4 +68,8 @@ exports.Get_Rank = async(req, res) => {
     } catch(err){
         return res.status(400).send(err.message)
     }
+}
+
+exports.log_fail = async(req, res) => {
+    return res.status(400).send('에러 : 회원 정보가 존재하지 않습니다')
 }
