@@ -1,4 +1,5 @@
-DB_secret/secret_OSSW_DB.js
+DB_secret/
 node_modules
+package-lock.json
 dist/*
 *.log
