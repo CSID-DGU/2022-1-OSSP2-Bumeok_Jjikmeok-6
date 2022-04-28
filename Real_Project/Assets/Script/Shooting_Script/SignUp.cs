@@ -17,7 +17,7 @@ public class SignUp : MonoBehaviour
     TMP_InputField PWD_Again;
 
     [SerializeField]
-    Text infoText;
+    TextMeshProUGUI infoText;
 
     [SerializeField]
     GameObject Popup;
@@ -96,13 +96,13 @@ public class SignUp : MonoBehaviour
         while (true)
         {
             infoText.text = "로딩 중....";
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.15f);
 
             infoText.text = "로딩 중......";
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.15f);
 
             infoText.text = "로딩 중........";
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.15f);
         }
     }
     IEnumerator SignUp_Enum()

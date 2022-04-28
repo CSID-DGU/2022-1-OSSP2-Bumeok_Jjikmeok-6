@@ -1,25 +1,22 @@
-const pool_k = require('../DB_open/open_OSSW_DB')
+const pool_k = require('../DB_info/open_OSSW_DB')
 
 const crypto = require('crypto') // 비밀번호의 단방향 암호화
 
-const id_crabz = /^(?=.*[a-z])(?=.*[0-9]).{5,20}$/ // 아이디 정규표현식
+const id_RE = /^(?=.*[a-z])(?=.*[0-9]).{5,20}$/ // 아이디 정규표현식
 
-const pwd_crabz = /^(?=.*[a-zA-Z!@#$%])(?=.*[0-9]).{8,16}$/ // 비밀번호 정규표현식
+const pwd_RE = /^(?=.*[a-zA-Z!@#$%])(?=.*[0-9]).{8,16}$/ // 비밀번호 정규표현식
 
 exports.log_in = async (req, res) => {
     try {
-        if (req.user === undefined) 
-            return new Error('회원 정보 없음!')
         return res.status(200).send({user_info : req.user[0], success_message: "로그인 성공!"})
     } catch(err) {
-        console.log('엥')
         return res.status(400).send(err.message)
     }
     
 }
 exports.log_out = async (req, res) => {
     req.session.destroy( function ( err ) {
-        return res.send( { message: 'Successfully logged out' } )
+        return res.status(200).send({message: 'Successfully logged out' })
     })
 }
 
@@ -28,10 +25,10 @@ exports.sign_up = async(req, res) => {
 
         if (req.body.id.length === 0 || req.body.pwd.length === 0)
             throw new Error('아이디와 비밀번호 입력을 안 하셨네요!')
-        if (!id_crabz.test(req.body.id))
+        if (!id_RE.test(req.body.id))
             throw new Error("회원 가입 시 아이디는 영문 소문자 + 숫자 조합 5~20자 이내만 가능합니다.")
     
-        if (!pwd_crabz.test(req.body.pwd))
+        if (!pwd_RE.test(req.body.pwd))
             throw new Error("회원가입 시 비밀번호는 영문(대/소문자) + 숫자 + 특수문자 (!, @, #, $, %) 조합 8~16자 이내만 가능합니다.")
 
         if (req.body.pwd !== req.body.pwd_again)
@@ -72,4 +69,25 @@ exports.Get_Rank = async(req, res) => {
 
 exports.log_fail = async(req, res) => {
     return res.status(400).send('에러 : 회원 정보가 존재하지 않습니다')
+}
+
+exports.isNotLoggedIn = async(req, res, next) => {
+    if (!req.isAuthenticated())
+    {
+        next()
+    }
+    else
+    {
+        return res.status(400).send("이미 로그인 했어요")
+    }
+}
+exports.isLoggedIn = async(req, res, next) => {
+    if (req.isAuthenticated())
+    {
+        next()
+    }
+    else
+    {
+        return res.status(400).send("로그인 없인 아무것도 할 수 없어요")
+    }
 }

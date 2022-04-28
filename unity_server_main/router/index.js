@@ -39,20 +39,20 @@ passport.serializeUser((user, done) => {
     
 passport.deserializeUser((id, done) => { // 페이지를 접근할 때마다 호출되는 것
     console.log('deserializeUser : ', id)
-    done(null, id); // 이 id라는 새끼가 request.user로 가는 거다.
+    done(null, id); // id는 request.user로 저장되고 log_in (GET)으로 이동
 })
 
 router.route('/log_in')
-.post(Auth.isLocalAuthenticated, router_func.log_in)
+.post(router_func.isNotLoggedIn, Auth.isLocalAuthenticated, router_func.log_in)
 
 router.route('/log_out')
-.get(router_func.log_out)
+.get(router_func.isLoggedIn, router_func.log_out)
 
 router.route('/sign_up')
-.post(router_func.sign_up)
+.post(router_func.isNotLoggedIn, router_func.sign_up)
 
 router.route('/Get_Rank')
-.get(router_func.Get_Rank)
+.get(router_func.isLoggedIn, router_func.Get_Rank)
 
 router.route('/log_fail')
 .get(router_func.log_fail)

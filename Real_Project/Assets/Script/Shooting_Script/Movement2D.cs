@@ -12,7 +12,11 @@ public class Movement2D : MonoBehaviour
     [SerializeField]
     Vector3 moveDirection = Vector3.zero; // 처음에야 이렇게 초기화 한건데, SerializeField 때문에 inspector 안에서도 수정이 가능하다
 
-
+    public float MoveSpeed
+    {
+        set { moveSpeed = value; }
+        get { return moveSpeed; }
+    }
     void Start()
     {
 

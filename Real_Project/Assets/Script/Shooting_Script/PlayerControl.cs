@@ -46,50 +46,8 @@ public class PlayerControl : MonoBehaviour
 
     bool is_LateUpdate = false;
 
-    float[,] Jebal = new float[41, 2]
-    {
-        { -0.06f, 0.12f },
-        { -0.11f, 0.11f },
-        { -0.06f, 0.12f },
-        { -0.17f, 0.11f },
-        { -0.060000f, 0.060000f },
-        { -0.180000f, 0.170000f },
-        { -0.050000f, 0.000000f },
-        { -0.120000f, 0.060000f },
-        { -0.060000f, 0.120000f },
-        { -0.060000f, 0.000000f },
-        { -0.170000f, 0.060000f },
-        { -0.230000f, 0.050000f },
-        { -0.060000f, 0.060000f },
-        { -0.060000f, 0.060000f },
-        { -0.110000f, 0.060000f },
-        { -0.060000f, 0.000000f },
-        { -0.170000f, 0.050000f },
-        { -0.230000f, 0.000000f },
-        { -0.240000f, 0.060000f },
-        { -0.050000f, 0.000000f },
-        { -0.120000f, 0.000000f },
-        { -0.060000f, 0.000000f },
-        { -0.170000f, 0.000000f },
-        { -0.060000f, 0.000000f },
-        { -0.110000f, 0.000000f },
-        { -0.120000f, 0.000000f },
-        { -0.120000f, 0.000000f },
-        { -0.050000f, 0.000000f },
-        { -0.060000f, -0.110000f },
-        { -0.060000f, 0.000000f },
-        { -0.120000f, -0.120000f },
-        { -0.050000f, -0.110000f },
-        { -0.060000f, 0.000000f },
-        { -0.120000f, -0.120000f },
-        { -0.050000f, -0.120000f },
-        { -0.060000f, -0.050000f },
-        { -0.120000f, -0.120000f },
-        { -0.110000f, -0.170000f },
-        { -0.180000f, -0.120000f },
-        { -0.060000f, -0.110000f },
-        { -0.110000f, -0.120000f },
-    };
+    bool is_Update = false;
+
     [SerializeField]
     int LifeTime = 5;
 
@@ -99,8 +57,8 @@ public class PlayerControl : MonoBehaviour
         weapon = GetComponent<Weapon>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-
-        movement2D.enabled = false;
+        is_Update = false;
+        is_LateUpdate = false;
         weapon.enabled = false;
         score = 0;
         PlayerScore.text = "점수 : " + score;
@@ -128,9 +86,13 @@ public class PlayerControl : MonoBehaviour
             yield return null;
             if (transform.position.x >= -4.6)
             {
-                movement2D.enabled = true;
                 weapon.enabled = true;
                 is_LateUpdate = true;
+                is_Update = true;
+                movement2D.enabled = true;
+                movement2D.MoveSpeed = 10;
+                yield return null;
+
                 StartCoroutine("FadeText");
                 yield return new WaitForSeconds(3f);
                 yield break;
@@ -148,35 +110,34 @@ public class PlayerControl : MonoBehaviour
     }
     IEnumerator Damage_After()
     {
-        movement2D.enabled = false;
         weapon.enabled = false;
         is_LateUpdate = false;
+        is_Update = false;
+        movement2D.enabled = true;
         yield return null;
+
         yield return StartCoroutine("MovePath");
+        movement2D.enabled = false;
+        yield return null;
+
         yield return StartCoroutine("Move_first");
         yield break;
     }
     IEnumerator MovePath()
     {
-        yield return null;
-        for (int i = 0; i < 41; i++)
+
+        float Params = 0.7f;
+        while (true)
         {
-            Vector3 temp = transform.position;
-            while (true)
+            if (transform.position.y <= -7)
             {
-                transform.position += new Vector3(Jebal[i, 0], Jebal[i, 1], 0) * (Time.deltaTime * ((float)i * 4 + 20f));
-                yield return null;
-
-                if (temp.x - transform.position.x >= Jebal[i, 0] && temp.y - transform.position.y <= Jebal[i, 1])
-                {
-                    break;
-                }
-                if (transform.position.y <= -7)
-                {
-                    yield break;
-                }
-
+                yield break;
             }
+            movement2D.MoveSpeed = 3f / Mathf.Pow(Params, 2);
+            Params -= 0.004f;
+            movement2D.MoveTo(new Vector3(-0.7f, -1, 0));
+            
+            yield return null;
         }
     }
     public void TakeDamage()
@@ -222,15 +183,26 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (is_Update)
+        {
+            float x = Input.GetAxisRaw("Horizontal");
+            float y = Input.GetAxisRaw("Vertical");
+            Debug.Log(x);
+            Debug.Log(y);
+            movement2D.MoveTo(new Vector3(x, y, 0));
+            if (x < 0 || y < 0)
+            {
+                animator.SetBool("HasExit", true);
+            }
+            else
+                animator.SetBool("HasExit", false);
+        }
         PlayerScore.text = "점수 : " + Score;
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
-        movement2D.MoveTo(new Vector3(x, y, 0));
         if (Input.GetKeyDown(keyCodeAttack) && weapon.enabled)
         {
             weapon.StartFiring();
         }
-        else if (Input.GetKeyUp(keyCodeAttack) && weapon.enabled)
+        else if (Input.GetKeyUp(keyCodeAttack) || !weapon.enabled)
         {
             weapon.StopFiring();
         }
@@ -238,14 +210,7 @@ public class PlayerControl : MonoBehaviour
         {
             weapon.StartBoom();
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            animator.SetBool("HasExit", true);
-        }
-        if (Input.GetKeyUp(KeyCode.LeftArrow) && Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            animator.SetBool("HasExit", false);
-        }
+       
     }
     void LateUpdate()
     {

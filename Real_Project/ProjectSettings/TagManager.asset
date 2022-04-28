@@ -9,6 +9,8 @@ TagManager:
   - Boss
   - EnemyAndBoss
   - Devil_Weapon
+  - Circle
+  - Box
   layers:
   - Default
   - TransparentFX

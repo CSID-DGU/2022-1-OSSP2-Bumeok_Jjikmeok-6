@@ -2,7 +2,7 @@ const passport = require('passport')
 
 let LocalStrategy = require('passport-local').Strategy
 
-const OSSW_DB_pool = require('../DB_open/open_OSSW_DB')
+const OSSW_DB_pool = require('../DB_info/open_OSSW_DB')
 
 const crypto = require('crypto')
 
