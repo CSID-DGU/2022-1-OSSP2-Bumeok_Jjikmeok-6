@@ -8,7 +8,7 @@ public class MoveBackGround : MonoBehaviour
     [SerializeField]
     GameObject Back_another;
 
-    float move_value = 16.55f;
+    float move_value = 17.69f;
 
     // Start is called before the first frame update
 
