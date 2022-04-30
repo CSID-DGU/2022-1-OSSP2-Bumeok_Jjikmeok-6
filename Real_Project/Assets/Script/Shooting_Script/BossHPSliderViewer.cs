@@ -27,7 +27,7 @@ public class BossHPSliderViewer : MonoBehaviour
     {
         for (int i = 0; i < boss.MaxHP; i++)
         {
-            yield return null;
+            yield return new WaitForSeconds(0.04f);
             slider.value = i / boss.MaxHP;
         }
         OnUpdate = true;

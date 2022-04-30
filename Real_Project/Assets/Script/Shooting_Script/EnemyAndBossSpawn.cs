@@ -36,17 +36,19 @@ public class EnemyAndBossSpawn : MonoBehaviour
     private void Awake()
     {
         BossWarningText.color = new Color(BossWarningText.color.r, BossWarningText.color.g, BossWarningText.color.b, 0);
+        BossHPSliderPrefab.SetActive(false);
+        BossHPSliderLeft.SetActive(false);
     }
 
     public void Random_made()
     {
-        StartCoroutine("Deley");
+        StartCoroutine(Deley());
     }
     IEnumerator Deley()
     {  
-        yield return StartCoroutine("Enemy_Random_made");
-        yield return StartCoroutine("Warning");
-        yield return StartCoroutine("Boss_Appear");
+        yield return StartCoroutine(Enemy_Random_made());
+        yield return StartCoroutine(Warning());
+        yield return StartCoroutine(First_Boss_Appear());
     }
 
     IEnumerator Enemy_Random_made()
@@ -83,24 +85,28 @@ public class EnemyAndBossSpawn : MonoBehaviour
             }
         }
     }
-    IEnumerator Boss_Appear()
+    IEnumerator First_Boss_Appear()
     {
         GameObject BossClone = Instantiate(Boss, new Vector3(9, 0.38f, 1), Quaternion.identity);
 
         yield return null;
         while (true)
         {
+            if (BossClone == null)
+                break;
             BossClone.transform.position += Vector3.left * (Time.deltaTime * 1.5f);
             yield return null;
             if (BossClone.transform.position.x <= 5)
             {
-                Instantiate(BossHPSliderLeft);
-                GameObject sliderClone = Instantiate(BossHPSliderPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                BossHPSliderPrefab.SetActive(true);
+                BossHPSliderLeft.SetActive(true);
+                BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(BossClone.GetComponent<Boss>());
+                // sliderClone = Instantiate(BossHPSliderPrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
-                sliderClone.transform.SetParent(canvasTransform); // Slider UI 오브젝트를 parent("Canvas")의 자식으로 설정
-                sliderClone.transform.position = new Vector3(0.6f, -4.3f, 0);
-                sliderClone.transform.localScale = Vector3.one; // 계층 설정으로 바뀐 크기를 기존의 크기로 재설정
-                sliderClone.GetComponent<BossHPSliderViewer>().F_HPFull(BossClone.GetComponent<Boss>());
+                //sliderClone.transform.SetParent(canvasTransform); // Slider UI 오브젝트를 parent("Canvas")의 자식으로 설정
+                //sliderClone.transform.position = new Vector3(0.6f, -4.3f, 0);
+                //sliderClone.transform.localScale = Vector3.one; // 계층 설정으로 바뀐 크기를 기존의 크기로 재설정
+                //sliderClone.GetComponent<BossHPSliderViewer>().F_HPFull(BossClone.GetComponent<Boss>());
                 yield return new WaitForSeconds(2f);
                 BossClone.GetComponent<Boss>().Phase_Start();
                 //yield return new WaitForSeconds(100f);

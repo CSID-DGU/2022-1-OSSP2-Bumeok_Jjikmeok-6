@@ -11,6 +11,8 @@ TagManager:
   - Devil_Weapon
   - Circle
   - Box
+  - BackGround1
+  - BackGround2
   layers:
   - Default
   - TransparentFX
@@ -21,7 +23,7 @@ TagManager:
   - 
   - 
   - 
-  - Layer
+  - Player
   - 
   - 
   - Ground

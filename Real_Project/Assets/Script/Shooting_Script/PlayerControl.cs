@@ -82,7 +82,7 @@ public class PlayerControl : MonoBehaviour
         yield return null;
         while (true)
         {
-            transform.position += Vector3.right * (Time.deltaTime * 2f);
+            transform.position += Vector3.right * (Time.deltaTime * 2);
             yield return null;
             if (transform.position.x >= -4.6)
             {
@@ -187,8 +187,6 @@ public class PlayerControl : MonoBehaviour
         {
             float x = Input.GetAxisRaw("Horizontal");
             float y = Input.GetAxisRaw("Vertical");
-            Debug.Log(x);
-            Debug.Log(y);
             movement2D.MoveTo(new Vector3(x, y, 0));
             if (x < 0 || y < 0)
             {

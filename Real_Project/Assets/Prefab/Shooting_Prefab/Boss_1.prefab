@@ -96,8 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b5b5b7d56e4f814c95f9a62de621113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 400
-  body_damage: 1
+  maxHP: 50
   curve:
     serializedVersion: 2
     m_Curve:

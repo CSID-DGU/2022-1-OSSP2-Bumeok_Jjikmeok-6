@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -2627388519499012390}
   - component: {fileID: 7303021704688384524}
   - component: {fileID: -4571650417953729176}
+  - component: {fileID: -3870563130120368333}
   m_Layer: 0
   m_Name: Enemy_W1
   m_TagString: Devil_Weapon
@@ -129,3 +130,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
+--- !u!114 &-3870563130120368333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566935688652192511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}

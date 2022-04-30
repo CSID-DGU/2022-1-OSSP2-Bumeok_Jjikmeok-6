@@ -68,6 +68,9 @@ public class Boss : HP_Info
     {
         playerControl.Score += 10000;
         Instantiate(Die_Explosion, transform.position, Quaternion.identity);
+
+        GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().MoveSpeed = GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().MoveSpeed * 2f;
+        GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().MoveSpeed = GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().MoveSpeed * 2f;
         Destroy(gameObject);
     }
     public void Phase_Start()
