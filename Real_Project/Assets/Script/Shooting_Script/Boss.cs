@@ -28,10 +28,13 @@ public class Boss : HP_Info
     [SerializeField]
     GameObject[] Boss_Weapon;
 
+    Animator animator;
+
     new private void Awake()
     {
         base.Awake();
         playerControl = GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>();
+        animator = GetComponent<Animator>();
         CurrentHP = MaxHP;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -81,8 +84,8 @@ public class Boss : HP_Info
     {
         while (true)
         {
-            yield return StartCoroutine("Phase01");
-            yield return StartCoroutine("Phase02");
+            //yield return StartCoroutine("Phase01");
+            //yield return StartCoroutine("Phase02");
             yield return StartCoroutine("Phase03");
         }
     }
@@ -143,7 +146,7 @@ public class Boss : HP_Info
     }
     IEnumerator Phase03()
     {
-        Debug.Log("¿¿?");
+        
         float boomDelay = 0.5f;
         float current = 0;
         float percent = 0;
@@ -154,16 +157,14 @@ public class Boss : HP_Info
             transform.position = Vector3.Slerp(transform.position, new Vector3(0, 0, 0), curve.Evaluate(percent));
             yield return null;
         }
-
         float rot_Speed = 7;
         while (true)
         {
-            transform.Rotate(Vector3.forward * rot_Speed * 200 * Time.deltaTime);
+            transform.Rotate(Vector3.forward * rot_Speed * 100 * Time.deltaTime);
             GameObject T1 = Instantiate(Boss_Weapon[4]);
             T1.transform.position = transform.position;
             T1.transform.rotation = transform.rotation;
             yield return null;
-
         }
     }
     IEnumerator Boss_Move(float[,] Boss_Move_float)

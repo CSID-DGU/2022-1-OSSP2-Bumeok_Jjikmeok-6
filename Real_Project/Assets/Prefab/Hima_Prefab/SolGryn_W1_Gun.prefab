@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 3722087470536273460}
   - component: {fileID: 3722087470536273461}
   - component: {fileID: 3361601717794370315}
-  - component: {fileID: -7252683745536014560}
-  - component: {fileID: 1997727818351862433}
+  - component: {fileID: 382072459549055944}
+  - component: {fileID: 3329514434004491946}
+  - component: {fileID: -2583640907102403047}
   m_Layer: 0
   m_Name: SolGryn_W1_Gun
   m_TagString: Untagged
@@ -111,7 +112,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.2}
   m_EdgeRadius: 0
---- !u!114 &-7252683745536014560
+--- !u!114 &382072459549055944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3722087470536273458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+--- !u!114 &3329514434004491946
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,9 +137,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07029b59c310ce148a311ab8ad8d07e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
+  moveSpeed: 8
   moveDirection: {x: 0, y: 0, z: 0}
---- !u!114 &1997727818351862433
+--- !u!114 &-2583640907102403047
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

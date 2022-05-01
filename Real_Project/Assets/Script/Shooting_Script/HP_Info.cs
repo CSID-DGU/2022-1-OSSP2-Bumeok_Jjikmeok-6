@@ -22,10 +22,6 @@ public class HP_Info : MonoBehaviour
         CurrentHP = MaxHP;
     }
 
-    
-
-
-
     void Start()
     {
 

@@ -46,8 +46,8 @@ public class EnemyAndBossSpawn : MonoBehaviour
     }
     IEnumerator Deley()
     {  
-        yield return StartCoroutine(Enemy_Random_made());
-        yield return StartCoroutine(Warning());
+        //yield return StartCoroutine(Enemy_Random_made());
+        //yield return StartCoroutine(Warning());
         yield return StartCoroutine(First_Boss_Appear());
     }
 

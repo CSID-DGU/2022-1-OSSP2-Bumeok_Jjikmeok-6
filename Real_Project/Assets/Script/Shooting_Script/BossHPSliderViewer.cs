@@ -7,28 +7,25 @@ public class BossHPSliderViewer : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    Boss boss;
+    HP_Info hp_info;
     Slider slider;
 
     bool OnUpdate = false;
 
-    public void Kuku()
-    {
-        Debug.Log("int KUKU = ");
-    }
 
-    public void F_HPFull(Boss boss)
+    public void F_HPFull(HP_Info hp_info)
     {
-        this.boss = boss;
+        this.hp_info = hp_info;
         slider = GetComponent<Slider>();
         StartCoroutine("I_HPFull");
     }
-    public IEnumerator I_HPFull()
+    IEnumerator I_HPFull()
     {
-        for (int i = 0; i < boss.MaxHP; i++)
+        Debug.Log(hp_info.CurrentHP);
+        for (int i = 0; i < hp_info.MaxHP; i++)
         {
-            yield return new WaitForSeconds(0.04f);
-            slider.value = i / boss.MaxHP;
+            yield return null;
+            slider.value = i / hp_info.MaxHP;
         }
         OnUpdate = true;
     }
@@ -43,7 +40,7 @@ public class BossHPSliderViewer : MonoBehaviour
     void LateUpdate()
     {
          if (OnUpdate)
-            slider.value = boss.CurrentHP / boss.MaxHP;
+            slider.value = hp_info.CurrentHP / hp_info.MaxHP;
        
     }
 }

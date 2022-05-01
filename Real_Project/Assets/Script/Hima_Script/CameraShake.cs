@@ -8,6 +8,8 @@ public class CameraShake : MonoBehaviour
 
     Vector3 Origin = new Vector3(0, 0, -10);
 
+    
+
     [SerializeField]
     [Range(0.01f, 1f)] float shakeRange = 0.5f;
 
