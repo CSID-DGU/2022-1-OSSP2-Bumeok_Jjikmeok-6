@@ -8,14 +8,26 @@ public class PlayerController_temp : MonoBehaviour
     public float IsDoubleClick = 0.25f;
     private bool IsOneClick = false;
     private double Timer = 0;
-    private bool onUpdate = true; 
+    private bool onUpdate = true;
+    private IEnumerator m_Coroutine;
 
     [SerializeField]
     float maxWalkSpeed = 0.02f;
 
     [SerializeField]
-    Camera getCamera;
-   
+    GameObject Move_Slider;
+
+    [SerializeField]
+    Transform canvasTransform;
+
+    [SerializeField]
+    GameObject Lazor;
+
+    private void Awake()
+    {
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,24 +36,40 @@ public class PlayerController_temp : MonoBehaviour
 
     IEnumerator Move_Delay()
     {
+        Debug.Log("왜");
+        GameObject sliderClone = Instantiate(Move_Slider, transform.position, Quaternion.identity);
+
+        sliderClone.transform.SetParent(canvasTransform); // Slider UI 오브젝트를 parent("Canvas")의 자식으로 설정
+        sliderClone.transform.position = transform.position + new Vector3(0, 2, 0);
+        sliderClone.transform.localScale = Vector3.one; // 계층 설정으로 바뀐 크기를 기존의 크기로 재설정
+        sliderClone.GetComponent<Gaze_Info>().HP_Down();
         maxWalkSpeed *= 2;
-        StartCoroutine("Check_Button_Off");
+        StartCoroutine(Check_Button_Off(sliderClone));
+            
         yield return new WaitForSeconds(3f);
+
+        Destroy(sliderClone);
         maxWalkSpeed = 0;
         yield return new WaitForSeconds(2f);
+
         maxWalkSpeed = 0.02f;
         onUpdate = true;
         yield return null;
     }
-    IEnumerator Check_Button_Off()
+    IEnumerator Check_Button_Off(GameObject e)
     {
-        while(true)
+        while (true)
         {
-            if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+            {
+                maxWalkSpeed = 0.02f;
+                Destroy(e);
+                onUpdate = true;
+                StopCoroutine(m_Coroutine);
                 yield break;
+            }
             yield return null;
         }
-       
     }
     void Update()
     {
@@ -63,7 +91,8 @@ public class PlayerController_temp : MonoBehaviour
                 else if (IsOneClick && ((Time.time - Timer) < IsDoubleClick)) // 더블클릭
                 {
                     onUpdate = false;
-                    StartCoroutine(Move_Delay());
+                    m_Coroutine = Move_Delay();
+                    StartCoroutine(m_Coroutine);
                     IsOneClick = false;
                 }
             } // 더블클릭 했을 때 아얘 동작하지 않도록 해야한다
@@ -90,9 +119,16 @@ public class PlayerController_temp : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Debug.Log(pos);
+
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-            Debug.Log(hit);
+
+            if (hit.collider != null && hit.transform.gameObject.GetComponent<Square>().Correct_Color())
+            {
+                Instantiate(Lazor, transform.position, Quaternion.identity);
+                Lazor.GetComponent<Movement2D>().MoveTo(new Vector3(hit.transform.gameObject.transform.position.x - transform.position.x,
+                    hit.transform.gameObject.transform.position.y - transform.position.y, 0));
+            }
+
             GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
             foreach(var u in e)
             {

@@ -16,9 +16,12 @@ public class Square : MonoBehaviour
     {
         StartCoroutine(I_Change(r, g, b));
     }
+    public bool Correct_Color()
+    {
+        return spriteRenderer.color != new Color(1, 1, 1);
+    }
     IEnumerator I_Change(float r, float g, float b)
     {
-        Debug.Log("Á¦¹ß Á»");
         spriteRenderer.color = new Color(r/255f, g/255f, b/255f);
         yield return null;
     }
