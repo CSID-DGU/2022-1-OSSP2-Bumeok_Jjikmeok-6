@@ -14,12 +14,12 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_FogMode: 3
+  m_FogMode: 1
   m_FogDensity: 0.01
-  m_LinearFogStart: 0
-  m_LinearFogEnd: 300
+  m_LinearFogStart: 15
+  m_LinearFogEnd: 40
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
@@ -97,8 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: dc3d088bcaa370049bb99ff6372dbbb2, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: f7ef5a2bcf409fe429ece36b622bad11, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -216,7 +216,7 @@ RectTransform:
   m_Children:
   - {fileID: 736350207}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -265,7 +265,7 @@ Transform:
   m_Children:
   - {fileID: 1601477444}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &706954103
 GameObject:
@@ -547,7 +547,7 @@ Transform:
   m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1176409224
 MonoBehaviour:
@@ -584,7 +584,7 @@ Rigidbody2D:
   m_Mass: 2.02
   m_LinearDrag: 1.5
   m_AngularDrag: 0.05
-  m_GravityScale: 2.78
+  m_GravityScale: 4
   m_Material: {fileID: 6200000, guid: e39c9d16aa981ca4d8ae9a8ecacd866f, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -627,6 +627,8 @@ GameObject:
   - component: {fileID: 1436607221}
   - component: {fileID: 1436607220}
   - component: {fileID: 1436607219}
+  - component: {fileID: 1436607223}
+  - component: {fileID: 1436607222}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -699,6 +701,46 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1436607222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436607218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a61272b015f1e4490bb177f7cf1dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CamTransform: {fileID: 1436607221}
+  CameraSpeedMultiplier: 0.2
+  Color: {r: 0.75686276, g: 0.6901961, b: 0.6901961, a: 1}
+  Size: 1
+  HorizontalSpeed: 0.35
+  VerticalSpeed: 0
+  Density: 0.78
+  Shader: {fileID: 4800000, guid: 9c40c0bfc34be7845aa07b1b368b5d30, type: 3}
+--- !u!114 &1436607223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436607218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a61272b015f1e4490bb177f7cf1dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CamTransform: {fileID: 1436607221}
+  CameraSpeedMultiplier: 0.2
+  Color: {r: 0.754717, g: 0.68636525, b: 0.68636525, a: 1}
+  Size: 1.65
+  HorizontalSpeed: 1.3
+  VerticalSpeed: 0
+  Density: 0.66
+  Shader: {fileID: 4800000, guid: 9c40c0bfc34be7845aa07b1b368b5d30, type: 3}
 --- !u!1 &1601477443
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,7 +1311,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1737199596
 GameObject:
@@ -1389,7 +1431,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1770839856
 MonoBehaviour:
