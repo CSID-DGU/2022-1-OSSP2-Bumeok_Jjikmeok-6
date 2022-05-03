@@ -88,7 +88,7 @@ public class EnemyAndBossSpawn : MonoBehaviour
     IEnumerator First_Boss_Appear()
     {
         GameObject BossClone = Instantiate(Boss, new Vector3(9, 0.38f, 1), Quaternion.identity);
-
+       
         yield return null;
         while (true)
         {

@@ -17,15 +17,16 @@ public class BossHPSliderViewer : MonoBehaviour
     {
         this.hp_info = hp_info;
         slider = GetComponent<Slider>();
+        slider.value = 0;
         StartCoroutine("I_HPFull");
     }
     IEnumerator I_HPFull()
     {
-        Debug.Log(hp_info.CurrentHP);
-        for (int i = 0; i < hp_info.MaxHP; i++)
+        //Debug.Log(hp_info.CurrentHP);
+        while(slider.value < 1)
         {
+            slider.value += Time.deltaTime / 2;
             yield return null;
-            slider.value = i / hp_info.MaxHP;
         }
         OnUpdate = true;
     }

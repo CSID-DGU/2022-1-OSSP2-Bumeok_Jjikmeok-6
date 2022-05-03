@@ -21,6 +21,8 @@ public class Boss : HP_Info
 
     PlayerControl playerControl;
 
+    public bool UnBeatable = true;
+
     float boomDelay = 0.5f;
 
     SpriteRenderer spriteRenderer;
@@ -30,6 +32,11 @@ public class Boss : HP_Info
 
     Animator animator;
 
+    IEnumerator phase01;
+    IEnumerator phase02;
+    IEnumerator phase03;
+    IEnumerator phase04;
+
     new private void Awake()
     {
         base.Awake();
@@ -37,11 +44,14 @@ public class Boss : HP_Info
         animator = GetComponent<Animator>();
         CurrentHP = MaxHP;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        phase01 = Phase01();
+        phase02 = Phase02();
+        phase03 = Phase03();
+        phase04 = Phase04();
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.CompareTag("Playerrr"))
         {
             if (!collision.GetComponent<PlayerControl>().Unbeatable_Player)
@@ -54,11 +64,14 @@ public class Boss : HP_Info
 
     public void TakeDamage(float damage)
     {
-        CurrentHP -= damage;
-        StartCoroutine("Hit");
-        if (CurrentHP <= 0)
+        if (!UnBeatable)
         {
-            OnDie();
+            CurrentHP -= damage;
+            StartCoroutine("Hit");
+            if (CurrentHP <= 0)
+            {
+                OnDie();
+            }
         }
     }
     IEnumerator Hit()
@@ -71,7 +84,9 @@ public class Boss : HP_Info
     {
         playerControl.Score += 10000;
         Instantiate(Die_Explosion, transform.position, Quaternion.identity);
-
+        StopCoroutine(phase01);
+        StopCoroutine(phase02);
+        StopCoroutine(phase03);
         GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().MoveSpeed = GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().MoveSpeed * 2f;
         GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().MoveSpeed = GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().MoveSpeed * 2f;
         Destroy(gameObject);
@@ -82,11 +97,14 @@ public class Boss : HP_Info
     }
     IEnumerator Repeat_Phase()
     {
+        UnBeatable = false;
+        yield return null;
         while (true)
         {
-            //yield return StartCoroutine("Phase01");
-            //yield return StartCoroutine("Phase02");
-            yield return StartCoroutine("Phase03");
+            yield return StartCoroutine(phase01);
+            yield return StartCoroutine(phase02);
+            yield return StartCoroutine(phase03);
+            yield return StartCoroutine(phase04);
         }
     }
     IEnumerator Phase01()
@@ -111,6 +129,7 @@ public class Boss : HP_Info
         GameObject L7 = Instantiate(Boss_Weapon[3], new Vector3(-8, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)));
         GameObject L8 = Instantiate(Boss_Weapon[3], new Vector3(6.6f, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)));
         yield return new WaitForSeconds(2.5f);
+
         Destroy(L5); Destroy(L6); Destroy(L7); Destroy(L8);
 
         while (true)
@@ -167,6 +186,11 @@ public class Boss : HP_Info
             yield return null;
         }
     }
+    IEnumerator Phase04()
+    {
+        animator.SetTrigger("Size");
+        yield return null;
+    }
     IEnumerator Boss_Move(float[,] Boss_Move_float)
     {
         for (int i = 0; i < 9; i++)
@@ -192,6 +216,6 @@ public class Boss : HP_Info
     // Update is called once per frame
     void Update()
     {
-
+        //Debug.Log(UnBeatable);
     }
 }

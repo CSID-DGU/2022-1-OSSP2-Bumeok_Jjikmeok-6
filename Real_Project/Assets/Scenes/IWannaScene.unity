@@ -590,8 +590,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!61 &1176409226
-BoxCollider2D:
+--- !u!60 &1176409226
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -613,9 +613,17 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.25}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 0.125}
+      - {x: -0.04, y: 0.125}
+      - {x: -0.07, y: -0.005}
+      - {x: -0.125, y: -0.105}
+      - {x: -0.095, y: -0.125}
+      - {x: 0.1, y: -0.125}
+      - {x: 0.125, y: -0.095}
+      - {x: 0.1, y: 0.065}
+      - {x: 0.1, y: 0.085}
 --- !u!1 &1436607218
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,7 +662,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.28819865, g: 0.5943396, b: 0.35340223, a: 0}
+  m_BackGroundColor: {r: 0.3057316, g: 0.3584906, b: 0.3170848, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

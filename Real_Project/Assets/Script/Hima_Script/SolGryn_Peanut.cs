@@ -45,7 +45,7 @@ public class SolGryn_Peanut : MonoBehaviour
 		{
 			Count++;
 		}
-		if (Count == 3)
+		if (Count == 2)
         {
 			Die();
         }
