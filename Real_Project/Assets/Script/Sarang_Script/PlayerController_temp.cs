@@ -123,7 +123,7 @@ public class PlayerController_temp : MonoBehaviour
     {
         StopCoroutine(i_Coroutine);
         yield return StartCoroutine(Student_Gaze.GetComponent<Student_Gaze_Info>().Conflict(targetStudent_t));
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f); // 이 한줄 코드 때문에 10시에 끝날거 12시에 끝났다
         StartCoroutine(i_Coroutine);
 
         yield return null;

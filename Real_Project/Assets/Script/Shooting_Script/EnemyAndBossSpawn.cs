@@ -96,7 +96,7 @@ public class EnemyAndBossSpawn : MonoBehaviour
                 break;
             BossClone.transform.position += Vector3.left * (Time.deltaTime * 1.5f);
             yield return null;
-            if (BossClone.transform.position.x <= 5)
+            if (BossClone.transform.position.x <= 6.3f)
             {
                 BossHPSliderPrefab.SetActive(true);
                 BossHPSliderLeft.SetActive(true);

@@ -24,7 +24,7 @@ public class Square : MonoBehaviour
     {
         spriteRenderer.color = new Color(r/255f, g/255f, b/255f);
         yield return null;
-    }
+    } // ¾êµµ
     void Start()
     {
         

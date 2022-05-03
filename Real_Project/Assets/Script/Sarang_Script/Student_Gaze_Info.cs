@@ -101,5 +101,5 @@ public class Student_Gaze_Info : MonoBehaviour
     void Update()
     {
         CheckInterrupt();
-    }
+    } // 학생이 레이저 빔을 과제, 시험같은 방해 오브젝트 및 플레이어에게 맞았을 때 처리한 코드
 }

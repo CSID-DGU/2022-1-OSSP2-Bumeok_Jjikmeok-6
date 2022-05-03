@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -616046502998551682}
   - component: {fileID: 8302477712163269332}
   - component: {fileID: 4081900864096837645}
+  - component: {fileID: -2921005202711069536}
   m_Layer: 0
   m_Name: Boss_1
   m_TagString: Boss
@@ -130,6 +131,8 @@ MonoBehaviour:
   - {fileID: 3892351702495847471, guid: cb4bb15324b69a04c9f0c561c2cd95c0, type: 3}
   - {fileID: 1422771892401474626, guid: b670e6b9bf758134ba222e175cbd5cd9, type: 3}
   - {fileID: 2832031252176686515, guid: 519cf4bf2b4904646a146395dd0b5141, type: 3}
+  speed: 15
+  rotateSpeed: 500
 --- !u!61 &8302477712163269332
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -175,3 +178,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!50 &-2921005202711069536
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5999451461264187749}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

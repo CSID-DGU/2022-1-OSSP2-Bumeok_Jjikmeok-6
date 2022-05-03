@@ -15,7 +15,7 @@ public class InterruptBehaviour : MonoBehaviour
     {
 
     }
-    public IEnumerator Trigger_Lazor(Vector3 tempPosition)
+    public IEnumerator Trigger_Lazor(Vector3 tempPosition) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
     {
         while(true)
         {

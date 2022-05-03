@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Camera_Trace : MonoBehaviour
+public class Camera_Trace : MonoBehaviour // 이건 카메라가 플레이어 추적하는 코드
 {
     // Start is called before the first frame update
 

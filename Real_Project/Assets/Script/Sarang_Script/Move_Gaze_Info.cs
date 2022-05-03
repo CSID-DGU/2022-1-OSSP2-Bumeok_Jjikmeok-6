@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Move_Gaze_Info : MonoBehaviour
+public class Move_Gaze_Info : MonoBehaviour // 플레이어 달릴 때의 게이지바
 {
     Slider slider;
     private IEnumerator hp_down;

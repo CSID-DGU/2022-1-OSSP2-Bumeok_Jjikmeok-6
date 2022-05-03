@@ -27,10 +27,13 @@ public class Boss : HP_Info
 
     SpriteRenderer spriteRenderer;
 
+    Rigidbody2D rb;
+
     [SerializeField]
     GameObject[] Boss_Weapon;
 
-    Animator animator;
+    public float speed = 15;
+    public float rotateSpeed = 200f;
 
     IEnumerator phase01;
     IEnumerator phase02;
@@ -41,7 +44,7 @@ public class Boss : HP_Info
     {
         base.Awake();
         playerControl = GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>();
-        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
         CurrentHP = MaxHP;
         spriteRenderer = GetComponent<SpriteRenderer>();
         phase01 = Phase01();
@@ -101,11 +104,34 @@ public class Boss : HP_Info
         yield return null;
         while (true)
         {
-            yield return StartCoroutine(phase01);
-            yield return StartCoroutine(phase02);
-            yield return StartCoroutine(phase03);
-            yield return StartCoroutine(phase04);
+            //yield return StartCoroutine(phase01);
+            //yield return StartCoroutine(phase02);
+            //yield return StartCoroutine(phase03);
+            //yield return StartCoroutine(phase04);
+            yield return StartCoroutine(Ready_To_Phase());
         }
+    }
+    IEnumerator Ready_To_Phase()
+    {
+        var kuku1 = (float)Mathf.Sqrt(Mathf.Pow(transform.position.x - 5, 2) + Mathf.Pow(transform.position.y - 1, 2));
+        var kuku2 = Mathf.Atan2(transform.position.y - 1, transform.position.x - 5);
+        var kuku3 = Mathf.Rad2Deg * kuku2;
+        var kuku4 = 90 - kuku3;
+        for (int i = 0; i < 4; i++)
+        {
+            Debug.Log(i);
+            for (int th = 0; th < 90; th++)
+            {
+                var rad = Mathf.Deg2Rad * (4 * th + kuku4);
+                var x = kuku1 * Mathf.Sin(rad);
+                var y = kuku1 * Mathf.Cos(rad);
+
+                transform.position = new Vector3(5 + x, 1 + y, 0);
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+            //yield return null;
+        }
+       
     }
     IEnumerator Phase01()
     {
@@ -188,8 +214,37 @@ public class Boss : HP_Info
     }
     IEnumerator Phase04()
     {
-        animator.SetTrigger("Size");
-        yield return null;
+        float percent = 0;
+        while(percent < 1)
+        {
+            percent += Time.deltaTime * 2;
+            transform.localScale = new Vector3(transform.localScale.x + (8f * Time.deltaTime),
+                transform.localScale.y + (8f * Time.deltaTime), 0);
+            yield return null;
+        }
+
+        percent = 0;
+        while (percent < 1)
+        {
+            percent += (Time.deltaTime * 2.5f);
+            transform.localScale = new Vector3(transform.localScale.x - (16f * Time.deltaTime),
+                transform.localScale.y - (16f * Time.deltaTime), 0);
+            yield return null;
+        }
+        percent = 0;
+        while (percent < 1)
+        {
+            percent += (Time.deltaTime / 5);
+            Vector2 direction = (Vector2)(GameObject.FindGameObjectWithTag("Playerrr").transform.position) - rb.position;
+            direction.Normalize();
+
+            float rotateAmount = Vector3.Cross(direction, transform.up).z;
+
+            rb.angularVelocity = -rotateAmount * rotateSpeed;
+
+            rb.velocity = transform.up * speed;
+            yield return null;
+        }
     }
     IEnumerator Boss_Move(float[,] Boss_Move_float)
     {
