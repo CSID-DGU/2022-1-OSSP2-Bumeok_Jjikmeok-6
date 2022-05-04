@@ -1,6 +1,10 @@
 # 2022-1-OSSP2-Bumeok_Jjikmeok-6
 2022년 1학기 공개SW프로젝트 02분반 6조 부먹찍먹
 
+## **게임 플레이 시 주의 사항**
+- 이 게임은 반드시 서버를 실행시킨다는 전제하에 플레이가 가능하니, 아래에 있는 서버 구동 방법에 있는 절차를 따라 서버를 실행시키세요. 
+- 이 게임은 광과민성 발작을 일으키는 요소가 다분하니, 주의하시기 바랍니다.
+
 ## 서버 구동 방법
 1. cmd 창을 열고 clone한 폴더의 unity_server_main 폴더로 이동하세요. (cmd 창에 "cd <해당 파일 경로>" 입력) (ex. cd C:\Users\hiwg08\Desktop\2022-1-OSSP2-Bumeok_Jjikmeok-6\unity_server_main)
 2. mysql을 설치하고, cmd 창을 하나 더 열어 본인의 mysql로 접속합니다. (1. mysql -uroot -p / 2.mysql을 설치하면서 설정한 비밀번호 입력)
