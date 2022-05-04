@@ -7,7 +7,6 @@ public class Boss : HP_Info
 {
     // Start is called before the first frame update
 
-
     [SerializeField]
     AnimationCurve curve;
 
@@ -20,6 +19,8 @@ public class Boss : HP_Info
 
     float[,] Boss_Random_Move = new float[6, 2] { { -6.64f, 1.95f }, { -3.11f, 0.04f }, { 2.31f, 2.78f }, { 3.4f, -2.91f }, { -4.92f, -3.07f },
     { -7.55f, -1.43f }};
+
+    float[] Meteor_Move = new float[9] { 4, 3, 2, 1, 0, -1, -2, -3, -4 };
 
     PlayerControl playerControl;
 
@@ -45,6 +46,12 @@ public class Boss : HP_Info
 
     [SerializeField]
     GameObject Charge_Beam;
+
+    [SerializeField]
+    GameObject Meteor;
+
+    [SerializeField]
+    GameObject Meteor_Line;
 
     public float speed = 15;
     public float rotateSpeed = 200f;
@@ -134,32 +141,32 @@ public class Boss : HP_Info
 
         UnBeatable = false;
         yield return YieldInstructionCache.WaitForEndOfFrame;
-        while (true)
-        {
-            yield return StartCoroutine(Ready_To_Phase());
-            int Random_Num = Random.Range(0, 5);
+        //while (true)
+        //{
+        //    yield return StartCoroutine(Ready_To_Phase());
+        //    int Random_Num = Random.Range(0, 5);
 
-            switch (Random_Num)
-            {
-                case 0:
-                    Phase_Total[Random_Num] = Phase01();
-                    break;
-                case 1:
-                    Phase_Total[Random_Num] = Phase02();
-                    break;
-                case 2:
-                    Phase_Total[Random_Num] = Phase03();
-                    break;
-                case 3:
-                    Phase_Total[Random_Num] = Phase04();
-                    break;
-                case 4:
-                    Phase_Total[Random_Num] = Phase05();
-                    break;
-            }
-            yield return StartCoroutine((IEnumerator)Phase_Total[Random_Num]);
-        }
-        //yield return StartCoroutine(Phase01());
+        //    switch (Random_Num)
+        //    {
+        //        case 0:
+        //            Phase_Total[Random_Num] = Phase01();
+        //            break;
+        //        case 1:
+        //            Phase_Total[Random_Num] = Phase02();
+        //            break;
+        //        case 2:
+        //            Phase_Total[Random_Num] = Phase03();
+        //            break;
+        //        case 3:
+        //            Phase_Total[Random_Num] = Phase04();
+        //            break;
+        //        case 4:
+        //            Phase_Total[Random_Num] = Phase05();
+        //            break;
+        //    }
+        //    yield return StartCoroutine((IEnumerator)Phase_Total[Random_Num]);
+        //}
+        yield return StartCoroutine(Phase04());
     }
     IEnumerator Ready_To_Phase()
     {
@@ -329,55 +336,80 @@ public class Boss : HP_Info
     }
     IEnumerator Phase04()
     {
-        //percent = 0;
-        //while (percent < 1)
-        //{
-        //    percent += Time.deltaTime * 2;
-        //    transform.localScale = new Vector3(transform.localScale.x + (8f * Time.deltaTime),
-        //        transform.localScale.y + (8f * Time.deltaTime), 0);
-        //    yield return YieldInstructionCache.WaitForEndOfFrame;
-        //}
+        while(true)
+        {
+            int Random_Num = Random.Range(0, 4);
+            Debug.Log(Random_Num);
+            switch (Random_Num)
+            {
+                case 0:
+                    yield return StartCoroutine(Meteor_Launch(9, 1));
+                    break;
+                case 1:
+                    yield return StartCoroutine(Meteor_Launch(6, 1));
+                    break;
+                case 2:
+                    yield return StartCoroutine(Meteor_Launch(1, 8));
+                    break;
+                case 3:
+                    yield return StartCoroutine(Meteor_Launch(3, 3));
+                    break;
+            }
+            yield return new WaitForSeconds(3f);
 
-        //percent = 0;
-        //while (percent < 1)
-        //{
-        //    percent += (Time.deltaTime * 2.5f);
-        //    transform.localScale = new Vector3(transform.localScale.x - (16f * Time.deltaTime),
-        //        transform.localScale.y - (16f * Time.deltaTime), 0);
-        //    yield return YieldInstructionCache.WaitForEndOfFrame;
-        //}
-        //percent = 0;
-        //while (percent < 1)
-        //{
-        //    percent += (Time.deltaTime / 3);
-        //    Vector2 direction = (Vector2)(GameObject.FindGameObjectWithTag("Playerrr").transform.position) - rb.position;
-        //    direction.Normalize();
-
-        //    float rotateAmount = Vector3.Cross(direction, transform.up).z;
-
-        //    rb.angularVelocity = -rotateAmount * rotateSpeed;
-
-        //    rb.velocity = transform.up * speed;
-
-
-        //    yield return YieldInstructionCache.WaitForEndOfFrame;
-        //}
-        //rb.angularVelocity = 0;
-        //rb.velocity = new Vector2(0, 0);
-        //transform.position = new Vector3(6, 1, 0);
-
-        //percent = 0;
-        //while (percent < 1)
-        //{
-        //    percent += (Time.deltaTime * 1.25f);
-        //    transform.localScale = new Vector3(transform.localScale.x + (3f * Time.deltaTime),
-        //        transform.localScale.y + (3f * Time.deltaTime), 0);
-        //    yield return YieldInstructionCache.WaitForEndOfFrame;
-        //}
-        //yield return YieldInstructionCache.WaitForEndOfFrame;
-        //yield break;
-        yield return null;
+        }
     }
+    IEnumerator Meteor_Launch(int Meteor_Num, int Launch_Count)
+    {
+
+        Meteor_Move = StaticStript.ShuffleList(Meteor_Move);
+        switch (Launch_Count)
+        {
+            case 1:
+                for (int i = 0; i < Meteor_Num; i++)
+                {
+                    GameObject e = Instantiate(Meteor_Line, new Vector3(0, Meteor_Move[i], 0), Quaternion.identity);
+                    StartCoroutine(e.GetComponent<Meteor_Line>().Change_Color());
+                }
+                yield return YieldInstructionCache.WaitForSeconds(2f);
+                for (int i = 0; i < Meteor_Num; i++)
+                {
+                    Instantiate(Meteor, new Vector3(7, Meteor_Move[i], 0), Quaternion.identity);
+                }
+                yield return YieldInstructionCache.WaitForSeconds(.5f);
+                break;
+
+            case 3:
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 3 * i; j < 3 * (i + 1); j++)
+                    {
+                        GameObject e = Instantiate(Meteor_Line, new Vector3(0, Meteor_Move[j], 0), Quaternion.identity);
+                        StartCoroutine(e.GetComponent<Meteor_Line>().Change_Color());
+                    }
+                    yield return YieldInstructionCache.WaitForSeconds(2f);
+                    for (int j = 3 * i; j < 3 * (i + 1); j++)
+                    {
+                        Instantiate(Meteor, new Vector3(7, Meteor_Move[j], 0), Quaternion.identity);
+                    }
+                    yield return YieldInstructionCache.WaitForSeconds(.5f);
+                }
+                break;
+
+            case 8:
+                for (int i = 0; i < 8; i++)
+                {
+                    GameObject e = Instantiate(Meteor_Line, new Vector3(0, Meteor_Move[i], 0), Quaternion.identity);
+                    StartCoroutine(e.GetComponent<Meteor_Line>().Change_Color());
+                    yield return YieldInstructionCache.WaitForSeconds(2f);
+                    Instantiate(Meteor, new Vector3(7, Meteor_Move[i], 0), Quaternion.identity);
+                    yield return YieldInstructionCache.WaitForEndOfFrame;
+                }
+                break;
+        }
+        yield break;
+    }
+    
 
     IEnumerator Phase05()
     {

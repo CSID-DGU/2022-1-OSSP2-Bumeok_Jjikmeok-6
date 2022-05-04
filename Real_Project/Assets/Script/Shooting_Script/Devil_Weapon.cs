@@ -8,8 +8,6 @@ public class Devil_Weapon : MonoBehaviour
     [SerializeField]
     GameObject Devil_Explosion;
 
-    [SerializeField]
-    bool user_Define_Explose = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -19,8 +17,7 @@ public class Devil_Weapon : MonoBehaviour
             {
                 collision.GetComponent<PlayerControl>().Unbeatable_Player = true;
                 collision.GetComponent<PlayerControl>().TakeDamage();
-                if (user_Define_Explose)
-                    OffLife();
+                OffLife();
             }
         }
     }
