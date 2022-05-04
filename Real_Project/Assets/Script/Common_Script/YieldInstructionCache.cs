@@ -15,18 +15,3 @@ internal static class YieldInstructionCache
         return wfs;
     }
 }
-
-//public class YieldInstructionCache : MonoBehaviour
-//{
-//    // Start is called before the first frame update
-//    void Start()
-//    {
-        
-//    }
-
-//    // Update is called once per frame
-//    void Update()
-//    {
-        
-//    }
-//}

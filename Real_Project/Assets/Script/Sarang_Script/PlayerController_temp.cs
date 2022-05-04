@@ -9,8 +9,10 @@ public class PlayerController_temp : MonoBehaviour
     private bool IsOneClick = false;
     private double Timer = 0;
     private bool onUpdate = true;
+    private bool FixedSlider = false;
     private IEnumerator m_Coroutine;
     private IEnumerator i_Coroutine;
+
 
     [SerializeField]
     float maxWalkSpeed = 0.02f;
@@ -29,7 +31,7 @@ public class PlayerController_temp : MonoBehaviour
 
     private void Awake()
     {
-        Student_Gaze.SetActive(false);
+       // Student_Gaze.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -95,13 +97,18 @@ public class PlayerController_temp : MonoBehaviour
                 if (Input.GetMouseButton(0))
                 {
                     GameObject targetStudent = hit.transform.gameObject;
+                    if (!FixedSlider)
+                    {
+                        Student_Gaze.transform.position = targetStudent.transform.position + new Vector3(0, 2, 0);
+                        FixedSlider = true;
+                    }
+
                     Lazor.GetComponent<Movement2D_Variation>().MoveTo(new Vector3(targetStudent.transform.position.x - transform.position.x,
                            targetStudent.transform.position.y - transform.position.y, 0));
                     Instantiate(Lazor, transform.position, Quaternion.identity);
+                    
                     if (!Student_Gaze.activeSelf)
                         Student_Gaze.SetActive(true);
-
-                    Student_Gaze.transform.position = targetStudent.transform.position + new Vector3(0, 2, 0);
                     //Debug.Log(Student_Gaze.transform.position);
                     if (Student_Gaze.GetComponent<Student_Gaze_Info>().Block_HP(targetStudent.transform.position))
                     {
@@ -113,6 +120,7 @@ public class PlayerController_temp : MonoBehaviour
                 else if (Input.GetMouseButtonUp(0))
                 {
                     Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
+                    FixedSlider = false;
                     Student_Gaze.SetActive(false);
                 }
             }
@@ -123,7 +131,9 @@ public class PlayerController_temp : MonoBehaviour
     {
         StopCoroutine(i_Coroutine);
         yield return StartCoroutine(Student_Gaze.GetComponent<Student_Gaze_Info>().Conflict(targetStudent_t));
+        FixedSlider = false;
         yield return new WaitForSeconds(0.1f); // 이 한줄 코드 때문에 10시에 끝날거 12시에 끝났다
+       
         StartCoroutine(i_Coroutine);
 
         yield return null;

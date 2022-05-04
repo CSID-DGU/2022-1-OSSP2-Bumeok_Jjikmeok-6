@@ -16,6 +16,7 @@ TagManager:
   - Trap
   - Interrupt
   - Student
+  - Flash
   layers:
   - Default
   - TransparentFX

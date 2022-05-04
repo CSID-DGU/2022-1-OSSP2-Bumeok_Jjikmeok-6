@@ -87,29 +87,19 @@ public class EnemyAndBossSpawn : MonoBehaviour
     }
     IEnumerator First_Boss_Appear()
     {
-        GameObject BossClone = Instantiate(Boss, new Vector3(9, 0.38f, 1), Quaternion.identity);
-       
-        yield return null;
         while (true)
         {
-            if (BossClone == null)
+            if (Boss == null)
                 break;
-            BossClone.transform.position += Vector3.left * (Time.deltaTime * 1.5f);
+            Boss.transform.position += Vector3.left * (Time.deltaTime * 4f);
             yield return null;
-            if (BossClone.transform.position.x <= 6.3f)
+            if (Boss.transform.position.x <= 6.3f)
             {
                 BossHPSliderPrefab.SetActive(true);
                 BossHPSliderLeft.SetActive(true);
-                BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(BossClone.GetComponent<Boss>());
-                // sliderClone = Instantiate(BossHPSliderPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-
-                //sliderClone.transform.SetParent(canvasTransform); // Slider UI 오브젝트를 parent("Canvas")의 자식으로 설정
-                //sliderClone.transform.position = new Vector3(0.6f, -4.3f, 0);
-                //sliderClone.transform.localScale = Vector3.one; // 계층 설정으로 바뀐 크기를 기존의 크기로 재설정
-                //sliderClone.GetComponent<BossHPSliderViewer>().F_HPFull(BossClone.GetComponent<Boss>());
+                BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<Boss>());
                 yield return new WaitForSeconds(2f);
-                BossClone.GetComponent<Boss>().Phase_Start();
-                //yield return new WaitForSeconds(100f);
+                Boss.GetComponent<Boss>().Phase_Start();
                 yield break;
             }
             yield return null;

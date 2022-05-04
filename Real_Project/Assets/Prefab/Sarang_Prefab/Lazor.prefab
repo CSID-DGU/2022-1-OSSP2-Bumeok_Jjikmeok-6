@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 8
-  moveDirection: {x: -6.4532223, y: -1.4102838, z: 0}
+  moveDirection: {x: -7.63, y: -4.4, z: 0}
 --- !u!96 &9125672011398998463
 TrailRenderer:
   serializedVersion: 2
