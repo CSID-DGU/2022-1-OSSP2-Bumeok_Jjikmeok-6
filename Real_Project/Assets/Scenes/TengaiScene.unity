@@ -1398,7 +1398,7 @@ MonoBehaviour:
   PlayerScore: {fileID: 559547068}
   LifeTime_Text: {fileID: 807666787}
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
-  LifeTime: 5
+  LifeTime: 20
 --- !u!114 &1175002248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1449,7 +1449,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!95 &1175002251
 Animator:
   serializedVersion: 3

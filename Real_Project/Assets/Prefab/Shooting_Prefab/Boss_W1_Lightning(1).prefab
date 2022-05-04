@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5313545053945245215}
   - component: {fileID: 618834354433247376}
   - component: {fileID: 9041559630958799090}
+  - component: {fileID: -5260851961087281840}
   m_Layer: 0
   m_Name: Boss_W1_Lightning(1)
   m_TagString: Untagged
@@ -159,3 +160,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.7}
   m_EdgeRadius: 0
+--- !u!114 &-5260851961087281840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5313545053945245203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}

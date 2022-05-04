@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public enum BossState { Phase01 = 0, Phase02, Phase03 }
 
 public class Boss : HP_Info
 {
@@ -35,10 +34,10 @@ public class Boss : HP_Info
     public float speed = 15;
     public float rotateSpeed = 200f;
 
-    IEnumerator phase01;
-    IEnumerator phase02;
-    IEnumerator phase03;
-    IEnumerator phase04;
+
+    IEnumerator phase;
+
+    ArrayList Phase_Total;
 
     new private void Awake()
     {
@@ -47,10 +46,19 @@ public class Boss : HP_Info
         rb = GetComponent<Rigidbody2D>();
         CurrentHP = MaxHP;
         spriteRenderer = GetComponent<SpriteRenderer>();
-        phase01 = Phase01();
-        phase02 = Phase02();
-        phase03 = Phase03();
-        phase04 = Phase04();
+        Phase_Total = new ArrayList();
+        phase = Phase01();
+        Phase_Total.Add(phase);
+
+        phase = Phase02();
+        Phase_Total.Add(phase);
+
+        phase = Phase03();
+        Phase_Total.Add(phase);
+
+        phase = Phase04();
+        Phase_Total.Add(phase);
+
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
@@ -87,9 +95,11 @@ public class Boss : HP_Info
     {
         playerControl.Score += 10000;
         Instantiate(Die_Explosion, transform.position, Quaternion.identity);
-        StopCoroutine(phase01);
-        StopCoroutine(phase02);
-        StopCoroutine(phase03);
+        foreach (var u in Phase_Total)
+        {
+            StopCoroutine((IEnumerator)u);
+        }
+
         GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().MoveSpeed = GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().MoveSpeed * 2f;
         GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().MoveSpeed = GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().MoveSpeed * 2f;
         Destroy(gameObject);
@@ -100,38 +110,52 @@ public class Boss : HP_Info
     }
     IEnumerator Repeat_Phase()
     {
+        
         UnBeatable = false;
-        yield return null;
+        yield return YieldInstructionCache.WaitForEndOfFrame;
         while (true)
         {
-            //yield return StartCoroutine(phase01);
-            //yield return StartCoroutine(phase02);
-            //yield return StartCoroutine(phase03);
-            //yield return StartCoroutine(phase04);
             yield return StartCoroutine(Ready_To_Phase());
+            int Random_Num = Random.Range(0, 4);
+
+            switch (Random_Num)
+            {
+                case 0:
+                    Phase_Total[Random_Num] = Phase01();
+                    break;
+                case 1:
+                    Phase_Total[Random_Num] = Phase02();
+                    break;
+                case 2:
+                    Phase_Total[Random_Num] = Phase03();
+                    break;
+                case 3:
+                    Phase_Total[Random_Num] = Phase04();
+                    break;
+            }
+            yield return StartCoroutine((IEnumerator)Phase_Total[Random_Num]);
         }
     }
     IEnumerator Ready_To_Phase()
     {
-        var kuku1 = (float)Mathf.Sqrt(Mathf.Pow(transform.position.x - 5, 2) + Mathf.Pow(transform.position.y - 1, 2));
-        var kuku2 = Mathf.Atan2(transform.position.y - 1, transform.position.x - 5);
-        var kuku3 = Mathf.Rad2Deg * kuku2;
-        var kuku4 = 90 - kuku3;
+        var radius = (float)Mathf.Sqrt(Mathf.Pow(0.5f, 2) + Mathf.Pow(-0.5f, 2));
+        var start_deg = 90 - (Mathf.Rad2Deg * Mathf.Atan2(-0.5f, 0.5f));
+        var center_x = transform.position.x - 0.5f;
+        var center_y = transform.position.y + 0.5f;
         for (int i = 0; i < 4; i++)
         {
             Debug.Log(i);
             for (int th = 0; th < 90; th++)
             {
-                var rad = Mathf.Deg2Rad * (4 * th + kuku4);
-                var x = kuku1 * Mathf.Sin(rad);
-                var y = kuku1 * Mathf.Cos(rad);
+                var rad = Mathf.Deg2Rad * (4 * th + start_deg);
+                var x = radius * Mathf.Sin(rad);
+                var y = radius * Mathf.Cos(rad);
 
-                transform.position = new Vector3(5 + x, 1 + y, 0);
-                yield return new WaitForSeconds(Time.deltaTime);
+                transform.position = new Vector3(center_x + x, center_y + y, 0);
+                yield return YieldInstructionCache.WaitForEndOfFrame;
             }
-            //yield return null;
         }
-       
+        yield break;
     }
     IEnumerator Phase01()
     {
@@ -148,23 +172,26 @@ public class Boss : HP_Info
         GameObject L4 = Instantiate(Boss_Weapon[0], transform.position, Quaternion.Euler(new Vector3(0, 0, 120)));
         L4.GetComponent<Movement2D>().MoveTo(new Vector3(-1, 0.5714f, 0));
 
-        yield return new WaitForSeconds(2f);
+        yield return YieldInstructionCache.WaitForSeconds(2f);
 
         GameObject L5 = Instantiate(Boss_Weapon[2], new Vector3(0, 3, 0), Quaternion.Euler(new Vector3(0, 0, -9)));
         GameObject L6 = Instantiate(Boss_Weapon[2], new Vector3(0, -4, 0), Quaternion.Euler(new Vector3(0, 0, -9)));
         GameObject L7 = Instantiate(Boss_Weapon[3], new Vector3(-8, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)));
         GameObject L8 = Instantiate(Boss_Weapon[3], new Vector3(6.6f, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)));
-        yield return new WaitForSeconds(2.5f);
+        yield return YieldInstructionCache.WaitForSeconds(2.5f);
 
         Destroy(L5); Destroy(L6); Destroy(L7); Destroy(L8);
 
         while (true)
         {
             transform.position += Vector3.right * (Time.deltaTime * 8f);
-            yield return null;
+            yield return YieldInstructionCache.WaitForEndOfFrame;
 
             if (transform.position.x >= 7)
+            {
+                yield return YieldInstructionCache.WaitForEndOfFrame;
                 yield break;
+            }
         }
     }
     IEnumerator Phase02()
@@ -185,8 +212,9 @@ public class Boss : HP_Info
             GameObject C5 = Instantiate(Boss_Weapon[1], transform.position, Quaternion.identity);
             C5.GetComponent<Movement2D>().MoveTo(new Vector3(-1, -0.2857f, 0));
 
-            yield return new WaitForSeconds(0.15f);
+            yield return YieldInstructionCache.WaitForSeconds(0.15f);
         }
+        yield return YieldInstructionCache.WaitForSeconds(2f);
         yield break;
     }
     IEnumerator Phase03()
@@ -200,17 +228,27 @@ public class Boss : HP_Info
             current += Time.deltaTime;
             percent = current / boomDelay;
             transform.position = Vector3.Slerp(transform.position, new Vector3(0, 0, 0), curve.Evaluate(percent));
-            yield return null;
+            yield return YieldInstructionCache.WaitForEndOfFrame;
         }
         float rot_Speed = 7;
-        while (true)
+        percent = 0;
+        while (percent < 1)
         {
-            transform.Rotate(Vector3.forward * rot_Speed * 100 * Time.deltaTime);
-            GameObject T1 = Instantiate(Boss_Weapon[4]);
-            T1.transform.position = transform.position;
-            T1.transform.rotation = transform.rotation;
-            yield return null;
+            percent += (Time.deltaTime / 2);
+            transform.Rotate(Vector3.forward * rot_Speed * 250 * Time.deltaTime);
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == 3)
+                {
+                    GameObject T1 = Instantiate(Boss_Weapon[4]);
+                    T1.transform.position = transform.position;
+                    T1.transform.rotation = transform.rotation;
+                    yield return YieldInstructionCache.WaitForEndOfFrame;
+                }
+            }
         }
+        yield return YieldInstructionCache.WaitForSeconds(3f);
+        yield break;
     }
     IEnumerator Phase04()
     {
@@ -220,7 +258,7 @@ public class Boss : HP_Info
             percent += Time.deltaTime * 2;
             transform.localScale = new Vector3(transform.localScale.x + (8f * Time.deltaTime),
                 transform.localScale.y + (8f * Time.deltaTime), 0);
-            yield return null;
+            yield return YieldInstructionCache.WaitForEndOfFrame;
         }
 
         percent = 0;
@@ -229,12 +267,12 @@ public class Boss : HP_Info
             percent += (Time.deltaTime * 2.5f);
             transform.localScale = new Vector3(transform.localScale.x - (16f * Time.deltaTime),
                 transform.localScale.y - (16f * Time.deltaTime), 0);
-            yield return null;
+            yield return YieldInstructionCache.WaitForEndOfFrame;
         }
         percent = 0;
         while (percent < 1)
         {
-            percent += (Time.deltaTime / 5);
+            percent += (Time.deltaTime / 3);
             Vector2 direction = (Vector2)(GameObject.FindGameObjectWithTag("Playerrr").transform.position) - rb.position;
             direction.Normalize();
 
@@ -243,8 +281,22 @@ public class Boss : HP_Info
             rb.angularVelocity = -rotateAmount * rotateSpeed;
 
             rb.velocity = transform.up * speed;
-            yield return null;
+            yield return YieldInstructionCache.WaitForEndOfFrame;
         }
+        rb.angularVelocity = 0;
+        rb.velocity = new Vector2(0, 0);
+        transform.position = new Vector3(6, 1, 0);
+
+        percent = 0;
+        while (percent < 1)
+        {
+            percent += (Time.deltaTime * 1.25f);
+            transform.localScale = new Vector3(transform.localScale.x + (3f * Time.deltaTime),
+                transform.localScale.y + (3f * Time.deltaTime), 0);
+            yield return YieldInstructionCache.WaitForEndOfFrame;
+        }
+        yield return YieldInstructionCache.WaitForEndOfFrame;
+        yield break;
     }
     IEnumerator Boss_Move(float[,] Boss_Move_float)
     {
@@ -258,7 +310,7 @@ public class Boss : HP_Info
                 percent = current / boomDelay;
 
                 transform.position = Vector3.Lerp(transform.position, new Vector3(Boss_Move_float[i, 0], Boss_Move_float[i, 1], Boss_Move_float[i, 2]), curve.Evaluate(percent));
-                yield return null;
+                yield return YieldInstructionCache.WaitForEndOfFrame;
             }
         }
         yield break;
