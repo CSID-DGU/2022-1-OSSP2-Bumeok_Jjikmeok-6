@@ -21,7 +21,8 @@ public class PlayerControl : MonoBehaviour
     }
 
     [SerializeField]
-    AnimationCurve curve;
+    AnimationCurve curve_For_Boom;
+
 
     public bool Unbeatable_Player = false;
 
@@ -51,6 +52,16 @@ public class PlayerControl : MonoBehaviour
     [SerializeField]
     int LifeTime = 5;
 
+    [SerializeField]
+    GameObject Dead_Particle;
+
+    [SerializeField]
+    GameObject Emit_Obj;
+
+    GameObject Emit_Obj_Copy;
+
+    IEnumerator params_enum;
+
     private void Awake()
     {
         movement2D = GetComponent<Movement2D>();
@@ -60,6 +71,7 @@ public class PlayerControl : MonoBehaviour
         is_Update = false;
         is_LateUpdate = false;
         weapon.enabled = false;
+        movement2D.enabled = false;
         score = 0;
         PlayerScore.text = "Á¡¼ö : " + score;
         PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
@@ -94,7 +106,7 @@ public class PlayerControl : MonoBehaviour
                 yield return null;
 
                 StartCoroutine("FadeText");
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(2f);
                 yield break;
             }
         }
@@ -103,40 +115,63 @@ public class PlayerControl : MonoBehaviour
     {
         while (PlayerScore.color.a < 1.0f)
         {
-            LifeTime_Text.color = new Color(LifeTime_Text.color.r, LifeTime_Text.color.g, LifeTime_Text.color.b, LifeTime_Text.color.a + (Time.deltaTime / 2.0f));
-            PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, PlayerScore.color.a + (Time.deltaTime / 2.0f));
+            LifeTime_Text.color = new Color(LifeTime_Text.color.r, LifeTime_Text.color.g, LifeTime_Text.color.b, LifeTime_Text.color.a + Time.deltaTime / 2);
+            PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, PlayerScore.color.a + Time.deltaTime / 2);
             yield return null;
         }
     }
     IEnumerator Damage_After()
     {
+       
         weapon.enabled = false;
         is_LateUpdate = false;
+        movement2D.enabled = false;
         is_Update = false;
-        movement2D.enabled = true;
+        GameObject e = Instantiate(Dead_Particle, transform.position, Quaternion.identity);
         yield return null;
 
-        yield return StartCoroutine("MovePath");
-        movement2D.enabled = false;
-        yield return null;
+        yield return StartCoroutine(MovePath());
+        Destroy(e);
 
         yield return StartCoroutine("Move_first");
         yield break;
     }
     IEnumerator MovePath()
     {
+        Vector3 temp_position = transform.position;
+        Vector3 Last_Position;
+        float percent = 0;
+        float Fall_X = 0;
+        float Fall_Y = 0;
+        float Params = 0;
+        while (percent < 1)
+        {
+            Last_Position = transform.position;
+            percent += Time.deltaTime * 2;
+            Vector3 center = (temp_position + new Vector3(temp_position.x - 2.5f, temp_position.y, temp_position.z)) * 0.5f;
+            center -= Vector3.up;
+            Vector3 riseRelCenter = temp_position - center;
+            Vector3 setRelCenter = new Vector3(temp_position.x - 2.5f, temp_position.y, temp_position.z) - center;
 
-        float Params = 0.7f;
+            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, percent);
+
+            transform.position += center;
+            Fall_X = transform.position.x - Last_Position.x;
+            Fall_Y = transform.position.y - Last_Position.y;
+            yield return null;
+        }
+        Vector2 Normal = new Vector2(Fall_X, Fall_Y).normalized;
+
+
         while (true)
         {
             if (transform.position.y <= -7)
             {
                 yield break;
             }
-            movement2D.MoveSpeed = 3f / Mathf.Pow(Params, 2);
-            Params -= 0.004f;
-            movement2D.MoveTo(new Vector3(-0.7f, -1, 0));
-            
+            transform.position = new Vector3(transform.position.x + (Normal.x * Time.deltaTime * (6 + Params)), transform.position.y + (Normal.y * Time.deltaTime * (6 + Params)), 0);
+
+            Params += 0.03f;
             yield return null;
         }
     }
@@ -148,6 +183,12 @@ public class PlayerControl : MonoBehaviour
         if (LifeTime <= 0)
         {
             OnDie();
+        }
+
+        if (Emit_Obj_Copy != null)
+        {
+            StopCoroutine(params_enum);
+            Destroy(Emit_Obj_Copy);
         }
 
         StartCoroutine("Damage_After");
@@ -171,6 +212,55 @@ public class PlayerControl : MonoBehaviour
 
         Unbeatable_Player = false;
         yield return null;
+    }
+
+    public void Start_Emit()
+    {
+        StartCoroutine(I_Start_Emit());
+    }
+    IEnumerator I_Start_Emit()
+    {
+        Unbeatable_Player = true;
+        yield return null;
+        Emit_Obj_Copy = Instantiate(Emit_Obj, transform.position, Quaternion.identity);
+        params_enum = Emit_Obj_Copy.GetComponent<Emit_Motion>().Change_Size();
+        
+        StartCoroutine(params_enum);
+        yield return YieldInstructionCache.WaitForSeconds(5f);
+        //Unbeatable_Player = true;
+        //yield return null;
+        StopCoroutine(params_enum);
+
+        yield return StartCoroutine(Emit_Obj_Copy.GetComponent<Emit_Motion>().Expand_Circle());
+        Destroy(Emit_Obj_Copy);
+        yield return null;
+
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
+        GameObject[] meteor_line = GameObject.FindGameObjectsWithTag("Meteor_Line");
+        GameObject[] meteor_traffic = GameObject.FindGameObjectsWithTag("Meteor_Traffic");
+        foreach (var e in enemy)
+        {
+            Destroy(e);
+        }
+        foreach (var e in meteor)
+        {
+            Destroy(e);
+        }
+        foreach (var e in meteor_line)
+        {
+            Destroy(e);
+        }
+        foreach (var e in meteor_traffic)
+        {
+            Destroy(e);
+        }
+
+        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().Get_Flash());
+        GameObject.FindGameObjectWithTag("Boss").GetComponent<Boss>().Stop_Meteor();
+        GameObject u = Instantiate(Dead_Particle, Vector3.zero, Quaternion.identity);
+        yield return YieldInstructionCache.WaitForSeconds(2f);
+        Destroy(u);
     }
 
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : HP_Info
+public class Enemy : MonoBehaviour
 {
 
     [SerializeField]
@@ -11,42 +11,31 @@ public class Enemy : HP_Info
     [SerializeField]
     GameObject Die_Explosion;
 
-    SpriteRenderer spriteRenderer;
-
     PlayerControl playerControl;
 
-    [SerializeField]
-    GameObject[] Enemy_Weapon;
+    Rigidbody2D rb;
 
-    new private void Awake()
+    [SerializeField]
+    float speed = 5;
+
+    [SerializeField]
+    public float rotateSpeed = 200f;
+
+    private void Awake()
     {
-        base.Awake();
-        CurrentHP = MaxHP;
         playerControl = GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
     }
     void Start()
     {
-        StartCoroutine("Wow");
+        //StartCoroutine(Auto_Dead());
+        StartCoroutine(Homming_Player());
     }
-    IEnumerator Wow()
+    IEnumerator Auto_Dead()
     {
-        yield return new WaitForSeconds(1f);
-        while(true)
-        {
-            Instantiate(Enemy_Weapon[0], transform.position, Quaternion.identity);
-
-
-            GameObject C1 = Instantiate(Enemy_Weapon[0], transform.position, Quaternion.identity);
-            C1.GetComponent<Movement2D>().MoveTo(new Vector3(-1, 1.1428f, 0));
-
-
-            GameObject C2 = Instantiate(Enemy_Weapon[0], transform.position, Quaternion.identity);
-            C2.GetComponent<Movement2D>().MoveTo(new Vector3(-1, -1.1428f, 0));
-
-            yield return new WaitForSeconds(0.6f);
-        }
-        
+        yield return YieldInstructionCache.WaitForSeconds(5f);
+        OnDie();
+        yield return YieldInstructionCache.WaitForEndOfFrame;
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -56,31 +45,33 @@ public class Enemy : HP_Info
             {
                 collision.GetComponent<PlayerControl>().Unbeatable_Player = true;
                 collision.GetComponent<PlayerControl>().TakeDamage();
+                Instantiate(Die_Explosion, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
         }
     }
-    public void TakeDamage(float damage)
-    {
-        CurrentHP -= damage;
-        StartCoroutine("Hit");
-        if (CurrentHP <= 0)
-        {
-            OnDie();
-        }
-    }
-    IEnumerator Hit()
-    {
-        spriteRenderer.color = Color.blue;
-        yield return new WaitForSeconds(0.1f);
-        spriteRenderer.color = Color.white;
-    }
-
     public void OnDie()
     {
         playerControl.Score += ScorePerEnemy;
         Instantiate(Die_Explosion, transform.position, Quaternion.identity);
         Destroy(gameObject);
+    }
+    IEnumerator Homming_Player()
+    {
+        while (true)
+        {
+            Vector2 direction = (Vector2)(GameObject.FindGameObjectWithTag("Playerrr").transform.position) - rb.position;
+            direction.Normalize();
+
+            float rotateAmount = Vector3.Cross(direction, transform.up).z;
+
+            rb.angularVelocity = -rotateAmount * rotateSpeed;
+
+            rb.velocity = transform.up * speed;
+
+            yield return YieldInstructionCache.WaitForEndOfFrame;
+        }
+
     }
 
     // Update is called once per frame
@@ -88,4 +79,5 @@ public class Enemy : HP_Info
     {
         
     }
+
 }

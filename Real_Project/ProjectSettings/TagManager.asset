@@ -17,6 +17,9 @@ TagManager:
   - Interrupt
   - Student
   - Flash
+  - Meteor
+  - Meteor_Line
+  - Meteor_Traffic
   layers:
   - Default
   - TransparentFX

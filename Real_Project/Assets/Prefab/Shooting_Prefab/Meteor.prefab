@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 5237981916155833131}
   - component: {fileID: 5237981916155833129}
   - component: {fileID: -4984613072594687240}
+  - component: {fileID: 2881198842379697128}
   m_Layer: 0
   m_Name: Meteor
-  m_TagString: Untagged
+  m_TagString: Meteor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,3 +172,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2050619d650e44c84aac210ce04f9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Meteor_Line_O: {fileID: 7825423239845067279, guid: 276fea8bb09c9f94095d1999f3ca0d28, type: 3}
+  Meteor_Traffic_O: {fileID: 3074925144767600519, guid: 2c22f4bdb8e91da4d9e5d3b918cceef7, type: 3}
+--- !u!114 &2881198842379697128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5237981916155833143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}

@@ -10,12 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1007418396252536624}
   - component: {fileID: 1007418396252536625}
-  - component: {fileID: 1007418396252536639}
   - component: {fileID: 1237595746762495752}
-  - component: {fileID: 2167536492608440319}
   - component: {fileID: 1102636073480303114}
   - component: {fileID: -1391084154194980928}
   - component: {fileID: 107024717335685559}
+  - component: {fileID: 1646967279181538332}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -76,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 7295804384125065538, guid: 4357a1554783efb4bb10b7d251d734b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -88,20 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1007418396252536639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1007418396252536626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07029b59c310ce148a311ab8ad8d07e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 2
-  moveDirection: {x: -1, y: 0, z: 0}
 --- !u!58 &1237595746762495752
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -118,19 +103,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.4
---- !u!114 &2167536492608440319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1007418396252536626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
 --- !u!114 &1102636073480303114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,12 +128,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab3dd44dcec4fd1479bd17b8b240670b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 7
-  attack_rate: 1
   ScorePerEnemy: 50
   Die_Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
-  Enemy_Weapon:
-  - {fileID: 566935688652192511, guid: 69e3b015d8d6e424698b474e4044d1aa, type: 3}
+  speed: 5
+  rotateSpeed: 200
 --- !u!95 &107024717335685559
 Animator:
   serializedVersion: 3
@@ -181,3 +151,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!50 &1646967279181538332
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007418396252536626}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
