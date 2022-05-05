@@ -91,3 +91,6 @@ exports.isLoggedIn = async(req, res, next) => {
         return res.status(400).send("로그인 없인 아무것도 할 수 없어요")
     }
 }
+exports.connect_check = async(req, res, next) => {
+    return res.status(200).send({message: 'Successfully connected' })
+}

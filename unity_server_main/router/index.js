@@ -57,5 +57,8 @@ router.route('/Get_Rank')
 router.route('/log_fail')
 .get(router_func.log_fail)
 
+router.route('/continue_connect')
+.get(router_func.connect_check)
+
 
 module.exports = router
