@@ -50,9 +50,9 @@ public class Student_Gaze_Info : MonoBehaviour
     {
         slider.value = 0;
     }
-    public IEnumerator Conflict(GameObject e)
+    public IEnumerator Competition(GameObject e)
     {
-        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().Get_Flash());
+        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().White_Flash());
         while(true)
         {
             slider.value -= Time.deltaTime / (5 - InterruptArray.Count);

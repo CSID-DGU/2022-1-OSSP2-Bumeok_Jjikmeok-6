@@ -597,6 +597,8 @@ MonoBehaviour:
   canvasTransform: {fileID: 470250061}
   Lazor: {fileID: 5058595808972261254, guid: c5ab8b444345de6479fbf0575b75c2ba, type: 3}
   Student_Gaze: {fileID: 328023424}
+  Left: 97
+  Right: 100
 --- !u!50 &365745729
 Rigidbody2D:
   serializedVersion: 4
@@ -2861,4 +2863,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 703bb649085d6444ab4325b5de6aa5b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changed: 0

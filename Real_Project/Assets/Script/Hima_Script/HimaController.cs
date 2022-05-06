@@ -117,6 +117,5 @@ public class HimaController : MonoBehaviour {
 	public void Die() {
 		Destroy(gameObject);
 		//Instantiate(deathParticle, transform.position, Quaternion.identity);
-
 	}
 }

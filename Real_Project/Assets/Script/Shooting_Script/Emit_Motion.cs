@@ -32,7 +32,7 @@ public class Emit_Motion : MonoBehaviour
                 yield return YieldInstructionCache.WaitForEndOfFrame;
             }
             temp_scale = transform.localScale;
-            while (temp_scale.x - transform.localScale.x < .24f)
+            while (temp_scale.x - transform.localScale.x < .25f)
             {
                 transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, 0);
                 yield return YieldInstructionCache.WaitForEndOfFrame;

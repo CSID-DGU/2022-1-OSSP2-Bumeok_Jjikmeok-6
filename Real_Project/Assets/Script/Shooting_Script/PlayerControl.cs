@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : Player_Info
 {
     // Start is called before the first frame update
 
@@ -23,7 +23,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField]
     AnimationCurve curve_For_Boom;
 
-
     public bool Unbeatable_Player = false;
 
     [SerializeField]
@@ -31,8 +30,6 @@ public class PlayerControl : MonoBehaviour
 
     [SerializeField]
     KeyCode keyCodeBoom = KeyCode.Z;
-
-    SpriteRenderer spriteRenderer;
 
     [SerializeField]
     TextMeshProUGUI PlayerScore;
@@ -62,16 +59,18 @@ public class PlayerControl : MonoBehaviour
 
     IEnumerator params_enum;
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
         movement2D = GetComponent<Movement2D>();
         weapon = GetComponent<Weapon>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        
         animator = GetComponent<Animator>();
         is_Update = false;
         is_LateUpdate = false;
         weapon.enabled = false;
         movement2D.enabled = false;
+        Unbeatable_Player = true;
         score = 0;
         PlayerScore.text = "Á¡¼ö : " + score;
         PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
@@ -177,6 +176,8 @@ public class PlayerControl : MonoBehaviour
     }
     public void TakeDamage()
     {
+        if (Unbeatable_Player)
+            return;
         LifeTime--;
 
         LifeTime_Text.text = "Life x  : " + LifeTime;
@@ -227,13 +228,11 @@ public class PlayerControl : MonoBehaviour
         
         StartCoroutine(params_enum);
         yield return YieldInstructionCache.WaitForSeconds(5f);
-        //Unbeatable_Player = true;
-        //yield return null;
+
         StopCoroutine(params_enum);
 
         yield return StartCoroutine(Emit_Obj_Copy.GetComponent<Emit_Motion>().Expand_Circle());
         Destroy(Emit_Obj_Copy);
-        yield return null;
 
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
@@ -256,15 +255,15 @@ public class PlayerControl : MonoBehaviour
             Destroy(e);
         }
 
-        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().Get_Flash());
-        GameObject.FindGameObjectWithTag("Boss").GetComponent<Boss>().Stop_Meteor();
+        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().White_Flash());
+        GameObject.FindGameObjectWithTag("Boss").GetComponent<DoPhan>().Stop_Meteor();
         GameObject u = Instantiate(Dead_Particle, Vector3.zero, Quaternion.identity);
         yield return YieldInstructionCache.WaitForSeconds(2f);
         Destroy(u);
     }
 
 
-    public void OnDie()
+    public override void OnDie()
     {
         Destroy(gameObject);
         return;
@@ -298,7 +297,6 @@ public class PlayerControl : MonoBehaviour
         {
             weapon.StartBoom();
         }
-       
     }
     void LateUpdate()
     {

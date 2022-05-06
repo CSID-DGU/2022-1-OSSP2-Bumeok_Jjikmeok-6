@@ -54,7 +54,7 @@ public class W3_Boom : MonoBehaviour
         }
         if (boss != null)
         {
-            boss.GetComponent<Boss>().TakeDamage(30);
+            boss.GetComponent<DoPhan>().TakeDamage(30);
         }
         Destroy(gameObject);
     }

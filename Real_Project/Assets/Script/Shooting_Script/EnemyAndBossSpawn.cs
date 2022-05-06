@@ -48,9 +48,9 @@ public class EnemyAndBossSpawn : MonoBehaviour
             {
                 BossHPSliderPrefab.SetActive(true);
                 BossHPSliderLeft.SetActive(true);
-                BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<Boss>());
+                BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<DoPhan>());
                 yield return new WaitForSeconds(2f);
-                Boss.GetComponent<Boss>().Phase_Start();
+                Boss.GetComponent<DoPhan>().Phase_Start();
                 yield break;
             }
             yield return null;

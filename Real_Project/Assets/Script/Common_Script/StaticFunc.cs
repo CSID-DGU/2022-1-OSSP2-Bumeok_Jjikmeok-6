@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 internal static class StaticFunc
 {
@@ -29,16 +28,6 @@ internal static class StaticFunc
             yield return null;
         }
     }
-    public static IEnumerator Position_Lerp(GameObject copy, Vector3 start_location, Vector3 last_location, float time_ratio, AnimationCurve curve)
-    {
-        float percent = 0;
-        while (percent < 1)
-        {
-            percent += (Time.deltaTime * time_ratio);
-            copy.transform.position = Vector3.Lerp(start_location, last_location, curve.Evaluate(percent));
-            yield return YieldInstructionCache.WaitForEndOfFrame;
-        }
-    }
     public static IEnumerator Warning(TextMeshProUGUI warning_UI, string warning_message, float time_ratio)
     {
         warning_UI.text = warning_message;
@@ -53,35 +42,5 @@ internal static class StaticFunc
             yield return null;
         }
     }
-    //public static IEnumerator Rotation_Lerp(GameObject copy, float rot_Speed, float rot_radius, float time_ratio, GameObject Bullet)
-    //{
-    //    //gameObject, 7, 250, .5f, Boss_Weapon[4]
 
-    //    float percent = 0;
-    //    while (percent < 1)
-    //    {
-    //        percent += (Time.deltaTime * time_ratio);
-    //        copy.transform.Rotate(Vector3.forward * rot_Speed * rot_radius * Time.deltaTime);
-    //        for (int i = 0; i < 4; i++)
-    //        {
-    //            if (i == 3)
-    //            {
-
-    //                GameObject T1 = Instantiate(Bullet);
-    //                T1.transform.position = transform.position;
-    //                T1.transform.rotation = transform.rotation;
-    //                yield return YieldInstructionCache.WaitForEndOfFrame;
-    //            }
-    //        }
-    //    }
-    //}
-    public static IEnumerator Position_Slerp()
-    {
-        yield return null;
-    }
-
-    public static IEnumerator Color_Lerp()
-    {
-        yield return null;
-    }
 }

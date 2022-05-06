@@ -71,7 +71,6 @@ public class Enemy : MonoBehaviour
 
             yield return YieldInstructionCache.WaitForEndOfFrame;
         }
-
     }
 
     // Update is called once per frame

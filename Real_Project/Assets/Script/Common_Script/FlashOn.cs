@@ -25,7 +25,7 @@ public class FlashOn : MonoBehaviour
         
     }
 
-    public IEnumerator Get_Flash()
+    public IEnumerator White_Flash()
     {
         image.color = flashColor;
         yield return new WaitForSeconds(.05f);
@@ -45,7 +45,6 @@ public class FlashOn : MonoBehaviour
         {
             int Random_Color = Random.Range(0, 7);
             image.color = new Color(RGB_Color[Random_Color, 0], RGB_Color[Random_Color, 1], RGB_Color[Random_Color, 2], 1);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
 
             float percent = 0;
             while (percent < 1)

@@ -26,7 +26,7 @@ public class W1_Watergun : MonoBehaviour
         }
         if (collision.CompareTag("Boss"))
         {
-            collision.GetComponent<Boss>().TakeDamage(gun_damage);
+            collision.GetComponent<DoPhan>().TakeDamage(gun_damage);
             Destroy(gameObject);
         }
     }

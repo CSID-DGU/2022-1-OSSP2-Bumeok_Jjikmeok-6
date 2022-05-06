@@ -7,15 +7,15 @@ public class BossHPSliderViewer : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    HP_Info hp_info;
+    Boss_Info boss_info;
     Slider slider;
 
     bool OnUpdate = false;
 
 
-    public void F_HPFull(HP_Info hp_info)
+    public void F_HPFull(Boss_Info boss_info)
     {
-        this.hp_info = hp_info;
+        this.boss_info = boss_info;
         slider = GetComponent<Slider>();
         slider.value = 0;
         StartCoroutine("I_HPFull");
@@ -41,7 +41,7 @@ public class BossHPSliderViewer : MonoBehaviour
     void LateUpdate()
     {
          if (OnUpdate)
-            slider.value = hp_info.CurrentHP / hp_info.MaxHP;
+            slider.value = boss_info.CurrentHP / boss_info.MaxHP;
        
     }
 }

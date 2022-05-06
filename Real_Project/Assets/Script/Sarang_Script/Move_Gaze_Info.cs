@@ -24,9 +24,8 @@ public class Move_Gaze_Info : MonoBehaviour // 플레이어 달릴 때의 게이지바
     }
     public void HP_Stop()
     {
-        slider.value = 0;
-        
         StopCoroutine(hp_down);
+        slider.value = 0;
     }
     IEnumerator I_HP_Down()
     {

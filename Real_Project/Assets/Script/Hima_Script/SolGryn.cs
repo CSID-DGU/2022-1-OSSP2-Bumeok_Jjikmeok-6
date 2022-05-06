@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SolGryn : HP_Info
+public class SolGryn : Boss_Info
 {
     // Start is called before the first frame update
 
@@ -22,8 +22,6 @@ public class SolGryn : HP_Info
     [SerializeField]
     GameObject Disappear_Effect;
 
-    SpriteRenderer spriteRenderer;
-
     float[,] move_random =
     {
         {4.81f, -0.38f },
@@ -35,9 +33,10 @@ public class SolGryn : HP_Info
     private new void Awake()
     {
         base.Awake();
-        cameraShake = GetComponent<CameraShake>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         CurrentHP = MaxHP;
+
+        cameraShake = GetComponent<CameraShake>();
+        
        
         SolGryn_HP.SetActive(false);
     }

@@ -130,8 +130,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScorePerEnemy: 50
   Die_Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
-  speed: 5
-  rotateSpeed: 200
+  speed: 7
+  rotateSpeed: 300
 --- !u!95 &107024717335685559
 Animator:
   serializedVersion: 3
