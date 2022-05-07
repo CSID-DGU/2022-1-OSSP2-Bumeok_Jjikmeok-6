@@ -10,10 +10,12 @@ public class PlayerController_temp : Player_Info
     private double Timer = 0;
     private bool Dash_Able = true;
     private bool FixedSlider = false;
+    private bool FixedTarget = false;
     private IEnumerator m_Coroutine;
+    int StudentLayerMask;  // Player 레이어만 충돌 체크함
 
     [SerializeField]
-    float PlayerWalkSpeed = 0.02f;
+    float PlayerWalkSpeed = 0.03f;
 
     [SerializeField]
     GameObject Move_Slider;
@@ -27,15 +29,26 @@ public class PlayerController_temp : Player_Info
     [SerializeField]
     GameObject Student_Gaze;
 
+    [SerializeField]
+    GameObject Targetting_Object;
+
+    Vector3 Check_Student_Fixed;
+
+    Animator animator;
+
     private new void Awake()
     {
-        // Student_Gaze.SetActive(false);
+        Student_Gaze.SetActive(false);
+        Targetting_Object.SetActive(false);
+        StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
+        animator = GetComponent<Animator>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         m_Coroutine = Second_Phase(null);
+        
         StartCoroutine(First_Phase());
     }
     IEnumerator First_Phase()
@@ -49,35 +62,135 @@ public class PlayerController_temp : Player_Info
             
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
+            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, StudentLayerMask);
+            
 
             if (hit.collider != null && hit.transform.gameObject.name != "Person")
             {
+
+                if (!FixedTarget)
+                {
+                    Targetting_Object.SetActive(true);
+                    Targetting_Object.GetComponent<Targetting_Effect>().Scale_Color(hit.transform.gameObject);
+                    FixedTarget = true;
+                }
+              
                 if (Input.GetMouseButton(0))
                 {
-                    GameObject targetStudent = hit.transform.gameObject;
-
+                    Targetting_Object.GetComponent<Targetting_Effect>().Init();
+                    Targetting_Object.SetActive(false);
+                    FixedTarget = false;
+                   
                     if (!FixedSlider)
                     {
-                        Student_Gaze.transform.position = targetStudent.transform.position + new Vector3(0, 2, 0);
+                        Student_Gaze.transform.position = hit.transform.gameObject.transform.position + new Vector3(0, 2, 0);
                         FixedSlider = true;
+
+                        hit.transform.gameObject.GetComponent<Student_Random_Move>().Be_Attacked();
+                        hit.transform.gameObject.GetComponent<Student_Random_Move>().Stop_Move(); // 공격 받는 중 + 움직임 정지
                     }
 
-                    Launch_Weapon_For_Move(Lazor, targetStudent.transform.position, transform.position);
+                    Lazor_In_First_Phase(Lazor, hit.transform.gameObject.transform.position, transform.position);
 
                     if (!Student_Gaze.activeSelf)
                         Student_Gaze.SetActive(true);
-                    if (Student_Gaze.GetComponent<Student_Gaze_Info>().Block_HP(targetStudent.transform.position))
+
+                    if (Student_Gaze.GetComponent<Student_Gaze_Info>().Block_HP(hit.transform.gameObject.transform.position))
                     {
-                        yield return StartCoroutine(Second_Phase(targetStudent));
+                        yield return StartCoroutine(Second_Phase(hit.transform.gameObject));
                     }
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
                     Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
                     FixedSlider = false;
+
+                    hit.transform.gameObject.GetComponent<Student_Random_Move>().NotBe_Attacked();
+                    hit.transform.gameObject.GetComponent<Student_Random_Move>().Start_Move();
+
                     Student_Gaze.SetActive(false);
                 }
+            }
+            else
+            {
+                Targetting_Object.GetComponent<Targetting_Effect>().Init();
+                Targetting_Object.SetActive(false);
+                FixedTarget = false;
+            }
+                
+            yield return null;
+        }
+    }
+
+    private void Lazor_In_First_Phase(GameObject weapon, Vector3 target, Vector3 self)
+    {
+        Launch_Weapon_For_Move(weapon, target, self);
+    }
+    
+    IEnumerator Second_Phase(GameObject targetStudent_t)
+    {
+        IEnumerator lazor_after_second = Lazor_In_Second_Phase(targetStudent_t);
+
+        StartCoroutine(lazor_after_second);
+        yield return StartCoroutine(Student_Gaze.GetComponent<Student_Gaze_Info>().Competition(targetStudent_t));
+        StopCoroutine(lazor_after_second);
+
+        if (targetStudent_t != null)
+        {
+            targetStudent_t.GetComponent<Student_Random_Move>().NotBe_Attacked();
+            targetStudent_t.GetComponent<Student_Random_Move>().Start_Move();
+        }
+     
+        FixedSlider = false;
+        yield return new WaitForSeconds(0.1f);
+    }
+    IEnumerator Lazor_In_Second_Phase(GameObject targetStudent_t)
+    {
+        while(true)
+        {
+            if (targetStudent_t != null)
+                Lazor_In_First_Phase(Lazor, targetStudent_t.transform.position, transform.position);
+            yield return null;
+        }
+    }
+
+    IEnumerator Move_Delay()
+    {
+        GameObject sliderClone = Instantiate(Move_Slider, transform.position, Quaternion.identity);
+
+        sliderClone.transform.SetParent(canvasTransform); 
+        sliderClone.transform.position = transform.position + new Vector3(0, 2, 0);
+        sliderClone.transform.localScale = Vector3.one; 
+        sliderClone.GetComponent<Move_Gaze_Info>().HP_Down();
+        PlayerWalkSpeed *= 2;
+
+        IEnumerator check_button_off = Check_Button_Off(sliderClone);
+        StartCoroutine(check_button_off);
+
+        yield return new WaitForSeconds(3f);
+
+        Destroy(sliderClone);
+        StopCoroutine(check_button_off);
+        animator.SetTrigger("Tired");
+        PlayerWalkSpeed = 0;
+        yield return new WaitForSeconds(2.5f);
+
+        PlayerWalkSpeed = 0.03f;
+        Dash_Able = true;
+        animator.SetBool("IsWalk", false);
+        yield return null;
+    }
+    IEnumerator Check_Button_Off(GameObject e)
+    {
+        while (true)
+        {
+            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+            {
+                PlayerWalkSpeed = 0.03f;
+                Destroy(e);
+                Dash_Able = true;
+                StopCoroutine(m_Coroutine);
+                yield break;
             }
             yield return null;
         }
@@ -91,7 +204,7 @@ public class PlayerController_temp : Player_Info
 
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A))
         {
-            if (!IsOneClick) 
+            if (!IsOneClick)
             {
                 Timer = Time.time;
                 IsOneClick = true;
@@ -101,11 +214,12 @@ public class PlayerController_temp : Player_Info
             {
                 Dash_Able = false;
                 IsOneClick = false;
+
                 m_Coroutine = Move_Delay();
                 StartCoroutine(m_Coroutine);
             }
-        } 
-        
+        }
+
     }
     private void Move()
     {
@@ -113,75 +227,24 @@ public class PlayerController_temp : Player_Info
 
         if (Input.GetKey(KeyCode.D))
         {
+            animator.SetBool("IsWalk", true);
             key = 1;
             transform.position = new Vector3(transform.position.x + PlayerWalkSpeed * key, transform.position.y, transform.position.z);
 
         }
         if (Input.GetKey(KeyCode.A))
         {
+            animator.SetBool("IsWalk", true);
             key = -1;
             transform.position = new Vector3(transform.position.x + PlayerWalkSpeed * key, transform.position.y, transform.position.z);
         }
 
         if (key != 0)
         {
-            transform.localScale = new Vector3(key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
-    }
-    IEnumerator Second_Phase(GameObject targetStudent_t)
-    {
-        IEnumerator lazor_after_second = Lazor_After_Second(targetStudent_t);
-        StartCoroutine(lazor_after_second);
-        yield return StartCoroutine(Student_Gaze.GetComponent<Student_Gaze_Info>().Competition(targetStudent_t));
-        StopCoroutine(lazor_after_second);
-        FixedSlider = false;
-        yield return new WaitForSeconds(0.1f);
-    }
-    IEnumerator Lazor_After_Second(GameObject targetStudent_t)
-    {
-        while(true)
-        {
-            if (targetStudent_t != null)
-                Launch_Weapon_For_Move(Lazor, targetStudent_t.transform.position, transform.position);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
-        }
-    }
-
-    IEnumerator Move_Delay()
-    {
-        GameObject sliderClone = Instantiate(Move_Slider, transform.position, Quaternion.identity);
-
-        sliderClone.transform.SetParent(canvasTransform); 
-        sliderClone.transform.position = transform.position + new Vector3(0, 2, 0);
-        sliderClone.transform.localScale = Vector3.one; 
-        sliderClone.GetComponent<Move_Gaze_Info>().HP_Down();
-        PlayerWalkSpeed *= 2;
-        StartCoroutine(Check_Button_Off(sliderClone));
-
-        yield return new WaitForSeconds(3f);
-
-        Destroy(sliderClone);
-        PlayerWalkSpeed = 0;
-        yield return new WaitForSeconds(2f);
-
-        PlayerWalkSpeed = 0.02f;
-        Dash_Able = true;
-        yield return null;
-    }
-    IEnumerator Check_Button_Off(GameObject e)
-    {
-        while (true)
-        {
-            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
-            {
-                PlayerWalkSpeed = 0.02f;
-                Destroy(e);
-                Dash_Able = true;
-                StopCoroutine(m_Coroutine);
-                yield break;
-            }
-            yield return null;
-        }
+        else
+            animator.SetBool("IsWalk", false);
     }
     void Update()
     {

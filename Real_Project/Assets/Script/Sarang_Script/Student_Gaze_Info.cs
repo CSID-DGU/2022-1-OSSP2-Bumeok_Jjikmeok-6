@@ -12,16 +12,19 @@ public class Student_Gaze_Info : MonoBehaviour
     Camera selectedCamera;
     public bool CanWarp = false;
 
-    ArrayList InterruptArray;
+    ArrayList Interrupt_Num_On_Active; // GameObject(여기서는 Interrupt)를 담는 배열
+    ArrayList Interrupt_Num_On_NonActive; // GameObject(여기서는 Interrupt)를 담는 배열
 
-    ArrayList To_Stop_Interrupt;
+
+    ArrayList Stop_Interrupt_Arr_IEnum; // IEnumrator를 담는 배열
 
     private void Awake()
     {
         slider = GetComponent<Slider>();
         slider.value = 0;
-        InterruptArray = new ArrayList();
-        To_Stop_Interrupt = new ArrayList();
+        Interrupt_Num_On_NonActive = new ArrayList();
+        Interrupt_Num_On_Active = new ArrayList();
+        Stop_Interrupt_Arr_IEnum = new ArrayList();
     }
     void Start()
     {
@@ -30,14 +33,19 @@ public class Student_Gaze_Info : MonoBehaviour
     public bool Block_HP(Vector3 TempPosition)
     {
         slider.value += Time.deltaTime / 2;
-        if (slider.value >= 0.5f && InterruptArray.Count >= 1)
+        if (slider.value >= 0.5f && Interrupt_Num_On_NonActive.Count >= 1 && Interrupt_Num_On_Active.Count == 0)
         {
-            To_Stop_Interrupt = new ArrayList();
-            foreach (var interrupt in InterruptArray)
+            Stop_Interrupt_Arr_IEnum = new ArrayList();
+            foreach (var interrupt in Interrupt_Num_On_NonActive)
             {
-                GameObject temp_i = (GameObject)interrupt;
-                IEnumerator temp_s = temp_i.GetComponent<InterruptBehaviour>().Trigger_Lazor(TempPosition);
-                To_Stop_Interrupt.Add(temp_s);
+                GameObject copy_interrupt = (GameObject)interrupt;
+
+                copy_interrupt.GetComponent<Interrupt_Random_Move>().Stop_Move();
+                Interrupt_Num_On_Active.Add(copy_interrupt);
+
+                IEnumerator temp_s = copy_interrupt.GetComponent<Interrupt_Random_Move>().Trigger_Lazor(TempPosition);
+                Stop_Interrupt_Arr_IEnum.Add(temp_s);
+
                 StartCoroutine(temp_s);
             }
             return true;
@@ -53,22 +61,29 @@ public class Student_Gaze_Info : MonoBehaviour
     public IEnumerator Competition(GameObject e)
     {
         StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().White_Flash());
+
         while(true)
         {
-            slider.value -= Time.deltaTime / (5 - InterruptArray.Count);
+            slider.value -= Time.deltaTime / (5 - Interrupt_Num_On_NonActive.Count);
+
             if (Input.GetMouseButtonDown(0))
                 slider.value += (Time.deltaTime * 15);
+
             if (slider.value <= 0 || slider.value >= 1)
             {
-                foreach (var stop in To_Stop_Interrupt)
+                foreach (var stop in Stop_Interrupt_Arr_IEnum)
                 {
-                    IEnumerator temp_s = (IEnumerator)stop;
-                    StopCoroutine(temp_s);
+                    StopCoroutine((IEnumerator)stop);
                 }
-
+                foreach(var u in Interrupt_Num_On_Active)
+                {
+                    GameObject q = (GameObject)u;
+                    q.GetComponent<Interrupt_Random_Move>().Start_Move();
+                }
                 gameObject.SetActive(false);
-                To_Stop_Interrupt = new ArrayList();
-
+                Stop_Interrupt_Arr_IEnum = new ArrayList();
+                Interrupt_Num_On_Active = new ArrayList();
+                Interrupt_Num_On_NonActive = new ArrayList();
                 if (slider.value >= 1)
                 {
                     slider.value = 0;
@@ -85,7 +100,7 @@ public class Student_Gaze_Info : MonoBehaviour
         GameObject[] e = GameObject.FindGameObjectsWithTag("Interrupt");
         if (e != null)
         {
-            InterruptArray = new ArrayList();
+            Interrupt_Num_On_NonActive = new ArrayList();
             foreach (var u in e)
             {
                 Vector3 screenPoint = selectedCamera.WorldToViewportPoint(u.transform.position);
@@ -93,7 +108,7 @@ public class Student_Gaze_Info : MonoBehaviour
 
                 if (OnScreen)
                 {
-                    InterruptArray.Add(u);
+                    Interrupt_Num_On_NonActive.Add(u);
                 }
             }
         }
