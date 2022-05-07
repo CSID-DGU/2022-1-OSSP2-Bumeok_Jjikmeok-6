@@ -102,29 +102,32 @@ public class Login : MonoBehaviour
            (www.result == UnityWebRequest.Result.ProtocolError) ||
            (www.result == UnityWebRequest.Result.DataProcessingError))
         {
+            infoText_2.color = Color.red;
             infoText_2.text = www.error + '\n' + www.downloadHandler.text;
             Popup_X.SetActive(true);
-            yield return null;
+            yield return YieldInstructionCache.WaitForEndOfFrame;
 
             yield break;
         }
         else
         {
+            infoText_2.color = Color.black;
             Login_Success data = JsonUtility.FromJson<Login_Success>(www.downloadHandler.text);
 
             infoText_2.text = data.success_message;
             Popup_X.SetActive(true);
-            yield return null;
+            yield return YieldInstructionCache.WaitForEndOfFrame;
             PlayerPrefs.SetInt("keycode", data.user_info.keycode);
             PlayerPrefs.SetString("id", data.user_info.id);
             PlayerPrefs.Save();
-            LoadingProgress.LoadScene("TengaiScene");
+            //LoadingProgress.LoadScene("TengaiScene");
         }
     }
 
     IEnumerator Wait_Load()
     {
-        while(true)
+        infoText_2.color = Color.black;
+        while (true)
         {
             infoText_2.text = "·Îµù Áß....";
             yield return new WaitForSeconds(0.15f);

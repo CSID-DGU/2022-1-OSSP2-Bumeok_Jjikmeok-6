@@ -51,20 +51,23 @@ public class SignUp : MonoBehaviour
     }
     public void Show_Ranking()
     {
-        StartCoroutine("Show_Ranking_I");
+        StartCoroutine(Show_Ranking_I());
     }
     IEnumerator Show_Ranking_I()
     {
 
         Popup.SetActive(true);
-        StartCoroutine("Wait_Load");
+        IEnumerator wait_load = Wait_Load();
+        StartCoroutine(wait_load);
         
 
 
         UnityWebRequest www = UnityWebRequest.Get("http://localhost:3000/Get_Rank");
         yield return www.SendWebRequest();
 
-        StopCoroutine("Wait_Load");
+        
+
+        StopCoroutine(wait_load);
 
         if ((www.result == UnityWebRequest.Result.ConnectionError) ||
             (www.result == UnityWebRequest.Result.ProtocolError) ||
@@ -77,38 +80,27 @@ public class SignUp : MonoBehaviour
         }
         else
         {
-            
             Data d = JsonUtility.FromJson<Data>(www.downloadHandler.text);
-
-            infoText.text = d.item[0].id + ", " + d.item[0].score1 + ", " + d.item[0].score2 + ", " + d.item[0].score3 + ", " + '\n' +
-                d.item[1].id + ", " + d.item[1].score1 + ", " + d.item[1].score2 + ", " + d.item[1].score3 + ", ";
+            infoText.text = "";
+            foreach (var u in d.item)
+            {
+                infoText.text += u.id + ", " + u.score1 + ", " + u.score2 + ", " + u.score3 + '\n';
+            }
 
             infoText.color = Color.blue;
             Popup_X.SetActive(true);
-            yield return null;
+            yield return YieldInstructionCache.WaitForEndOfFrame;
 
         }
 
         yield break;
     }
-    IEnumerator Wait_Load()
-    {
-        while (true)
-        {
-            infoText.text = "로딩 중....";
-            yield return new WaitForSeconds(0.15f);
-
-            infoText.text = "로딩 중......";
-            yield return new WaitForSeconds(0.15f);
-
-            infoText.text = "로딩 중........";
-            yield return new WaitForSeconds(0.15f);
-        }
-    }
+ 
     IEnumerator SignUp_Enum()
     {
         Popup.SetActive(true);
-        infoText.text = "로딩 중....";
+        IEnumerator wait_load = Wait_Load();
+        StartCoroutine(wait_load);
         yield return null;
 
         WWWForm form = new WWWForm();
@@ -119,6 +111,7 @@ public class SignUp : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Post("http://localhost:3000/sign_up", form);
 
         yield return www.SendWebRequest();
+        StopCoroutine(wait_load);
 
         if ((www.result == UnityWebRequest.Result.ConnectionError) ||
             (www.result == UnityWebRequest.Result.ProtocolError) ||
@@ -150,23 +143,24 @@ public class SignUp : MonoBehaviour
        
         yield break;
     }
-    //PlayerPrefs.SetInt("userid", data.userid);
-    //PlayerPrefs.SetString("username", data.username);
-    //PlayerPrefs.Save();
-    //RadialProgress.LoadScene("Scene2");
+    IEnumerator Wait_Load()
+    {
+        infoText.color = Color.black;
+        while (true)
+        {
+            infoText.text = "로딩 중....";
+            yield return new WaitForSeconds(0.15f);
 
-    // Start is called before the first frame update
+            infoText.text = "로딩 중......";
+            yield return new WaitForSeconds(0.15f);
+
+            infoText.text = "로딩 중........";
+            yield return new WaitForSeconds(0.15f);
+        }
+    }
+
     void Start()
     {
         Debug.Log(PlayerPrefs.GetInt("userid"));
     }
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space))
-    //    {
-    //        RadialProgress.LoadScene("Scene2");
-    //    }
-    //}
 }
