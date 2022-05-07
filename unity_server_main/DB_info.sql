@@ -11,4 +11,5 @@ create table Ranking(
     score2 int(11) not null,
     score3 int(11) not null,
     index(Auth_id),
-    FOREIGN KEY(Auth_id) REFERENCES Auth(keycode));
+    FOREIGN KEY(Auth_id) REFERENCES Auth(keycode) ON DELETE CASCADE);
+

@@ -56,9 +56,11 @@ exports.Get_Rank = async(req, res) => {
     try {
         const connection = await pool_k.getConnection(async conn => conn)
         const [DB1] = await connection.query(`select id, score1, score2, score3 from auth left join ranking on auth.keycode = ranking.Auth_id`)
-
+        //const [DB1] = await connection.query(`select id, score1, score2, score3 from auth left join ranking`) // 이건 본인 랭킹 검색
         if (DB1.length === 0)
             throw new Error("랭킹이 비었습니다.")
+        
+        console.log(DB1)
 
         return res.status(200).send({item: DB1})
 
