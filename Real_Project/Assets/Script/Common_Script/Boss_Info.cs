@@ -11,7 +11,7 @@ public class Boss_Info : Player_And_Boss
     float maxHP = 100;
 
     [SerializeField]
-    protected AnimationCurve curve; // 상위
+    protected AnimationCurve declineCurve; // 상위
 
     [SerializeField]
     protected GameObject Boss_Explosion_When_Die;  // 상위
@@ -30,7 +30,7 @@ public class Boss_Info : Player_And_Boss
 
     protected IEnumerator phase; // 상위
 
-    protected ArrayList Phase_Total; // 상위
+    protected ArrayList Pattern_Total; // 상위
 
     public float speed = 15; // 둘다
     public float rotateSpeed = 200f; // 상위
@@ -46,8 +46,8 @@ public class Boss_Info : Player_And_Boss
     {
         base.Awake();
         CurrentHP = MaxHP;
-        Phase_Total = new ArrayList();
-        WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, 0);
+        Pattern_Total = new ArrayList();
+        
     }
     public new void OnDie()
     {
@@ -71,20 +71,20 @@ public class Boss_Info : Player_And_Boss
     protected IEnumerator Rotate_Bullet(float rot_Speed, float rot_Radius, float ratio, int Launch_Num, GameObject Bullet)
     {
         float percent = 0;
+        int Index = 0;
         while (percent < 1)
         {
             percent += (Time.deltaTime * ratio);
             transform.Rotate(Vector3.forward * rot_Speed * rot_Radius * Time.deltaTime);
-            for (int i = 0; i < Launch_Num; i++)
+            Index++;
+            if (Index >= Launch_Num)
             {
-                if (i == Launch_Num - 1)
-                {
-                    GameObject T1 = Instantiate(Bullet);
-                    T1.transform.position = transform.position;
-                    T1.transform.rotation = transform.rotation;
-                    yield return YieldInstructionCache.WaitForEndOfFrame;
-                }
+                Index = 0;
+                GameObject T1 = Instantiate(Bullet);
+                T1.transform.position = transform.position;
+                T1.transform.rotation = transform.rotation;
             }
+            yield return null;
         }
         transform.rotation = Quaternion.Euler(0, 0, 0);
         yield return YieldInstructionCache.WaitForEndOfFrame;
@@ -114,7 +114,7 @@ public class Boss_Info : Player_And_Boss
         {
             percent += (Time.deltaTime * time_ratio);
             transform.position = Vector3.Lerp(start_location, last_location, curve.Evaluate(percent));
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
     }
     protected IEnumerator Position_Curve(Vector3 start_location, Vector3 standard_location, Vector3 last_location, float standard_time_ratio, AnimationCurve curve)
@@ -137,27 +137,27 @@ public class Boss_Info : Player_And_Boss
             transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent / journeyTime));
 
             transform.position += center;
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
-        yield return YieldInstructionCache.WaitForEndOfFrame; // 깔끔한 정지를 위해 한 프레임 넘겨줌
+        yield return null; // 깔끔한 정지를 위해 한 프레임 넘겨줌
     }
-    protected IEnumerator Position_Curve(Vector3 start_location, Vector3 last_location, float time_ratio, AnimationCurve curve, float Wow)
+    protected IEnumerator Position_Curve(Vector3 start_location, Vector3 last_location, float time_ratio, string dir)
     {
         float percent = 0;
-        float Length = Mathf.Sqrt(Mathf.Pow(transform.position.x - 7, 2) + Mathf.Pow(transform.position.y, 2));
-        float journeyTime = 1f * Mathf.Sqrt(212) / Length; // 3차원 좌표 (-7, -4, 0), (7, 0, 0) 사이를 선형보간하는 시간을 1초로 기준을 두고 계산
-
-        while (true)
+        int dir_int;
+        if (dir == "down")
+            dir_int = -1;
+        else
+            dir_int = 1;
+        while (percent < 1)
         {
-            if (percent / journeyTime >= 1)
-                break;
-            percent += Time.deltaTime;
+            percent += Time.deltaTime * time_ratio;
             Vector3 center = (start_location + last_location) * 0.5f;
-            center -= new Vector3(0, -7f, 0);
+            center -= new Vector3(0, dir_int * 7f, 0);
             Vector3 riseRelCenter = start_location - center;
-            Vector3 setRelCenter = new Vector3(7, 0, 0) - center;
+            Vector3 setRelCenter = last_location - center;
 
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent / journeyTime));
+            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, percent);
 
             transform.position += center;
             yield return null;

@@ -70,7 +70,7 @@ public class PlayerControl : Player_Info
         is_LateUpdate = false;
         weapon.enabled = false;
         movement2D.enabled = false;
-        Unbeatable_Player = true;
+        //Unbeatable_Player = true;
         score = 0;
         PlayerScore.text = "Á¡¼ö : " + score;
         PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
@@ -101,11 +101,14 @@ public class PlayerControl : Player_Info
                 is_LateUpdate = true;
                 is_Update = true;
                 movement2D.enabled = true;
+                
                 movement2D.MoveSpeed = 10;
                 yield return null;
 
                 StartCoroutine("FadeText");
                 yield return new WaitForSeconds(2f);
+                Unbeatable_Player = false;
+                yield return null;
                 yield break;
             }
         }
@@ -176,8 +179,8 @@ public class PlayerControl : Player_Info
     }
     public void TakeDamage()
     {
-        if (Unbeatable_Player)
-            return;
+        //if (Unbeatable_Player)
+        //    return;
         LifeTime--;
 
         LifeTime_Text.text = "Life x  : " + LifeTime;

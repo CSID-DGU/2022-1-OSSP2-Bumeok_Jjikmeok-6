@@ -1454,12 +1454,66 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 1000
-  Weapon:
+  declineCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Boss_Explosion_When_Die: {fileID: 0}
+  Boss_Weapon:
   - {fileID: 3722087470536273458, guid: 5d56ee919a08c3e4393fd1f689e38e17, type: 3}
   - {fileID: 877967428950669577, guid: acfa6c2a4ac7a75468937c955ce36e7d, type: 3}
   - {fileID: 5476868837286687897, guid: 04889c1e4d1de5e4a987abcedeccbb0a, type: 3}
+  Boss_Disappear_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
+  Boss_Disappear_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
+  WarningText: {fileID: 0}
+  speed: 15
+  rotateSpeed: 200
   SolGryn_HP: {fileID: 736350206}
-  animationCurve:
+  inclineCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  De_In_Curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -1483,7 +1537,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Disappear_Effect: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
 --- !u!114 &1770839857
 MonoBehaviour:
   m_ObjectHideFlags: 0

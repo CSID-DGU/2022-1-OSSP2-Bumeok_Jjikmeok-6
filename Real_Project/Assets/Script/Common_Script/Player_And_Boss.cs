@@ -42,7 +42,7 @@ public class Player_And_Boss : MonoBehaviour, Life_Of_Basic
         GameObject e = Instantiate(weapon, instantiate_position, Degree);
         Destroy(e, Destroy_Time);
     }
-    protected IEnumerator Change_Color_Return_To_Origin(Color Origin_C, Color Change_C, float ratio)
+    protected IEnumerator Change_Color_Return_To_Origin(Color Origin_C, Color Change_C, float ratio, bool is_Continue)
     { 
         while (true)
         {
@@ -51,15 +51,17 @@ public class Player_And_Boss : MonoBehaviour, Life_Of_Basic
             {
                 percent += Time.deltaTime * ratio;
                 spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
             percent = 0;
             while (percent < 1)
             {
                 percent += Time.deltaTime * ratio;
                 spriteRenderer.color = Color.Lerp(Change_C, Origin_C, percent);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
+            if (!is_Continue)
+                break;
         }
     }
     protected IEnumerator Change_Color_Temporary(Color Origin_C, Color Change_C, float ratio, float Wait_Second, GameObject Effect)

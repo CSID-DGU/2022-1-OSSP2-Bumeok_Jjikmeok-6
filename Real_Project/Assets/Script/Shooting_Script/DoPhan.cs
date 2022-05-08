@@ -9,7 +9,7 @@ public class DoPhan : Boss_Info
 
     public bool Boss_UnBeatable = true; // 본인
 
-    private int Phase_Num; // 본인
+    private int Pattern_Num; // 본인
 
     [SerializeField]
     GameObject Charge_Beam; // 본인
@@ -22,13 +22,20 @@ public class DoPhan : Boss_Info
 
     IEnumerator enemy_spawn; // 본인
 
+    IEnumerator meteor_launch;
+
+    ArrayList remove_for_meteor_security;
+
     new private void Awake()
     {
         base.Awake();
-        phase = Phase01();
+        WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, 0);
+        phase = Pattern01();
 
         for (int i = 0; i < 5; i++)
-            Phase_Total.Add(phase);
+            Pattern_Total.Add(phase);
+        remove_for_meteor_security = new ArrayList();
+        Pattern_Num = 0;
         // Make Array of Phase
     }
 
@@ -36,8 +43,10 @@ public class DoPhan : Boss_Info
     {
         if (collision.CompareTag("Playerrr"))
         {
+            Debug.Log("하");
             if (!collision.GetComponent<PlayerControl>().Unbeatable_Player)
             {
+                Debug.Log("후");
                 collision.GetComponent<PlayerControl>().Unbeatable_Player = true;
                 collision.GetComponent<PlayerControl>().TakeDamage();
             }
@@ -68,7 +77,7 @@ public class DoPhan : Boss_Info
         GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>().Score += 10000;
         Instantiate(Boss_Explosion_When_Die, transform.position, Quaternion.identity);
 
-        foreach (var u in Phase_Total)
+        foreach (var u in Pattern_Total)
         {
             StopCoroutine((IEnumerator)u);
         }
@@ -87,32 +96,32 @@ public class DoPhan : Boss_Info
 
         while (true)
         {
-            yield return StartCoroutine(Ready_To_Phase());
-            Phase_Num = Random.Range(0, 5);
-            switch (Phase_Num)
+            yield return StartCoroutine(Ready_To_Pattern());
+            Pattern_Num = Random.Range(0, 5);
+            switch (Pattern_Num)
             {
                 case 0:
-                    Phase_Total[Phase_Num] = Phase01();
+                    Pattern_Total[Pattern_Num] = Pattern01();
                     break;
                 case 1:
-                    Phase_Total[Phase_Num] = Phase02();
+                    Pattern_Total[Pattern_Num] = Pattern02();
                     break;
                 case 2:
-                    Phase_Total[Phase_Num] = Phase03();
+                    Pattern_Total[Pattern_Num] = Pattern03();
                     break;
                 case 3:
-                    Phase_Total[Phase_Num] = Phase04();
+                    Pattern_Total[Pattern_Num] = Pattern04();
                     break;
                 case 4:
-                    Phase_Total[Phase_Num] = Phase05();
+                    Pattern_Total[Pattern_Num] = Pattern05();
                     break;
             }
-            //yield return StartCoroutine((IEnumerator)Phase_Total[Phase_Num]);
-            yield return StartCoroutine(Phase05());
+            yield return StartCoroutine((IEnumerator)Pattern_Total[Pattern_Num]);
+
         }
     }
     
-    IEnumerator Ready_To_Phase()
+    IEnumerator Ready_To_Pattern()
     {
         var radius = (float)Mathf.Sqrt(Mathf.Pow(0.5f, 2) + Mathf.Pow(-0.5f, 2));
         var start_deg = 90 - (Mathf.Rad2Deg * Mathf.Atan2(-0.5f, 0.5f));
@@ -125,11 +134,11 @@ public class DoPhan : Boss_Info
         }
         yield break;
     }
-    IEnumerator Phase01()
+    IEnumerator Pattern01()
     {
         yield return StartCoroutine(Boss_Move(StaticData.Sequence_Move));
 
-        IEnumerator change_boss_color = Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 4);
+        IEnumerator change_boss_color = Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 4, true);
         StartCoroutine(change_boss_color);
 
         Launch_Weapon_For_Move(Boss_Weapon[0], new Vector3(1, 0.5714f, 0), Quaternion.identity, 2.5f);
@@ -154,9 +163,9 @@ public class DoPhan : Boss_Info
         StopCoroutine(thunder);
         StopCoroutine(change_boss_color);
 
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 1, curve));
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 1, declineCurve));
     }
-    IEnumerator Phase02()
+    IEnumerator Pattern02()
     {
         GameObject c = Instantiate(Charge_Beam, transform.position + new Vector3(-1.22f, 0, 0), Quaternion.identity);
 
@@ -180,19 +189,20 @@ public class DoPhan : Boss_Info
         yield return YieldInstructionCache.WaitForSeconds(2f);
         yield break;
     }
-    IEnumerator Phase03()
+    IEnumerator Pattern03()
     {
-        yield return StartCoroutine(Position_Lerp(transform.position, Vector3.zero, 1, curve));
+        yield return StartCoroutine(Position_Lerp(transform.position, Vector3.zero, 1, declineCurve));
 
         yield return StartCoroutine(Rotate_Bullet(7, 250, .5f, 4, Boss_Weapon[4]));
 
-        yield return StartCoroutine(Position_Lerp(Vector3.zero, new Vector3(0, 3, 0), 1, curve));
+        yield return StartCoroutine(Position_Lerp(Vector3.zero, new Vector3(0, 3, 0), 1, declineCurve));
 
         yield return StartCoroutine(Circle_Move(270, -1, 0, 7, 3, 0, 0, 2));
     }
-    IEnumerator Phase04() // + 플레이어가 시련을 겪다가 방출하는 것도 추가해야한다. 하나라도 데미지 맞으면 정화 취소.
+    IEnumerator Pattern04() // + 플레이어가 시련을 겪다가 방출하는 것도 추가해야한다. 하나라도 데미지 맞으면 정화 취소.
     {
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(12, transform.position.y, 0), 1, curve));
+
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(12, transform.position.y, 0), 1, declineCurve));
 
         GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>().Start_Emit();
 
@@ -202,19 +212,25 @@ public class DoPhan : Boss_Info
         for (int i = 0; i < 7; i++)
         {
             int Random_Num = Random.Range(0, 4);
+            if (meteor_launch != null)
+                StopCoroutine(meteor_launch);
             switch (Random_Num)
             {
                 case 0:
-                    yield return StartCoroutine(Meteor_Launch(9, 1));
+                    meteor_launch = Meteor_Launch(9, 1);
+                    yield return StartCoroutine(meteor_launch);
                     break;
                 case 1:
-                    yield return StartCoroutine(Meteor_Launch(6, 1));
+                    meteor_launch = Meteor_Launch(6, 1);
+                    yield return StartCoroutine(meteor_launch);
                     break;
                 case 2:
-                    yield return StartCoroutine(Meteor_Launch(3, 3));
+                    meteor_launch = Meteor_Launch(3, 3);
+                    yield return StartCoroutine(meteor_launch);
                     break;
                 case 3:
-                    yield return StartCoroutine(Meteor_Launch(1, 8));
+                    meteor_launch = Meteor_Launch(1, 8);
+                    yield return StartCoroutine(meteor_launch);
                     break;
             }
             yield return YieldInstructionCache.WaitForSeconds(3f);
@@ -228,15 +244,17 @@ public class DoPhan : Boss_Info
     }
     IEnumerator I_Stop_Meteor()
     {
+        StopCoroutine(meteor_launch);
         StopCoroutine(enemy_spawn);
-        StopCoroutine((IEnumerator)Phase_Total[Phase_Num]);
+        StopCoroutine((IEnumerator)Pattern_Total[Pattern_Num]);
 
-        yield return YieldInstructionCache.WaitForSeconds(3f);
 
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, transform.position.y, 0), 1, curve));
+        yield return YieldInstructionCache.WaitForSeconds(1f);
 
+
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, transform.position.y, 0), 1, declineCurve));
         StartCoroutine(Repeat_Phase());
-        yield return YieldInstructionCache.WaitForEndOfFrame;
+        yield return null;
     }
     IEnumerator Enemy_Spawn()
     {
@@ -254,13 +272,15 @@ public class DoPhan : Boss_Info
         Meteor_Move = StaticFunc.ShuffleList(Meteor_Move);
         switch (Launch_Count)
         {
+            
             case 1:
                 for (int i = 0; i < Meteor_Num; i++)
-                {
+                { 
                     GameObject e = Instantiate(Meteor, new Vector3(8, Meteor_Move[i], 0), Quaternion.identity);
                     StartCoroutine(e.GetComponent<Meteor_Effect>().Meteor_Launch_Act(Meteor_Move[i], R1, R2, R3));
                 }
                 yield return YieldInstructionCache.WaitForSeconds(2f);
+
                 break;
 
             case 3:
@@ -283,14 +303,12 @@ public class DoPhan : Boss_Info
                 {
                     GameObject e = Instantiate(Meteor, new Vector3(8, Meteor_Move[i], 0), Quaternion.identity);
                     StartCoroutine(e.GetComponent<Meteor_Effect>().Meteor_Launch_Act(Meteor_Move[i], R1, R2, R3));
-                    yield return YieldInstructionCache.WaitForSeconds(.4f);
                 }
                 break;
         }
-        yield break;
     }
 
-    IEnumerator Phase05()
+    IEnumerator Pattern05()
     {
         int Random_Move;
         Color A = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
@@ -335,13 +353,13 @@ public class DoPhan : Boss_Info
 
         yield return YieldInstructionCache.WaitForSeconds(.5f);
 
-        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(-7, -4, 0), new Vector3(7, 0, 0), 1, curve));
+        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(-7, -4, 0), new Vector3(7, 0, 0), 1, declineCurve));
     }
     IEnumerator Boss_Move(float[,] Boss_Move_float)
     {
         for (int i = 0; i < 9; i++)
         {
-            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(Boss_Move_float[i, 0], Boss_Move_float[i, 1], Boss_Move_float[i, 2]), 4, curve));
+            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(Boss_Move_float[i, 0], Boss_Move_float[i, 1], Boss_Move_float[i, 2]), 4, declineCurve));
         }
         yield break;
     }

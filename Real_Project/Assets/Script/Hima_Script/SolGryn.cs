@@ -7,20 +7,17 @@ public class SolGryn : Boss_Info
     // Start is called before the first frame update
 
     // Update is called once per frame
-
-    [SerializeField]
-    GameObject[] Weapon;
-
+    
     [SerializeField]
     GameObject SolGryn_HP;
   
     CameraShake cameraShake;
 
     [SerializeField]
-    AnimationCurve animationCurve;
+    AnimationCurve inclineCurve;
 
     [SerializeField]
-    GameObject Disappear_Effect;
+    AnimationCurve De_In_Curve;
 
     float[,] move_random =
     {
@@ -36,8 +33,7 @@ public class SolGryn : Boss_Info
         CurrentHP = MaxHP;
 
         cameraShake = GetComponent<CameraShake>();
-        
-       
+
         SolGryn_HP.SetActive(false);
     }
 
@@ -71,58 +67,24 @@ public class SolGryn : Boss_Info
     }
     IEnumerator Pattern_3()
     {
-        IEnumerator rotate_Attack = Rotate_Attack();
+        IEnumerator rotate_bullet = Rotate_Bullet(7, 200, 0.02f, 4, Boss_Weapon[2]);
         while (true)
         {
-            
-            yield return null;
-            yield return StartCoroutine(Disappear());
-            StartCoroutine(rotate_Attack);
+            yield return Change_Color_Temporary(new Color(1, 1, 1, 0), new Color(1, 1, 1, 0), 3, 1.5f, Boss_Disappear_2);
+
+            StartCoroutine(rotate_bullet);
             int x = Random.Range(0, 5);
-            yield return StartCoroutine(SolGryn_Color(move_random[x, 0], move_random[x, 1]));
-            StopCoroutine(rotate_Attack);
-            yield return null;
-        }
-    }
-    IEnumerator SolGryn_Color(float x, float y)
-    {
-        transform.position = new Vector3(x, y, 0);
-        while (spriteRenderer.color.a < 1.0f)
-        {
-            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + (Time.deltaTime * 1.5f));
-            yield return null;
-        }
-        while (spriteRenderer.color.a > 0f)
-        {
-            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a - (Time.deltaTime * 1.5f));
-            yield return null;
-        }
-        yield break;
-    }
-    IEnumerator Rotate_Attack()
-    {
-        Debug.Log("Èì");
-        float rot_Speed = 7;
-        int MAX = 4;
-        int Index = 0;
-        while (true)
-        {
-            transform.Rotate(Vector3.forward * rot_Speed * 200 * Time.deltaTime);
-            Index++;
-            if (Index >= MAX)
-            {
-                Index = 0;
-                GameObject T1 = Instantiate(Weapon[2]);
-                T1.transform.position = transform.position;
-                T1.transform.rotation = transform.rotation;
-            }
+
+            transform.position = new Vector3(move_random[x, 0], move_random[x, 1], 0);
+            yield return StartCoroutine(Change_Color_Return_To_Origin(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 1.5f, false));
+            StopCoroutine(rotate_bullet);
             yield return null;
         }
     }
     IEnumerator Pattern_1()
     {
         IEnumerator move_Second = Move_Second(7, -2, 7, 2);
-        IEnumerator rotate = Rotate();
+        IEnumerator rotate = Rotate(180);
         StartCoroutine(move_Second);
         StartCoroutine(rotate);
         for (int i = 0; i < 3; i++)
@@ -137,9 +99,12 @@ public class SolGryn : Boss_Info
     IEnumerator Pattern_2()
     {
         IEnumerator move_Second = Move_Second(-2f, 2, 2f, 2);
-        IEnumerator rotate = Rotate();
-        yield return StartCoroutine(Disappear());
-        yield return StartCoroutine(Appear(-2, 2));
+        IEnumerator rotate = Rotate(180);
+      
+        yield return Change_Color_Temporary(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 3, 1.5f, Boss_Disappear_1);
+        transform.position = new Vector3(-2, 2, 0);
+        yield return Change_Color_Temporary(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 3, 0, Boss_Disappear_1);
+
         StartCoroutine(move_Second);
         StartCoroutine(rotate);
        
@@ -148,127 +113,54 @@ public class SolGryn : Boss_Info
         {
             StartCoroutine(Boss_W1(162 + (i * 20), 10, 180));
             yield return new WaitForSeconds(0.8f);
-            Instantiate(Weapon[1], transform.position, Quaternion.identity);
+            Instantiate(Boss_Weapon[1], transform.position, Quaternion.identity);
             yield return new WaitForSeconds(0.4f);
         }
+
         StopCoroutine(move_Second);
         StopCoroutine(rotate);
         yield break;
     }
-    IEnumerator Disappear()
-    {
-        Instantiate(Disappear_Effect, transform.position, Quaternion.identity);
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0);
-        yield return new WaitForSeconds(1.5f);
-    }
-    IEnumerator Appear(float x, float y)
-    {
-        transform.position = new Vector3(x, y, 0);
-        transform.Rotate(0, 0, 70);
-        Instantiate(Disappear_Effect, transform.position, Quaternion.identity);
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
-        yield return null;
-    }
     IEnumerator First_Move()
     {
-        float temp = .01f;
-        while (transform.position.y >= -3)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y - (Mathf.Pow(5, temp) * Time.deltaTime), transform.position.z);
-            temp += 0.025f;
-            yield return null;
-        }
-        temp = .01f;
-        StartCoroutine(Boss_W1(72, 7, 150));
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, -3, 0), 2, inclineCurve));
+        yield return StartCoroutine(Boss_W1(72, 7, 150));
         cameraShake.Shake();
-        while (transform.position.x >= -7 && transform.position.y <= 3)
-        {
-            transform.position = new Vector3(transform.position.x - (Mathf.Pow(5, temp) * Time.deltaTime), transform.position.y + (0.4286f * Mathf.Pow(5, temp) * Time.deltaTime), transform.position.z);
-            temp += 0.015f;
-            yield return null;
-        }
-        temp = .01f;
-        StartCoroutine(Boss_W1(252, 7, 150));
+
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-7, 3, 0), 2, inclineCurve));
+        yield return StartCoroutine(Boss_W1(252, 7, 150));
         cameraShake.Shake();
-        while (transform.position.y >= -3)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y - (Mathf.Pow(5, temp) * Time.deltaTime), transform.position.z);
-            temp += 0.025f;
-            yield return null;
-        }
-        temp = .01f;
-        StartCoroutine(Boss_W1(-18, 7, 150));
+       
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-7, -3, 0), 2, inclineCurve));
+        yield return StartCoroutine(Boss_W1(-18, 7, 150));
         cameraShake.Shake();
-        while (transform.position.x <= 7 && transform.position.y <= 3)
-        {
-            transform.position = new Vector3(transform.position.x + (Mathf.Pow(5, temp) * Time.deltaTime), transform.position.y + (0.4286f * Mathf.Pow(5, temp) * Time.deltaTime), transform.position.z);
-            temp += 0.015f;
-            yield return null;
-        }
-        StartCoroutine(Boss_W1(162, 7, 150));
+
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 3, 0), 2, inclineCurve));
+        yield return StartCoroutine(Boss_W1(162, 7, 150));
         cameraShake.Shake();
-        float journeyTime = 0.45f;
-        float startTime = Time.time;
-        while (true)
-        {
-            if (transform.position.x <= -6.5f && transform.position.y <= -3.5f)
-            {
-                startTime = Time.time;
-                break;
-            }
-            Vector3 center = (new Vector3(7, 4, 0) + new Vector3(-7, -4, 0)) * 0.5f;
-            center -= new Vector3(0, 7f, 0);
-            Vector3 riseRelCenter = new Vector3(7, 4, 0) - center;
-            Vector3 setRelCenter = new Vector3(-7, -4, 0) - center;
-            float fracComplete = (Time.time - startTime) / journeyTime;
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, fracComplete);
-            transform.position += center;
-            yield return null;
-        }
-        while (true)
-        {
-            if (transform.position.x >= 6.5f && transform.position.y >= -.5f)
-                break;
-            Vector3 center = (new Vector3(-7, -4, 0) + new Vector3(7, 0, 0)) * 0.5f;
-            center -= new Vector3(0, -7f, 0);
-            Vector3 riseRelCenter = new Vector3(-7, -4, 0) - center;
-            Vector3 setRelCenter = new Vector3(7, 0, 0) - center;
-            float fracComplete = (Time.time - startTime) / journeyTime;
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, fracComplete);
-            transform.position += center;
-            yield return null;
-        }
+
+        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(-7, -4, 0), 2.2f, "up"));
+        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(7, 0, 0), 2.2f, "down"));
     }
     IEnumerator Move_Second(float x_f, float y_f, float x_l, float y_l)
     {
-        float current;
-        Vector3 startPosition;
-        Vector3 endPosition;
         bool move_dir = false;
         while (true)
         {
-            startPosition = transform.position;
             if (move_dir)
-                endPosition = new Vector3(x_f, y_f, 0);
+                yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(x_f, y_f, 0), 1, De_In_Curve));
             else
-                endPosition = new Vector3(x_l, y_l, 0);
-            current = 0;
-            while (current < 1)
-            {
-                current += Time.deltaTime;
-                transform.position = Vector3.Lerp(startPosition, endPosition, animationCurve.Evaluate(current));
-                yield return null;
-            }
+                yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(x_l, y_l, 0), 1, De_In_Curve));
+
             move_dir = !move_dir;
         }
     }
-    IEnumerator Rotate()
+    IEnumerator Rotate(int Degree)
     {
-        int MAX = 180;
         bool rotate_dir = true;
-        for (int i = 0; i < MAX; i++)
+        for (int i = 0; i < Degree; i++)
         {
-            if (i == MAX - 1)
+            if (i == Degree - 1)
             {
                 i = 0;
                 rotate_dir = !rotate_dir;
@@ -286,12 +178,10 @@ public class SolGryn : Boss_Info
         float intervalAngle = start_angle;
         for (int i = 0; i < count; i++)
         {
-            GameObject clone = Instantiate(Weapon[0], transform.position, Quaternion.identity);
             float angle = intervalAngle + (i * count_per_radian);
             float x = Mathf.Cos(angle * Mathf.PI / 180.0f);
             float y = Mathf.Sin(angle * Mathf.PI / 180.0f);
-            clone.GetComponent<Movement2D>().MoveSpeed = 8;
-            clone.GetComponent<Movement2D>().MoveTo(new Vector3(x, y));
+            Launch_Weapon_For_Move(Boss_Weapon[0], new Vector3(x, y), Quaternion.identity, 2f);
             yield return null;
         }
     }

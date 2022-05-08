@@ -2422,7 +2422,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Unbeatable_Player: 1
+  Unbeatable_Player: 0
   keyCodeAttack: 32
   keyCodeBoom: 122
   PlayerScore: {fileID: 559547068}
@@ -2569,9 +2569,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1596555461}
   - component: {fileID: 1596555460}
-  - component: {fileID: 1596555465}
   - component: {fileID: 1596555464}
   - component: {fileID: 1596555462}
+  - component: {fileID: 1596555463}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Boss
@@ -2665,33 +2665,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &1596555464
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596555459}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.71, y: 0.49}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.71, y: 0.49}
-  m_EdgeRadius: 0
---- !u!114 &1596555465
+--- !u!114 &1596555463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2700,11 +2674,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1596555459}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b5b5b7d56e4f814c95f9a62de621113, type: 3}
+  m_Script: {fileID: 11500000, guid: 8830ba5682b5f6c40b96c9eae32085a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 50
-  curve:
+  maxHP: 200
+  declineCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -2740,10 +2714,36 @@ MonoBehaviour:
   WarningText: {fileID: 431468218}
   speed: 15
   rotateSpeed: 200
-  Boss_UnBeatable: 1
+  Boss_UnBeatable: 0
   Charge_Beam: {fileID: 8007856273135382374, guid: b0d0600a13f97f743adedfb8af3fb3c3, type: 3}
   Meteor: {fileID: 5237981916155833143, guid: b11d98dff4ec861429c2508c6d642a10, type: 3}
   Homming_Enemy: {fileID: 1007418396252536626, guid: 316feb450edaa144f90fef626a8d745a, type: 3}
+--- !u!61 &1596555464
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596555459}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.71, y: 0.49}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.71, y: 0.49}
+  m_EdgeRadius: 0
 --- !u!1 &1623738521
 GameObject:
   m_ObjectHideFlags: 0
@@ -2856,7 +2856,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1734084789
 Transform:
   m_ObjectHideFlags: 0
@@ -2878,7 +2878,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734084787}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5694aff86f4e7dc409129e7cd238bd53, type: 3}
   m_Name: 
