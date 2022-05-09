@@ -141,7 +141,7 @@ public class Boss_Info : Player_And_Boss
         }
         yield return null; // 깔끔한 정지를 위해 한 프레임 넘겨줌
     }
-    protected IEnumerator Position_Curve(Vector3 start_location, Vector3 last_location, float time_ratio, string dir)
+    protected IEnumerator Position_Curve(Vector3 start_location, Vector3 last_location, float time_ratio, string dir, AnimationCurve curve)
     {
         float percent = 0;
         int dir_int;
@@ -157,7 +157,7 @@ public class Boss_Info : Player_And_Boss
             Vector3 riseRelCenter = start_location - center;
             Vector3 setRelCenter = last_location - center;
 
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, percent);
+            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent));
 
             transform.position += center;
             yield return null;

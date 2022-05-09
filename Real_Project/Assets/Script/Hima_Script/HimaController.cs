@@ -12,11 +12,19 @@ public class HimaController : MonoBehaviour {
 
 
 	public float moveAccel = 30f;
-	public float maxSpeed = 2f;
+	public float maxSpeed = 7f;
 	public float jumpSpeed = 10f;
 	public int maxAirJumps = 2;
 	public float distanceToGround = 0.78f;
 	public GameObject deathParticle;
+	private bool isMove = false;
+	private float h = 0;
+
+	public bool IsMove
+    {
+        get { return isMove; }
+        set { isMove = value; }
+    }
 
 	private bool grounded = false;
 	private Animator anim;
@@ -32,8 +40,47 @@ public class HimaController : MonoBehaviour {
 	}
 
 	void Start() {
-		
+		StartCoroutine(Load());
+	}
 
+	IEnumerator Load()
+    {
+		h = 0;
+		yield return YieldInstructionCache.WaitForSeconds(2f);
+
+		h = 1;
+		yield return YieldInstructionCache.WaitForSeconds(.3f);
+		h = 0;
+		yield return YieldInstructionCache.WaitForSeconds(1f);
+
+		h = -1;
+		yield return YieldInstructionCache.WaitForSeconds(.6f);
+		h = 0;
+		yield return YieldInstructionCache.WaitForSeconds(1f);
+
+		h = 1;
+		maxSpeed = 1f;
+		yield return YieldInstructionCache.WaitForSeconds(2f);
+		h = 0;
+		yield return YieldInstructionCache.WaitForSeconds(2f);
+
+		maxSpeed = 2f;
+		h = 1;
+		yield return YieldInstructionCache.WaitForSeconds(.25f);
+		h = 0;
+		yield return YieldInstructionCache.WaitForSeconds(.25f);
+
+		h = -1;
+		yield return YieldInstructionCache.WaitForSeconds(.25f);
+		h = 0;
+		yield return YieldInstructionCache.WaitForSeconds(.25f);
+
+		h = 1;
+		yield return YieldInstructionCache.WaitForSeconds(.25f);
+		h = 0;
+		maxSpeed = 7f;
+		yield return YieldInstructionCache.WaitForSeconds(.7f);
+		GameObject.FindGameObjectWithTag("SolGryn").GetComponent<SolGryn>().WelCome();
 	}
 
 	// Update is called once per frame
@@ -55,12 +102,18 @@ public class HimaController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		float h = Input.GetAxisRaw("Horizontal");
 
-		if (h == 0) {
+		
+		if (isMove)
+			h = Input.GetAxisRaw("Horizontal");
+
+		if (h == 0)
+		{
 			rb2d.velocity = new Vector2(0, rb2d.velocity.y);
 			anim.SetBool("Walking", false);
-		} else {
+		}
+		else
+		{
 			float vx = Mathf.Sign(h) * maxSpeed;
 			rb2d.velocity = new Vector2(vx, rb2d.velocity.y);
 			anim.SetBool("Walking", true);
@@ -69,36 +122,43 @@ public class HimaController : MonoBehaviour {
 		anim.SetFloat("VelocityY", rb2d.velocity.y);
 
 		if (h > 0 && !facingRight)
-			Flip ();
+			Flip();
 		else if (h < 0 && facingRight)
-			Flip ();
+			Flip();
 
 		bool nextGrounded = isGrounded();
 
 
-		if (jump) {
+		if (jump)
+		{
 			rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeed);
 			jump = false;
 		}
 
-		if (nextGrounded) {
+		if (nextGrounded)
+		{
 			jumpCount = 0;
 		}
 
-		if (nextGrounded && !grounded) {
+		if (nextGrounded && !grounded)
+		{
 
 			anim.SetTrigger("Land");
 		}
 
-		if (!nextGrounded && grounded) {
+		if (!nextGrounded && grounded)
+		{
 			anim.SetTrigger("Midair");
 		}
 
 		grounded = nextGrounded;
 
-		if (isInsideGround()) {
+		if (isInsideGround())
+		{
 			Die();
 		}
+		
+		
 	}
 
 	bool isInsideGround() {

@@ -120,7 +120,7 @@ public class Login : MonoBehaviour
             PlayerPrefs.SetInt("keycode", data.user_info.keycode);
             PlayerPrefs.SetString("id", data.user_info.id);
             PlayerPrefs.Save();
-            //LoadingProgress.LoadScene("TengaiScene");
+            LoadingProgress.LoadScene("IWannaScene");
         }
     }
 

@@ -20,6 +20,7 @@ public class SolGryn_Peanut : MonoBehaviour
 	void Awake()
 	{
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
+		Debug.Log(groundLayerMask);
 	}
 
 	void Start()
@@ -43,12 +44,13 @@ public class SolGryn_Peanut : MonoBehaviour
 
 		if (nextGrounded)
 		{
+			Debug.Log("¿Ö");
 			Count++;
 		}
 		if (Count == 2)
-        {
+		{
 			Die();
-        }
+		}
 	}
 	public void Die()
 	{
