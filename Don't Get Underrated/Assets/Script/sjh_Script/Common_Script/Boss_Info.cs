@@ -28,6 +28,15 @@ public class Boss_Info : Player_And_Boss
     [SerializeField]
     protected TextMeshProUGUI WarningText; // 상위
 
+    [SerializeField]
+    protected AnimationCurve inclineCurve;
+
+    [SerializeField]
+    protected AnimationCurve De_In_Curve;
+
+    [SerializeField]
+    protected AnimationCurve OriginCurve;
+
     protected IEnumerator phase; // 상위
 
     protected ArrayList Pattern_Total; // 상위

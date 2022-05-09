@@ -1575,9 +1575,6 @@ MonoBehaviour:
   Boss_Disappear_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
   Boss_Disappear_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
   WarningText: {fileID: 0}
-  speed: 15
-  rotateSpeed: 200
-  SolGryn_HP: {fileID: 736350206}
   inclineCurve:
     serializedVersion: 2
     m_Curve:
@@ -1650,6 +1647,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  speed: 15
+  rotateSpeed: 200
+  SolGryn_HP: {fileID: 736350206}
 --- !u!114 &1770839857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1663,8 +1663,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1436607220}
-  shakeRange: 0.115
-  duration: 0.2
 --- !u!1 &1971282756
 GameObject:
   m_ObjectHideFlags: 0

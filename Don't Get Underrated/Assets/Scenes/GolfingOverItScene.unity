@@ -299,6 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfcf90c79ae797048b8f12ae5368196f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Trace_Object: football
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
