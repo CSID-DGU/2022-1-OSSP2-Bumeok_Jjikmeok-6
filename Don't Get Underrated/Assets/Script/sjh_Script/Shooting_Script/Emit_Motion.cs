@@ -10,6 +10,7 @@ public class Emit_Motion : MonoBehaviour
     AnimationCurve curve;
 
     SpriteRenderer spriteRenderer;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -20,7 +21,8 @@ public class Emit_Motion : MonoBehaviour
     {
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, .3f);
     }
-    public IEnumerator Change_Size()
+
+    public IEnumerator Emit_Change_Size()
     {
         Vector3 temp_scale;
         while (true)
@@ -41,7 +43,7 @@ public class Emit_Motion : MonoBehaviour
             yield return YieldInstructionCache.WaitForEndOfFrame;
         }
     }
-    public IEnumerator Expand_Circle()
+    public IEnumerator Emit_Expand_Circle()
     {
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
         float percent = 0;
@@ -62,5 +64,9 @@ public class Emit_Motion : MonoBehaviour
     void Update()
     {
         transform.position = GameObject.FindGameObjectWithTag("Playerrr").transform.position;
+    }
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 }

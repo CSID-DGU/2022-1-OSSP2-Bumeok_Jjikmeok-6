@@ -10,14 +10,8 @@ public class SolGryn : Boss_Info
     
     [SerializeField]
     GameObject SolGryn_HP;
-  
-    CameraShake cameraShake;
-
-    FlashOn flashOn;
 
     HimaController himaController;
-
-    IEnumerator camera_shake;
 
     float[,] move_random =
     {
@@ -31,8 +25,7 @@ public class SolGryn : Boss_Info
     {
         base.Awake();
         CurrentHP = MaxHP;
-
-        cameraShake = GetComponent<CameraShake>();
+        
         flashOn = GameObject.Find("Flash").GetComponent<FlashOn>();
         himaController = GameObject.FindGameObjectWithTag("Player").GetComponent<HimaController>();
         SolGryn_HP.SetActive(false);
@@ -43,7 +36,6 @@ public class SolGryn : Boss_Info
     void Start()
     {
      
-        
     }
     public void WelCome()
     {
@@ -105,11 +97,11 @@ public class SolGryn : Boss_Info
     }
     IEnumerator Pattern_3()
     {
-        IEnumerator rotate_bullet = Rotate_Bullet(7, 200, 0.02f, 4, Boss_Weapon[2]);
+        IEnumerator rotate_bullet = Rotate_Bullet(7, 200, 0.02f, 4, Weapon[2]);
 
         while (true)
         {
-            yield return Change_Color_Temporary(new Color(1, 1, 1, 0), new Color(1, 1, 1, 0), 3, 1.5f, Boss_Disappear_2);
+            yield return Change_Color_Temporary(new Color(1, 1, 1, 0), new Color(1, 1, 1, 0), 3, 1.5f, DisAppear_Effect_2);
 
             camera_shake = cameraShake.Shake_Act(.035f, .2f, 1, true);
             StartCoroutine(camera_shake);
@@ -120,6 +112,7 @@ public class SolGryn : Boss_Info
 
             yield return StartCoroutine(Change_Color_Return_To_Origin(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 1.5f, false));
             StopCoroutine(camera_shake);
+            cameraShake.Origin_Camera();
             StopCoroutine(rotate_bullet);
             
             yield return null;
@@ -146,9 +139,9 @@ public class SolGryn : Boss_Info
     }
     IEnumerator Pattern_2()
     { 
-        yield return StartCoroutine(Change_Color_Temporary(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 3, 1.5f, Boss_Disappear_1));
+        yield return StartCoroutine(Change_Color_Temporary(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 3, 1.5f, DisAppear_Effect_1));
         transform.position = new Vector3(-2, 2, 0);
-        StartCoroutine(Change_Color_Temporary(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 3, 0, Boss_Disappear_1));
+        StartCoroutine(Change_Color_Temporary(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 3, 0, DisAppear_Effect_1));
 
         IEnumerator move_Second = Move_Round_Trip(-2f, 2, 2f, 2);
         IEnumerator rotate = Rotate(150);
@@ -163,7 +156,7 @@ public class SolGryn : Boss_Info
             StartCoroutine(Boss_W1(110 + (i * 20), 30, 360));
             yield return new WaitForSeconds(0.4f); // Åº¾Ë ¹ß»ç
 
-            Instantiate(Boss_Weapon[1], transform.position, Quaternion.identity);
+            Instantiate(Weapon[1], transform.position, Quaternion.identity);
             yield return new WaitForSeconds(0.4f); // ¶¥Äá ¹ß»ç
         }
 
@@ -185,8 +178,8 @@ public class SolGryn : Boss_Info
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 3, 0), 2, declineCurve));
         yield return StartCoroutine(Boss_W1(162, 9, 180));
 
-        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(-7, -4, 0), 2.2f, "up", declineCurve));
-        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(7, 0, 0), 2.2f, "down", declineCurve));
+        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(-7, -4, 0), 2.2f, 7, "up", declineCurve));
+        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(7, 0, 0), 2.2f, 7, "down", declineCurve));
 
         StopCoroutine(camera_shake);
         GameObject.Find("Main Camera").transform.position = new Vector3(0, 0, -10);
@@ -235,7 +228,7 @@ public class SolGryn : Boss_Info
             float angle = intervalAngle + (i * count_per_radian);
             float x = Mathf.Cos(angle * Mathf.PI / 180.0f);
             float y = Mathf.Sin(angle * Mathf.PI / 180.0f);
-            Launch_Weapon_For_Move(Boss_Weapon[0], new Vector3(x, y), Quaternion.identity, 2f);
+            Launch_Weapon_For_Move(Weapon[0], new Vector3(x, y), Quaternion.identity, 2f);
         }
         yield return null;
     }

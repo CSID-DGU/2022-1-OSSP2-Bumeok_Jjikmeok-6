@@ -15,6 +15,8 @@ public class Meteor_Traffic : MonoBehaviour
     private float percent;
     private Color temp;
 
+    IEnumerator change_color, shake_act;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -56,7 +58,6 @@ public class Meteor_Traffic : MonoBehaviour
             yield return YieldInstructionCache.WaitForEndOfFrame;
         }
         yield break;
-
     }
     public IEnumerator Shake_Act()
     {
@@ -77,4 +78,10 @@ public class Meteor_Traffic : MonoBehaviour
             yield return YieldInstructionCache.WaitForEndOfFrame;
         }
     }
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
 }
+

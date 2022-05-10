@@ -10,21 +10,6 @@ public class PlayerControl : Player_Info
 
     Movement2D movement2D;
 
-    Weapon weapon;
-
-    int score;
-
-    public int Score
-    {
-        set { score = value; }
-        get { return score; }
-    }
-
-    [SerializeField]
-    AnimationCurve curve_For_Boom;
-
-    public bool Unbeatable_Player = false;
-
     [SerializeField]
     KeyCode keyCodeAttack = KeyCode.Space;
 
@@ -38,204 +23,169 @@ public class PlayerControl : Player_Info
     TextMeshProUGUI LifeTime_Text;
 
     [SerializeField]
-    StageData stageData;
+    TextMeshProUGUI BoomCountText;
 
-    Animator animator;
+    [SerializeField]
+    GameObject Emit_Obj;
+
+    [SerializeField]
+    int BoomCount = 3;
+
+    Animator animator; // 애니메이터는 여러개 추가될 수 있어서 상속 생략
+
+    GameObject Emit_Obj_Copy; // 고유
 
     bool is_LateUpdate = false;
 
     bool is_Update = false;
 
-    [SerializeField]
-    int LifeTime = 5;
+    public bool Unbeatable_Player;
 
-    [SerializeField]
-    GameObject Dead_Particle;
-
-    [SerializeField]
-    GameObject Emit_Obj;
-
-    GameObject Emit_Obj_Copy;
-
-    IEnumerator params_enum;
+    IEnumerator emit_expand_circle, emit_change_size, i_start_emit, i_start_firing, color_when_unbeatable;
 
     private new void Awake()
     {
         base.Awake();
         movement2D = GetComponent<Movement2D>();
-        weapon = GetComponent<Weapon>();
-        
         animator = GetComponent<Animator>();
+        flashOn = GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>();
+
         is_Update = false;
         is_LateUpdate = false;
-        weapon.enabled = false;
+        weapon_able = false;
         movement2D.enabled = false;
-        //Unbeatable_Player = true;
-        score = 0;
-        PlayerScore.text = "점수 : " + score;
+        Unbeatable_Player = true;
+        Final_Score = 0;
+
+        PlayerScore.text = "점수 : " + Final_Score;
         PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
+
         LifeTime_Text.text = "Life x  : " + LifeTime;
         LifeTime_Text.color = new Color(LifeTime_Text.color.r, LifeTime_Text.color.g, LifeTime_Text.color.b, 0);
+
+        BoomCountText.text = "폭탄 : " + BoomCount;
+        BoomCountText.color = new Color(BoomCountText.color.r, BoomCountText.color.g, BoomCountText.color.b, 0);
     }
     void Start()
     {
-        Move_First();
-    }
-    public void Move_First()
+        StartCoroutine(Move_First());
+    }    
+   
+    IEnumerator Move_First()
     {
-        StartCoroutine("Move_first");
-    }
-    IEnumerator Move_first()
-    {
-        StartCoroutine("UnBeatable_Apply");
-        transform.position = new Vector3(-9, 0, 0);
-        Unbeatable_Player = true;
-        yield return null;
-        while (true)
-        {
-            transform.position += Vector3.right * (Time.deltaTime * 2);
-            yield return null;
-            if (transform.position.x >= -4.6)
-            {
-                weapon.enabled = true;
-                is_LateUpdate = true;
-                is_Update = true;
-                movement2D.enabled = true;
-                
-                movement2D.MoveSpeed = 10;
-                yield return null;
+        color_when_unbeatable = Color_When_UnBeatable();
+        StartCoroutine(color_when_unbeatable);
 
-                StartCoroutine("FadeText");
-                yield return new WaitForSeconds(2f);
-                Unbeatable_Player = false;
-                yield return null;
-                yield break;
-            }
-        }
+        transform.position = new Vector3(-9, 0, 0);
+
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-4.6f, transform.position.y, transform.position.z), 0.4f, OriginCurve));
+
+        weapon_able = true;
+        is_LateUpdate = true;
+        is_Update = true;
+        movement2D.enabled = true;
+        movement2D.MoveSpeed = 10;
+        
+
+        StartCoroutine(FadeText());
+        yield return new WaitForSeconds(2f);
+
+        Unbeatable_Player = false;
+
+        StopCoroutine(color_when_unbeatable);
     }
     IEnumerator FadeText()
     {
+        if (PlayerScore.color.a >= 1f)
+            yield break;
         while (PlayerScore.color.a < 1.0f)
         {
             LifeTime_Text.color = new Color(LifeTime_Text.color.r, LifeTime_Text.color.g, LifeTime_Text.color.b, LifeTime_Text.color.a + Time.deltaTime / 2);
             PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, PlayerScore.color.a + Time.deltaTime / 2);
+            BoomCountText.color = new Color(BoomCountText.color.r, BoomCountText.color.g, BoomCountText.color.b, BoomCountText.color.a + (Time.deltaTime / 2.0f));
             yield return null;
         }
     }
-    IEnumerator Damage_After()
+    public override void TakeDamage()
     {
-       
-        weapon.enabled = false;
+        if (Unbeatable_Player)
+            return;
+
+        LifeTime--;
+
+        Unbeatable_Player = true;
+        weapon_able = false;
         is_LateUpdate = false;
         movement2D.enabled = false;
         is_Update = false;
-        GameObject e = Instantiate(Dead_Particle, transform.position, Quaternion.identity);
-        yield return null;
-
-        yield return StartCoroutine(MovePath());
-        Destroy(e);
-
-        yield return StartCoroutine("Move_first");
-        yield break;
-    }
-    IEnumerator MovePath()
-    {
-        Vector3 temp_position = transform.position;
-        Vector3 Last_Position;
-        float percent = 0;
-        float Fall_X = 0;
-        float Fall_Y = 0;
-        float Params = 0;
-        while (percent < 1)
-        {
-            Last_Position = transform.position;
-            percent += Time.deltaTime * 2;
-            Vector3 center = (temp_position + new Vector3(temp_position.x - 2.5f, temp_position.y, temp_position.z)) * 0.5f;
-            center -= Vector3.up;
-            Vector3 riseRelCenter = temp_position - center;
-            Vector3 setRelCenter = new Vector3(temp_position.x - 2.5f, temp_position.y, temp_position.z) - center;
-
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, percent);
-
-            transform.position += center;
-            Fall_X = transform.position.x - Last_Position.x;
-            Fall_Y = transform.position.y - Last_Position.y;
-            yield return null;
-        }
-        Vector2 Normal = new Vector2(Fall_X, Fall_Y).normalized;
-
-
-        while (true)
-        {
-            if (transform.position.y <= -7)
-            {
-                yield break;
-            }
-            transform.position = new Vector3(transform.position.x + (Normal.x * Time.deltaTime * (6 + Params)), transform.position.y + (Normal.y * Time.deltaTime * (6 + Params)), 0);
-
-            Params += 0.03f;
-            yield return null;
-        }
-    }
-    public void TakeDamage()
-    {
-        //if (Unbeatable_Player)
-        //    return;
-        LifeTime--;
 
         LifeTime_Text.text = "Life x  : " + LifeTime;
+
+        if (Emit_Obj_Copy != null)
+        {
+            if (i_start_emit != null)
+                StopCoroutine(i_start_emit);
+            if (emit_expand_circle != null)
+                StopCoroutine(emit_expand_circle);
+            if (emit_change_size != null)
+                StopCoroutine(emit_change_size);
+            Destroy(Emit_Obj_Copy);
+        }
+
         if (LifeTime <= 0)
         {
             OnDie();
         }
 
-        if (Emit_Obj_Copy != null)
-        {
-            StopCoroutine(params_enum);
-            Destroy(Emit_Obj_Copy);
-        }
-
-        StartCoroutine("Damage_After");
+        StartCoroutine(Damage_After());
     }
-    IEnumerator UnBeatable_Apply()
+    IEnumerator Damage_After()
     {
-
-        int countTime = 0;
-
-        while (countTime < 20)
-        {
-            if (countTime % 2 == 0)
-                spriteRenderer.color = new Color32(255, 255, 255, 90);
-            else
-                spriteRenderer.color = new Color32(255, 255, 255, 180);
-            countTime++;
-
-            yield return new WaitForSeconds(0.2f);
-        }
-        spriteRenderer.color = new Color32(255, 255, 255, 255);
-
-        Unbeatable_Player = false;
+        //GameObject e = Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         yield return null;
+
+        yield return StartCoroutine(MovePath());
+        //Destroy(e);
+
+        yield return StartCoroutine(Move_First());
+        yield break;
+    }
+    IEnumerator MovePath() // 여기 수정
+    {
+        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z), 2.8f, 1, "up", OriginCurve));
+
+        float kuku = ((1.215f * transform.position.x) - transform.position.y - 7) / 1.215f;
+
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(kuku, -7, 0), 1.15f, OriginCurve));
     }
 
     public void Start_Emit()
     {
-        StartCoroutine(I_Start_Emit());
+        i_start_emit = I_Start_Emit();
+        StartCoroutine(i_start_emit);
     }
     IEnumerator I_Start_Emit()
     {
-        Unbeatable_Player = true;
-        yield return null;
         Emit_Obj_Copy = Instantiate(Emit_Obj, transform.position, Quaternion.identity);
-        params_enum = Emit_Obj_Copy.GetComponent<Emit_Motion>().Change_Size();
-        
-        StartCoroutine(params_enum);
+
+        emit_expand_circle = Emit_Obj_Copy.GetComponent<Emit_Motion>().Emit_Expand_Circle();
+        emit_change_size = Emit_Obj_Copy.GetComponent<Emit_Motion>().Emit_Change_Size();
+
+        StartCoroutine(emit_change_size);
+
         yield return YieldInstructionCache.WaitForSeconds(5f);
 
-        StopCoroutine(params_enum);
+        Unbeatable_Player = true;
+        yield return null;
 
-        yield return StartCoroutine(Emit_Obj_Copy.GetComponent<Emit_Motion>().Expand_Circle());
+        StopCoroutine(emit_change_size);
+        yield return StartCoroutine(emit_expand_circle);
+
         Destroy(Emit_Obj_Copy);
+
+        StartCoroutine(flashOn.White_Flash());
+
+        GameObject.FindGameObjectWithTag("Boss").GetComponent<DoPhan>().Stop_Meteor();
 
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
@@ -258,17 +208,14 @@ public class PlayerControl : Player_Info
             Destroy(e);
         }
 
-        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().White_Flash());
-        GameObject.FindGameObjectWithTag("Boss").GetComponent<DoPhan>().Stop_Meteor();
-        GameObject u = Instantiate(Dead_Particle, Vector3.zero, Quaternion.identity);
+        GameObject u = Instantiate(When_Dead_Effect, Vector3.zero, Quaternion.identity);
         yield return YieldInstructionCache.WaitForSeconds(2f);
+
         Destroy(u);
     }
-
-
     public override void OnDie()
     {
-        Destroy(gameObject);
+        Destroy(gameObject); // 씬 추가해야한다.
         return;
     }
 
@@ -287,18 +234,45 @@ public class PlayerControl : Player_Info
             else
                 animator.SetBool("HasExit", false);
         }
-        PlayerScore.text = "점수 : " + Score;
-        if (Input.GetKeyDown(keyCodeAttack) && weapon.enabled)
+        PlayerScore.text = "점수 : " + Final_Score;
+        if (Input.GetKeyDown(keyCodeAttack) && weapon_able)
         {
-            weapon.StartFiring();
+            StartFiring();
         }
-        else if (Input.GetKeyUp(keyCodeAttack) || !weapon.enabled)
+        else if (Input.GetKeyUp(keyCodeAttack) || !weapon_able)
         {
-            weapon.StopFiring();
+            StopFiring();
         }
         if (Input.GetKeyDown(keyCodeBoom))
         {
-            weapon.StartBoom();
+            StartBoom();
+        }
+    }
+    void StartFiring()
+    {
+        i_start_firing = I_Start_Firing();
+        StartCoroutine(i_start_firing);
+    }
+    void StopFiring()
+    {
+        if (i_start_firing != null)
+            StopCoroutine(i_start_firing);
+    }
+    IEnumerator I_Start_Firing()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+            Instantiate(Weapon[0], transform.position, Quaternion.identity);
+        }
+    }
+    void StartBoom()
+    {
+        if (BoomCount > 0)
+        {
+            BoomCount--;
+            BoomCountText.text = "폭탄 : " + BoomCount;
+            Instantiate(Weapon[1], transform.position, Quaternion.identity);
         }
     }
     void LateUpdate()

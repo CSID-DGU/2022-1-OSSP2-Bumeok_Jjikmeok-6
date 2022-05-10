@@ -5,15 +5,17 @@ using UnityEngine;
 public class Meteor_Effect : MonoBehaviour
 {
     // Start is called before the first frame update
+    [SerializeField]
+    GameObject Meteor_Line;
+
+    [SerializeField]
+    GameObject Meteor_Traffic;
+
+    GameObject copy_Meteor_Line, copy_Meteor_Traffic;
 
     Movement2D movement2D;
+
     SpriteRenderer spriteRenderer;
-
-    [SerializeField]
-    GameObject Meteor_Line_O;
-
-    [SerializeField]
-    GameObject Meteor_Traffic_O;
 
     IEnumerator u, h, q;
 
@@ -32,13 +34,13 @@ public class Meteor_Effect : MonoBehaviour
 
     public IEnumerator Meteor_Launch_Act(float temp, float R1, float R2, float R3)
     {
-        
-        GameObject e = Instantiate(Meteor_Line_O, new Vector3(0, temp, 0), Quaternion.identity);
-        GameObject f = Instantiate(Meteor_Traffic_O, new Vector3(8, temp, 0), Quaternion.identity);
+        copy_Meteor_Line = Instantiate(Meteor_Line, new Vector3(0, temp, 0), Quaternion.identity);
+        copy_Meteor_Traffic = Instantiate(Meteor_Traffic, new Vector3(8, temp, 0), Quaternion.identity);
 
-        u = e.GetComponent<Meteor_Line>().Change_Color(R1, R2, R3);
-        h = f.GetComponent<Meteor_Traffic>().Change_Color();
-        q = f.GetComponent<Meteor_Traffic>().Shake_Act();
+        u = copy_Meteor_Line.GetComponent<Meteor_Line>().Change_Color(R1, R2, R3);
+        h = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Change_Color();
+        q = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Shake_Act();
+
         StartCoroutine(u);
 
         yield return StartCoroutine(h);
@@ -51,8 +53,8 @@ public class Meteor_Effect : MonoBehaviour
         if (q != null)
             StopCoroutine(q);
 
-        Destroy(f);
-        Destroy(e);
+        Destroy(copy_Meteor_Line);
+        Destroy(copy_Meteor_Traffic);
         spriteRenderer.color = new Color(1, 1, 1, 1);
         movement2D.MoveTo(Vector3.left);
         yield return null;
@@ -62,8 +64,9 @@ public class Meteor_Effect : MonoBehaviour
     {
         
     }
+
     private void OnDestroy()
     {
-       
+        StopAllCoroutines();
     }
 }

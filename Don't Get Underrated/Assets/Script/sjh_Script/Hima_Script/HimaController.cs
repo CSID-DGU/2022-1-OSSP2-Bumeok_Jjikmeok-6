@@ -16,7 +16,6 @@ public class HimaController : MonoBehaviour {
 	public float jumpSpeed = 10f;
 	public int maxAirJumps = 2;
 	public float distanceToGround = 0.78f;
-	public GameObject deathParticle;
 	private bool isMove = false;
 	private float h = 0;
 
@@ -157,8 +156,6 @@ public class HimaController : MonoBehaviour {
 		{
 			Die();
 		}
-		
-		
 	}
 
 	bool isInsideGround() {

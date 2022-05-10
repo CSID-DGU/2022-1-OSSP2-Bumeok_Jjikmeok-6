@@ -8,8 +8,6 @@ public class Meteor_Line : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
-   
-
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -41,12 +39,15 @@ public class Meteor_Line : MonoBehaviour
                 yield return null;
             }
         }
-        
     }
-
     // Update is called once per frame
     void Update()
     {
         
     }
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
 }

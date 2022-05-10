@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class EnemyAndBossSpawn : MonoBehaviour
 {
@@ -10,12 +9,14 @@ public class EnemyAndBossSpawn : MonoBehaviour
     [SerializeField]
     GameObject Boss;
 
-
     [SerializeField]
     GameObject BossHPSliderPrefab;
 
     [SerializeField]
     GameObject BossHPSliderLeft;
+
+    [SerializeField]
+    AnimationCurve OriginCurve;
 
     private void Awake()
     {
@@ -23,11 +24,6 @@ public class EnemyAndBossSpawn : MonoBehaviour
         BossHPSliderLeft.SetActive(false);
     }
     void Start()
-    {
-        Random_made();
-    }
-
-    public void Random_made()
     {
         StartCoroutine(Deley());
     }
@@ -38,23 +34,13 @@ public class EnemyAndBossSpawn : MonoBehaviour
    
     IEnumerator First_Boss_Appear()
     {
-        while (true)
-        {
-            if (Boss == null)
-                break;
-            Boss.transform.position += Vector3.left * (Time.deltaTime * 4f);
-            yield return null;
-            if (Boss.transform.position.x <= 6.3f)
-            {
-                BossHPSliderPrefab.SetActive(true);
-                BossHPSliderLeft.SetActive(true);
-                BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<DoPhan>());
-                yield return new WaitForSeconds(2f);
-                Boss.GetComponent<DoPhan>().Phase_Start();
-                yield break;
-            }
-            yield return null;
-        }
+        
+        yield return StartCoroutine(Boss.GetComponent<DoPhan>().Position_Lerp(Boss.transform.position, new Vector3(6.3f, Boss.transform.position.y, Boss.transform.position.z), 0.4f, OriginCurve));
+        BossHPSliderPrefab.SetActive(true);
+        BossHPSliderLeft.SetActive(true);
+        BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<DoPhan>());
+        yield return new WaitForSeconds(2f);
+        Boss.GetComponent<DoPhan>().Phase_Start();
     }
  
 

@@ -14,11 +14,8 @@ public class Devil_Weapon : MonoBehaviour
         if (collision.CompareTag("Playerrr"))
         {
             if (!collision.GetComponent<PlayerControl>().Unbeatable_Player)
-            {
-                collision.GetComponent<PlayerControl>().Unbeatable_Player = true;
-                collision.GetComponent<PlayerControl>().TakeDamage();
                 OffLife();
-            }
+            collision.GetComponent<PlayerControl>().TakeDamage();
         }
     }
     public void OffLife()

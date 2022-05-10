@@ -10,11 +10,12 @@ public class Student_Gaze_Info : MonoBehaviour
     Slider slider;
 
     Camera selectedCamera;
+
     public bool CanWarp = false;
 
-    ArrayList Interrupt_Num_On_Active; // GameObject(여기서는 Interrupt)를 담는 배열
-    ArrayList Interrupt_Num_On_NonActive; // GameObject(여기서는 Interrupt)를 담는 배열
+    ArrayList Interrupt_Num_On_Active; // 플레이어와 실제 경쟁 중인 인터럽트
 
+    ArrayList Interrupt_Num_On_NonActive; // 맵을 떠도는 인터럽트
 
     ArrayList Stop_Interrupt_Arr_IEnum; // IEnumrator를 담는 배열
 
@@ -50,7 +51,6 @@ public class Student_Gaze_Info : MonoBehaviour
             }
             return true;
         }
-            
         return false;
     }
     
@@ -58,7 +58,7 @@ public class Student_Gaze_Info : MonoBehaviour
     {
         slider.value = 0;
     }
-    public IEnumerator Competition(GameObject e)
+    public IEnumerator Competition(GameObject student)
     {
         StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().White_Flash());
 
@@ -75,20 +75,30 @@ public class Student_Gaze_Info : MonoBehaviour
                 {
                     StopCoroutine((IEnumerator)stop);
                 }
-                foreach(var u in Interrupt_Num_On_Active)
+                if (slider.value <= 0)
                 {
-                    GameObject q = (GameObject)u;
-                    q.GetComponent<Interrupt_Random_Move>().Start_Move();
+                    foreach (var u in Interrupt_Num_On_Active)
+                    {
+                        GameObject interrupt = (GameObject)u;
+                        interrupt.GetComponent<Interrupt_Random_Move>().Start_Move();
+                    }
                 }
+                else if (slider.value >= 1)
+                {
+                    foreach (var u in Interrupt_Num_On_Active)
+                    {
+                        GameObject copy_interrupt = (GameObject)u;
+                        Destroy(copy_interrupt);
+                    }
+                    slider.value = 0;
+
+                    Destroy(student);
+                }
+                
                 gameObject.SetActive(false);
                 Stop_Interrupt_Arr_IEnum = new ArrayList();
                 Interrupt_Num_On_Active = new ArrayList();
                 Interrupt_Num_On_NonActive = new ArrayList();
-                if (slider.value >= 1)
-                {
-                    slider.value = 0;
-                    Destroy(e);
-                }
                 yield return null;
                 yield break;
             }

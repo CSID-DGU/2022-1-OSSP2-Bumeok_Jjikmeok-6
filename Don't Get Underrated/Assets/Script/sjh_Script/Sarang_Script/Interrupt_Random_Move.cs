@@ -4,17 +4,26 @@ using UnityEngine;
 
 public class Interrupt_Random_Move : MonoBehaviour
 {
-    public float pursuitSpeed;
-    public float wanderSpeed;
+    [SerializeField]
+    float pursuitSpeed;
+
+    [SerializeField]
+    float wanderSpeed;
+
+    [SerializeField]
+    float directionChangeInterval;
+
+    [SerializeField]
+    bool followPlayer;
+
     float currentSpeed;
 
-    public float directionChangeInterval;
-    public bool followPlayer;
-    Coroutine moveCoroutine;
     Rigidbody2D rb;
-    //Animator animator;
-    Transform targetTransform = null;
+
+    Transform targetTransform;
+
     Vector3 endPosition;
+
     int randomAngle = 0;
 
     CircleCollider2D circleColliderObject; // The variable for visualizing gizmos on the screen
@@ -29,19 +38,19 @@ public class Interrupt_Random_Move : MonoBehaviour
     {
         while (true)
         {
-            Lazor.GetComponent<Movement2D_Variation>().MoveTo(new Vector3(tempPosition.x - transform.position.x,
+            Lazor.GetComponent<Movement2D_Wow>().MoveTo(new Vector3(tempPosition.x - transform.position.x,
                          tempPosition.y - transform.position.y, 0));
             Instantiate(Lazor, transform.position, Quaternion.identity);
             yield return null;
         }
-
     }
 
     private void Awake()
     {
-        currentSpeed = wanderSpeed;
         rb = GetComponent<Rigidbody2D>();
         circleColliderObject = GetComponent<CircleCollider2D>();
+        targetTransform = null;
+        currentSpeed = wanderSpeed;
     }
 
     // Start is called before the first frame update
@@ -140,13 +149,14 @@ public class Interrupt_Random_Move : MonoBehaviour
             currentSpeed = pursuitSpeed;
 
             targetTransform = collision.gameObject.transform;
-
-            if (moveCoroutine != null)
+            
+            if (move != null)
             {
-                StopCoroutine(moveCoroutine);
+                StopCoroutine(move);
             }
 
-            moveCoroutine = StartCoroutine(Move(rb, currentSpeed));
+            move = Move(rb, currentSpeed);
+            StartCoroutine(move);
         }
     }
 
@@ -158,9 +168,9 @@ public class Interrupt_Random_Move : MonoBehaviour
 
             currentSpeed = wanderSpeed;
 
-            if (moveCoroutine != null)
+            if (move != null)
             {
-                StopCoroutine(moveCoroutine);
+                StopCoroutine(move);
             }
 
             targetTransform = null;
@@ -173,6 +183,10 @@ public class Interrupt_Random_Move : MonoBehaviour
         {
             Gizmos.DrawWireSphere(transform.position, circleColliderObject.radius);
         }
+    }
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 }
 
