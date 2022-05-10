@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Final_1_Enemy : MonoBehaviour
 {
 
     [SerializeField]
@@ -28,31 +28,30 @@ public class Enemy : MonoBehaviour
     }
     void Start()
     {
-        //StartCoroutine(Auto_Dead());
+        StartCoroutine(Auto_Dead());
         StartCoroutine(Homming_Player());
     }
     IEnumerator Auto_Dead()
     {
-        yield return YieldInstructionCache.WaitForSeconds(5f);
+        yield return YieldInstructionCache.WaitForSeconds(3.5f);
         OnDie();
         yield return YieldInstructionCache.WaitForEndOfFrame;
     }
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Playerrr"))
         {
             if (!collision.GetComponent<PlayerControl>().Unbeatable_Player)
             {
-                collision.GetComponent<PlayerControl>().Unbeatable_Player = true;
-                collision.GetComponent<PlayerControl>().TakeDamage();
                 Instantiate(Die_Explosion, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
+            collision.GetComponent<PlayerControl>().TakeDamage();
         }
     }
     public void OnDie()
     {
-        playerControl.Score += ScorePerEnemy;
+        playerControl.Final_Score += ScorePerEnemy;
         Instantiate(Die_Explosion, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

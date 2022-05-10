@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class W1_Watergun : MonoBehaviour
+public class Final_1_W1_Watergun : MonoBehaviour
 {
     // Start is called before the first frame update
-
-    [SerializeField]
-    GameObject watergun;
 
     [SerializeField]
     float gun_damage = 3;
@@ -21,7 +18,7 @@ public class W1_Watergun : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            collision.GetComponent<Enemy>().OnDie();
+            collision.GetComponent<Final_1_Enemy>().OnDie();
             Destroy(gameObject);
         }
         if (collision.CompareTag("Boss"))

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController_kch : MonoBehaviour
+public class CameraController_GolfTec : MonoBehaviour
 {
 
     GameObject player;
@@ -10,13 +10,13 @@ public class CameraController_kch : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.player = GameObject.Find("football");
+        player = GameObject.Find("football");
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 playerPos = this.player.transform.position;
+        Vector3 playerPos = player.transform.position;
         transform.position = new Vector3(playerPos.x, playerPos.y, transform.position.z);
     }
 }

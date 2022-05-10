@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallController_kch : MonoBehaviour
+public class BallController_GolfTec : Player_Info // »ó¼ÓÇÑ °Å´Ï±î Àß ºÁºÁ
 {
     Rigidbody2D rigid2D;
     Camera Camera;
@@ -19,7 +19,7 @@ public class BallController_kch : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.rigid2D = GetComponent<Rigidbody2D>();
+        rigid2D = GetComponent<Rigidbody2D>();
         Camera = GameObject.Find("Main Camera").GetComponent<Camera>();
         GumBounce = GetComponent<CircleCollider2D>();
 
@@ -34,7 +34,7 @@ public class BallController_kch : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity);
 
-            if (hit.collider != null && hit.collider.transform == this.transform)
+            if (hit.collider != null && hit.collider.transform == transform)
             {
                 CheckClick = 1;
                 InitBallPos = Input.mousePosition;
@@ -63,7 +63,7 @@ public class BallController_kch : MonoBehaviour
             Debug.Log("Gum item status: " + checkGumGet);
         }
 
-        this.rigid2D.AddForce(weightedValue);
+        rigid2D.AddForce(weightedValue);
         weightedValue.x *= 0.5f;
         weightedValue.y *= 0.5f;
     }
@@ -75,9 +75,9 @@ public class BallController_kch : MonoBehaviour
 
     private void CheckChangePosition()
     {
-        if (lastPos.x != this.transform.localPosition.x && lastPos.y != this.transform.localPosition.y)
+        if (lastPos.x != transform.localPosition.x && lastPos.y != transform.localPosition.y)
         {
-            lastPos = this.transform.localPosition;
+            lastPos = transform.localPosition;
         }
         else
         {

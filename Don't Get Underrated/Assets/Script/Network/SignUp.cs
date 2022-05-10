@@ -45,6 +45,7 @@ public class SignUp : MonoBehaviour
     {
         public Item[] item;
     }
+
     public void buttonClick()
     {
         StartCoroutine(SignUp_Enum());

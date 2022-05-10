@@ -172,8 +172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2050619d650e44c84aac210ce04f9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Meteor_Line_O: {fileID: 7825423239845067279, guid: 276fea8bb09c9f94095d1999f3ca0d28, type: 3}
-  Meteor_Traffic_O: {fileID: 3074925144767600519, guid: 2c22f4bdb8e91da4d9e5d3b918cceef7, type: 3}
+  Meteor_Line: {fileID: 7825423239845067279, guid: 276fea8bb09c9f94095d1999f3ca0d28, type: 3}
+  Meteor_Traffic: {fileID: 3074925144767600519, guid: 2c22f4bdb8e91da4d9e5d3b918cceef7, type: 3}
 --- !u!114 &2881198842379697128
 MonoBehaviour:
   m_ObjectHideFlags: 0

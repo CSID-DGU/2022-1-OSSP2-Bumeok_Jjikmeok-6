@@ -686,11 +686,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ece778fb5222f741998a2f66fd263d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Weapon:
+  - {fileID: 5058595808972261254, guid: c5ab8b444345de6479fbf0575b75c2ba, type: 3}
+  declineCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  OriginCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  inclineCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  De_In_Curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  When_Dead_Effect: {fileID: 1000010675638318, guid: a3768c8a9d1b90d4bb0eb0e4bdbe730c, type: 3}
+  stageData: {fileID: 0}
+  LifeTime: 5
+  Item: []
   IsDoubleClick: 0.25
   PlayerWalkSpeed: 0.03
   Move_Slider: {fileID: 9202798864372973980, guid: ff7f74ae2a92a9f4bb68cbae2cad3fce, type: 3}
   canvasTransform: {fileID: 470250061}
-  Lazor: {fileID: 5058595808972261254, guid: c5ab8b444345de6479fbf0575b75c2ba, type: 3}
   Student_Gaze: {fileID: 328023424}
   Targetting_Object: {fileID: 2135397}
 --- !u!50 &365745729

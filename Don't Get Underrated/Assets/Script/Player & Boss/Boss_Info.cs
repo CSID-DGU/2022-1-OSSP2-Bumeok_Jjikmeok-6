@@ -11,31 +11,13 @@ public class Boss_Info : Player_And_Boss
     float maxHP = 100;
 
     [SerializeField]
-    protected AnimationCurve declineCurve; // 상위
+    protected GameObject DisAppear_Effect_1; // 상위
 
     [SerializeField]
-    protected GameObject Boss_Explosion_When_Die;  // 상위
-
-    [SerializeField]
-    protected GameObject[] Boss_Weapon; // 상위
-
-    [SerializeField]
-    protected GameObject Boss_Disappear_1; // 상위
-
-    [SerializeField]
-    protected GameObject Boss_Disappear_2; // 상위
+    protected GameObject DisAppear_Effect_2; // 상위
 
     [SerializeField]
     protected TextMeshProUGUI WarningText; // 상위
-
-    [SerializeField]
-    protected AnimationCurve inclineCurve;
-
-    [SerializeField]
-    protected AnimationCurve De_In_Curve;
-
-    [SerializeField]
-    protected AnimationCurve OriginCurve;
 
     protected IEnumerator phase; // 상위
 
@@ -56,11 +38,10 @@ public class Boss_Info : Player_And_Boss
         base.Awake();
         CurrentHP = MaxHP;
         Pattern_Total = new ArrayList();
-        
     }
-    public new void OnDie()
+    public override void OnDie()
     {
-
+        Destroy(gameObject);
     }
    
     protected IEnumerator Warning(string warning_message, float time_ratio)
@@ -116,16 +97,7 @@ public class Boss_Info : Player_And_Boss
         yield return null;
     }
     
-    protected IEnumerator Position_Lerp(Vector3 start_location, Vector3 last_location, float time_ratio, AnimationCurve curve)
-    {
-        float percent = 0;
-        while (percent < 1)
-        {
-            percent += (Time.deltaTime * time_ratio);
-            transform.position = Vector3.Lerp(start_location, last_location, curve.Evaluate(percent));
-            yield return null;
-        }
-    }
+   
     protected IEnumerator Position_Curve(Vector3 start_location, Vector3 standard_location, Vector3 last_location, float standard_time_ratio, AnimationCurve curve)
     {
         float percent = 0;
@@ -150,29 +122,7 @@ public class Boss_Info : Player_And_Boss
         }
         yield return null; // 깔끔한 정지를 위해 한 프레임 넘겨줌
     }
-    protected IEnumerator Position_Curve(Vector3 start_location, Vector3 last_location, float time_ratio, string dir, AnimationCurve curve)
-    {
-        float percent = 0;
-        int dir_int;
-        if (dir == "down")
-            dir_int = -1;
-        else
-            dir_int = 1;
-        while (percent < 1)
-        {
-            percent += Time.deltaTime * time_ratio;
-            Vector3 center = (start_location + last_location) * 0.5f;
-            center -= new Vector3(0, dir_int * 7f, 0);
-            Vector3 riseRelCenter = start_location - center;
-            Vector3 setRelCenter = last_location - center;
-
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent));
-
-            transform.position += center;
-            yield return null;
-        }
-        yield return null;
-    }
+   
     void Start()
     {
 

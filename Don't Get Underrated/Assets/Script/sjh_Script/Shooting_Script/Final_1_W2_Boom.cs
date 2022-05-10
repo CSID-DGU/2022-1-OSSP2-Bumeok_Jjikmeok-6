@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class W3_Boom : MonoBehaviour
+public class Final_1_W2_Boom : MonoBehaviour
 {
     [SerializeField]
     AnimationCurve curve;
 
-    float boomDelay = 0.5f;
     Animator animator;
-
 
     private void Awake()
     {
@@ -17,24 +15,17 @@ public class W3_Boom : MonoBehaviour
     }
     void Start()
     {
-        StartCoroutine("MoveToCenter");
+        StartCoroutine(MoveToCenter());
     }
     IEnumerator MoveToCenter()
     {
         Vector3 startPosition = transform.position;
-        // 이 transform.position은 Boom 오브젝트의 위치다.
         Vector3 endPosition = Vector3.zero;
-        float current = 0;
         float percent = 0;
         while (percent < 1)
         {
-            current += Time.deltaTime;
-            percent = current / boomDelay;
-
-            // boomDelay에 설정된 시간동안 startPOsition부터 endPosition까지 이동
-            // curve에 설정된 그래프처럼 처음엔 빠르게 이동하고, 목적지에 다다를수록 천천히 이동
+            percent += Time.deltaTime * 2;
             transform.position = Vector3.Lerp(startPosition, endPosition, curve.Evaluate(percent));
-            // curve.Evaluate = 마치 그래프 같은 거 y = f(x)인데, 여기서는 x에 percent를 곁들인
             yield return null;
         }
         animator.SetTrigger("onBoom");
@@ -44,9 +35,24 @@ public class W3_Boom : MonoBehaviour
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] devil_weapon = GameObject.FindGameObjectsWithTag("Devil_Weapon");
         GameObject boss = GameObject.FindGameObjectWithTag("Boss");
-        foreach(var e in enemy)
+        GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
+        GameObject[] meteor_line = GameObject.FindGameObjectsWithTag("Meteor_Line");
+        GameObject[] meteor_traffic = GameObject.FindGameObjectsWithTag("Meteor_Traffic");
+        foreach (var e in meteor)
         {
-            e.GetComponent<Enemy>().OnDie();
+            Destroy(e);
+        }
+        foreach (var e in meteor_line)
+        {
+            Destroy(e);
+        }
+        foreach (var e in meteor_traffic)
+        {
+            Destroy(e);
+        }
+        foreach (var e in enemy)
+        {
+            e.GetComponent<Final_1_Enemy>().OnDie();
         }
         foreach (var e in devil_weapon)
         {

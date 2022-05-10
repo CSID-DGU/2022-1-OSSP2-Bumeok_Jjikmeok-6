@@ -657,7 +657,6 @@ MonoBehaviour:
   jumpSpeed: 12
   maxAirJumps: 1
   distanceToGround: 0.78
-  deathParticle: {fileID: 0}
 --- !u!50 &1176409225
 Rigidbody2D:
   serializedVersion: 4
@@ -1542,7 +1541,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5fb948c6dde3349933a3d232d34033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 1000
+  Weapon:
+  - {fileID: 3722087470536273458, guid: 5d56ee919a08c3e4393fd1f689e38e17, type: 3}
+  - {fileID: 877967428950669577, guid: acfa6c2a4ac7a75468937c955ce36e7d, type: 3}
+  - {fileID: 5476868837286687897, guid: 04889c1e4d1de5e4a987abcedeccbb0a, type: 3}
   declineCurve:
     serializedVersion: 2
     m_Curve:
@@ -1567,14 +1569,30 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Boss_Explosion_When_Die: {fileID: 0}
-  Boss_Weapon:
-  - {fileID: 3722087470536273458, guid: 5d56ee919a08c3e4393fd1f689e38e17, type: 3}
-  - {fileID: 877967428950669577, guid: acfa6c2a4ac7a75468937c955ce36e7d, type: 3}
-  - {fileID: 5476868837286687897, guid: 04889c1e4d1de5e4a987abcedeccbb0a, type: 3}
-  Boss_Disappear_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
-  Boss_Disappear_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
-  WarningText: {fileID: 0}
+  OriginCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   inclineCurve:
     serializedVersion: 2
     m_Curve:
@@ -1623,30 +1641,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  OriginCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  When_Dead_Effect: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  stageData: {fileID: 0}
+  maxHP: 1000
+  DisAppear_Effect_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
+  DisAppear_Effect_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
+  WarningText: {fileID: 0}
   speed: 15
   rotateSpeed: 200
   SolGryn_HP: {fileID: 736350206}

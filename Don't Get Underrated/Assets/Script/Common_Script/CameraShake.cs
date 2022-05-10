@@ -20,6 +20,13 @@ public class CameraShake : MonoBehaviour
 
     }
 
+    public void Origin_Camera()
+    {
+        mainCamera.transform.position = new Vector3(0, 0, -10);
+        mainCamera.transform.rotation = Quaternion.identity;
+        mainCamera.transform.localScale = new Vector3(1, 1, 1);
+    }
+
     public IEnumerator Shake_Act(float shake_intensity, float ratio, float time_persist, bool is_Continue)
     {
         originPosition = mainCamera.transform.position;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement2D_Variation : MonoBehaviour
+public class Movement2D_Wow : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]

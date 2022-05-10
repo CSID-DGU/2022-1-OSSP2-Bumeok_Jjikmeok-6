@@ -44,7 +44,7 @@ public class FlashOn : MonoBehaviour
 
         while(true)
         {
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
             if (image.color.a <= 0)
                 yield break;
             image.color = Color.Lerp(image.color, Color.clear, flashSpeed * Time.deltaTime);
@@ -63,7 +63,7 @@ public class FlashOn : MonoBehaviour
             {
                 percent += Time.deltaTime * 2.5f;
                 image.color = Color.Lerp(image.color, Color.clear, flashSpeed * Time.deltaTime);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
         }
     }

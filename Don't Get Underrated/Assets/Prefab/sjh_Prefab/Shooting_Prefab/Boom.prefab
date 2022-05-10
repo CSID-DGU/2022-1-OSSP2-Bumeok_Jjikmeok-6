@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6461648377642794201}
   - component: {fileID: 6461648377642794202}
   m_Layer: 0
-  m_Name: PlayerExplosion
+  m_Name: Boom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

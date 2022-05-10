@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerController_temp : Player_Info
+public class PlayerController_Sarang : Player_Info
 {
     public float IsDoubleClick = 0.25f;
     private bool IsOneClick = false;
@@ -24,15 +24,10 @@ public class PlayerController_temp : Player_Info
     Transform canvasTransform;
 
     [SerializeField]
-    GameObject Lazor;
-
-    [SerializeField]
     GameObject Student_Gaze;
 
     [SerializeField]
     GameObject Targetting_Object;
-
-    Vector3 Check_Student_Fixed;
 
     Animator animator;
 
@@ -77,6 +72,8 @@ public class PlayerController_temp : Player_Info
               
                 if (Input.GetMouseButton(0))
                 {
+                    float dir_Change = transform.position.x - hit.transform.gameObject.transform.position.x;
+                    transform.localScale = new Vector3((dir_Change / Mathf.Abs(dir_Change)) * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
                     Targetting_Object.GetComponent<Targetting_Effect>().Init();
                     Targetting_Object.SetActive(false);
                     FixedTarget = false;
@@ -90,7 +87,7 @@ public class PlayerController_temp : Player_Info
                         hit.transform.gameObject.GetComponent<Student_Random_Move>().Stop_Move(); // 공격 받는 중 + 움직임 정지
                     }
 
-                    Lazor_In_First_Phase(Lazor, hit.transform.gameObject.transform.position, transform.position);
+                    Lazor_In_First_Phase(Weapon[0], hit.transform.gameObject.transform.position, transform.position);
 
                     if (!Student_Gaze.activeSelf)
                         Student_Gaze.SetActive(true);
@@ -149,7 +146,7 @@ public class PlayerController_temp : Player_Info
         while(true)
         {
             if (targetStudent_t != null)
-                Lazor_In_First_Phase(Lazor, targetStudent_t.transform.position, transform.position);
+                Lazor_In_First_Phase(Weapon[0], targetStudent_t.transform.position, transform.position);
             yield return null;
         }
     }

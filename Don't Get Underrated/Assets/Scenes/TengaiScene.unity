@@ -2224,7 +2224,6 @@ GameObject:
   - component: {fileID: 1324609393}
   - component: {fileID: 1324609400}
   - component: {fileID: 1324609399}
-  - component: {fileID: 1324609398}
   - component: {fileID: 1324609397}
   - component: {fileID: 1324609396}
   - component: {fileID: 1324609395}
@@ -2356,22 +2355,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1324609398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1324609392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21bbc03de7925b743aafbf0b8df2c12d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waterGun: {fileID: 6715167470845593886, guid: e16dcbc8b8ab88341ab31918db8f2548, type: 3}
-  Boom: {fileID: 6461648377642794198, guid: ae2a48b8bc0d7c949925356d20258f88, type: 3}
-  BoomCount: 3
-  BoomCountText: {fileID: 55219505}
 --- !u!114 &1324609399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2398,14 +2381,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa31c17199a4b34bb6f32db7c41bf25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curve_For_Boom:
+  Weapon:
+  - {fileID: 6715167470845593886, guid: e16dcbc8b8ab88341ab31918db8f2548, type: 3}
+  - {fileID: 6461648377642794198, guid: ae2a48b8bc0d7c949925356d20258f88, type: 3}
+  declineCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  OriginCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  inclineCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -2413,8 +2447,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -2422,15 +2456,24 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Unbeatable_Player: 0
+  De_In_Curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  When_Dead_Effect: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+  LifeTime: 20
+  Item: []
   keyCodeAttack: 32
   keyCodeBoom: 122
   PlayerScore: {fileID: 559547068}
   LifeTime_Text: {fileID: 807666787}
-  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
-  LifeTime: 20
-  Dead_Particle: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
+  BoomCountText: {fileID: 55219505}
   Emit_Obj: {fileID: 7552215502891305466, guid: d31f3a815c296d74abab8dbb89d4b5a7, type: 3}
+  BoomCount: 3
+  Unbeatable_Player: 1
 --- !u!1 &1457272320
 GameObject:
   m_ObjectHideFlags: 0
@@ -2545,6 +2588,30 @@ MonoBehaviour:
   Boss: {fileID: 1596555459}
   BossHPSliderPrefab: {fileID: 1005747520}
   BossHPSliderLeft: {fileID: 869102348}
+  OriginCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &1529927748
 Transform:
   m_ObjectHideFlags: 0
@@ -2572,6 +2639,7 @@ GameObject:
   - component: {fileID: 1596555464}
   - component: {fileID: 1596555462}
   - component: {fileID: 1596555463}
+  - component: {fileID: 1596555465}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Boss
@@ -2677,7 +2745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8830ba5682b5f6c40b96c9eae32085a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 200
+  Weapon: []
   declineCurve:
     serializedVersion: 2
     m_Curve:
@@ -2702,19 +2770,32 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Boss_Explosion_When_Die: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
-  Boss_Weapon:
-  - {fileID: 5313545053945245203, guid: 9d4f54bf04936f245a6822e4c739e585, type: 3}
-  - {fileID: 6536780781597690881, guid: 1e75e2c6eab93bb46a50f5e8dfe6ffda, type: 3}
-  - {fileID: 3892351702495847471, guid: cb4bb15324b69a04c9f0c561c2cd95c0, type: 3}
-  - {fileID: 1422771892401474626, guid: b670e6b9bf758134ba222e175cbd5cd9, type: 3}
-  - {fileID: 2832031252176686515, guid: 519cf4bf2b4904646a146395dd0b5141, type: 3}
-  Boss_Disappear_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
-  Boss_Disappear_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
+  OriginCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  inclineCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  De_In_Curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  When_Dead_Effect: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+  maxHP: 200
+  DisAppear_Effect_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
+  DisAppear_Effect_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
   WarningText: {fileID: 431468218}
   speed: 15
   rotateSpeed: 200
-  Boss_UnBeatable: 0
   Charge_Beam: {fileID: 8007856273135382374, guid: b0d0600a13f97f743adedfb8af3fb3c3, type: 3}
   Meteor: {fileID: 5237981916155833143, guid: b11d98dff4ec861429c2508c6d642a10, type: 3}
   Homming_Enemy: {fileID: 1007418396252536626, guid: 316feb450edaa144f90fef626a8d745a, type: 3}
@@ -2744,6 +2825,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.71, y: 0.49}
   m_EdgeRadius: 0
+--- !u!114 &1596555465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596555459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05b52193e13c3f24e80f721dc4a9fb15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 519420031}
 --- !u!1 &1623738521
 GameObject:
   m_ObjectHideFlags: 0

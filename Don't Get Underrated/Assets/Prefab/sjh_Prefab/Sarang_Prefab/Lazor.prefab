@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4485945587126210176}
   - component: {fileID: 3025097149977661722}
-  - component: {fileID: -7571062153665141531}
   - component: {fileID: 9125672011398998463}
   - component: {fileID: -6240004096247482136}
   - component: {fileID: -8408268449381053138}
+  - component: {fileID: 2574679413246855416}
   m_Layer: 0
   m_Name: Lazor
   m_TagString: Untagged
@@ -86,20 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-7571062153665141531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5058595808972261254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d81ac64b60a9a846853c2da045e3ad4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 8
-  moveDirection: {x: -7.57, y: -1.6299999, z: 0}
 --- !u!96 &9125672011398998463
 TrailRenderer:
   serializedVersion: 2
@@ -226,3 +212,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
+--- !u!114 &2574679413246855416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5058595808972261254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b67ecce3965c8fd43a691b7d7e9e3d39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 8
+  moveDirection: {x: 0, y: 0, z: 0}
