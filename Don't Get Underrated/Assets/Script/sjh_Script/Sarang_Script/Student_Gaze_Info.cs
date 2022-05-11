@@ -60,7 +60,7 @@ public class Student_Gaze_Info : MonoBehaviour
     }
     public IEnumerator Competition(GameObject student)
     {
-        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().White_Flash());
+        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().Flash(new Color(1, 1, 1, 1), 0.05f, 5));
 
         while(true)
         {

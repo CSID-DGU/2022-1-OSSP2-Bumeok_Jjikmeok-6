@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Devil_Weapon : MonoBehaviour
+public class Enemy_Info : Life
 {
+    // Start is called before the first frame update
 
-    [SerializeField]
-    GameObject Devil_Explosion;
-
-
+    protected virtual new void Awake()
+    {
+        base.Awake();
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Playerrr"))
@@ -26,13 +27,16 @@ public class Devil_Weapon : MonoBehaviour
     }
     public void Weak_Weapon()
     {
-        if (Devil_Explosion != null)
+        if (When_Dead_Effect != null)
         {
-            Instantiate(Devil_Explosion, transform.position, Quaternion.identity);
+            Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
-    // Start is called before the first frame update
+    public override void OnDie()
+    {
+        Destroy(gameObject);
+    }
     void Start()
     {
         

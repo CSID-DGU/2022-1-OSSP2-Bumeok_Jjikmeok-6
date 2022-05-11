@@ -33,6 +33,7 @@ public class PlayerController_Sarang : Player_Info
 
     private new void Awake()
     {
+        base.Awake();
         Student_Gaze.SetActive(false);
         Targetting_Object.SetActive(false);
         StudentLayerMask = 1 << LayerMask.NameToLayer("Student");

@@ -36,7 +36,7 @@ public class CameraShake : MonoBehaviour
             float percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime * time_persist;
+                percent += Time.deltaTime / time_persist;
                 mainCamera.transform.position = originPosition + Random.insideUnitSphere * shake_intensity;
                 mainCamera.transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * ratio, transform.localScale.y + Time.deltaTime * ratio, 0);
                 mainCamera.transform.transform.rotation = new Quaternion(

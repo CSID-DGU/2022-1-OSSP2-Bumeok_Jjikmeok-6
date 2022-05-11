@@ -7,14 +7,6 @@ public class DoPhan : Boss_Info
 {
     float[] Meteor_Move = new float[9] { 4, 3, 2, 1, 0, -1, -2, -3, -4 };  // 본인
 
-    private bool boss_UnBeatable; // 본인
-
-    public bool Boss_UnBeatable
-    {
-        set { boss_UnBeatable = value; }
-        get { return boss_UnBeatable; }
-    }
-
     private int Pattern_Num; // 본인
 
     [SerializeField]
@@ -25,7 +17,6 @@ public class DoPhan : Boss_Info
 
     [SerializeField]
     GameObject Homming_Enemy; // 본인
- 
 
     IEnumerator enemy_spawn; // 본인
 
@@ -37,7 +28,6 @@ public class DoPhan : Boss_Info
 
     IEnumerator charge_beam;
 
-
     new private void Awake()
     {
         base.Awake();
@@ -45,7 +35,7 @@ public class DoPhan : Boss_Info
         WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, 0);
         flashOn = GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>();
         phase = Pattern01();
-        Boss_UnBeatable = true;
+        Unbeatable = true;
         for (int i = 0; i < 5; i++)
             Pattern_Total.Add(phase);
         Pattern_Num = 0;
@@ -55,13 +45,13 @@ public class DoPhan : Boss_Info
     {
         if (collision.CompareTag("Playerrr"))
         {
-            collision.GetComponent<PlayerControl>().TakeDamage();
+            collision.GetComponent<PlayerCtrl_Tengai>().TakeDamage(1);
         }
     }
 
-    public void TakeDamage(float damage) // 얘만 (불상은 데미지를 입지 않음)
+    public override void TakeDamage(float damage) // 얘만 (불상은 데미지를 입지 않음)
     {
-        if (!Boss_UnBeatable)
+        if (Unbeatable)
         {
             CurrentHP -= damage;
             StartCoroutine(Hit());
@@ -73,7 +63,7 @@ public class DoPhan : Boss_Info
     }
     IEnumerator Hit()
     {
-        camera_shake = cameraShake.Shake_Act(.03f, .01f, 30, false);
+        camera_shake = cameraShake.Shake_Act(.03f, .01f, 0.03f, false);
         StartCoroutine(camera_shake);
 
         spriteRenderer.color = new Color(1, 1, 1, 0.25f);
@@ -83,7 +73,7 @@ public class DoPhan : Boss_Info
     }
     public override void OnDie()
     {
-        GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>().Final_Score += 10000;
+        GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerCtrl_Tengai>().Final_Score += 10000;
         Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
 
         if (enemy_spawn != null) // 본인
@@ -113,7 +103,7 @@ public class DoPhan : Boss_Info
     }
     IEnumerator Repeat_Phase()
     {
-        Boss_UnBeatable = false;
+        Unbeatable = false;
 
         while (true)
         {
@@ -162,9 +152,9 @@ public class DoPhan : Boss_Info
     {
         yield return StartCoroutine(Boss_Move(StaticData.Sequence_Move));
 
-        Boss_UnBeatable = true;
+        Unbeatable = true;
 
-        change_boss_color = Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 4, true);
+        change_boss_color = Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.25f, true);
         StartCoroutine(change_boss_color);
 
         Launch_Weapon_For_Move(Weapon[0], new Vector3(1, 0.5714f, 0), Quaternion.identity, 2.5f);
@@ -188,7 +178,7 @@ public class DoPhan : Boss_Info
         StopCoroutine(thunder);
         StopCoroutine(change_boss_color);
 
-        Boss_UnBeatable = false;
+        Unbeatable = false;
 
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 1, declineCurve));
     }
@@ -196,7 +186,7 @@ public class DoPhan : Boss_Info
     {
         GameObject c = Instantiate(Charge_Beam, transform.position + new Vector3(-1.22f, 0, 0), Quaternion.identity);
 
-        Boss_UnBeatable = true;
+        Unbeatable = true;
 
         charge_beam = c.GetComponent<Charge_Beam_Motion>().Change_Size();
         StartCoroutine(charge_beam);
@@ -206,7 +196,7 @@ public class DoPhan : Boss_Info
         StopCoroutine(charge_beam);
         Destroy(c);
 
-        Boss_UnBeatable = false;
+        Unbeatable = false;
 
         for (int i = 0; i < 30; i++)
         {
@@ -235,7 +225,7 @@ public class DoPhan : Boss_Info
 
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(12, transform.position.y, 0), 1, declineCurve));
 
-        GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>().Start_Emit();
+        GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerCtrl_Tengai>().Start_Emit();
 
         enemy_spawn = Enemy_Spawn();
         StartCoroutine(enemy_spawn);
@@ -347,12 +337,12 @@ public class DoPhan : Boss_Info
         {
             Random_Move = Random.Range(0, 6);
 
-            yield return StartCoroutine(Change_Color_Temporary(A, B, 10, .2f, DisAppear_Effect_1));
+            yield return StartCoroutine(Change_Color_Lerp(A, B, 0.1f, .2f, DisAppear_Effect_1));
 
             transform.position = new Vector3(StaticData.Random_Move[Random_Move, 0], StaticData.Random_Move[Random_Move, 1], 0);
             yield return YieldInstructionCache.WaitForEndOfFrame;
 
-            yield return StartCoroutine(Change_Color_Temporary(B, A, 10, .4f, DisAppear_Effect_1));
+            yield return StartCoroutine(Change_Color_Lerp(B, A, 0.1f, .4f, DisAppear_Effect_1));
         }
 
         yield return YieldInstructionCache.WaitForSeconds(.6f);
@@ -360,30 +350,30 @@ public class DoPhan : Boss_Info
         for (int i = 0; i < 7; i++)
         {
             Random_Move = Random.Range(0, 6);
-            yield return StartCoroutine(Change_Color_Temporary(A, B, 10, .1f, DisAppear_Effect_1));
+            yield return StartCoroutine(Change_Color_Lerp(A, B, 0.1f, .1f, DisAppear_Effect_1));
 
             transform.position = new Vector3(StaticData.Random_Move[Random_Move, 0], StaticData.Random_Move[Random_Move, 1], 0);
 
-            yield return StartCoroutine(Change_Color_Temporary(B, A, 10, .1f, DisAppear_Effect_1));
+            yield return StartCoroutine(Change_Color_Lerp(B, A, 0.1f, .1f, DisAppear_Effect_1));
         }
 
-        Boss_UnBeatable = true;
+        Unbeatable = true;
 
         yield return StartCoroutine(StaticFunc.Warning(WarningText, "플레이어를 랜덤으로 자동 추격합니다. (반드시 즉사)", .5f));
 
-        Boss_UnBeatable = false;
+        Unbeatable = false;
 
         for (int i = 0; i < 4; i++)
         {
             Random_Move = Random.Range(0, 4);
-            yield return StartCoroutine(Change_Color_Temporary(A, B, 10, .7f, DisAppear_Effect_2));
+            yield return StartCoroutine(Change_Color_Lerp(A, B, 0.1f, .7f, DisAppear_Effect_2));
 
             if (Random_Move == 3)
                 transform.position = GameObject.FindGameObjectWithTag("Playerrr").transform.position;
             else
                 transform.position = new Vector3(StaticData.Random_Move[Random_Move, 0], StaticData.Random_Move[Random_Move, 1], 0);
 
-            yield return StartCoroutine(Change_Color_Temporary(B, A, 10, .7f, DisAppear_Effect_2));
+            yield return StartCoroutine(Change_Color_Lerp(B, A, 0.1f, .7f, DisAppear_Effect_2));
         }
 
         yield return YieldInstructionCache.WaitForSeconds(.5f);
@@ -394,7 +384,7 @@ public class DoPhan : Boss_Info
     {
         for (int i = 0; i < 9; i++)
         {
-            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(Boss_Move_float[i, 0], Boss_Move_float[i, 1], Boss_Move_float[i, 2]), 4, declineCurve));
+            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(Boss_Move_float[i, 0], Boss_Move_float[i, 1], Boss_Move_float[i, 2]), .25f, declineCurve));
         }
         yield break;
     }

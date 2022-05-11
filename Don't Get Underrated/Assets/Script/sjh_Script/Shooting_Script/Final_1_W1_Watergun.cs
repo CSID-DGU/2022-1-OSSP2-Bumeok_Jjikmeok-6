@@ -18,7 +18,7 @@ public class Final_1_W1_Watergun : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            collision.GetComponent<Final_1_Enemy>().OnDie();
+            collision.GetComponent<F1_Homming_Enemy>().OnDie();
             Destroy(gameObject);
         }
         if (collision.CompareTag("Boss"))

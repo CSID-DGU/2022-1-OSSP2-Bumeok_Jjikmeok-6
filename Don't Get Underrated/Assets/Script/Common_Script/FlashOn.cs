@@ -9,7 +9,6 @@ public class FlashOn : MonoBehaviour
     Image image;
     float flashSpeed = 5f;
     float percent;
-    Color flashColor = new Color(1, 1, 1, 1);
     float[,] RGB_Color = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 }, { 1, 1, 0 }, { 1, 0, 1 }, { 0, 1, 1 }, { 1, 1, 1 } };
     // Start is called before the first frame update
     
@@ -37,16 +36,17 @@ public class FlashOn : MonoBehaviour
         }
     }
 
-    public IEnumerator White_Flash()
+    public IEnumerator Flash(Color flashColor, float Wait_Second, float flashSpeed)
     {
         image.color = flashColor;
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(Wait_Second);
 
         while(true)
         {
             yield return null;
             if (image.color.a <= 0)
                 yield break;
+            Debug.Log(image.color);
             image.color = Color.Lerp(image.color, Color.clear, flashSpeed * Time.deltaTime);
         }
 

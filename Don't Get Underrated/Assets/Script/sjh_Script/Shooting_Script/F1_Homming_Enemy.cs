@@ -2,16 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Final_1_Enemy : MonoBehaviour
+public class F1_Homming_Enemy : Enemy_Info
 {
 
     [SerializeField]
     int ScorePerEnemy = 50;
 
-    [SerializeField]
-    GameObject Die_Explosion;
-
-    PlayerControl playerControl;
+    PlayerCtrl_Tengai player_tengai;
 
     Rigidbody2D rb;
 
@@ -21,9 +18,10 @@ public class Final_1_Enemy : MonoBehaviour
     [SerializeField]
     public float rotateSpeed = 200f;
 
-    private void Awake()
+    private new void Awake()
     {
-        playerControl = GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerControl>();
+        base.Awake();
+        player_tengai = GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerCtrl_Tengai>();
         rb = GetComponent<Rigidbody2D>();
     }
     void Start()
@@ -37,22 +35,10 @@ public class Final_1_Enemy : MonoBehaviour
         OnDie();
         yield return YieldInstructionCache.WaitForEndOfFrame;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    public override void OnDie()
     {
-        if (collision.CompareTag("Playerrr"))
-        {
-            if (!collision.GetComponent<PlayerControl>().Unbeatable_Player)
-            {
-                Instantiate(Die_Explosion, transform.position, Quaternion.identity);
-                Destroy(gameObject);
-            }
-            collision.GetComponent<PlayerControl>().TakeDamage();
-        }
-    }
-    public void OnDie()
-    {
-        playerControl.Final_Score += ScorePerEnemy;
-        Instantiate(Die_Explosion, transform.position, Quaternion.identity);
+        player_tengai.Final_Score += ScorePerEnemy;
+        Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
     IEnumerator Homming_Player()

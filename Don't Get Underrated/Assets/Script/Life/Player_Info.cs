@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Info : Player_And_Boss
+public class Player_Info : Life
 {
     // Start is called before the first frame update
 
@@ -15,6 +15,11 @@ public class Player_Info : Player_And_Boss
     protected bool weapon_able;
 
     private int main_1_score, main_2_score, main_3_score, final_score;
+
+    protected virtual new void Awake()
+    {
+        base.Awake();
+    }
 
     public int Main_1_Score
     {
@@ -37,9 +42,9 @@ public class Player_Info : Player_And_Boss
         set { final_score = value; }
         get { return final_score; }
     }
-    public virtual void TakeDamage()
+    public override void TakeDamage(int damage)
     {
-        LifeTime -= 1;
+        LifeTime -= damage;
     }
     public override void OnDie()
     {

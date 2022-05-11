@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Boss_Info : Player_And_Boss
+public class Boss_Info : Life
 {
     // Start is called before the first frame update
 
@@ -38,6 +38,10 @@ public class Boss_Info : Player_And_Boss
         base.Awake();
         CurrentHP = MaxHP;
         Pattern_Total = new ArrayList();
+    }
+    public override void TakeDamage(float damage)
+    {
+        CurrentHP -= damage;
     }
     public override void OnDie()
     {
@@ -122,7 +126,16 @@ public class Boss_Info : Player_And_Boss
         }
         yield return null; // 깔끔한 정지를 위해 한 프레임 넘겨줌
     }
-   
+    protected IEnumerator Size_Change(float size_ratio, int inc_or_dec)
+
+    {
+        while (true)
+        {
+            transform.localScale = new Vector3(transform.localScale.x + (Time.deltaTime * size_ratio * inc_or_dec), transform.localScale.y + (Time.deltaTime * size_ratio * inc_or_dec), 0);
+            yield return null;
+        }
+    }
+
     void Start()
     {
 

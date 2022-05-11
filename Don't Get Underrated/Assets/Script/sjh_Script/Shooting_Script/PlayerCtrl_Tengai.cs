@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PlayerControl : Player_Info
+public class PlayerCtrl_Tengai : Player_Info
 {
     // Start is called before the first frame update
 
@@ -39,8 +39,6 @@ public class PlayerControl : Player_Info
 
     bool is_Update = false;
 
-    public bool Unbeatable_Player;
-
     IEnumerator emit_expand_circle, emit_change_size, i_start_emit, i_start_firing, color_when_unbeatable;
 
     private new void Awake()
@@ -54,7 +52,7 @@ public class PlayerControl : Player_Info
         is_LateUpdate = false;
         weapon_able = false;
         movement2D.enabled = false;
-        Unbeatable_Player = true;
+        Unbeatable = true;
         Final_Score = 0;
 
         PlayerScore.text = "점수 : " + Final_Score;
@@ -78,7 +76,7 @@ public class PlayerControl : Player_Info
 
         transform.position = new Vector3(-9, 0, 0);
 
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-4.6f, transform.position.y, transform.position.z), 0.4f, OriginCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-4.6f, transform.position.y, transform.position.z), 2.5f, OriginCurve));
 
         weapon_able = true;
         is_LateUpdate = true;
@@ -90,7 +88,7 @@ public class PlayerControl : Player_Info
         StartCoroutine(FadeText());
         yield return new WaitForSeconds(2f);
 
-        Unbeatable_Player = false;
+        Unbeatable = false;
 
         StopCoroutine(color_when_unbeatable);
     }
@@ -106,14 +104,14 @@ public class PlayerControl : Player_Info
             yield return null;
         }
     }
-    public override void TakeDamage()
+    public override void TakeDamage(int damage)
     {
-        if (Unbeatable_Player)
+        if (Unbeatable)
             return;
 
-        LifeTime--;
+        LifeTime -= damage;
 
-        Unbeatable_Player = true;
+        Unbeatable = true;
         weapon_able = false;
         is_LateUpdate = false;
         movement2D.enabled = false;
@@ -152,11 +150,11 @@ public class PlayerControl : Player_Info
     }
     IEnumerator MovePath() // 여기 수정
     {
-        yield return StartCoroutine(Position_Curve(transform.position, new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z), 2.8f, 1, "up", OriginCurve));
+        yield return StartCoroutine(Position_Slerp(transform.position, new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z), 0.357f, 1, "up", OriginCurve));
 
         float kuku = ((1.215f * transform.position.x) - transform.position.y - 7) / 1.215f;
 
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(kuku, -7, 0), 1.15f, OriginCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(kuku, -7, 0), 0.87f, OriginCurve));
     }
 
     public void Start_Emit()
@@ -175,7 +173,7 @@ public class PlayerControl : Player_Info
 
         yield return YieldInstructionCache.WaitForSeconds(5f);
 
-        Unbeatable_Player = true;
+        Unbeatable = true;
         yield return null;
 
         StopCoroutine(emit_change_size);
@@ -183,7 +181,7 @@ public class PlayerControl : Player_Info
 
         Destroy(Emit_Obj_Copy);
 
-        StartCoroutine(flashOn.White_Flash());
+        StartCoroutine(flashOn.Flash(new Color(1, 1, 1, 1), 0.1f, 5));
 
         GameObject.FindGameObjectWithTag("Boss").GetComponent<DoPhan>().Stop_Meteor();
 

@@ -52,11 +52,11 @@ public class Final_1_W2_Boom : MonoBehaviour
         }
         foreach (var e in enemy)
         {
-            e.GetComponent<Final_1_Enemy>().OnDie();
+            e.GetComponent<F1_Homming_Enemy>().OnDie();
         }
         foreach (var e in devil_weapon)
         {
-           e.GetComponent<Devil_Weapon>().OffLife();
+           e.GetComponent<Devil_Weapon>().Weak_Weapon();
         }
         if (boss != null)
         {

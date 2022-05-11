@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
-public class HimaController : MonoBehaviour {
+public class HimaController : Player_Info {
 
 	[HideInInspector]
 	public bool facingRight = true;
@@ -32,54 +33,57 @@ public class HimaController : MonoBehaviour {
 	private int groundLayerMask;
 
 	// Use this for initialization
-	void Awake() {
+	private new void Awake() 
+	{
 		anim = GetComponent<Animator>();
 		rb2d = GetComponent<Rigidbody2D>();
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
 	}
 
-	void Start() {
+	void Start() 
+	{
 		StartCoroutine(Load());
 	}
 
 	IEnumerator Load()
     {
-		h = 0;
-		yield return YieldInstructionCache.WaitForSeconds(2f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(2f);
 
-		h = 1;
-		yield return YieldInstructionCache.WaitForSeconds(.3f);
-		h = 0;
-		yield return YieldInstructionCache.WaitForSeconds(1f);
+		//h = 1;
+		//yield return YieldInstructionCache.WaitForSeconds(.3f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(1f);
 
-		h = -1;
-		yield return YieldInstructionCache.WaitForSeconds(.6f);
-		h = 0;
-		yield return YieldInstructionCache.WaitForSeconds(1f);
+		//h = -1;
+		//yield return YieldInstructionCache.WaitForSeconds(.6f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(1f);
 
-		h = 1;
-		maxSpeed = 1f;
-		yield return YieldInstructionCache.WaitForSeconds(2f);
-		h = 0;
-		yield return YieldInstructionCache.WaitForSeconds(2f);
+		//h = 1;
+		//maxSpeed = 1f;
+		//yield return YieldInstructionCache.WaitForSeconds(2f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(2f);
 
-		maxSpeed = 2f;
-		h = 1;
-		yield return YieldInstructionCache.WaitForSeconds(.25f);
-		h = 0;
-		yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//maxSpeed = 2f;
+		//h = 1;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
 
-		h = -1;
-		yield return YieldInstructionCache.WaitForSeconds(.25f);
-		h = 0;
-		yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//h = -1;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
 
-		h = 1;
-		yield return YieldInstructionCache.WaitForSeconds(.25f);
-		h = 0;
-		maxSpeed = 7f;
-		yield return YieldInstructionCache.WaitForSeconds(.7f);
+		//h = 1;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//h = 0;
+		//maxSpeed = 7f;
+		//yield return YieldInstructionCache.WaitForSeconds(.7f);
 		GameObject.FindGameObjectWithTag("SolGryn").GetComponent<SolGryn>().WelCome();
+		yield return null;
 	}
 
 	// Update is called once per frame
@@ -100,8 +104,12 @@ public class HimaController : MonoBehaviour {
 		return hit.collider != null;
 	}
 
-	void FixedUpdate() {
+    public override void TakeDamage(int damage)
+    {
+		OnDie();
+    }
 
+    void FixedUpdate() {
 		
 		if (isMove)
 			h = Input.GetAxisRaw("Horizontal");
@@ -154,7 +162,7 @@ public class HimaController : MonoBehaviour {
 
 		if (isInsideGround())
 		{
-			Die();
+			OnDie();
 		}
 	}
 
@@ -170,9 +178,8 @@ public class HimaController : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col) {
 		Debug.Log(LayerMask.LayerToName(col.gameObject.layer));
 	}
-
-	public void Die() {
-		Destroy(gameObject);
-		//Instantiate(deathParticle, transform.position, Quaternion.identity);
-	}
+    public override void OnDie()
+    {
+		base.OnDie();
+    }
 }
