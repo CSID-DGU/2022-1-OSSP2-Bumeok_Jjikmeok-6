@@ -29,6 +29,9 @@ public class PlayerCtrl_Tengai : Player_Info
     GameObject Emit_Obj;
 
     [SerializeField]
+    GameObject TalkPanel;
+
+    [SerializeField]
     int BoomCount = 3;
 
     Animator animator; // 애니메이터는 여러개 추가될 수 있어서 상속 생략
@@ -54,6 +57,7 @@ public class PlayerCtrl_Tengai : Player_Info
         movement2D.enabled = false;
         Unbeatable = true;
         Final_Score = 0;
+        TalkPanel.SetActive(true);
 
         PlayerScore.text = "점수 : " + Final_Score;
         PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
@@ -87,6 +91,7 @@ public class PlayerCtrl_Tengai : Player_Info
 
         StartCoroutine(FadeText());
         yield return new WaitForSeconds(2f);
+        TalkPanel.SetActive(true);
 
         Unbeatable = false;
 
