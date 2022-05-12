@@ -13,7 +13,7 @@ public class EffectAutoDestroy : MonoBehaviour
     }
     IEnumerator Auto_Destroy()
     {
-        yield return YieldInstructionCache.WaitForSeconds(1f);
+        yield return YieldInstructionCache.WaitForSeconds(2f);
         Destroy(gameObject);
         yield break;
     }

@@ -68,7 +68,28 @@ public class FlashOn : MonoBehaviour
         }
     }
 
-
+    public IEnumerator Change_Color_Return_To_Origin(Color Origin_C, Color Change_C, float time_persist, bool is_Continue)
+    {
+        while (true)
+        {
+            percent = 0;
+            while (percent < 1)
+            {
+                percent += Time.deltaTime / time_persist;
+                image.color = Color.Lerp(Origin_C, Change_C, percent);
+                yield return null;
+            }
+            percent = 0;
+            while (percent < 1)
+            {
+                percent += Time.deltaTime / time_persist;
+                image.color = Color.Lerp(Change_C, Origin_C, percent);
+                yield return null;
+            }
+            if (!is_Continue)
+                break;
+        }
+    }
 
     // Update is called once per frame
     void Update()

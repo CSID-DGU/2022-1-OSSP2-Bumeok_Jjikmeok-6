@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07029b59c310ce148a311ab8ad8d07e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 5
   moveDirection: {x: 1, y: 0.5714, z: 0}
 --- !u!114 &618834354433247376
 MonoBehaviour:
@@ -133,7 +133,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Devil_Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
-  user_Define_Explose: 0
 --- !u!61 &9041559630958799090
 BoxCollider2D:
   m_ObjectHideFlags: 0

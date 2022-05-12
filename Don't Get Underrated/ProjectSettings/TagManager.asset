@@ -22,6 +22,7 @@ TagManager:
   - Meteor_Traffic
   - SolGryn
   - Ground
+  - HeartSlider
   layers:
   - Default
   - TransparentFX
