@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Student_Random_Move : MonoBehaviour
+public class Student_Move : MonoBehaviour
 {
     [SerializeField]
     float pursuitSpeed;
@@ -17,6 +17,7 @@ public class Student_Random_Move : MonoBehaviour
     bool followPlayer;
 
     IEnumerator move;
+
     IEnumerator wander_routine;
 
     Rigidbody2D rb;
@@ -95,6 +96,10 @@ public class Student_Random_Move : MonoBehaviour
     {
         spriteRenderer.color = Color.white;
     }
+    public void Stop_Coroutine()
+    {
+        StopAllCoroutines();
+    }
 
     IEnumerator Move(Rigidbody2D rigidBodyToMove, float speed) // Acutual movement of an object according to the value of an endPosition
     {
@@ -117,5 +122,18 @@ public class Student_Random_Move : MonoBehaviour
         }
 
         //animator.SetBool("isWalking",false);
+    }
+    public IEnumerator Change_Color_Lerp(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
+    {
+        if (Effect != null)
+            Instantiate(Effect, transform.position, Quaternion.identity);
+        float percent = 0;
+        while (percent < 1)
+        {
+            percent += Time.deltaTime / time_persist;
+            spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
+            yield return YieldInstructionCache.WaitForEndOfFrame;
+        }
+        yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
     }
 }

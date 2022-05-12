@@ -18,7 +18,6 @@ public class Targetting_Effect : MonoBehaviour
     {
        
     }
-
     public void Init()
     {
         transform.localScale = new Vector3(.5f, .5f, 0);
@@ -37,19 +36,25 @@ public class Targetting_Effect : MonoBehaviour
         float percent = 0;
         while(true)
         {
-            percent += Time.deltaTime * 2;
             transform.position = e.transform.position;
 
             if (transform.localScale.x >= 0.3f)
-                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime / 3, transform.localScale.y - Time.deltaTime / 3, transform.localScale.z);
-            if (percent <= 0.5f)
-                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a - Time.deltaTime * 4);
-               
-            else if (percent >= 0.5f && percent < 1)
-                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + Time.deltaTime * 4);
-              
+            {
+                percent += Time.deltaTime * 5;
+                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime, transform.localScale.y - Time.deltaTime, transform.localScale.z);
+            }
             else
-                percent = 0;
+            {
+                percent += Time.deltaTime * 2;
+                if (percent <= 0.5f)
+                    spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a - Time.deltaTime * 4);
+
+                else if (percent >= 0.5f && percent < 1)
+                    spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + Time.deltaTime * 4);
+
+                else
+                    percent = 0;
+            }
                
             yield return null;
         }

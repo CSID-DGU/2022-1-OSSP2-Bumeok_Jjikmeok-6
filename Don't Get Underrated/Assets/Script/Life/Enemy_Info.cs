@@ -25,7 +25,7 @@ public class Enemy_Info : Life
             collision.GetComponent<Player_Info>().TakeDamage(1);
         }
     }
-    public void Weak_Weapon()
+    void Weak_Weapon()
     {
         if (When_Dead_Effect != null)
         {

@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Student_Gaze_Info : MonoBehaviour
+public class Student_Gaze_Info : Slider_Viewer
 {
     // Start is called before the first frame update
 
-    Slider slider;
-
     Camera selectedCamera;
 
-    public bool CanWarp = false;
+    GameObject Player_Heart_Slider;
 
     ArrayList Interrupt_Num_On_Active; // 플레이어와 실제 경쟁 중인 인터럽트
 
@@ -19,17 +17,18 @@ public class Student_Gaze_Info : MonoBehaviour
 
     ArrayList Stop_Interrupt_Arr_IEnum; // IEnumrator를 담는 배열
 
-    private void Awake()
+    private new void Awake()
     {
-        slider = GetComponent<Slider>();
-        slider.value = 0;
+        base.Awake();
+        Player_Heart_Slider = GameObject.FindGameObjectWithTag("HeartSlider");
         Interrupt_Num_On_NonActive = new ArrayList();
         Interrupt_Num_On_Active = new ArrayList();
         Stop_Interrupt_Arr_IEnum = new ArrayList();
+        selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
     void Start()
     {
-        selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+       
     }
     public bool Block_HP(Vector3 TempPosition)
     {
@@ -41,10 +40,10 @@ public class Student_Gaze_Info : MonoBehaviour
             {
                 GameObject copy_interrupt = (GameObject)interrupt;
 
-                copy_interrupt.GetComponent<Interrupt_Random_Move>().Stop_Move();
+                copy_interrupt.GetComponent<Interrupt>().Stop_Move();
                 Interrupt_Num_On_Active.Add(copy_interrupt);
 
-                IEnumerator temp_s = copy_interrupt.GetComponent<Interrupt_Random_Move>().Trigger_Lazor(TempPosition);
+                IEnumerator temp_s = copy_interrupt.GetComponent<Interrupt>().Trigger_Lazor(TempPosition);
                 Stop_Interrupt_Arr_IEnum.Add(temp_s);
 
                 StartCoroutine(temp_s);
@@ -60,8 +59,8 @@ public class Student_Gaze_Info : MonoBehaviour
     }
     public IEnumerator Competition(GameObject student)
     {
-        StartCoroutine(GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>().Flash(new Color(1, 1, 1, 1), 0.05f, 5));
-
+        StartCoroutine(GameObject.Find("Flash_Interrupt").GetComponent<FlashOn>().Flash(new Color(1, 1, 1, 1), 0.05f, 5));
+        yield return YieldInstructionCache.WaitForSeconds(1f);
         while(true)
         {
             slider.value -= Time.deltaTime / (5 - Interrupt_Num_On_NonActive.Count);
@@ -80,8 +79,9 @@ public class Student_Gaze_Info : MonoBehaviour
                     foreach (var u in Interrupt_Num_On_Active)
                     {
                         GameObject interrupt = (GameObject)u;
-                        interrupt.GetComponent<Interrupt_Random_Move>().Start_Move();
+                        interrupt.GetComponent<Interrupt>().Start_Move();
                     }
+                    Player_Heart_Slider.GetComponent<Heart_Slider_Viewer>().When_Player_Defeat();
                 }
                 else if (slider.value >= 1)
                 {
@@ -90,6 +90,7 @@ public class Student_Gaze_Info : MonoBehaviour
                         GameObject copy_interrupt = (GameObject)u;
                         Destroy(copy_interrupt);
                     }
+                    Player_Heart_Slider.GetComponent<Heart_Slider_Viewer>().When_Interrupt_Defeat();
                     slider.value = 0;
 
                     Destroy(student);
@@ -123,9 +124,18 @@ public class Student_Gaze_Info : MonoBehaviour
             }
         }
     }
+    public void Stop_Coroutine()
+    {
+        foreach (var stop in Stop_Interrupt_Arr_IEnum)
+        {
+            StopCoroutine((IEnumerator)stop);
+        }
+        StopAllCoroutines();
+    }
     // Update is called once per frame
     void Update()
     {
+
         CheckInterrupt();
     } // 학생이 레이저 빔을 과제, 시험같은 방해 오브젝트 및 플레이어에게 맞았을 때 처리한 코드
 }

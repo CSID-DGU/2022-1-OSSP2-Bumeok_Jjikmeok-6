@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BossHPSliderViewer : MonoBehaviour
+public class BossHPSliderViewer : Slider_Viewer
 {
     // Start is called before the first frame update
 
     Boss_Info boss_info;
-    Slider slider;
 
     bool OnUpdate = false;
 
-
+    private new void Awake()
+    {
+        base.Awake();
+        slider.value = 0;
+    }
     public void F_HPFull(Boss_Info boss_info)
     {
         this.boss_info = boss_info;
-        slider = GetComponent<Slider>();
-        slider.value = 0;
+       
         StartCoroutine("I_HPFull");
     }
     IEnumerator I_HPFull()

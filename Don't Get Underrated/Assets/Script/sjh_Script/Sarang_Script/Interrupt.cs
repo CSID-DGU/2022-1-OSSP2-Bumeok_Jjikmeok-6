@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interrupt_Random_Move : MonoBehaviour
+public class Interrupt : Enemy_Info
 {
     [SerializeField]
     float pursuitSpeed;
@@ -28,29 +28,31 @@ public class Interrupt_Random_Move : MonoBehaviour
 
     CircleCollider2D circleColliderObject; // The variable for visualizing gizmos on the screen
 
-    [SerializeField]
-    GameObject Lazor;
-
     IEnumerator move;
     IEnumerator wander_routine;
 
-    public IEnumerator Trigger_Lazor(Vector3 tempPosition) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
+    private new void Awake()
     {
-        while (true)
-        {
-            Lazor.GetComponent<Movement2D_Wow>().MoveTo(new Vector3(tempPosition.x - transform.position.x,
-                         tempPosition.y - transform.position.y, 0));
-            Instantiate(Lazor, transform.position, Quaternion.identity);
-            yield return null;
-        }
-    }
-
-    private void Awake()
-    {
+        base.Awake();
         rb = GetComponent<Rigidbody2D>();
         circleColliderObject = GetComponent<CircleCollider2D>();
         targetTransform = null;
         currentSpeed = wanderSpeed;
+    }
+    public IEnumerator Trigger_Lazor(Vector3 tempPosition) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
+    {
+        while (true)
+        {
+            Weapon[0].GetComponent<Movement2D_Wow>().MoveTo(new Vector3(tempPosition.x - transform.position.x,
+                         tempPosition.y - transform.position.y, 0));
+            Instantiate(Weapon[0], transform.position, Quaternion.identity);
+            yield return null;
+        }
+    }
+
+    public void Stop_Coroutine()
+    {
+        StopAllCoroutines();
     }
 
     // Start is called before the first frame update
@@ -61,11 +63,6 @@ public class Interrupt_Random_Move : MonoBehaviour
         StartCoroutine(wander_routine);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.DrawLine(rb.position, endPosition, Color.red); // Showing the direction and distance of an object
-    }
 
     public IEnumerator WanderRoutine()
     {
@@ -186,7 +183,15 @@ public class Interrupt_Random_Move : MonoBehaviour
     }
     private void OnDestroy()
     {
+        When_Dead_Effect.transform.localScale = new Vector3(5, 5, 3);
+        Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         StopAllCoroutines();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Debug.DrawLine(rb.position, endPosition, Color.red); // Showing the direction and distance of an object
     }
 }
 

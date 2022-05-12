@@ -120,7 +120,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
             ee = !ee;
         }
     }
-    protected IEnumerator Change_Color_Lerp(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
+    public IEnumerator Change_Color_Lerp(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
     {
         if (Effect != null)
             Instantiate(Effect, transform.position, Quaternion.identity);
