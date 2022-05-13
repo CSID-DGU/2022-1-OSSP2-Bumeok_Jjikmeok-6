@@ -17,6 +17,12 @@ public class Student_Gaze_Info : Slider_Viewer
 
     ArrayList Stop_Interrupt_Arr_IEnum; // IEnumrator를 담는 배열
 
+    [SerializeField]
+    GameObject YeonTa;
+
+    GameObject YeonTa_Copy;
+
+   
     private new void Awake()
     {
         base.Awake();
@@ -52,16 +58,20 @@ public class Student_Gaze_Info : Slider_Viewer
         }
         return false;
     }
-    
+
     public void Empty_HP()
     {
         slider.value = 0;
     }
     public IEnumerator Competition(GameObject student)
     {
-        StartCoroutine(GameObject.Find("Flash_Interrupt").GetComponent<FlashOn>().Flash(new Color(1, 1, 1, 1), 0.05f, 5));
-        yield return YieldInstructionCache.WaitForSeconds(1f);
-        while(true)
+        yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        StartCoroutine(GameObject.Find("Flash_Interrupt").GetComponent<FlashOn>().Flash(new Color(1, 1, 1, 1), 0.2f, 5));
+        YeonTa_Copy = Instantiate(YeonTa, transform.position + Vector3.up, Quaternion.identity);
+        GameObject.FindGameObjectWithTag("StudentSlider").GetComponent<Image>().color = new Color(1, 0.2f, 0.6f, 1);
+        transform.localScale = new Vector3(2, 1.5f, 1);
+        transform.position = transform.position - Vector3.down;
+        while (true)
         {
             slider.value -= Time.deltaTime / (5 - Interrupt_Num_On_NonActive.Count);
 
@@ -70,6 +80,9 @@ public class Student_Gaze_Info : Slider_Viewer
 
             if (slider.value <= 0 || slider.value >= 1)
             {
+                GameObject.FindGameObjectWithTag("StudentSlider").GetComponent<Image>().color = new Color(1, 0, 0, 1);
+                transform.localScale = new Vector3(1, 1, 1);
+                Destroy(YeonTa_Copy);
                 foreach (var stop in Stop_Interrupt_Arr_IEnum)
                 {
                     StopCoroutine((IEnumerator)stop);
@@ -81,7 +94,7 @@ public class Student_Gaze_Info : Slider_Viewer
                         GameObject interrupt = (GameObject)u;
                         interrupt.GetComponent<Interrupt>().Start_Move();
                     }
-                    Player_Heart_Slider.GetComponent<Heart_Slider_Viewer>().When_Player_Defeat();
+                    Player_Heart_Slider.GetComponent<Heart_Gaze_Viewer>().When_Player_Defeat();
                 }
                 else if (slider.value >= 1)
                 {
@@ -90,7 +103,7 @@ public class Student_Gaze_Info : Slider_Viewer
                         GameObject copy_interrupt = (GameObject)u;
                         Destroy(copy_interrupt);
                     }
-                    Player_Heart_Slider.GetComponent<Heart_Slider_Viewer>().When_Interrupt_Defeat();
+                    Player_Heart_Slider.GetComponent<Heart_Gaze_Viewer>().When_Interrupt_Defeat();
                     slider.value = 0;
 
                     Destroy(student);
@@ -135,7 +148,14 @@ public class Student_Gaze_Info : Slider_Viewer
     // Update is called once per frame
     void Update()
     {
-
         CheckInterrupt();
     } // 학생이 레이저 빔을 과제, 시험같은 방해 오브젝트 및 플레이어에게 맞았을 때 처리한 코드
+    private void LateUpdate()
+    {
+        if (YeonTa_Copy != null)
+        {
+            Debug.Log("응");
+            YeonTa_Copy.transform.position = new Vector3(transform.position.x - 1.78f + (slider.value * 3.56f), transform.position.y + 1f, 1);
+        }
+    }
 }

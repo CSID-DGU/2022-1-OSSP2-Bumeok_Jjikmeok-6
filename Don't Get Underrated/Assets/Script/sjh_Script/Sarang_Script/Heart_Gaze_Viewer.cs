@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Heart_Slider_Viewer : Slider_Viewer
+public class Heart_Gaze_Viewer : Slider_Viewer
 {
     // Start is called before the first frame update
 

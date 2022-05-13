@@ -113,7 +113,7 @@ public class PlayerCtrl_Sarang : Player_Info
                         hit.transform.gameObject.GetComponent<Student_Move>().Be_Attacked();
                         hit.transform.gameObject.GetComponent<Student_Move>().Stop_Move(); // 공격 받는 중 + 움직임 정지
                     }
-                    Heart_Slider.GetComponent<Heart_Slider_Viewer>().Decrease_HP(Decrease_HP_ratio);
+                    Heart_Slider.GetComponent<Heart_Gaze_Viewer>().Decrease_HP(Decrease_HP_ratio);
                     Lazor_In_First_Phase(Weapon[0], hit.transform.gameObject.transform.position, transform.position);
 
                     if (!Student_Gaze.activeSelf)
@@ -235,7 +235,6 @@ public class PlayerCtrl_Sarang : Player_Info
     }
     private void Dash()
     {
-        Debug.Log("이");
         if (IsOneClick && ((Time.time - Timer) > IsDoubleClick))
         {
             IsOneClick = false;
@@ -263,7 +262,6 @@ public class PlayerCtrl_Sarang : Player_Info
     private void Move()
     {
         int key = 0;
-        Debug.Log("왜");
         if (Input.GetKey(KeyCode.D))
         {
             animator.SetBool("IsWalk", true);

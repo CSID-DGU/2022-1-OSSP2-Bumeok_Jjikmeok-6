@@ -14,6 +14,10 @@ public class Interrupt : Enemy_Info
     float directionChangeInterval;
 
     [SerializeField]
+    GameObject Exclamation;
+
+
+    [SerializeField]
     bool followPlayer;
 
     float currentSpeed;
@@ -31,6 +35,8 @@ public class Interrupt : Enemy_Info
     IEnumerator move;
     IEnumerator wander_routine;
 
+    GameObject u;
+
     private new void Awake()
     {
         base.Awake();
@@ -41,6 +47,10 @@ public class Interrupt : Enemy_Info
     }
     public IEnumerator Trigger_Lazor(Vector3 tempPosition) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
     {
+        u = Instantiate(Exclamation, transform.position, Quaternion.identity);
+        yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        Destroy(u);
+
         while (true)
         {
             Weapon[0].GetComponent<Movement2D_Wow>().MoveTo(new Vector3(tempPosition.x - transform.position.x,
@@ -52,6 +62,8 @@ public class Interrupt : Enemy_Info
 
     public void Stop_Coroutine()
     {
+        if (u != null)
+            Destroy(u);
         StopAllCoroutines();
     }
 
@@ -183,8 +195,7 @@ public class Interrupt : Enemy_Info
     }
     private void OnDestroy()
     {
-        When_Dead_Effect.transform.localScale = new Vector3(5, 5, 3);
-        Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
+
         StopAllCoroutines();
     }
 

@@ -12,7 +12,7 @@ public class Time_Over_Text : MonoBehaviour
 
     private void Awake()
     {
-        transform.localScale = new Vector3(0.7f, 0.7f, 0);
+        transform.localScale = new Vector3(1f, 1f, 0);
         delta_ratio = 1;
     }
     private void Start()
@@ -21,9 +21,9 @@ public class Time_Over_Text : MonoBehaviour
     }
     IEnumerator Change()
     {
-        yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.1f, 4, 0), true));
+        yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.05f, 4, 0), true));
 
-        yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.55f, 0.55f, 0), false));
+        yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.65f, 0.65f, 0), false));
 
         yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.1f, 3, 0), false));
 

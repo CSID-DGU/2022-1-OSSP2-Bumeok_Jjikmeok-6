@@ -23,6 +23,7 @@ TagManager:
   - SolGryn
   - Ground
   - HeartSlider
+  - StudentSlider
   layers:
   - Default
   - TransparentFX

@@ -82,7 +82,7 @@ public class Limit_Time : MonoBehaviour
                 }
 
                 yield return YieldInstructionCache.WaitForSeconds(3f);
-                Instantiate(Time_Over_Text, new Vector3(0.54f, -0.14f, 0), Quaternion.identity);
+                Instantiate(Time_Over_Text, new Vector3(GameObject.FindGameObjectWithTag("Player").transform.position.x, 0, 0), Quaternion.identity);
                 yield break;
                 // ¾À ÀüÈ¯ 
             }

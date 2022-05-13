@@ -21,7 +21,6 @@ public class ThunderBolt : Enemy_Info
 
     IEnumerator Move()
     {
-        
         //yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, 0, 0), 0.5f, OriginCurve));
         StartCoroutine(flashOn.Flash(new Color(1, 1, 1, 1), 0.1f, 7));
         camera_shake = cameraShake.Shake_Act(.1f, .26f, 0.3f, false);
@@ -37,15 +36,6 @@ public class ThunderBolt : Enemy_Info
         Destroy(gameObject);
     }
 
-    //IEnumerator I_DestroyNow()
-    //{
-    //    // return YieldInstructionCache.WaitForSeconds(2f);
-      
-    //}
-
-    
-
-    // Update is called once per frame
     void Update()
     {
         
