@@ -22,11 +22,12 @@ public class Movement2D_Wow : MonoBehaviour
 
     }
 
+
     public void MoveTo(Vector3 direction1)
     {
         moveDirection = direction1;
     } // 흠.....MoveTo에서 위치를 딱 설정해주고
-
+    
     // Update is called once per frame
     void LateUpdate() // 여기서 위치를 이동시키는 거군
     {
@@ -34,7 +35,7 @@ public class Movement2D_Wow : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Student"))
+        if (collision.CompareTag("Student") && collision.gameObject.GetComponent<Student_Move>().get_Color() == new Color(0, 0, 1, 1))
             Destroy(gameObject);
     }
 }

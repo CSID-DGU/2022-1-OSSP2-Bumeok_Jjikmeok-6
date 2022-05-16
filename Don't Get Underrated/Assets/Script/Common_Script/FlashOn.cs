@@ -46,7 +46,6 @@ public class FlashOn : MonoBehaviour
             yield return null;
             if (image.color.a <= 0)
                 yield break;
-            Debug.Log(image.color);
             image.color = Color.Lerp(image.color, Color.clear, flashSpeed * Time.deltaTime);
         }
 

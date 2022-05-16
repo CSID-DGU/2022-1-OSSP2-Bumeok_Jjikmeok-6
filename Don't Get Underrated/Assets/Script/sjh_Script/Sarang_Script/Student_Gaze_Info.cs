@@ -22,10 +22,11 @@ public class Student_Gaze_Info : Slider_Viewer
 
     GameObject YeonTa_Copy;
 
-   
+    int StudentLayerMask;  // Player 레이어만 충돌 체크함
     private new void Awake()
     {
         base.Awake();
+        StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
         Player_Heart_Slider = GameObject.FindGameObjectWithTag("HeartSlider");
         Interrupt_Num_On_NonActive = new ArrayList();
         Interrupt_Num_On_Active = new ArrayList();
@@ -73,10 +74,15 @@ public class Student_Gaze_Info : Slider_Viewer
         transform.position = transform.position - Vector3.down;
         while (true)
         {
-            slider.value -= Time.deltaTime / (5 - Interrupt_Num_On_NonActive.Count);
+            if (4 - Interrupt_Num_On_NonActive.Count > 0)
+                slider.value -= Time.deltaTime / (4 - Interrupt_Num_On_NonActive.Count);
 
-            if (Input.GetMouseButtonDown(0))
-                slider.value += (Time.deltaTime * 15);
+            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, StudentLayerMask);
+
+            if (Input.GetMouseButtonDown(0) && hit.collider != null && hit.transform.gameObject.CompareTag("Student"))
+                slider.value += 0.15f;
 
             if (slider.value <= 0 || slider.value >= 1)
             {

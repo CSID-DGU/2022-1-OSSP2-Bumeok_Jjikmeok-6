@@ -221,6 +221,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
             Plus_Speed += 0.0006f;
             yield return null;
         }
+        Debug.Log("드디어 빠져");
         yield return null;
     }
 
@@ -231,5 +232,16 @@ public class Life : MonoBehaviour, Life_Of_Basic
             transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * delta_ratio, transform.localScale.y + Time.deltaTime * delta_ratio, 0);
             yield return null;
         }
+    }
+    protected IEnumerator Rotate_Dec(Quaternion A, Quaternion B, float speed)
+    {
+        percent = 0;
+        while (percent < 1)
+        {
+            percent += (Time.deltaTime * speed);
+            transform.rotation = Quaternion.Lerp(A, B, percent);
+            yield return null;
+        }
+
     }
 }

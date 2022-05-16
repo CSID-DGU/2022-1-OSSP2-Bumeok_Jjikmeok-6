@@ -45,7 +45,7 @@ public class Talk_Panel : MonoBehaviour
         Dic_Context = new Dictionary<int, string[]>();
         Before_Button.SetActive(false);
         After_Button.SetActive(false);
-        Dic_Context.Add(0, new string[] { "뭉탱이 월드에 오신 것을 환영합니다. 나는 뭉탱이 춤울 추는 뭉탱이", "아야 머리가 아플걸 잠도 오지 않을걸 넌 쉽게 날 잊지 못할걸" });
+        Dic_Context.Add(0, new string[] { "이상 세계는 네가 생각하는 바와 많이 다르단다", "생각보다 고독하고.... 힘든 법이지...." });
         Dic_Context.Add(1, new string[] { "골프공 게임이라....", "한번 공을 조작해봐!" });
         Dic_Context.Add(2, new string[] { "눈빛 보내기에서", "어레인지했어!!" });
         Dic_Context.Add(3, new string[] { "어서와", "텐가이는 처음이지?" });

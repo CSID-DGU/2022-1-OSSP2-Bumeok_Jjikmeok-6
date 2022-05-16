@@ -57,7 +57,7 @@ public class PlayerCtrl_Tengai : Player_Info
         movement2D.enabled = false;
         Unbeatable = true;
         Final_Score = 0;
-        TalkPanel.SetActive(true);
+        //TalkPanel.SetActive(true);
 
         PlayerScore.text = "점수 : " + Final_Score;
         PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
@@ -91,11 +91,12 @@ public class PlayerCtrl_Tengai : Player_Info
 
         StartCoroutine(FadeText());
         yield return new WaitForSeconds(2f);
-        TalkPanel.SetActive(true);
+        //TalkPanel.SetActive(true);
 
         Unbeatable = false;
 
         StopCoroutine(color_when_unbeatable);
+        spriteRenderer.color = new Color(1, 1, 1, 1);
     }
     IEnumerator FadeText()
     {
@@ -155,11 +156,14 @@ public class PlayerCtrl_Tengai : Player_Info
     }
     IEnumerator MovePath() // 여기 수정
     {
-        yield return StartCoroutine(Position_Slerp(transform.position, new Vector3(transform.position.x - 2.5f, transform.position.y, transform.position.z), 0.357f, 1, "up", OriginCurve));
+        float A = Get_Slerp_Distance(transform.position, transform.position + 2.5f * Vector3.left, Get_Center_Vector(transform.position, transform.position + 2.5f * Vector3.left, Vector3.Distance(transform.position, transform.position + 2.5f * Vector3.left) * 0.85f, "clock"));
+
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, transform.position + 2.5f * Vector3.left, Get_Center_Vector(transform.position, transform.position + 2.5f * Vector3.left, Vector3.Distance(transform.position, transform.position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.3f, OriginCurve, false));
 
         float kuku = ((1.215f * transform.position.x) - transform.position.y - 7) / 1.215f;
 
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(kuku, -7, 0), 0.87f, OriginCurve));
+        float B = Vector3.Distance(transform.position, new Vector3(kuku, -7, 0));
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(kuku, -7, 0), B/A * 0.3f, OriginCurve));
     }
 
     public void Start_Emit()

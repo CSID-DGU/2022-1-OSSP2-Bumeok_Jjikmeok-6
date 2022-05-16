@@ -112,17 +112,7 @@ public class DynaBlade : Enemy_Info
 
         Destroy(gameObject);
     }
-    IEnumerator Rotate_Dec(Quaternion A, Quaternion B, float speed)
-    {
-        percent = 0;
-        while(percent < 1)
-        {
-            percent += (Time.deltaTime * speed);
-            transform.rotation = Quaternion.Lerp(A, B, percent);
-            yield return null;
-        }
-        
-    }
+ 
     void Update()
     {
         

@@ -66,7 +66,7 @@ public class SolGryn : Boss_Info
     {
         himaController.IsMove = true;
         transform.position = new Vector3(7, 4, 0);
-        transform.localScale = new Vector3(1, 1, 0);
+        transform.localScale = new Vector3(1.4f, 1.4f, 0);
         yield return YieldInstructionCache.WaitForSeconds(.5f);
 
         SolGryn_HP.SetActive(true);
@@ -85,7 +85,7 @@ public class SolGryn : Boss_Info
         yield return StartCoroutine(First_Move());
         
         //yield return StartCoroutine(Pattern_1());
-       // yield return StartCoroutine(Pattern_2());
+        //yield return StartCoroutine(Pattern_2());
         yield return StartCoroutine(Pattern_3());
         //yield return StartCoroutine(Pattern_4());
     }
@@ -177,13 +177,13 @@ public class SolGryn : Boss_Info
 
         StopCoroutine(move_Second);
         StopCoroutine(rotate);
-        yield return StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 0.67f, 0, DisAppear_Effect_1));
+        yield return StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 0.33f, 0, DisAppear_Effect_1));
         yield break;
     }
     IEnumerator Pattern_2() // 각도 수정 & 
     { 
         transform.position = new Vector3(-2, 2, 0);
-        StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 0.67f, 0, DisAppear_Effect_1));
+        StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1));
 
         IEnumerator move_Second = Move_Round_Trip(-2f, 2, 2f, 2);
         IEnumerator rotate = Rotate(150);
@@ -211,14 +211,24 @@ public class SolGryn : Boss_Info
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, -3, 0), .5f, declineCurve));
         yield return StartCoroutine(Boss_W1(72, 9, 180));
 
+        yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 0, 45), 13));
+
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-7, 3, 0), .5f, declineCurve));
         yield return StartCoroutine(Boss_W1(252, 9, 180));
-       
+
+        yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 45), Quaternion.Euler(0, 0, 180), 13));
+
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-7, -3, 0), .5f, declineCurve));
         yield return StartCoroutine(Boss_W1(-18, 9, 180));
 
+        yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 180), Quaternion.Euler(0, 0, 315), 13));
+
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 3, 0), .5f, declineCurve));
         yield return StartCoroutine(Boss_W1(162, 9, 180));
+
+        yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 315), Quaternion.Euler(0, 0, 360), 13));
+
+        yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(1, 69 / 255, 69 / 255, 1), 1, false));
 
         yield return StartCoroutine(Position_Slerp(transform.position, new Vector3(-7, -4, 0), 0.45f, 7, "up", declineCurve));
         yield return StartCoroutine(Position_Slerp(transform.position, new Vector3(7, 0, 0), 0.45f, 7, "down", declineCurve));

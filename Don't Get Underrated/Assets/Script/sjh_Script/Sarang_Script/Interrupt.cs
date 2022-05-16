@@ -117,7 +117,7 @@ public class Interrupt : Enemy_Info
 
         int randNum = Random.Range(-13, 14);
 
-        return new Vector3(randNum * Mathf.Cos(inputAngleRadians), this.transform.position.y, 0);
+        return new Vector3(randNum * Mathf.Cos(inputAngleRadians) + transform.position.x, this.transform.position.y, 0);
     }
 
     public IEnumerator Move(Rigidbody2D rigidBodyToMove, float speed) // Acutual movement of an object according to the value of an endPosition

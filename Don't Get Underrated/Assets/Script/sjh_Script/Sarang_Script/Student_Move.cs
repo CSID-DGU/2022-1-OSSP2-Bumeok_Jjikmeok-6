@@ -25,12 +25,13 @@ public class Student_Move : MonoBehaviour
     Vector3 endPosition;
     int randomAngle = 0;
     float currentSpeed;
-
+    int StudentLayerMask;  // Player 레이어만 충돌 체크함
     // Start is called before the first frame update
 
     private void Awake()
     {
         currentSpeed = wanderSpeed;
+        StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -77,6 +78,7 @@ public class Student_Move : MonoBehaviour
     }
     public void Stop_Move()
     {
+        Debug.Log("야 멈춰");
         StopCoroutine(move);
         StopCoroutine(wander_routine);
     }
@@ -86,11 +88,15 @@ public class Student_Move : MonoBehaviour
 
         int randNum = Random.Range(-13, 14);
 
-        return new Vector3(randNum * Mathf.Cos(inputAngleRadians), transform.position.y, 0);
+        return new Vector3(randNum * Mathf.Cos(inputAngleRadians) + transform.position.x, transform.position.y, 0);
     }
     public void Be_Attacked()
     {
         spriteRenderer.color = Color.blue;
+    }
+    public Color get_Color()
+    {
+        return spriteRenderer.color;
     }
     public void NotBe_Attacked()
     {

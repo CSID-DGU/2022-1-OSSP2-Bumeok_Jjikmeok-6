@@ -9,7 +9,7 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     private new void Awake()
     {
         base.Awake();
-        slider.value = 1;
+        slider.value = 0.86f;
     }
 
     public void Decrease_HP(float ratio)
@@ -32,6 +32,10 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     // Update is called once per frame
     void Update()
     {
-        
+        if (slider.value >= 0.88)
+        {
+            slider.value -= 0.2f;
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Fever_Time();
+        }
     }
 }
