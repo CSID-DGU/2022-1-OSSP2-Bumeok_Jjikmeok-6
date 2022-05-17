@@ -30,18 +30,20 @@ public class Spawn_Student_Interrupt : MonoBehaviour
     }
     IEnumerator Spawn_Student_And_Interrupt()
     {
-        for (int i = 0; i < 18; i++)
+        for (int j = 0; j < 4; j++)
         {
-            int eee = Random.Range(0, 2);
-            float SpawnRange = Random.Range(-3, 3);
-            Instantiate(Interrupt, new Vector3(Standard_Interrupt_X + (26 * i + SpawnRange), Standard_Interrupt_Y, 1), Quaternion.identity);
-            if (eee == 0)
-                Instantiate(Student, new Vector3(Standard_Student_X + (18 * i + SpawnRange), -4, 1), Quaternion.identity);
-            else
-                Instantiate(Student, new Vector3(Standard_Student_X + (18 * i + SpawnRange), -1, 1), Quaternion.identity);
-            yield return null;
+            for (int i = 0; i < 18; i++)
+            {
+                int eee = Random.Range(0, 2);
+                float SpawnRange = Random.Range(-3, 3);
+                Instantiate(Interrupt, new Vector3(Standard_Interrupt_X + (26 * i + SpawnRange), Standard_Interrupt_Y + (40 * j), 1), Quaternion.identity);
+                if (eee == 0)
+                    Instantiate(Student, new Vector3(Standard_Student_X + (18 * i + SpawnRange), -4 + (40 * j), 1), Quaternion.identity);
+                else
+                    Instantiate(Student, new Vector3(Standard_Student_X + (18 * i + SpawnRange), -1 + (40 * j), 1), Quaternion.identity);
+                yield return null;
+            }
         }
-
         yield break;
     }
 

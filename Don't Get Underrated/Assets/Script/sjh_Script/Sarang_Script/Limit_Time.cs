@@ -9,7 +9,7 @@ public class Limit_Time : MonoBehaviour
     TextMeshProUGUI Limit_Time_Text;
     Image image;
 
-    FlashOn flashOn;
+    BackGroundColor flashOn;
 
     IEnumerator flash_on;
 
@@ -28,7 +28,7 @@ public class Limit_Time : MonoBehaviour
         Limit_Time_Text = GetComponent<TextMeshProUGUI>();
         Limit_Time_Text.text = "제한시간 : " + Option_Limit_Time;
         image = GameObject.Find("Flash_TimeOut").GetComponent<Image>();
-        flashOn = image.GetComponent<FlashOn>();
+        flashOn = image.GetComponent<BackGroundColor>();
     }
 
     private void Start()

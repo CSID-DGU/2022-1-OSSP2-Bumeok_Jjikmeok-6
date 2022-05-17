@@ -26,7 +26,7 @@ public class SolGryn : Boss_Info
         base.Awake();
         CurrentHP = MaxHP;
         
-        flashOn = GameObject.Find("Flash").GetComponent<FlashOn>();
+        backGroundColor = GameObject.Find("Flash").GetComponent<BackGroundColor>();
         himaController = GameObject.FindGameObjectWithTag("Player").GetComponent<HimaController>();
         SolGryn_HP.SetActive(false);
         transform.position = new Vector3(0, -15.81f, 0);
@@ -50,16 +50,16 @@ public class SolGryn : Boss_Info
         yield return StartCoroutine(Position_Lerp(new Vector3(0, -15.81f, 0), new Vector3(0, -3, 0), 5f, OriginCurve));
         yield return YieldInstructionCache.WaitForSeconds(1.5f); // 웅장한 이동 다음 1.5초 정지
 
-        StartCoroutine(flashOn.Change_Color(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 1));
+        StartCoroutine(backGroundColor.Change_Color(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 1));
         yield return StartCoroutine(Position_Lerp(new Vector3(0, -3f, 0), new Vector3(0, 13, 0), 1f, declineCurve)); // 플래시 키는 동시에 빠른 위로 이동(?)
 
         StopCoroutine(camera_shake);
         yield return YieldInstructionCache.WaitForSeconds(1.5f); // 이동 후 카메라 정지 + 1.5초 정지
 
-        StartCoroutine(flashOn.Change_Color(new Color(1, 1, 1, 1), new Color(0, 0, 0, 1), 1));
+        StartCoroutine(backGroundColor.Change_Color(new Color(1, 1, 1, 1), new Color(0, 0, 0, 1), 1));
         yield return YieldInstructionCache.WaitForSeconds(1.5f);  // 검정색 플래시 후 1.5초 정지
 
-        StartCoroutine(flashOn.Change_Color(new Color(0, 0, 0, 1), new Color(1, 1, 1, 0), 1));
+        StartCoroutine(backGroundColor.Change_Color(new Color(0, 0, 0, 1), new Color(1, 1, 1, 0), 1));
         StartCoroutine(Boss_Pattern());
     }
     IEnumerator Boss_Pattern()

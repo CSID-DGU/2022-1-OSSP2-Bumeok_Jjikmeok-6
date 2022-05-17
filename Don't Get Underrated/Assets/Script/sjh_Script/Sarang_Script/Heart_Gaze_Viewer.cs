@@ -18,12 +18,10 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     }
     public void When_Player_Defeat()
     {
-        Debug.Log("À½");
         slider.value -= 0.1f;
     }
     public void When_Interrupt_Defeat()
     {
-        Debug.Log("¾Ó");
         slider.value += 0.1f;
     }
     void Start()

@@ -12,13 +12,24 @@ public class MoveBackGround : MonoBehaviour
 
     Vector3 moveDirection = Vector3.left;
 
-    float moveSpeed = 6f;
+    [SerializeField]
+    float moveSpeed= 9f;
 
-    public float MoveSpeed
+    float inGameSpeed;
+
+    public float InGameSpeed
     {
-        get { return moveSpeed; }
-        set { moveSpeed = value; }
+        get { return inGameSpeed; }
+        set { inGameSpeed = value; }
     }
+
+
+    private void Awake()
+    {
+        inGameSpeed = 0;   
+    }
+
+
 
     // Start is called before the first frame update
 
@@ -40,10 +51,21 @@ public class MoveBackGround : MonoBehaviour
      
     //}
 
+    public IEnumerator Increase_Speed()
+    {
+        while(true)
+        {
+            inGameSpeed += Time.deltaTime;
+            if (inGameSpeed >= 6)
+                yield break;
+            yield return null;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        transform.position += moveDirection * inGameSpeed * Time.deltaTime;
         if (transform.position.x <= -move_value)
         {
             transform.position = Back_another.transform.position + (Vector3.right * move_value);

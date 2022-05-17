@@ -51,7 +51,7 @@ public class Emit_Motion : MonoBehaviour
         while (percent < 1)
         {
             percent += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(temp_scale, temp_scale * 17, curve.Evaluate(percent));
+            transform.localScale = Vector3.Lerp(temp_scale, temp_scale * 21, curve.Evaluate(percent));
             yield return YieldInstructionCache.WaitForEndOfFrame;
            
         }

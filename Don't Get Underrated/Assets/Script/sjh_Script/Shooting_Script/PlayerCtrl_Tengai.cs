@@ -42,6 +42,8 @@ public class PlayerCtrl_Tengai : Player_Info
 
     bool is_Update = false;
 
+    bool boss_intend;
+
     IEnumerator emit_expand_circle, emit_change_size, i_start_emit, i_start_firing, color_when_unbeatable;
 
     private new void Awake()
@@ -49,13 +51,14 @@ public class PlayerCtrl_Tengai : Player_Info
         base.Awake();
         movement2D = GetComponent<Movement2D>();
         animator = GetComponent<Animator>();
-        flashOn = GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>();
+        backGroundColor = GameObject.FindGameObjectWithTag("Flash").GetComponent<BackGroundColor>();
 
         is_Update = false;
         is_LateUpdate = false;
         weapon_able = false;
         movement2D.enabled = false;
         Unbeatable = true;
+        boss_intend = false;
         Final_Score = 0;
         //TalkPanel.SetActive(true);
 
@@ -92,8 +95,13 @@ public class PlayerCtrl_Tengai : Player_Info
         StartCoroutine(FadeText());
         yield return new WaitForSeconds(2f);
         //TalkPanel.SetActive(true);
-
-        Unbeatable = false;
+        if (!boss_intend)
+        {
+            GameObject.Find("EnemyAndBoss").GetComponent<FinalStage_1_Total>().Boss_First_Appear();
+            boss_intend = true;
+        }
+        else
+            Unbeatable = false;
 
         StopCoroutine(color_when_unbeatable);
         spriteRenderer.color = new Color(1, 1, 1, 1);
@@ -190,9 +198,7 @@ public class PlayerCtrl_Tengai : Player_Info
 
         Destroy(Emit_Obj_Copy);
 
-        StartCoroutine(flashOn.Flash(new Color(1, 1, 1, 1), 0.1f, 5));
-
-        GameObject.FindGameObjectWithTag("Boss").GetComponent<DoPhan>().Stop_Meteor();
+        StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 5));
 
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
@@ -215,7 +221,11 @@ public class PlayerCtrl_Tengai : Player_Info
             Destroy(e);
         }
 
+        GameObject.FindGameObjectWithTag("Boss").GetComponent<DoPhan>().Stop_Meteor();
+
         GameObject u = Instantiate(When_Dead_Effect, Vector3.zero, Quaternion.identity);
+
+        StartCoroutine(cameraShake.Shake_Act(0.4f, 0.4f, 0.3f, false));
         yield return YieldInstructionCache.WaitForSeconds(2f);
 
         Destroy(u);

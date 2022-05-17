@@ -9,7 +9,7 @@ public class ThunderBolt : Enemy_Info
     private new void Awake()
     {
         base.Awake();
-        flashOn = GameObject.Find("Flash").GetComponent<FlashOn>();
+        backGroundColor = GameObject.Find("Flash").GetComponent<BackGroundColor>();
         cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
 
@@ -22,7 +22,7 @@ public class ThunderBolt : Enemy_Info
     IEnumerator Move()
     {
         //yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, 0, 0), 0.5f, OriginCurve));
-        StartCoroutine(flashOn.Flash(new Color(1, 1, 1, 1), 0.1f, 7));
+        StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 7));
         camera_shake = cameraShake.Shake_Act(.1f, .26f, 0.3f, false);
         StartCoroutine(camera_shake);
         

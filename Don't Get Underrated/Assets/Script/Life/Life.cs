@@ -31,7 +31,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
     protected CameraShake cameraShake;
 
-    protected FlashOn flashOn;
+    protected BackGroundColor backGroundColor;
 
     protected float percent;
 
@@ -223,6 +223,18 @@ public class Life : MonoBehaviour, Life_Of_Basic
         }
         Debug.Log("드디어 빠져");
         yield return null;
+    }
+
+    protected IEnumerator Size_Change(Vector3 Origin_Size, Vector3 Change_Size, float time_persist)
+    {
+        percent = 0;
+        while(percent < 1)
+        {
+            percent += Time.deltaTime / time_persist;
+            transform.localScale = Vector3.Lerp(Origin_Size, Change_Size, percent);
+            yield return null;
+        }
+        yield break;
     }
 
     protected IEnumerator Size_Change_Infinite(float delta_ratio)

@@ -18,6 +18,9 @@ public class DoPhan : Boss_Info
     [SerializeField]
     GameObject Homming_Enemy; // 본인
 
+    [SerializeField]
+    GameObject Blink;
+
     IEnumerator enemy_spawn; // 본인
 
     IEnumerator meteor_launch;
@@ -31,9 +34,10 @@ public class DoPhan : Boss_Info
     new private void Awake()
     {
         base.Awake();
-        transform.position = new Vector3(11, 0, 0);
+        transform.position = new Vector3(0, -7, 0);
+        transform.localScale = new Vector3(8, 8, 0);
         WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, 0);
-        flashOn = GameObject.FindGameObjectWithTag("Flash").GetComponent<FlashOn>();
+        backGroundColor = GameObject.FindGameObjectWithTag("Flash").GetComponent<BackGroundColor>();
         phase = Pattern01();
         Unbeatable = true;
         for (int i = 0; i < 5; i++)
@@ -51,7 +55,7 @@ public class DoPhan : Boss_Info
 
     public override void TakeDamage(float damage) // 얘만 (불상은 데미지를 입지 않음)
     {
-        if (Unbeatable)
+        if (!Unbeatable)
         {
             CurrentHP -= damage;
             StartCoroutine(Hit());
@@ -93,9 +97,96 @@ public class DoPhan : Boss_Info
         }
         Destroy(gameObject);
 
-        GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().MoveSpeed = GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().MoveSpeed * 2f;
-        GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().MoveSpeed = GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().MoveSpeed * 2f;
-        
+        GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().InGameSpeed = GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().InGameSpeed * 2f;
+        GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().InGameSpeed = GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().InGameSpeed * 2f;    }
+
+    IEnumerator Boss_Apprearance()
+    {
+        StartCoroutine(Size_Change(transform.localScale, new Vector3(4, 4, 0), 5));
+
+        transform.position = new Vector3(StaticData.DoPhan_Appearance_Move[0, 0], StaticData.DoPhan_Appearance_Move[0, 1], 0);
+
+        float A = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
+           Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
+           Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0)) * 0.85f, "anti_clock"));
+
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0)) * 0.85f, "anti_clock"),
+            0.4f, OriginCurve, false));
+
+        float B = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0)) * 0.85f, "anti_clock"));
+
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0)) * 0.85f, "anti_clock"),
+            B/A * 0.6f, OriginCurve, false));
+
+        float C = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
+           Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
+           Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0)) * 0.85f, "clock"));
+
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0)) * 0.85f, "clock"),
+            C/A * 0.8f, OriginCurve, false));
+
+        float D = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
+           Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
+           Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0)) * 0.85f, "anti_clock"));
+
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0)) * 0.85f, "anti_clock"),
+            D/A * 1f, OriginCurve, false));
+
+
+        float E = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
+         Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
+         Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0)) * 0.85f, "anti_clock"));
+
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0)) * 0.85f, "anti_clock"),
+            E/A * 1.2f, declineCurve, false));
+
+        yield return YieldInstructionCache.WaitForSeconds(2f);
+
+        StartCoroutine(GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>().Increase_Speed());
+        yield return StartCoroutine(GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>().Increase_Speed());
+
+        yield return YieldInstructionCache.WaitForSeconds(2f);
+    }
+
+    IEnumerator Real_Ready()
+    {
+        Unbeatable = true;
+
+        yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.125f, false));
+        yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.125f, false));
+        yield return YieldInstructionCache.WaitForSeconds(0.25f);
+
+        Instantiate(Blink, transform.position, Quaternion.identity);
+
+        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 1));
+        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0), 1));
+
+        Unbeatable = false;
+        GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerCtrl_Tengai>().Unbeatable = false;
+
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-1, 1, 0), 0.125f, OriginCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(2, 0, 0), 0.125f, OriginCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-1, -2, 0), 0.125f, OriginCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-1, 1, 0), 0.125f, OriginCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(2, 0, 0), 0.125f, OriginCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-1, 1, 0), 0.125f, OriginCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(0, -1, 0), 0.125f, OriginCurve));
+
+        yield return YieldInstructionCache.WaitForSeconds(0.5f);
+
+        yield return null;
     }
     public void Phase_Start()
     {
@@ -103,13 +194,13 @@ public class DoPhan : Boss_Info
     }
     IEnumerator Repeat_Phase()
     {
-        Unbeatable = false;
-
         while (true)
         {
             Pattern_Num = 3;
             Pattern_Total[Pattern_Num] = Pattern04();
-            yield return StartCoroutine(Ready_To_Pattern());
+            yield return StartCoroutine(Boss_Apprearance());
+            yield return StartCoroutine(Real_Ready());
+            //yield return StartCoroutine(Ready_To_Pattern());
             //Pattern_Num = Random.Range(0, 5);
             //switch (Pattern_Num)
             //{
@@ -150,7 +241,7 @@ public class DoPhan : Boss_Info
     }
     IEnumerator Pattern01()
     {
-        yield return StartCoroutine(Boss_Move(StaticData.Sequence_Move));
+        yield return StartCoroutine(Boss_Move(StaticData.DoPhan_First_Pattern_Move));
 
         Unbeatable = true;
 
@@ -164,7 +255,7 @@ public class DoPhan : Boss_Info
 
         yield return YieldInstructionCache.WaitForSeconds(2.5f);
 
-        thunder = flashOn.Thunder();
+        thunder = backGroundColor.Thunder();
         StartCoroutine(thunder);
 
         Launch_Weapon_For_Still(Weapon[2], new Vector3(0, 3, 0), Quaternion.Euler(new Vector3(0, 0, -9)), 2.5f);
@@ -174,7 +265,7 @@ public class DoPhan : Boss_Info
 
         yield return YieldInstructionCache.WaitForSeconds(2.5f);
 
-        flashOn.Origin();
+        backGroundColor.Origin();
         StopCoroutine(thunder);
         StopCoroutine(change_boss_color);
 
@@ -222,7 +313,7 @@ public class DoPhan : Boss_Info
     }
     IEnumerator Pattern04() // + 플레이어가 시련을 겪다가 방출하는 것도 추가해야한다. 하나라도 데미지 맞으면 정화 취소.
     {
-
+        Unbeatable = true;
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(12, transform.position.y, 0), 1, declineCurve));
 
         GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerCtrl_Tengai>().Start_Emit();
@@ -256,8 +347,9 @@ public class DoPhan : Boss_Info
             }
             yield return YieldInstructionCache.WaitForSeconds(3f);
         }
-        yield return YieldInstructionCache.WaitForSeconds(1f);
-        
+        Unbeatable = false;
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, transform.position.y, 0), 1, declineCurve));
+        yield return YieldInstructionCache.WaitForSeconds(0.5f);
     }
     public void Stop_Meteor()
     {
@@ -271,7 +363,9 @@ public class DoPhan : Boss_Info
 
         yield return YieldInstructionCache.WaitForSeconds(2f);
 
+        Unbeatable = false;
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, transform.position.y, 0), 1, declineCurve));
+        yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어에게 무차별 폭격 받는 곳
         StartCoroutine(Repeat_Phase());
 
         yield return null;
@@ -339,7 +433,7 @@ public class DoPhan : Boss_Info
 
             yield return StartCoroutine(Change_Color_Lerp(A, B, 0.1f, .2f, DisAppear_Effect_1));
 
-            transform.position = new Vector3(StaticData.Random_Move[Random_Move, 0], StaticData.Random_Move[Random_Move, 1], 0);
+            transform.position = new Vector3(StaticData.DoPhan_Fifth_Pattern_Move[Random_Move, 0], StaticData.DoPhan_Fifth_Pattern_Move[Random_Move, 1], 0);
             yield return YieldInstructionCache.WaitForEndOfFrame;
 
             yield return StartCoroutine(Change_Color_Lerp(B, A, 0.1f, .4f, DisAppear_Effect_1));
@@ -352,7 +446,7 @@ public class DoPhan : Boss_Info
             Random_Move = Random.Range(0, 6);
             yield return StartCoroutine(Change_Color_Lerp(A, B, 0.1f, .1f, DisAppear_Effect_1));
 
-            transform.position = new Vector3(StaticData.Random_Move[Random_Move, 0], StaticData.Random_Move[Random_Move, 1], 0);
+            transform.position = new Vector3(StaticData.DoPhan_Fifth_Pattern_Move[Random_Move, 0], StaticData.DoPhan_Fifth_Pattern_Move[Random_Move, 1], 0);
 
             yield return StartCoroutine(Change_Color_Lerp(B, A, 0.1f, .1f, DisAppear_Effect_1));
         }
@@ -371,7 +465,7 @@ public class DoPhan : Boss_Info
             if (Random_Move == 3)
                 transform.position = GameObject.FindGameObjectWithTag("Playerrr").transform.position;
             else
-                transform.position = new Vector3(StaticData.Random_Move[Random_Move, 0], StaticData.Random_Move[Random_Move, 1], 0);
+                transform.position = new Vector3(StaticData.DoPhan_Fifth_Pattern_Move[Random_Move, 0], StaticData.DoPhan_Fifth_Pattern_Move[Random_Move, 1], 0);
 
             yield return StartCoroutine(Change_Color_Lerp(B, A, 0.1f, .7f, DisAppear_Effect_2));
         }

@@ -98,7 +98,7 @@ public class PlayerCtrl_Sarang : Player_Info
         stageData.LimitMax = new Vector2(40, 8);
         StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
         animator = GetComponent<Animator>();
-        flashOn = GameObject.Find("Flash_Interrupt").GetComponent<FlashOn>();
+        backGroundColor = GameObject.Find("Flash_Interrupt").GetComponent<BackGroundColor>();
     }
 
     // Start is called before the first frame update
@@ -114,6 +114,7 @@ public class PlayerCtrl_Sarang : Player_Info
 
         while (true)
         {
+            Debug.Log("야");
             if (Dash_Able)
                 Dash();
             if (Move_Able)
@@ -326,10 +327,10 @@ public class PlayerCtrl_Sarang : Player_Info
 
         Dash_Able = false;
         Move_Able = false;
+        PlayerWalkSpeed = 0;
         if (first_phase != null)
             StopCoroutine(first_phase);
         animator.SetTrigger("Tired");
-        PlayerWalkSpeed = 0;
         yield return new WaitForSeconds(2.5f);
 
         animator.SetBool("IsWalk", false);
@@ -337,9 +338,10 @@ public class PlayerCtrl_Sarang : Player_Info
 
         Dash_Able = true;
         Move_Able = true;
+        PlayerWalkSpeed = 0.03f;
         first_phase = First_Phase();
         StartCoroutine(first_phase);
-        PlayerWalkSpeed = 0.03f;
+        PlayerWalkSpeed /= 2;
         yield return null;
     }
     IEnumerator Check_Button_Off(GameObject e)
@@ -423,7 +425,7 @@ public class PlayerCtrl_Sarang : Player_Info
         if (param == 0) // 아래 층 이동
         {
             Floor_Player_Place--;
-            StartCoroutine(I_Move_Floor(295, "down"));
+            StartCoroutine(I_Move_Floor(38, "down"));
         }
         else if (param == 1) // 위 층 이동
         {
@@ -434,8 +436,6 @@ public class PlayerCtrl_Sarang : Player_Info
 
     IEnumerator I_Move_Floor(int Change_X, string CHK)
     {
-        is_Domain = false;
-
         if (second_phase != null)
             StopCoroutine(second_phase);
         if (move_delay != null)
@@ -445,11 +445,30 @@ public class PlayerCtrl_Sarang : Player_Info
         if (score_up != null)
             StopCoroutine(score_up);
 
+        Dash_Able = false;
+        Move_Able = false;
+        is_Domain = false;
+        PlayerWalkSpeed = 0;
+
+        if (Down_Floor.activeSelf)
+        {
+            Down_Floor.GetComponent<Floor_Button>().Stop_Down_Or_UP();
+            Down_Floor.SetActive(false);
+        }
+        if (Up_Floor.activeSelf)
+        {
+            Up_Floor.GetComponent<Floor_Button>().Stop_Down_Or_UP();
+            Up_Floor.SetActive(false);
+        }
+
+        animator.SetBool("IsWalk", false);
+
+        yield return null;
 
         GameObject.Find("Main Camera").GetComponent<Camera_Trace>().When_Walk_Floor();
         GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().When_Walk_Floor();
 
-        IEnumerator qq = flashOn.Change_Color(flashOn.Get_BGColor(), new Color(0, 0, 0, 1), 2);
+        IEnumerator qq = backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(0, 0, 0, 1), 2);
 
         StartCoroutine(qq);
         if (CHK == "up")
@@ -472,15 +491,18 @@ public class PlayerCtrl_Sarang : Player_Info
         transform.position = new Vector3(Change_X, -2.5f + 40 * (Floor_Player_Place - 1), 0);
         GameObject.Find("Main Camera").GetComponent<Camera_Trace>().Final_Walk_Floor(Floor_Player_Place);
         GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().Final_Walk_Floor();
-        yield return StartCoroutine(flashOn.Change_Color(flashOn.Get_BGColor(), new Color(1, 1, 1, 0.5f), 0.5f));
-        yield return StartCoroutine(flashOn.Change_Color(flashOn.Get_BGColor(), new Color(1, 1, 1, 0), 0.2f));
-        first_phase = First_Phase();
+        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0.5f), 0.5f));
+        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0), 0.2f));
         
+        first_phase = First_Phase();
         StartCoroutine(first_phase);
 
         is_Domain = true;
+        Dash_Able = true;
+        Move_Able = true;
+        PlayerWalkSpeed = 0.03f;
+
         yield return null;
-        yield break;
     }
     public void Up()
     {
@@ -489,7 +511,7 @@ public class PlayerCtrl_Sarang : Player_Info
     }
     public void Fever_Time()
     {
-        StartCoroutine(flashOn.Flash(new Color(1, 1, 1, 1), 0.2f, 5));
+        StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.2f, 5));
         Fever_Particle_Clone = Instantiate(Fever_Particle, transform.position - Vector3.down * 1.5f, Quaternion.Euler(-90, 0, 0));
     }
 
@@ -503,42 +525,42 @@ public class PlayerCtrl_Sarang : Player_Info
         {
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, stageData.LimitMin.x, stageData.LimitMax.x),
             Mathf.Clamp(transform.position.y, stageData.LimitMin.y, stageData.LimitMax.y));
+            if (transform.position.x <= -3)
+            {
+                if (Floor_Player_Place != 1)
+                {
+                    Down_Floor.SetActive(true);
+                    Down_Floor.GetComponent<Floor_Button>().Start_Down_Or_UP(true, 40 * (Floor_Player_Place - 1));
+                }
+            }
+            else
+            {
+                if (Down_Floor.activeSelf)
+                {
+                    Down_Floor.GetComponent<Floor_Button>().Stop_Down_Or_UP();
+                    Down_Floor.SetActive(false);
+                }
+            }
+            if (transform.position.x >= 40)
+            {
+                if (Floor_Player_Place != 4)
+                {
+                    Up_Floor.SetActive(true);
+                    Up_Floor.GetComponent<Floor_Button>().Start_Down_Or_UP(false, 40 * (Floor_Player_Place - 1));
+                }
+            }
+            else
+            {
+                if (Up_Floor.activeSelf)
+                {
+                    Up_Floor.GetComponent<Floor_Button>().Stop_Down_Or_UP();
+                    Up_Floor.SetActive(false);
+                }
+            }
         }
-
         if (Fever_Particle_Clone != null)
             Fever_Particle_Clone.transform.position = new Vector3(transform.position.x, Fever_Particle_Clone.transform.position.y, Fever_Particle_Clone.transform.position.z);
 
-        if (transform.position.x <= -3)
-        {
-            if (Floor_Player_Place != 1)
-            {
-                Down_Floor.SetActive(true);
-                Down_Floor.GetComponent<AnchorPosition>().Start_Down_Or_UP(true, 40 * (Floor_Player_Place - 1));
-            }
-        }
-        else
-        {
-            if (Down_Floor.activeSelf)
-            {
-                Down_Floor.GetComponent<AnchorPosition>().Stop_Down_Or_UP();
-                Down_Floor.SetActive(false);
-            }
-        }
-        if (transform.position.x >= 40)
-        {
-            if (Floor_Player_Place != 4)
-            {
-                Up_Floor.SetActive(true);
-                Up_Floor.GetComponent<AnchorPosition>().Start_Down_Or_UP(false, 40 * (Floor_Player_Place - 1));
-            }
-        }
-        else
-        {
-            if (Up_Floor.activeSelf)
-            {
-                Down_Floor.GetComponent<AnchorPosition>().Stop_Down_Or_UP();
-                Up_Floor.SetActive(false);
-            }       
-        }
+      
     }
 }

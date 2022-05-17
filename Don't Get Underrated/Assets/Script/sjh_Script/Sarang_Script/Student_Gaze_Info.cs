@@ -67,7 +67,7 @@ public class Student_Gaze_Info : Slider_Viewer
     public IEnumerator Competition(GameObject student)
     {
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
-        StartCoroutine(GameObject.Find("Flash_Interrupt").GetComponent<FlashOn>().Flash(new Color(1, 1, 1, 1), 0.2f, 5));
+        StartCoroutine(GameObject.Find("Flash_Interrupt").GetComponent<BackGroundColor>().Flash(new Color(1, 1, 1, 1), 0.2f, 5));
         YeonTa_Copy = Instantiate(YeonTa, transform.position + Vector3.up, Quaternion.identity);
         GameObject.FindGameObjectWithTag("StudentSlider").GetComponent<Image>().color = new Color(1, 0.2f, 0.6f, 1);
         transform.localScale = new Vector3(2, 1.5f, 1);
