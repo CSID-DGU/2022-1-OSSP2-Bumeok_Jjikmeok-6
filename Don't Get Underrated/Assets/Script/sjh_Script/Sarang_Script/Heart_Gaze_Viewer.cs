@@ -18,10 +18,12 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     }
     public void When_Player_Defeat()
     {
+        Debug.Log("À½");
         slider.value -= 0.1f;
     }
     public void When_Interrupt_Defeat()
     {
+        Debug.Log("¾Ó");
         slider.value += 0.1f;
     }
     void Start()
@@ -32,10 +34,10 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     // Update is called once per frame
     void Update()
     {
-        if (slider.value >= 0.88)
-        {
-            slider.value -= 0.2f;
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Fever_Time();
-        }
+        //if (slider.value >= 0.88)
+        //{
+        //    slider.value -= 0.2f;
+        //    GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Fever_Time();
+        //}
     }
 }

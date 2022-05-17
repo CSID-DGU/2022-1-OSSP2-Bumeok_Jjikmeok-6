@@ -24,6 +24,7 @@ TagManager:
   - Ground
   - HeartSlider
   - StudentSlider
+  - LimitTimeText
   layers:
   - Default
   - TransparentFX

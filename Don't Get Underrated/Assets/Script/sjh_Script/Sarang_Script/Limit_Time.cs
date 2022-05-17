@@ -15,6 +15,8 @@ public class Limit_Time : MonoBehaviour
 
     IEnumerator disappear;
 
+    IEnumerator descent_time;
+
     [SerializeField]
     GameObject Time_Over_Text;
 
@@ -31,7 +33,8 @@ public class Limit_Time : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Descent_Time());
+        descent_time = Descent_Time();
+        StartCoroutine(descent_time);
     }
 
     IEnumerator Descent_Time()
@@ -91,7 +94,17 @@ public class Limit_Time : MonoBehaviour
         }
     }
 
-    
+    public void When_Walk_Floor()
+    {
+        if (descent_time != null)
+            StopCoroutine(descent_time);
+    }
+
+    public void Final_Walk_Floor()
+    {
+        descent_time = Descent_Time();
+        StartCoroutine(descent_time);
+    }
 
 
     void Update()

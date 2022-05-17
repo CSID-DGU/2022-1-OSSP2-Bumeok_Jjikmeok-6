@@ -8,14 +8,36 @@ public class Camera_Trace : MonoBehaviour // 이건 카메라가 플레이어 추적하는 코�
 
     private GameObject player;
 
+    private bool Floor_On;
+
+    private void Awake()
+    {
+        Floor_On = true;
+        Debug.Log(transform.position);
+    }
+
     private void Update()
     {
-        if (player)
+        if (Floor_On)
         {
-            Vector3 newPos = new Vector3(player.transform.position.x, transform.position.y, transform.position.z);
-            transform.position = newPos;
+            if (player)
+            {
+                Vector3 newPos = new Vector3(player.transform.position.x, transform.position.y, transform.position.z);
+                transform.position = newPos;
+            }
+            else
+                player = GameObject.FindGameObjectWithTag("Player");
         }
-        else
-            player = GameObject.FindGameObjectWithTag("Player");
     }
+
+    public void When_Walk_Floor()
+    {
+        Floor_On = false;
+    }
+    public void Final_Walk_Floor(int Floor_Num)
+    {
+        transform.position = new Vector3(0, 40 * (Floor_Num - 1), -10);
+        Floor_On = true;
+    }
+
 }

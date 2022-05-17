@@ -20,6 +20,10 @@ public class FlashOn : MonoBehaviour
     {
         image.color = new Color(1, 1, 1, 0);
     }
+    public Color Get_BGColor()
+    {
+        return image.color;
+    }
     void Start()
     {
         
@@ -30,7 +34,7 @@ public class FlashOn : MonoBehaviour
         percent = 0;
         while (percent < 1)
         {
-            percent += Time.deltaTime * ratio;
+            percent += Time.deltaTime / ratio;
             image.color = Color.Lerp(origin_color, change_color, percent);
             yield return null;
         }

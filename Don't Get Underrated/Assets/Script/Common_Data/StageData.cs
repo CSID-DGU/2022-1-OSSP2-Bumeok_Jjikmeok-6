@@ -12,7 +12,14 @@ public class StageData : ScriptableObject
     [SerializeField]
     Vector2 limitMax;
 
-    public Vector2 LimitMin => limitMin;
-
-    public Vector2 LimitMax => limitMax;
+    public Vector2 LimitMin
+    {
+        get { return limitMin; }
+        set { limitMin = value; }
+    }
+    public Vector2 LimitMax
+    {
+        get { return limitMax; }
+        set { limitMax = value; }
+    }
 }

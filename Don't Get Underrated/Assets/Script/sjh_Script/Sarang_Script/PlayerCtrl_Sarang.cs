@@ -19,13 +19,17 @@ public class PlayerCtrl_Sarang : Player_Info
 
     private bool FixedTarget = false;
 
-    private IEnumerator sibal;
+    private bool is_Domain = false;
+
+    private IEnumerator second_phase;
 
     private IEnumerator move_delay;
 
     private IEnumerator first_phase;
 
     private IEnumerator score_up;
+
+    private int Floor_Player_Place;
 
     int StudentLayerMask;  // Player 레이어만 충돌 체크함
 
@@ -56,6 +60,12 @@ public class PlayerCtrl_Sarang : Player_Info
     [SerializeField]
     GameObject Fever_Particle;
 
+    [SerializeField]
+    GameObject Down_Floor;
+
+    [SerializeField]
+    GameObject Up_Floor;
+
     GameObject Fever_Particle_Clone;
 
     GameObject sliderClone;
@@ -75,10 +85,17 @@ public class PlayerCtrl_Sarang : Player_Info
         base.Awake();
         score_up = null;
         first_phase = null;
-        sibal = null;
+        second_phase = null;
         move_delay = null;
+        is_Domain = true;
+        transform.position = new Vector3(0, -2.5f, 0);
+        Floor_Player_Place = 1;
         Student_Gaze.SetActive(false);
         Targetting_Object.SetActive(false);
+        Down_Floor.SetActive(false);
+        Up_Floor.SetActive(false);
+        stageData.LimitMin = new Vector2(-3, -6);
+        stageData.LimitMax = new Vector2(40, 8);
         StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
         animator = GetComponent<Animator>();
         flashOn = GameObject.Find("Flash_Interrupt").GetComponent<FlashOn>();
@@ -92,12 +109,11 @@ public class PlayerCtrl_Sarang : Player_Info
     }
     IEnumerator First_Phase()
     {
-        if (sibal != null)
-            StopCoroutine(sibal);
+        if (second_phase != null)
+            StopCoroutine(second_phase);
 
         while (true)
         {
-            Debug.Log("얘!");
             if (Dash_Able)
                 Dash();
             if (Move_Able)
@@ -117,8 +133,8 @@ public class PlayerCtrl_Sarang : Player_Info
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
-                    sibal = Sibal();
-                    yield return StartCoroutine(sibal);
+                    second_phase = Second_Phase();
+                    yield return StartCoroutine(second_phase);
                 }
             }
             else
@@ -132,7 +148,7 @@ public class PlayerCtrl_Sarang : Player_Info
         }
     }
 
-    IEnumerator Sibal()
+    IEnumerator Second_Phase()
     {
         if (first_phase != null)
             StopCoroutine(first_phase);
@@ -146,14 +162,13 @@ public class PlayerCtrl_Sarang : Player_Info
 
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, StudentLayerMask);
 
-            Debug.Log("왜 안 되냐?");
             if (hit.collider != null && hit.transform.gameObject.CompareTag("Student"))
             {
-                Debug.Log("지금 학생이어야 하는데");
                 if (Student_Clone == null)
                     Student_Clone = hit.transform.gameObject;
                 if (Input.GetMouseButton(0))
                 {
+                    Debug.Log("설마 여기서 감지하나");
                     float dir_Change = transform.position.x - Student_Clone.transform.position.x;
                     transform.localScale = new Vector3((dir_Change / Mathf.Abs(dir_Change)) * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
                     Targetting_Object.GetComponent<Targetting_Effect>().Init();
@@ -174,14 +189,14 @@ public class PlayerCtrl_Sarang : Player_Info
                         Student_Clone.GetComponent<Student_Move>().Stop_Move(); // 공격 받는 중 + 움직임 정지
                     }
                     Heart_Slider.GetComponent<Heart_Gaze_Viewer>().Decrease_HP(Decrease_HP_ratio);
-                    Lazor_In_First_Phase(Weapon[0], Student_Clone.transform.position, transform.position);
+                    Lazor_In_Second_Phase(Weapon[0], Student_Clone.transform.position, transform.position);
 
                     if (!Student_Gaze.activeSelf)
                         Student_Gaze.SetActive(true);
 
                     if (Student_Gaze.GetComponent<Student_Gaze_Info>().Block_HP(Student_Clone.transform.position))
                     {
-                        yield return StartCoroutine(Second_Phase(Student_Clone));
+                        yield return StartCoroutine(Third_Phase(Student_Clone));
                     }
                 }
                 else if (Input.GetMouseButtonUp(0))
@@ -235,7 +250,7 @@ public class PlayerCtrl_Sarang : Player_Info
         }
     }
 
-    private void Lazor_In_First_Phase(GameObject weapon, Vector3 target, Vector3 self)
+    private void Lazor_In_Second_Phase(GameObject weapon, Vector3 target, Vector3 self)
     {
         Launch_Weapon_For_Move(weapon, target, self);
     }
@@ -244,10 +259,10 @@ public class PlayerCtrl_Sarang : Player_Info
         StopAllCoroutines();
     }
     
-    IEnumerator Second_Phase(GameObject targetStudent_t)
+    IEnumerator Third_Phase(GameObject targetStudent_t)
     {
-        if (sibal != null)
-            StopCoroutine(sibal);
+        if (second_phase != null)
+            StopCoroutine(second_phase);
 
         if (move_delay != null)
             StopCoroutine(move_delay);
@@ -258,12 +273,12 @@ public class PlayerCtrl_Sarang : Player_Info
         if (score_up != null)
             StopCoroutine(score_up);
 
-        IEnumerator lazor_after_second = Lazor_In_Second_Phase(targetStudent_t);
+        IEnumerator lazor_in_second_phase = Lazor_In_Second_Phase(targetStudent_t);
 
-        StartCoroutine(lazor_after_second);
+        StartCoroutine(lazor_in_second_phase);
        
         yield return StartCoroutine(Student_Gaze.GetComponent<Student_Gaze_Info>().Competition(targetStudent_t));
-        StopCoroutine(lazor_after_second);
+        StopCoroutine(lazor_in_second_phase);
 
         Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
         Student_Gaze.SetActive(false);
@@ -276,7 +291,7 @@ public class PlayerCtrl_Sarang : Player_Info
 
             Destroy(targetStudent_t);
         }
-        yield return YieldInstructionCache.WaitForSeconds(1f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임
+        yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임
         first_phase = First_Phase();
         StartCoroutine(first_phase);
         yield break;
@@ -286,7 +301,7 @@ public class PlayerCtrl_Sarang : Player_Info
         while(true)
         {
             if (targetStudent_t != null)
-                Lazor_In_First_Phase(Weapon[0], targetStudent_t.transform.position, transform.position);
+                Lazor_In_Second_Phase(Weapon[0], targetStudent_t.transform.position, transform.position);
             yield return null;
         }
     }
@@ -345,13 +360,13 @@ public class PlayerCtrl_Sarang : Player_Info
     }
     IEnumerator Score_UP()
     {
-        
        while(true)
        {
             Main_3_Score += 3;
             yield return YieldInstructionCache.WaitForSeconds(0.125f);
        }
     }
+
     private void Dash()
     {
         if (IsOneClick && ((Time.time - Timer) > IsDoubleClick))
@@ -403,6 +418,75 @@ public class PlayerCtrl_Sarang : Player_Info
             animator.SetBool("IsWalk", false);
     }
 
+    public void Down_Or_Up(int param)
+    {
+        if (param == 0) // 아래 층 이동
+        {
+            Floor_Player_Place--;
+            StartCoroutine(I_Move_Floor(295, "down"));
+        }
+        else if (param == 1) // 위 층 이동
+        {
+            Floor_Player_Place++;
+            StartCoroutine(I_Move_Floor(0, "up"));
+        }
+    }
+
+    IEnumerator I_Move_Floor(int Change_X, string CHK)
+    {
+        is_Domain = false;
+
+        if (second_phase != null)
+            StopCoroutine(second_phase);
+        if (move_delay != null)
+            StopCoroutine(move_delay);
+        if (first_phase != null)
+            StopCoroutine(first_phase);
+        if (score_up != null)
+            StopCoroutine(score_up);
+
+
+        GameObject.Find("Main Camera").GetComponent<Camera_Trace>().When_Walk_Floor();
+        GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().When_Walk_Floor();
+
+        IEnumerator qq = flashOn.Change_Color(flashOn.Get_BGColor(), new Color(0, 0, 0, 1), 2);
+
+        StartCoroutine(qq);
+        if (CHK == "up")
+        {
+            stageData.LimitMax = stageData.LimitMax + new Vector2(0, 40);
+            stageData.LimitMin = stageData.LimitMin + new Vector2(0, 40);
+            yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(6, 2, 0), 2, OriginCurve));
+        }
+        else if (CHK == "down")
+        {
+            stageData.LimitMax = stageData.LimitMax + new Vector2(0, -40);
+            stageData.LimitMin = stageData.LimitMin + new Vector2(0, -40);
+            yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-6, -2, 0), 2, OriginCurve));
+        }
+           
+        StopCoroutine(qq);
+
+        yield return YieldInstructionCache.WaitForSeconds(1f);
+
+        transform.position = new Vector3(Change_X, -2.5f + 40 * (Floor_Player_Place - 1), 0);
+        GameObject.Find("Main Camera").GetComponent<Camera_Trace>().Final_Walk_Floor(Floor_Player_Place);
+        GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().Final_Walk_Floor();
+        yield return StartCoroutine(flashOn.Change_Color(flashOn.Get_BGColor(), new Color(1, 1, 1, 0.5f), 0.5f));
+        yield return StartCoroutine(flashOn.Change_Color(flashOn.Get_BGColor(), new Color(1, 1, 1, 0), 0.2f));
+        first_phase = First_Phase();
+        
+        StartCoroutine(first_phase);
+
+        is_Domain = true;
+        yield return null;
+        yield break;
+    }
+    public void Up()
+    {
+        is_Domain = false;
+        StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(6, 2, 0), 3, OriginCurve));
+    }
     public void Fever_Time()
     {
         StartCoroutine(flashOn.Flash(new Color(1, 1, 1, 1), 0.2f, 5));
@@ -415,9 +499,46 @@ public class PlayerCtrl_Sarang : Player_Info
     }
     private void LateUpdate()
     {
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, stageData.LimitMin.x, stageData.LimitMax.x),
-        Mathf.Clamp(transform.position.y, stageData.LimitMin.y, stageData.LimitMax.y));
+        if (is_Domain)
+        {
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, stageData.LimitMin.x, stageData.LimitMax.x),
+            Mathf.Clamp(transform.position.y, stageData.LimitMin.y, stageData.LimitMax.y));
+        }
+
         if (Fever_Particle_Clone != null)
             Fever_Particle_Clone.transform.position = new Vector3(transform.position.x, Fever_Particle_Clone.transform.position.y, Fever_Particle_Clone.transform.position.z);
+
+        if (transform.position.x <= -3)
+        {
+            if (Floor_Player_Place != 1)
+            {
+                Down_Floor.SetActive(true);
+                Down_Floor.GetComponent<AnchorPosition>().Start_Down_Or_UP(true, 40 * (Floor_Player_Place - 1));
+            }
+        }
+        else
+        {
+            if (Down_Floor.activeSelf)
+            {
+                Down_Floor.GetComponent<AnchorPosition>().Stop_Down_Or_UP();
+                Down_Floor.SetActive(false);
+            }
+        }
+        if (transform.position.x >= 40)
+        {
+            if (Floor_Player_Place != 4)
+            {
+                Up_Floor.SetActive(true);
+                Up_Floor.GetComponent<AnchorPosition>().Start_Down_Or_UP(false, 40 * (Floor_Player_Place - 1));
+            }
+        }
+        else
+        {
+            if (Up_Floor.activeSelf)
+            {
+                Down_Floor.GetComponent<AnchorPosition>().Stop_Down_Or_UP();
+                Up_Floor.SetActive(false);
+            }       
+        }
     }
 }
