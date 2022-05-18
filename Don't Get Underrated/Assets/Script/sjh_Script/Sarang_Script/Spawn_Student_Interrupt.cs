@@ -48,8 +48,4 @@ public class Spawn_Student_Interrupt : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

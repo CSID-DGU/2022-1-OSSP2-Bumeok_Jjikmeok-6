@@ -33,10 +33,6 @@ public class Student_Gaze_Info : Slider_Viewer
         Stop_Interrupt_Arr_IEnum = new ArrayList();
         selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
-    void Start()
-    {
-       
-    }
     public bool Block_HP(Vector3 TempPosition)
     {
         slider.value += Time.deltaTime / 2;
@@ -68,7 +64,7 @@ public class Student_Gaze_Info : Slider_Viewer
     {
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
         StartCoroutine(GameObject.Find("Flash_Interrupt").GetComponent<BackGroundColor>().Flash(new Color(1, 1, 1, 1), 0.2f, 5));
-        YeonTa_Copy = Instantiate(YeonTa, transform.position + Vector3.up, Quaternion.identity);
+        YeonTa_Copy = Instantiate(YeonTa, transform.position + 0.5f * Vector3.up, Quaternion.identity);
         GameObject.FindGameObjectWithTag("StudentSlider").GetComponent<Image>().color = new Color(1, 0.2f, 0.6f, 1);
         transform.localScale = new Vector3(2, 1.5f, 1);
         transform.position = transform.position - Vector3.down;
@@ -76,6 +72,8 @@ public class Student_Gaze_Info : Slider_Viewer
         {
             if (4 - Interrupt_Num_On_NonActive.Count > 0)
                 slider.value -= Time.deltaTime / (4 - Interrupt_Num_On_NonActive.Count);
+            else
+                slider.value -= Time.deltaTime;
 
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 

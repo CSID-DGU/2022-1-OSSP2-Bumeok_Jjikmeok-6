@@ -17,10 +17,6 @@ public class Movement2D_Wow : MonoBehaviour
         set { moveSpeed = value; }
         get { return moveSpeed; }
     }
-    void Start()
-    {
-
-    }
 
 
     public void MoveTo(Vector3 direction1)

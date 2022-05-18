@@ -11,11 +11,6 @@ public class Floor_Button : MonoBehaviour
         move = null;
     }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void Start_Down_Or_UP(bool is_Down, int Change_Y)
     {
@@ -69,10 +64,5 @@ public class Floor_Button : MonoBehaviour
                 yield return null;
             }
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

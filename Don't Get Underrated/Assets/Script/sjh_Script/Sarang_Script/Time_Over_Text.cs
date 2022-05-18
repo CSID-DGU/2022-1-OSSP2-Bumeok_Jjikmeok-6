@@ -41,10 +41,4 @@ public class Time_Over_Text : MonoBehaviour
             yield return null;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

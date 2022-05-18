@@ -22,10 +22,10 @@ public class LoadingProgress : MonoBehaviour
     [SerializeField]
     Slider slider;
     // Start is called before the first frame update
-    private void Awake()
-    {
-        //slider = GetComponent<Slider>();
-    }
+    //private void Awake()
+    //{
+    //    //slider = GetComponent<Slider>();
+    //}
     void Start()
     {
         StartCoroutine(LoadScene());
@@ -80,10 +80,7 @@ public class LoadingProgress : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
-    {
-        
-    }
+ 
     // Update is called once per frame
     //public static string nextScene;
 

@@ -9,6 +9,10 @@ public class DoPhan : Boss_Info
 
     private int Pattern_Num; // 본인
 
+    private int Pattern2_Meteor_Random_Num;
+
+    int[,] Pattern2_Meteor_Spawn = new int[3, 7] { { 4, 4, 4, 3, 3, 3, 3 }, { 3, 3, 3, 4, 3, 3, 3 }, { 3, 3, 3, 3, 4, 4, 4 } };
+
     [SerializeField]
     GameObject Charge_Beam; // 본인
 
@@ -20,6 +24,8 @@ public class DoPhan : Boss_Info
 
     [SerializeField]
     GameObject Blink;
+
+    PlayerCtrl_Tengai playerCtrl_Tengai;
 
     IEnumerator enemy_spawn; // 본인
 
@@ -40,6 +46,7 @@ public class DoPhan : Boss_Info
         backGroundColor = GameObject.FindGameObjectWithTag("Flash").GetComponent<BackGroundColor>();
         phase = Pattern01();
         Unbeatable = true;
+        playerCtrl_Tengai = GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerCtrl_Tengai>();
         for (int i = 0; i < 5; i++)
             Pattern_Total.Add(phase);
         Pattern_Num = 0;
@@ -102,7 +109,7 @@ public class DoPhan : Boss_Info
 
     IEnumerator Boss_Apprearance()
     {
-        StartCoroutine(Size_Change(transform.localScale, new Vector3(4, 4, 0), 5));
+        StartCoroutine(Size_Change(transform.localScale, new Vector3(4, 4, 0), 5, OriginCurve));
 
         transform.position = new Vector3(StaticData.DoPhan_Appearance_Move[0, 0], StaticData.DoPhan_Appearance_Move[0, 1], 0);
 
@@ -160,7 +167,7 @@ public class DoPhan : Boss_Info
         yield return YieldInstructionCache.WaitForSeconds(2f);
     }
 
-    IEnumerator Real_Ready()
+    IEnumerator Ready_To_Pattern()
     {
         Unbeatable = true;
 
@@ -194,13 +201,13 @@ public class DoPhan : Boss_Info
     }
     IEnumerator Repeat_Phase()
     {
+        yield return StartCoroutine(Boss_Apprearance());
+        yield return StartCoroutine(Ready_To_Pattern());
         while (true)
         {
-            Pattern_Num = 3;
-            Pattern_Total[Pattern_Num] = Pattern04();
-            yield return StartCoroutine(Boss_Apprearance());
-            yield return StartCoroutine(Real_Ready());
-            //yield return StartCoroutine(Ready_To_Pattern());
+            // Pattern_Num = 3;
+            // Pattern_Total[Pattern_Num] = Pattern04();
+            yield return StartCoroutine(Pattern02());
             //Pattern_Num = Random.Range(0, 5);
             //switch (Pattern_Num)
             //{
@@ -222,22 +229,8 @@ public class DoPhan : Boss_Info
             //}
             //yield return StartCoroutine((IEnumerator)Pattern_Total[Pattern_Num]);
 
-            yield return StartCoroutine((IEnumerator)Pattern_Total[Pattern_Num]); // 아 시바 이렇게 쓰지 말랬지 ㅡㅡ
+            //yield return StartCoroutine((IEnumerator)Pattern_Total[Pattern_Num]); // 아 시바 이렇게 쓰지 말랬지 ㅡㅡ
         }
-    }
-    
-    IEnumerator Ready_To_Pattern()
-    {
-        var radius = (float)Mathf.Sqrt(Mathf.Pow(0.5f, 2) + Mathf.Pow(-0.5f, 2));
-        var start_deg = 90 - (Mathf.Rad2Deg * Mathf.Atan2(-0.5f, 0.5f));
-        var center_x = transform.position.x - 0.5f;
-        var center_y = transform.position.y + 0.5f;
-       
-        for (int i = 0; i < 4; i++)
-        {
-            yield return StartCoroutine(Circle_Move(90, 4, start_deg, radius, radius, center_x, center_y, .5f)); // tuple로 묶는 방법을 찾자.
-        }
-        yield break;
     }
     IEnumerator Pattern01()
     {
@@ -258,10 +251,10 @@ public class DoPhan : Boss_Info
         thunder = backGroundColor.Thunder();
         StartCoroutine(thunder);
 
-        Launch_Weapon_For_Still(Weapon[2], new Vector3(0, 3, 0), Quaternion.Euler(new Vector3(0, 0, -9)), 2.5f);
-        Launch_Weapon_For_Still(Weapon[2], new Vector3(0, -4, 0), Quaternion.Euler(new Vector3(0, 0, -9)), 2.5f);
-        Launch_Weapon_For_Still(Weapon[3], new Vector3(-8, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)), 2.5f);
-        Launch_Weapon_For_Still(Weapon[3], new Vector3(6.6f, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)), 2.5f);
+        Launch_Weapon_For_Still(Weapon[1], new Vector3(0, 3, 0), Quaternion.Euler(new Vector3(0, 0, -9)), 2.5f);
+        Launch_Weapon_For_Still(Weapon[1], new Vector3(0, -4, 0), Quaternion.Euler(new Vector3(0, 0, -9)), 2.5f);
+        Launch_Weapon_For_Still(Weapon[2], new Vector3(-8, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)), 2.5f);
+        Launch_Weapon_For_Still(Weapon[2], new Vector3(6.6f, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)), 2.5f);
 
         yield return YieldInstructionCache.WaitForSeconds(2.5f);
 
@@ -282,30 +275,80 @@ public class DoPhan : Boss_Info
         charge_beam = c.GetComponent<Charge_Beam_Motion>().Change_Size();
         StartCoroutine(charge_beam);
 
-        yield return StartCoroutine(Warning("이 공격은 반드시 죽습니다", .5f));
+        yield return StartCoroutine(Warning("어디 한 번 지혜를 발휘해봐라", .5f));
 
         StopCoroutine(charge_beam);
         Destroy(c);
 
         Unbeatable = false;
 
-        for (int i = 0; i < 30; i++)
+        if (playerCtrl_Tengai.transform.position.x >= 3.5f && playerCtrl_Tengai.transform.position.x <= 8f && playerCtrl_Tengai.transform.position.y <= -2.6f)
         {
-            Launch_Weapon_For_Move(Weapon[1], Vector3.left, Quaternion.identity, 1);
-            Launch_Weapon_For_Move(Weapon[1], new Vector3(-1, 0.5714f, 0), Quaternion.identity, 1);
-            Launch_Weapon_For_Move(Weapon[1], new Vector3(-1, -0.5714f, 0), Quaternion.identity, 1);
-            Launch_Weapon_For_Move(Weapon[1], new Vector3(-1, 0.2857f, 0), Quaternion.identity, 1);
-            Launch_Weapon_For_Move(Weapon[1], new Vector3(-1, -0.2857f, 0), Quaternion.identity, 1);
-            yield return YieldInstructionCache.WaitForSeconds(.1f);
+            Pattern2_Meteor_Random_Num = Random.Range(1, 4);
+            switch(Pattern2_Meteor_Random_Num)
+            {
+                case 1:
+                    yield return StartCoroutine(Pattern02_When_Player_Avoid(0));
+                    break;
+                case 2:
+                    yield return StartCoroutine(Pattern02_When_Player_Avoid(1));
+                    break;
+                case 3:
+                    yield return StartCoroutine(Pattern02_When_Player_Avoid(2));
+                    break;
+            }
         }
+        else
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                Launch_Weapon_For_Move(Weapon[3], Vector3.left, Quaternion.identity, 1);
+                Launch_Weapon_For_Move(Weapon[3], new Vector3(-1, 0.5714f, 0), Quaternion.identity, 1);
+                Launch_Weapon_For_Move(Weapon[3], new Vector3(-1, 0.3809f, 0), Quaternion.identity, 1);
+                Launch_Weapon_For_Move(Weapon[3], new Vector3(-1, 0.1904f, 0), Quaternion.identity, 1);
+                Launch_Weapon_For_Move(Weapon[3], new Vector3(-1, -0.1904f, 0), Quaternion.identity, 1);
+                Launch_Weapon_For_Move(Weapon[3], new Vector3(-1, -0.3809f, 0), Quaternion.identity, 1);
+                Launch_Weapon_For_Move(Weapon[3], new Vector3(-1, -0.5714f, 0), Quaternion.identity, 1);
+                yield return YieldInstructionCache.WaitForSeconds(.1f);
+            }
+        }
+       
         yield return YieldInstructionCache.WaitForSeconds(2f);
         yield break;
+    }
+    IEnumerator Pattern02_When_Player_Avoid(int kuku)
+    {
+        StartCoroutine(Pattern02_Meteor_Down(kuku));
+        for (int i = 0; i < 30; i++)
+        {
+            Launch_Weapon_For_Move(Weapon[Pattern2_Meteor_Spawn[kuku, 0]], new Vector3(-1, 0.5714f, 0), Quaternion.identity, 1);
+            Launch_Weapon_For_Move(Weapon[Pattern2_Meteor_Spawn[kuku, 1]], new Vector3(-1, 0.3809f, 0), Quaternion.identity, 1);
+            Launch_Weapon_For_Move(Weapon[Pattern2_Meteor_Spawn[kuku, 2]], new Vector3(-1, 0.1904f, 0), Quaternion.identity, 1);
+            Launch_Weapon_For_Move(Weapon[Pattern2_Meteor_Spawn[kuku, 3]], Vector3.left, Quaternion.identity, 1);
+            Launch_Weapon_For_Move(Weapon[Pattern2_Meteor_Spawn[kuku, 4]], new Vector3(-1, -0.1904f, 0), Quaternion.identity, 1);
+            Launch_Weapon_For_Move(Weapon[Pattern2_Meteor_Spawn[kuku, 5]], new Vector3(-1, -0.3809f, 0), Quaternion.identity, 1);
+            Launch_Weapon_For_Move(Weapon[Pattern2_Meteor_Spawn[kuku, 6]], new Vector3(-1, -0.5714f, 0), Quaternion.identity, 1);
+            yield return YieldInstructionCache.WaitForSeconds(.1f);
+        }
+        yield return null;
+    }
+    IEnumerator Pattern02_Meteor_Down(int kuku)
+    {
+        yield return YieldInstructionCache.WaitForSeconds(1f);
+        for (int i = 0; i < 2 * (kuku + 1); i++)
+        {
+            int Rand = Random.Range(4, 9);
+            GameObject e = Instantiate(Meteor, new Vector3(Rand, 3, 0), Quaternion.identity);
+            StartCoroutine(e.GetComponent<Meteor_Effect>().Pattern02_Meteor(Rand));
+            yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        }
+        yield return null;
     }
     IEnumerator Pattern03()
     {
         yield return StartCoroutine(Position_Lerp(transform.position, Vector3.zero, 1, declineCurve));
 
-        yield return StartCoroutine(Rotate_Bullet(7, 250, .5f, 4, Weapon[4]));
+        yield return StartCoroutine(Rotate_Bullet(7, 250, .5f, 4, Weapon[5]));
 
         yield return StartCoroutine(Position_Lerp(Vector3.zero, new Vector3(0, 3, 0), 1, declineCurve));
 

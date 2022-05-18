@@ -15,11 +15,6 @@ public class CameraShake : MonoBehaviour
     private Vector3 originPosition;
     private Quaternion originRotation;
 
-    void Start()
-    {
-
-    }
-
     public void Origin_Camera()
     {
         mainCamera.transform.position = new Vector3(0, 0, -10);
@@ -57,9 +52,9 @@ public class CameraShake : MonoBehaviour
         }
     }
     // Update is called once per frame
-    void Update()
+    public void Trigger_Coroutine()
     {
-
+        StopAllCoroutines();
     }
 }
 

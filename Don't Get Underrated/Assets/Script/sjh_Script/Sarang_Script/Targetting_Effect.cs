@@ -14,10 +14,6 @@ public class Targetting_Effect : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    void Start()
-    {
-       
-    }
     public void Init()
     {
         transform.localScale = new Vector3(.5f, .5f, 0);
@@ -61,9 +57,4 @@ public class Targetting_Effect : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

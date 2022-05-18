@@ -37,14 +37,5 @@ public class Enemy_Info : Life
     {
         Destroy(gameObject);
     }
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

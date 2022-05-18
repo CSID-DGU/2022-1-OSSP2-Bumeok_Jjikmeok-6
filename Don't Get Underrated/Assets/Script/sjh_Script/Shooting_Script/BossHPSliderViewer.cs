@@ -32,13 +32,6 @@ public class BossHPSliderViewer : Slider_Viewer
         }
         OnUpdate = true;
     }
-
-
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void LateUpdate()
     {

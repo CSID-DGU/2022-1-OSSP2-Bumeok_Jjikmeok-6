@@ -9,11 +9,6 @@ public class Final_1_W1_Watergun : MonoBehaviour
     [SerializeField]
     float gun_damage = 3;
 
-    void Start()
-    {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
@@ -29,8 +24,4 @@ public class Final_1_W1_Watergun : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

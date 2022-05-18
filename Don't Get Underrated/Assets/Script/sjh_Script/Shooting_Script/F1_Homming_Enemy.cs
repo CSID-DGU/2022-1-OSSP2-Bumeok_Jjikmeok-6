@@ -59,9 +59,5 @@ public class F1_Homming_Enemy : Enemy_Info
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
 }

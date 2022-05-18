@@ -33,10 +33,6 @@ public class MoveBackGround : MonoBehaviour
 
     // Start is called before the first frame update
 
-    void Start()
-    {
-        
-    }
     //IEnumerator Move_BackGround()
     //{
     //    while(true)

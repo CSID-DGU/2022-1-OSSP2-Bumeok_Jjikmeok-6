@@ -24,18 +24,13 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     {
         slider.value += 0.1f;
     }
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
-    void Update()
-    {
-        //if (slider.value >= 0.88)
-        //{
-        //    slider.value -= 0.2f;
-        //    GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Fever_Time();
-        //}
-    }
+    //void Update()
+    //{
+    //    //if (slider.value >= 0.88)
+    //    //{
+    //    //    slider.value -= 0.2f;
+    //    //    GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Fever_Time();
+    //    //}
+    //}
 }

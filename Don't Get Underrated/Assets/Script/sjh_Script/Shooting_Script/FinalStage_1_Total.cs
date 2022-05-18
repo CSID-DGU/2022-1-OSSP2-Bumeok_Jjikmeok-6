@@ -23,10 +23,6 @@ public class FinalStage_1_Total : MonoBehaviour
         BossHPSliderPrefab.SetActive(false);
         BossHPSliderLeft.SetActive(false);
     }
-    void Start()
-    {
-       
-    }
 
     public void Boss_First_Appear() // 플레이어 --> 보스
     {
@@ -35,10 +31,5 @@ public class FinalStage_1_Total : MonoBehaviour
         BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<DoPhan>());
         BossHPSliderLeft.SetActive(true);
         Boss.GetComponent<DoPhan>().Phase_Start();
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

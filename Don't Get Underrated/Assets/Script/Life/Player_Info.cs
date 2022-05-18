@@ -46,18 +46,10 @@ public class Player_Info : Life
     {
         LifeTime -= damage;
     }
+
     public override void OnDie()
     {
         Destroy(gameObject);
     }
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

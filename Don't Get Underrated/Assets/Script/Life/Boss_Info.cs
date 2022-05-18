@@ -48,6 +48,8 @@ public class Boss_Info : Life
         Destroy(gameObject);
     }
    
+   
+
     protected IEnumerator Warning(string warning_message, float time_ratio)
     {
         WarningText.text = warning_message;
@@ -83,23 +85,7 @@ public class Boss_Info : Life
         transform.rotation = Quaternion.Euler(0, 0, 0);
         yield return YieldInstructionCache.WaitForEndOfFrame;
     }
-    protected IEnumerator Circle_Move(int Degree, int is_ClockWise_And_Speed, float Start_Degree, float x, float y, float start_x, float start_y, float ratio)
-    {
-        // 각도, 시계/반시계 방향, x축 원, y축 원
-
-        for (int th = 0; th < Degree; th++)
-        {
-
-            float rad = Mathf.Deg2Rad * (is_ClockWise_And_Speed * th + Start_Degree);
-
-            float rad_x = x * Mathf.Sin(rad);
-            float rad_y = y * Mathf.Cos(rad);
-
-            transform.position = new Vector3(start_x + rad_x, start_y + rad_y, 0);
-            yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime * ratio);
-        }
-        yield return null;
-    }
+   
     
    
     protected IEnumerator Position_Curve(Vector3 start_location, Vector3 standard_location, Vector3 last_location, float standard_time_ratio, AnimationCurve curve)
@@ -126,24 +112,5 @@ public class Boss_Info : Life
         }
         yield return null; // 깔끔한 정지를 위해 한 프레임 넘겨줌
     }
-    protected IEnumerator Size_Change(float size_ratio, int inc_or_dec)
 
-    {
-        while (true)
-        {
-            transform.localScale = new Vector3(transform.localScale.x + (Time.deltaTime * size_ratio * inc_or_dec), transform.localScale.y + (Time.deltaTime * size_ratio * inc_or_dec), 0);
-            yield return null;
-        }
-    }
-
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

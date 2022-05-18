@@ -24,6 +24,10 @@ public class BackGroundColor : MonoBehaviour
     {
         return image.color;
     }
+    public void Set_BGColor(Color new_c)
+    {
+        image.color = new_c;
+    }
     void Start()
     {
         

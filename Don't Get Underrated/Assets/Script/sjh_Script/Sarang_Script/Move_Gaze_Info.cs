@@ -14,10 +14,6 @@ public class Move_Gaze_Info : MonoBehaviour // 플레이어 달릴 때의 게이지바
         hp_down = I_HP_Down();
         slider.value = 0;
     }
-    void Start()
-    {
-       
-    }
     public void HP_Down()
     {
         StartCoroutine(hp_down);
@@ -37,8 +33,4 @@ public class Move_Gaze_Info : MonoBehaviour // 플레이어 달릴 때의 게이지바
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

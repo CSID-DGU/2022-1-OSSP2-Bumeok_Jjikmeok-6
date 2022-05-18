@@ -28,8 +28,4 @@ public class Razor_Launch : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() // ¿Ã∞« æ» ∫¡µµ µ 
-    {
-        
-    }
 }

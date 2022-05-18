@@ -12,10 +12,6 @@ public class Blink : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
-    void Start()
-    {
-        
-    }
 
     public void Change_D()
     {
@@ -26,8 +22,4 @@ public class Blink : MonoBehaviour
         Destroy(gameObject);
     }
     // Update is called once per frame
-    void Update()
-    {
-        Debug.Log(transform.position);
-    }
 }

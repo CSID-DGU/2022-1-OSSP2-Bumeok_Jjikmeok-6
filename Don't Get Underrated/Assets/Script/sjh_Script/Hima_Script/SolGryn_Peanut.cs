@@ -22,13 +22,6 @@ public class SolGryn_Peanut : MonoBehaviour
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
 		Debug.Log(groundLayerMask);
 	}
-
-	void Start()
-	{
-
-
-	}
-
 	bool isGrounded()
 	{
 		Vector2 position = transform.position;

@@ -15,20 +15,14 @@ public class Meteor_Traffic : MonoBehaviour
     private float percent;
     private Color temp;
 
-    IEnumerator change_color, shake_act;
-
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = new Color(1, 1, 1, 0);
-    }
-
-    void Start()
-    {
-
+        spriteRenderer.color = new Color(1, 1, 1, 1);
     }
     public IEnumerator Change_Color()
     {
+        spriteRenderer.color = new Color(1, 1, 1, 0);
         for (int i = 0; i < 4; i++)
         {
             percent = 0;
@@ -55,11 +49,11 @@ public class Meteor_Traffic : MonoBehaviour
         {
             percent += Time.deltaTime * 4;
             spriteRenderer.color = Color.Lerp(temp, new Color(1, 1, 1, 1), percent);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
         yield break;
     }
-    public IEnumerator Shake_Act()
+    public IEnumerator Shake_Act(float time_persist)
     {
         originPosition = transform.position;
         originRotation = transform.rotation;
@@ -67,16 +61,17 @@ public class Meteor_Traffic : MonoBehaviour
         float percent = 0;
         while(percent < 1)
         {
-            percent += Time.deltaTime;
+            percent += Time.deltaTime / time_persist;
             transform.position = originPosition + Random.insideUnitSphere * shake_intensity;
-            transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime / 6, transform.localScale.y + Time.deltaTime / 6, 0);
+            transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime / time_persist, transform.localScale.y + Time.deltaTime / time_persist, 0);
             transform.transform.rotation = new Quaternion(
                                 originRotation.x + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                 originRotation.y + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                 originRotation.z + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                 originRotation.w + Random.Range(-shake_intensity, shake_intensity) * 0.2f);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
+        Debug.Log("¿¨");
     }
     private void OnDestroy()
     {

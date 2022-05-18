@@ -65,9 +65,5 @@ public class Final_1_W2_Boom : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+ 
 }

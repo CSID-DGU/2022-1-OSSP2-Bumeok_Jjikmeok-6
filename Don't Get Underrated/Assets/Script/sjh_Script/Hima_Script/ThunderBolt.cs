@@ -35,9 +35,4 @@ public class ThunderBolt : Enemy_Info
        // StartCoroutine(I_DestroyNow());
         Destroy(gameObject);
     }
-
-    void Update()
-    {
-        
-    }
 }

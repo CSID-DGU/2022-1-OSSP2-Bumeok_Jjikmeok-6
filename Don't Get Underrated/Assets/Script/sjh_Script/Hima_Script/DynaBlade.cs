@@ -29,10 +29,6 @@ public class DynaBlade : Enemy_Info
         E.Add(4, new Vector3(-5.81f, -2.99f, 0));
         E.Add(5, new Vector3(13.77f, 3.77f, 0));
     }
-    void Start()
-    {
-       
-    }
     public void Dyna_Start(bool Opposite)
     {
         if (Opposite)
@@ -111,10 +107,5 @@ public class DynaBlade : Enemy_Info
         yield return null;
 
         Destroy(gameObject);
-    }
- 
-    void Update()
-    {
-        
     }
 }

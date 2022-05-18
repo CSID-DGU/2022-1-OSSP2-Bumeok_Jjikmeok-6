@@ -40,8 +40,4 @@ public class Charge_Beam_Motion : MonoBehaviour
 
     }
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -53,6 +53,11 @@ public class Life : MonoBehaviour, Life_Of_Basic
         Plus_Speed = 0;
         percent = 0;
     }
+    public Color SpriteRenderer_Color
+    {
+        get { return spriteRenderer.color; }
+        set { spriteRenderer.color = value; }
+    }
     public virtual void TakeDamage(float damage) {}
 
     public virtual void TakeDamage(int damage) { }
@@ -60,9 +65,22 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         Destroy(gameObject);
     }
-    void Start()
+    protected IEnumerator Circle_Move(int Degree, int is_ClockWise_And_Speed, float Start_Degree, float x, float y, float start_x, float start_y, float ratio)
     {
-        
+        // 각도, 시계/반시계 방향, x축 원, y축 원
+
+        for (int th = 0; th < Degree; th++)
+        {
+
+            float rad = Mathf.Deg2Rad * (is_ClockWise_And_Speed * th + Start_Degree);
+
+            float rad_x = x * Mathf.Sin(rad);
+            float rad_y = y * Mathf.Cos(rad);
+
+            transform.position = new Vector3(start_x + rad_x, start_y + rad_y, 0);
+            yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime * ratio);
+        }
+        yield return null;
     }
 
     protected void Launch_Weapon_For_Move(GameObject weapon, Vector3 target, Vector3 self)
@@ -225,13 +243,13 @@ public class Life : MonoBehaviour, Life_Of_Basic
         yield return null;
     }
 
-    protected IEnumerator Size_Change(Vector3 Origin_Size, Vector3 Change_Size, float time_persist)
+    protected IEnumerator Size_Change(Vector3 Origin_Size, Vector3 Change_Size, float time_persist, AnimationCurve curve)
     {
         percent = 0;
         while(percent < 1)
         {
             percent += Time.deltaTime / time_persist;
-            transform.localScale = Vector3.Lerp(Origin_Size, Change_Size, percent);
+            transform.localScale = Vector3.Lerp(Origin_Size, Change_Size, curve.Evaluate(percent));
             yield return null;
         }
         yield break;
