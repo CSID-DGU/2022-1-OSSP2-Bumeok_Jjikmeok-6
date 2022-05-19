@@ -95,7 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b68a6664eaf24a4391ee2f0bd1afed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapon: []
+  Weapon:
+  - {fileID: 2487260719207055476, guid: b74f6fb3815b16242a4a619d2578f5bf, type: 3}
   declineCurve:
     serializedVersion: 2
     m_Curve:
