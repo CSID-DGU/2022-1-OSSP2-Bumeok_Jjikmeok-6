@@ -21,7 +21,7 @@ public class F1_Homming_Enemy : Enemy_Info
     private new void Awake()
     {
         base.Awake();
-        player_tengai = GameObject.FindGameObjectWithTag("Playerrr").GetComponent<PlayerCtrl_Tengai>();
+        player_tengai = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Tengai>();
         rb = GetComponent<Rigidbody2D>();
     }
     void Start()
@@ -45,7 +45,7 @@ public class F1_Homming_Enemy : Enemy_Info
     {
         while (true)
         {
-            Vector2 direction = (Vector2)(GameObject.FindGameObjectWithTag("Playerrr").transform.position) - rb.position;
+            Vector2 direction = (Vector2)(GameObject.FindGameObjectWithTag("Player").transform.position) - rb.position;
             direction.Normalize();
 
             float rotateAmount = Vector3.Cross(direction, transform.up).z;

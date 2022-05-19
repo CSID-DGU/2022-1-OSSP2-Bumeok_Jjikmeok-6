@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5313545053945245201}
   - component: {fileID: 5313545053945245200}
   - component: {fileID: 5313545053945245215}
-  - component: {fileID: 618834354433247376}
   - component: {fileID: 9041559630958799090}
   - component: {fileID: -5260851961087281840}
+  - component: {fileID: 3129112153513655685}
   m_Layer: 0
   m_Name: Boss_W1_Lightning(1)
   m_TagString: Untagged
@@ -120,19 +120,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   moveDirection: {x: 1, y: 0.5714, z: 0}
---- !u!114 &618834354433247376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5313545053945245203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 476ecfe26b46a7542bd75978e6209f8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Devil_Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
 --- !u!61 &9041559630958799090
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -172,3 +159,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+--- !u!114 &3129112153513655685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5313545053945245203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 0}

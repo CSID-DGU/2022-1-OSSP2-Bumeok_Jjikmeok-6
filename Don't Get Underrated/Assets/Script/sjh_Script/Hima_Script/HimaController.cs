@@ -47,42 +47,43 @@ public class HimaController : Player_Info {
 
 	IEnumerator Load()
     {
-        h = 0;
-        yield return YieldInstructionCache.WaitForSeconds(2f);
+        //h = 0;
+        //yield return YieldInstructionCache.WaitForSeconds(2f);
 
-        h = 1;
-        yield return YieldInstructionCache.WaitForSeconds(.3f);
-        h = 0;
-        yield return YieldInstructionCache.WaitForSeconds(1f);
+        //h = 1;
+        //yield return YieldInstructionCache.WaitForSeconds(.3f);
+        //h = 0;
+        //yield return YieldInstructionCache.WaitForSeconds(1f);
 
-        h = -1;
-        yield return YieldInstructionCache.WaitForSeconds(.6f);
-        h = 0;
-        yield return YieldInstructionCache.WaitForSeconds(1f);
+        //h = -1;
+        //yield return YieldInstructionCache.WaitForSeconds(.6f);
+        //h = 0;
+        //yield return YieldInstructionCache.WaitForSeconds(1f);
 
-        h = 1;
-        maxSpeed = 1f;
-        yield return YieldInstructionCache.WaitForSeconds(2f);
-        h = 0;
-        yield return YieldInstructionCache.WaitForSeconds(2f);
+        //h = 1;
+        //maxSpeed = 1f;
+        //yield return YieldInstructionCache.WaitForSeconds(2f);
+        //h = 0;
+        //yield return YieldInstructionCache.WaitForSeconds(2f);
 
-        maxSpeed = 2f;
-        h = 1;
-        yield return YieldInstructionCache.WaitForSeconds(.25f);
-        h = 0;
-        yield return YieldInstructionCache.WaitForSeconds(.25f);
+        //maxSpeed = 2f;
+        //h = 1;
+        //yield return YieldInstructionCache.WaitForSeconds(.25f);
+        //h = 0;
+        //yield return YieldInstructionCache.WaitForSeconds(.25f);
 
-        h = -1;
-        yield return YieldInstructionCache.WaitForSeconds(.25f);
-        h = 0;
-        yield return YieldInstructionCache.WaitForSeconds(.25f);
+        //h = -1;
+        //yield return YieldInstructionCache.WaitForSeconds(.25f);
+        //h = 0;
+        //yield return YieldInstructionCache.WaitForSeconds(.25f);
 
-        h = 1;
-        yield return YieldInstructionCache.WaitForSeconds(.25f);
-        h = 0;
-        maxSpeed = 7f;
-        yield return YieldInstructionCache.WaitForSeconds(.7f);
+        //h = 1;
+        //yield return YieldInstructionCache.WaitForSeconds(.25f);
+        //h = 0;
+        //maxSpeed = 7f;
+        //yield return YieldInstructionCache.WaitForSeconds(.7f);
         GameObject.FindGameObjectWithTag("SolGryn").GetComponent<SolGryn>().WelCome();
+		yield return null;
 	}
 
 	// Update is called once per frame

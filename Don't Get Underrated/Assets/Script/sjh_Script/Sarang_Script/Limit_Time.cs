@@ -79,8 +79,8 @@ public class Limit_Time : MonoBehaviour
                 
                 foreach (var u in q)
                 {
-                    u.GetComponent<Student_Move>().Stop_Coroutine();
-                    disappear = u.GetComponent<Student_Move>().Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null);
+                    u.GetComponent<Student>().Stop_Coroutine();
+                    disappear = u.GetComponent<Student>().Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null);
                     StartCoroutine(disappear);
                 }
 

@@ -20,6 +20,10 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     {
         slider.value -= 0.1f;
     }
+    public void Ordinary_Case()
+    {
+        slider.value += 0.05f;
+    }
     public void When_Interrupt_Defeat()
     {
         slider.value += 0.1f;

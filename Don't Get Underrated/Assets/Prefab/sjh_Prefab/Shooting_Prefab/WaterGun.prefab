@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7209732707840843580}
   - component: {fileID: 7409978772565392567}
   - component: {fileID: 506251394456717461}
-  - component: {fileID: 403169614823653242}
   - component: {fileID: -5144029985024619588}
+  - component: {fileID: 79888925962743046}
   m_Layer: 0
   m_Name: WaterGun
   m_TagString: Untagged
@@ -137,20 +137,6 @@ CircleCollider2D:
   m_Offset: {x: -0.5, y: -0.5}
   serializedVersion: 2
   m_Radius: 1.5
---- !u!114 &403169614823653242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6715167470845593886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b8f187a99fa5a443b6a0762be9630c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  watergun: {fileID: 6715167470845593886}
-  gun_damage: 3
 --- !u!114 &-5144029985024619588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,3 +151,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 18
   moveDirection: {x: 1, y: 0, z: 0}
+--- !u!114 &79888925962743046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6715167470845593886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54af9dd4c27d918469354f8fff7bb6b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 0}

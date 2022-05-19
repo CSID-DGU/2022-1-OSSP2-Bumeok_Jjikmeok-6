@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThunderBolt : Enemy_Info
+public class ThunderBolt : Weapon_Devil
 {
     // Start is called before the first frame update
 
-    private new void Awake()
+    BackGroundColor backGroundColor;
+    CameraShake cameraShake;
+    IEnumerator camera_shake;
+    private void Awake()
     {
-        base.Awake();
         backGroundColor = GameObject.Find("Flash").GetComponent<BackGroundColor>();
         cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
@@ -31,8 +33,6 @@ public class ThunderBolt : Enemy_Info
 
     public void DestroyNow()
     {
-
-       // StartCoroutine(I_DestroyNow());
         Destroy(gameObject);
     }
 }

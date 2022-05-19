@@ -15,7 +15,6 @@ public class Gorichu : Enemy_Info
     {
         base.Awake();
         D = new Dictionary<int, Vector3>();
-       
     }
 
     void Start()

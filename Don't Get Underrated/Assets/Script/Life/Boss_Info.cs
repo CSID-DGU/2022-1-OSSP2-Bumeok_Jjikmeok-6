@@ -85,9 +85,41 @@ public class Boss_Info : Life
         transform.rotation = Quaternion.Euler(0, 0, 0);
         yield return YieldInstructionCache.WaitForEndOfFrame;
     }
-   
-    
-   
+
+
+    public IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
+    {
+        Vector3 originPosition;
+        Quaternion originRotation;
+        Vector3 originScale;
+        originPosition = transform.position;
+        originRotation = transform.rotation;
+        originScale = transform.localScale;
+        while (true)
+        {
+            float percent = 0;
+            while (percent < 1)
+            {
+                percent += Time.deltaTime / time_persist;
+                transform.position = originPosition + Random.insideUnitSphere * shake_intensity;
+                transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * scale_ratio, transform.localScale.y + Time.deltaTime * scale_ratio, 0);
+                transform.transform.rotation = new Quaternion(
+                                    originRotation.x + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
+                                    originRotation.y + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
+                                    originRotation.z + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
+                                    originRotation.w + Random.Range(-shake_intensity, shake_intensity) * 0.2f);
+                yield return YieldInstructionCache.WaitForEndOfFrame;
+            }
+            if (!is_Continue)
+            {
+                transform.position = originPosition;
+                transform.rotation = originRotation;
+                transform.localScale = originScale;
+                yield return null;
+                yield break;
+            }
+        }
+    }
     protected IEnumerator Position_Curve(Vector3 start_location, Vector3 standard_location, Vector3 last_location, float standard_time_ratio, AnimationCurve curve)
     {
         float percent = 0;

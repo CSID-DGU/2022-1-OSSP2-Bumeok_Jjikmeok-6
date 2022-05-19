@@ -33,12 +33,13 @@ public class Student_Gaze_Info : Slider_Viewer
         Stop_Interrupt_Arr_IEnum = new ArrayList();
         selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
-    public bool Block_HP(Vector3 TempPosition)
+    public int Check_Student_HP(Vector3 TempPosition)
     {
         slider.value += Time.deltaTime / 2;
+
         if (slider.value >= 0.5f && Interrupt_Num_On_NonActive.Count >= 1 && Interrupt_Num_On_Active.Count == 0)
         {
-            Stop_Interrupt_Arr_IEnum = new ArrayList();
+            Stop_Interrupt_Arr_IEnum.Clear();
             foreach (var interrupt in Interrupt_Num_On_NonActive)
             {
                 GameObject copy_interrupt = (GameObject)interrupt;
@@ -51,9 +52,14 @@ public class Student_Gaze_Info : Slider_Viewer
 
                 StartCoroutine(temp_s);
             }
-            return true;
+
+            return 0;
         }
-        return false;
+        else if (slider.value >= 1 && Interrupt_Num_On_NonActive.Count == 0 && Interrupt_Num_On_Active.Count == 0)
+            return 1;
+        else if (slider.value >= 0.4f && Interrupt_Num_On_NonActive.Count == 0 && Interrupt_Num_On_Active.Count == 0)
+            return 3;
+        return 2;
     }
 
     public void Empty_HP()
@@ -67,7 +73,7 @@ public class Student_Gaze_Info : Slider_Viewer
         YeonTa_Copy = Instantiate(YeonTa, transform.position + 0.5f * Vector3.up, Quaternion.identity);
         GameObject.FindGameObjectWithTag("StudentSlider").GetComponent<Image>().color = new Color(1, 0.2f, 0.6f, 1);
         transform.localScale = new Vector3(2, 1.5f, 1);
-        transform.position = transform.position - Vector3.down;
+        transform.position = transform.position + 1.5f * Vector3.down;
         while (true)
         {
             if (4 - Interrupt_Num_On_NonActive.Count > 0)
@@ -99,6 +105,7 @@ public class Student_Gaze_Info : Slider_Viewer
                         interrupt.GetComponent<Interrupt>().Start_Move();
                     }
                     Player_Heart_Slider.GetComponent<Heart_Gaze_Viewer>().When_Player_Defeat();
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().animator.SetBool("IsDead", true);
                 }
                 else if (slider.value >= 1)
                 {
@@ -114,9 +121,9 @@ public class Student_Gaze_Info : Slider_Viewer
                 }
                 
                 gameObject.SetActive(false);
-                Stop_Interrupt_Arr_IEnum = new ArrayList();
-                Interrupt_Num_On_Active = new ArrayList();
-                Interrupt_Num_On_NonActive = new ArrayList();
+                Stop_Interrupt_Arr_IEnum.Clear();
+                Interrupt_Num_On_Active.Clear();
+                Interrupt_Num_On_NonActive.Clear();
                 yield return null;
                 yield break;
             }
@@ -128,7 +135,7 @@ public class Student_Gaze_Info : Slider_Viewer
         GameObject[] e = GameObject.FindGameObjectsWithTag("Interrupt");
         if (e != null)
         {
-            Interrupt_Num_On_NonActive = new ArrayList();
+            Interrupt_Num_On_NonActive.Clear();
             foreach (var u in e)
             {
                 Vector3 screenPoint = selectedCamera.WorldToViewportPoint(u.transform.position);

@@ -53,7 +53,7 @@ public class Interrupt : Enemy_Info
 
         while (true)
         {
-            Weapon[0].GetComponent<Movement2D_Wow>().MoveTo(new Vector3(tempPosition.x - transform.position.x,
+            Weapon[0].GetComponent<Movement2D>().MoveTo(new Vector3(tempPosition.x - transform.position.x,
                          tempPosition.y - transform.position.y, 0));
             Instantiate(Weapon[0], transform.position, Quaternion.identity);
             yield return null;

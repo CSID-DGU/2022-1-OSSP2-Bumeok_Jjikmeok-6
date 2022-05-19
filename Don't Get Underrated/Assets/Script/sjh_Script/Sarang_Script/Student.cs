@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Student_Move : MonoBehaviour
+public class Student : MonoBehaviour
 {
     [SerializeField]
     float pursuitSpeed;
@@ -78,7 +78,6 @@ public class Student_Move : MonoBehaviour
     }
     public void Stop_Move()
     {
-        Debug.Log("æﬂ ∏ÿ√Á");
         StopCoroutine(move);
         StopCoroutine(wander_routine);
     }

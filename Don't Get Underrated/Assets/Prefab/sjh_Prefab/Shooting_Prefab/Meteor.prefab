@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5237981916155833142}
   - component: {fileID: 5237981916155833130}
   - component: {fileID: 5237981916155833131}
-  - component: {fileID: 5237981916155833129}
   - component: {fileID: -4984613072594687240}
   - component: {fileID: 2881198842379697128}
+  - component: {fileID: 2649738351513854989}
   m_Layer: 0
   m_Name: Meteor
   m_TagString: Meteor
@@ -147,19 +147,6 @@ PolygonCollider2D:
       - {x: 0.01, y: 0.125}
       - {x: 0, y: 0.125}
       - {x: -0.1, y: 0.074999996}
---- !u!114 &5237981916155833129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5237981916155833143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 476ecfe26b46a7542bd75978e6209f8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Devil_Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
 --- !u!114 &-4984613072594687240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,3 +174,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+--- !u!114 &2649738351513854989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5237981916155833143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}

@@ -8,6 +8,24 @@ public class Movement2D : MonoBehaviour
     [SerializeField]
     float moveSpeed = 0.0f;
 
+    bool is_Blink = false;
+
+    Animator animator;
+
+    private void Awake()
+    {
+        if (TryGetComponent(out Animator user))
+        {
+            animator = user;
+        }
+    }
+
+    public bool Is_Blink
+    {
+        get { return is_Blink; }
+        set { is_Blink = value; }
+    }
+
 
     [SerializeField]
     Vector3 moveDirection = Vector3.zero; // 처음에야 이렇게 초기화 한건데, SerializeField 때문에 inspector 안에서도 수정이 가능하다
@@ -17,11 +35,6 @@ public class Movement2D : MonoBehaviour
         set { moveSpeed = value; }
         get { return moveSpeed; }
     }
-    void Start()
-    {
-
-    }
-
     public void MoveTo(Vector3 direction)
     {
         moveDirection = direction;
@@ -30,7 +43,22 @@ public class Movement2D : MonoBehaviour
     // Update is called once per frame
     void LateUpdate() // 여기서 위치를 이동시키는 거군
     {
-
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student user1))
+        {
+            if (user1.get_Color() == new Color(0, 0, 1, 1))
+                Destroy(gameObject);
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out HimaController user2))
+        {
+            user2.TakeDamage(1);
+           
+        }
     }
 }

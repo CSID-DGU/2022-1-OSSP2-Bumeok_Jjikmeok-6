@@ -31,7 +31,11 @@ public class Movement2D_Wow : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Student") && collision.gameObject.GetComponent<Student_Move>().get_Color() == new Color(0, 0, 1, 1))
-            Destroy(gameObject);
+        if (collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student user))
+        {
+            Debug.Log("º´½Å¾Æ");
+            if (user.get_Color() == new Color(0, 0, 1, 1))
+                Destroy(gameObject);
+        }
     }
 }

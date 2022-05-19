@@ -83,18 +83,19 @@ public class Life : MonoBehaviour, Life_Of_Basic
         yield return null;
     }
 
-    protected void Launch_Weapon_For_Move(GameObject weapon, Vector3 target, Vector3 self)
-    {
-        weapon.GetComponent<Movement2D_Wow>().MoveTo(new Vector3(target.x - self.x,
-                        target.y - self.y, 0));
-        Instantiate(weapon, self, Quaternion.identity);
-    }
-   // GameObject L5 = Instantiate(Boss_Weapon[2], new Vector3(0, 3, 0), Quaternion.Euler(new Vector3(0, 0, -9)));
-    protected void Launch_Weapon_For_Move(GameObject weapon, Vector3 target, Quaternion Degree, float Destroy_Time)
+    protected void Launch_Weapon_For_Move(GameObject weapon, Vector3 target, Quaternion Degree, float Destroy_Time) // 이외의 나머지
     {
         weapon.GetComponent<Movement2D>().MoveTo(target);
         GameObject e = Instantiate(weapon, transform.position, Degree);
         Destroy(e, Destroy_Time);
+    }
+
+    protected void Launch_Weapon_For_Move_Blink(GameObject weapon, Vector3 Direction, Quaternion Degree, float speed, bool is_Blink, Vector3 Instantiate_Dir) // 이외의 나머지
+    {
+        weapon.GetComponent<Movement2D>().MoveTo(Direction);
+        weapon.GetComponent<Movement2D>().MoveSpeed = speed;
+        weapon.GetComponent<Movement2D>().Is_Blink = is_Blink;
+        Instantiate(weapon, Instantiate_Dir, Degree);
     }
 
     protected void Launch_Weapon_For_Still(GameObject weapon, Vector3 instantiate_position, Quaternion Degree, float Destroy_Time)
@@ -143,12 +144,14 @@ public class Life : MonoBehaviour, Life_Of_Basic
         if (Effect != null)
             Instantiate(Effect, transform.position, Quaternion.identity);
         percent = 0;
+        Debug.Log("응");
         while (percent < 1)
         {
             percent += Time.deltaTime / time_persist;
             spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
+        Debug.Log("야 왜");
         yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
     }
     public IEnumerator Position_Lerp(Vector3 start_location, Vector3 last_location, float time_ratio, AnimationCurve curve)
@@ -239,7 +242,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
             Plus_Speed += 0.0006f;
             yield return null;
         }
-        Debug.Log("드디어 빠져");
         yield return null;
     }
 
@@ -272,6 +274,5 @@ public class Life : MonoBehaviour, Life_Of_Basic
             transform.rotation = Quaternion.Lerp(A, B, percent);
             yield return null;
         }
-
     }
 }

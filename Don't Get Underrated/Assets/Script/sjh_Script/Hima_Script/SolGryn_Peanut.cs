@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SolGryn_Peanut : MonoBehaviour
+public class SolGryn_Peanut : Enemy_Info
 {
 
 	[SerializeField]
@@ -17,9 +17,12 @@ public class SolGryn_Peanut : MonoBehaviour
 	private int Count = 0;
 
 	// Use this for initialization
-	void Awake()
+	private new void Awake()
 	{
+		base.Awake();
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
+
+		cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
 		Debug.Log(groundLayerMask);
 	}
 	bool isGrounded()
@@ -40,13 +43,15 @@ public class SolGryn_Peanut : MonoBehaviour
 			Debug.Log("¿Ö");
 			Count++;
 		}
-		if (Count == 2)
+		if (Count == 1)
 		{
 			Die();
 		}
 	}
 	public void Die()
 	{
+		camera_shake = cameraShake.Shake_Act(.03f, .03f, 0.1f, false);
+		StartCoroutine(camera_shake);
 		Instantiate(deathParticle, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 	}

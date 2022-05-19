@@ -71,7 +71,6 @@ public class Meteor_Traffic : MonoBehaviour
                                 originRotation.w + Random.Range(-shake_intensity, shake_intensity) * 0.2f);
             yield return null;
         }
-        Debug.Log("¿¨");
     }
     private void OnDestroy()
     {

@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4525928332673241943}
   - component: {fileID: 4525928332673241942}
   - component: {fileID: 4525928332673241963}
-  - component: {fileID: 4525928332673241961}
   - component: {fileID: 4525928332673241960}
+  - component: {fileID: 1529646865330331776}
   m_Layer: 8
   m_Name: Student3
   m_TagString: Student
@@ -101,22 +101,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &4525928332673241961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4525928332673241940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 327421abee28a8147a3ee16a464bfbfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pursuitSpeed: 1
-  wanderSpeed: 3
-  directionChangeInterval: 0.5
-  followPlayer: 0
 --- !u!50 &4525928332673241960
 Rigidbody2D:
   serializedVersion: 4
@@ -138,3 +122,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1529646865330331776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4525928332673241940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf74c40343f6ad74d8c26e72147b09d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pursuitSpeed: 3
+  wanderSpeed: 3
+  directionChangeInterval: 0.5
+  followPlayer: 0

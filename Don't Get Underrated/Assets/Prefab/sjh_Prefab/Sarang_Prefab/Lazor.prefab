@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9125672011398998463}
   - component: {fileID: -6240004096247482136}
   - component: {fileID: -8408268449381053138}
-  - component: {fileID: 2574679413246855416}
+  - component: {fileID: -4332396582214391406}
   m_Layer: 0
   m_Name: Lazor
   m_TagString: Untagged
@@ -212,7 +212,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
---- !u!114 &2574679413246855416
+--- !u!114 &-4332396582214391406
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,8 +221,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5058595808972261254}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b67ecce3965c8fd43a691b7d7e9e3d39, type: 3}
+  m_Script: {fileID: 11500000, guid: 07029b59c310ce148a311ab8ad8d07e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 8
-  moveDirection: {x: 8.868519, y: -1.5, z: 0}
+  moveDirection: {x: 1, y: 0, z: 0}

@@ -63,7 +63,7 @@ public class Emit_Motion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = GameObject.FindGameObjectWithTag("Playerrr").transform.position;
+        transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
     }
     private void OnDestroy()
     {

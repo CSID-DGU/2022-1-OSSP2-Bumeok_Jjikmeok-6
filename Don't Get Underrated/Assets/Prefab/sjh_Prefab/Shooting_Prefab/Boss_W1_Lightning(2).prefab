@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 9009642527721918396}
   - component: {fileID: 5135566848150843789}
   - component: {fileID: 3460914197368590941}
-  - component: {fileID: -3842393814027411717}
   - component: {fileID: 3814482341462605714}
+  - component: {fileID: -9056934381080169243}
+  - component: {fileID: -3010204263810986790}
   m_Layer: 0
   m_Name: Boss_W1_Lightning(2)
   m_TagString: Untagged
@@ -104,20 +105,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-3842393814027411717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3892351702495847471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 476ecfe26b46a7542bd75978e6209f8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Devil_Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
-  user_Define_Explose: 0
 --- !u!61 &3814482341462605714
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -144,3 +131,29 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.162, y: 0.98}
   m_EdgeRadius: 0
+--- !u!114 &-9056934381080169243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892351702495847471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 0}
+--- !u!114 &-3010204263810986790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892351702495847471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}

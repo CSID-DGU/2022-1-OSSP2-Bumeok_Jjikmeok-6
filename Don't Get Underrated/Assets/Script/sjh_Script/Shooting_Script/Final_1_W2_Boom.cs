@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Final_1_W2_Boom : MonoBehaviour
+public class Final_1_W2_Boom : Weapon_Player
 {
     [SerializeField]
     AnimationCurve curve;
@@ -30,40 +30,4 @@ public class Final_1_W2_Boom : MonoBehaviour
         }
         animator.SetTrigger("onBoom");
     }
-    public void OnBoom()
-    {
-        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
-        GameObject[] devil_weapon = GameObject.FindGameObjectsWithTag("Devil_Weapon");
-        GameObject boss = GameObject.FindGameObjectWithTag("Boss");
-        GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
-        GameObject[] meteor_line = GameObject.FindGameObjectsWithTag("Meteor_Line");
-        GameObject[] meteor_traffic = GameObject.FindGameObjectsWithTag("Meteor_Traffic");
-        foreach (var e in meteor)
-        {
-            Destroy(e);
-        }
-        foreach (var e in meteor_line)
-        {
-            Destroy(e);
-        }
-        foreach (var e in meteor_traffic)
-        {
-            Destroy(e);
-        }
-        foreach (var e in enemy)
-        {
-            e.GetComponent<F1_Homming_Enemy>().OnDie();
-        }
-        foreach (var e in devil_weapon)
-        {
-           e.GetComponent<Devil_Weapon>().Weak_Weapon();
-        }
-        if (boss != null)
-        {
-            boss.GetComponent<DoPhan>().TakeDamage(30);
-        }
-        Destroy(gameObject);
-    }
-
- 
 }

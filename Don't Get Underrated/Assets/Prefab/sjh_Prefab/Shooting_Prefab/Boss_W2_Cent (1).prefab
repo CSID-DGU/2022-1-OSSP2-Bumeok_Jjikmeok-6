@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 9106550428233493027}
   - component: {fileID: 9106550428233493026}
   - component: {fileID: 9106550428233493025}
-  - component: {fileID: 7683653465483934003}
   - component: {fileID: 8367545898635378530}
   - component: {fileID: -3344656036925215960}
   - component: {fileID: 179314425725752922}
+  - component: {fileID: 6692674293590395340}
   m_Layer: 0
   m_Name: Boss_W2_Cent (1)
   m_TagString: Untagged
@@ -203,19 +203,6 @@ TrailRenderer:
   m_MinVertexDistance: 0
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &7683653465483934003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9106550428233493024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 476ecfe26b46a7542bd75978e6209f8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Devil_Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
 --- !u!114 &8367545898635378530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,3 +246,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+--- !u!114 &6692674293590395340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9106550428233493024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
