@@ -24,7 +24,6 @@ public class BossHPSliderViewer : Slider_Viewer
     }
     IEnumerator I_HPFull()
     {
-        //Debug.Log(hp_info.CurrentHP);
         while(slider.value < 1)
         {
             slider.value += Time.deltaTime / 2;
@@ -37,6 +36,5 @@ public class BossHPSliderViewer : Slider_Viewer
     {
          if (OnUpdate)
             slider.value = boss_info.CurrentHP / boss_info.MaxHP;
-       
     }
 }

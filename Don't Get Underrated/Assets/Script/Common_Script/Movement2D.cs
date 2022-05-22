@@ -9,24 +9,11 @@ public class Movement2D : MonoBehaviour
     float moveSpeed = 0.0f;
 
     bool is_Blink = false;
-
-    Animator animator;
-
-    private void Awake()
-    {
-        if (TryGetComponent(out Animator user))
-        {
-            animator = user;
-        }
-    }
-
     public bool Is_Blink
     {
         get { return is_Blink; }
         set { is_Blink = value; }
     }
-
-
     [SerializeField]
     Vector3 moveDirection = Vector3.zero; // 처음에야 이렇게 초기화 한건데, SerializeField 때문에 inspector 안에서도 수정이 가능하다
 
@@ -40,7 +27,6 @@ public class Movement2D : MonoBehaviour
         moveDirection = direction;
     } // 흠.....MoveTo에서 위치를 딱 설정해주고
 
-    // Update is called once per frame
     void LateUpdate() // 여기서 위치를 이동시키는 거군
     {
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
@@ -58,7 +44,6 @@ public class Movement2D : MonoBehaviour
         if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out HimaController user2))
         {
             user2.TakeDamage(1);
-           
         }
     }
 }

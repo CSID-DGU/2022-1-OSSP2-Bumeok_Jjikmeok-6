@@ -23,13 +23,13 @@ public class Meteor_Traffic : MonoBehaviour
     public IEnumerator Change_Color()
     {
         spriteRenderer.color = new Color(1, 1, 1, 0);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             percent = 0;
             temp = spriteRenderer.color;
             while (percent < 1)
             {
-                percent += Time.deltaTime * 4;
+                percent += Time.deltaTime * 8;
                 spriteRenderer.color = Color.Lerp(temp, new Color(1, 1, 1, 1), percent);
                 yield return YieldInstructionCache.WaitForEndOfFrame;
             }
@@ -38,7 +38,7 @@ public class Meteor_Traffic : MonoBehaviour
             percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime * 4;
+                percent += Time.deltaTime * 8;
                 spriteRenderer.color = Color.Lerp(temp, new Color(1, 1, 1, 0), percent);
                 yield return YieldInstructionCache.WaitForEndOfFrame;
             }
@@ -47,13 +47,13 @@ public class Meteor_Traffic : MonoBehaviour
         temp = spriteRenderer.color;
         while (percent < 1)
         {
-            percent += Time.deltaTime * 4;
+            percent += Time.deltaTime * 8;
             spriteRenderer.color = Color.Lerp(temp, new Color(1, 1, 1, 1), percent);
             yield return null;
         }
         yield break;
     }
-    public IEnumerator Shake_Act(float time_persist)
+    public IEnumerator Shake_Act(float time_persist, float scale_dif)
     {
         originPosition = transform.position;
         originRotation = transform.rotation;
@@ -63,7 +63,7 @@ public class Meteor_Traffic : MonoBehaviour
         {
             percent += Time.deltaTime / time_persist;
             transform.position = originPosition + Random.insideUnitSphere * shake_intensity;
-            transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime / time_persist, transform.localScale.y + Time.deltaTime / time_persist, 0);
+            transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime / scale_dif, transform.localScale.y + Time.deltaTime / scale_dif, 0);
             transform.transform.rotation = new Quaternion(
                                 originRotation.x + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                 originRotation.y + Random.Range(-shake_intensity, shake_intensity) * 0.2f,

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -5737214228189673314}
   m_Layer: 11
   m_Name: SoyBean
-  m_TagString: Untagged
+  m_TagString: Weapon_Devil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

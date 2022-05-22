@@ -45,6 +45,10 @@ public class Enemy_Info : Life
     {
         Destroy(gameObject);
     }
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
     public IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
     {
         Vector3 originPosition;

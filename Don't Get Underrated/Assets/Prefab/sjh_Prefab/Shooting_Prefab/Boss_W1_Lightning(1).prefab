@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3129112153513655685}
   m_Layer: 0
   m_Name: Boss_W1_Lightning(1)
-  m_TagString: Untagged
+  m_TagString: Weapon_Devil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

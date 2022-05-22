@@ -31,5 +31,6 @@ public class FinalStage_1_Total : MonoBehaviour
         BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<DoPhan>());
         BossHPSliderLeft.SetActive(true);
         Boss.GetComponent<DoPhan>().Phase_Start();
+
     }
 }

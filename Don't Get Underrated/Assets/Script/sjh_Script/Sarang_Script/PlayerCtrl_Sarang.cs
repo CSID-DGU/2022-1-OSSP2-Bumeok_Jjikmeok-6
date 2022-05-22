@@ -21,15 +21,13 @@ public class PlayerCtrl_Sarang : Player_Info
 
     private bool is_Domain = false;
 
-    private IEnumerator second_phase;
-
-    private IEnumerator move_delay;
+    private bool is_Button = false;
 
     private IEnumerator first_phase;
 
-    private IEnumerator score_up;
-
     private int Floor_Player_Place;
+
+    private float Student_Power = 1;
 
     int StudentLayerMask;  // Player 레이어만 충돌 체크함
 
@@ -83,11 +81,9 @@ public class PlayerCtrl_Sarang : Player_Info
     private new void Awake()
     {
         base.Awake();
-        score_up = null;
         first_phase = null;
-        second_phase = null;
-        move_delay = null;
         is_Domain = true;
+        is_Button = true;
         transform.position = new Vector3(0, -2.5f, 0);
         Floor_Player_Place = 1;
         Student_Gaze.SetActive(false);
@@ -104,21 +100,12 @@ public class PlayerCtrl_Sarang : Player_Info
     // Start is called before the first frame update
     void Start()
     {
-        first_phase = First_Phase();
-        StartCoroutine(first_phase);
+        All_Start();
     }
     IEnumerator First_Phase()
     {
-        if (second_phase != null)
-            StopCoroutine(second_phase);
-
         while (true)
-        {
-            if (Dash_Able)
-                Dash();
-            if (Move_Able)
-                Move(); 
-            
+        {    
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, StudentLayerMask);
@@ -132,10 +119,7 @@ public class PlayerCtrl_Sarang : Player_Info
                     FixedTarget = true;
                 }
                 if (Input.GetMouseButtonDown(0))
-                {
-                    second_phase = Second_Phase();
-                    yield return StartCoroutine(second_phase);
-                }
+                    yield return StartCoroutine(Second_Phase());
             }
             else
             {
@@ -150,13 +134,10 @@ public class PlayerCtrl_Sarang : Player_Info
 
     IEnumerator Second_Phase()
     {
-        if (first_phase != null)
-            StopCoroutine(first_phase);
-
-        if (move_delay != null)
-            StopCoroutine(move_delay); // 보류 코드
-
-        while(true)
+        All_Stop();
+        if (!Student_Gaze.activeSelf)
+            Student_Gaze.SetActive(true);
+        while (true)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -182,18 +163,20 @@ public class PlayerCtrl_Sarang : Player_Info
                         Student_Clone.GetComponent<Student>().Be_Attacked();
                         Student_Clone.GetComponent<Student>().Stop_Move(); // 공격 받는 중 + 움직임 정지
                     }
-                    Heart_Slider.GetComponent<Heart_Gaze_Viewer>().Decrease_HP(Decrease_HP_ratio);
+
+                    Heart_Slider.GetComponent<Heart_Gaze_Viewer>().Decrease_HP(Time.deltaTime / (15 * Student_Power));
+
                     Lazor_In_Second_Phase(Weapon[0], Student_Clone.transform.position, transform.position);
 
-                    if (!Student_Gaze.activeSelf)
-                        Student_Gaze.SetActive(true);
-
                     int temp = Student_Gaze.GetComponent<Student_Gaze_Info>().Check_Student_HP(Student_Clone.transform.position);
+
                     if (temp == 0)
+                    {
                         yield return StartCoroutine(Third_Phase(Student_Clone));
+                        yield break;
+                    }
                     else if (temp == 1)
                     {
-                        Debug.Log("흠");
                         Heart_Slider.GetComponent<Heart_Gaze_Viewer>().Ordinary_Case();
                         Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
                         Student_Gaze.SetActive(false);
@@ -201,41 +184,16 @@ public class PlayerCtrl_Sarang : Player_Info
 
                         if (Student_Clone != null)
                             Destroy(Student_Clone);
-
-
                     }
                     else if (temp == 3)
-                    {
-                        if (score_up == null)
-                        {
-                            score_up = Score_UP();
-                            StartCoroutine(score_up);
-                        }
-                    }
+                        Main_3_Score += 1;
                        
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
-                    Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
-                    Student_Gaze.SetActive(false);
-                    FixedSlider = false;
-
-                    if (Student_Clone != null)
-                    {
-                        Student_Clone.GetComponent<Student>().NotBe_Attacked();
-                        Student_Clone.GetComponent<Student>().Start_Move();
-
-                        Student_Clone = null;
-                    }
-                   
-                    if (score_up != null)
-                    {
-                        StopCoroutine(score_up);
-                        score_up = null;
-                    }
-
-                     first_phase = First_Phase();
-                     StartCoroutine(first_phase);
+                    Init_Student();
+                    Student_Clone = null;
+                    All_Start();
                  
                     yield return YieldInstructionCache.WaitForSeconds(0.2f);
                     yield break;
@@ -243,26 +201,10 @@ public class PlayerCtrl_Sarang : Player_Info
             }
             else
             {
-                Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
-                Student_Gaze.SetActive(false);
-                FixedSlider = false;
+                Init_Student();
+                Student_Clone = null;
+                All_Start();
 
-                if (Student_Clone != null)
-                {
-                    Student_Clone.GetComponent<Student>().NotBe_Attacked();
-                    Student_Clone.GetComponent<Student>().Start_Move();
-
-                    Student_Clone = null;
-                }
-
-                if (score_up != null)
-                {
-                    StopCoroutine(score_up);
-                    score_up = null;
-                }
-
-                first_phase = First_Phase();
-                StartCoroutine(first_phase);
                 yield return YieldInstructionCache.WaitForSeconds(0.2f);
                 yield break;
             }
@@ -282,44 +224,37 @@ public class PlayerCtrl_Sarang : Player_Info
     
     IEnumerator Third_Phase(GameObject targetStudent_t)
     {
-        if (second_phase != null)
-            StopCoroutine(second_phase);
-
-        if (move_delay != null)
-            StopCoroutine(move_delay);
-
-        if (first_phase != null)
-            StopCoroutine(first_phase);
-
-        if (score_up != null)
-        {
-            StopCoroutine(score_up);
-            score_up = null;
-        }
+        All_Stop();
 
         IEnumerator lazor_in_second_phase = Lazor_In_Second_Phase(targetStudent_t);
 
         StartCoroutine(lazor_in_second_phase);
-       
-        yield return StartCoroutine(Student_Gaze.GetComponent<Student_Gaze_Info>().Competition(targetStudent_t));
+        yield return StartCoroutine(Student_Gaze.GetComponent<Student_Gaze_Info>().Competition(targetStudent_t, Student_Power));
         StopCoroutine(lazor_in_second_phase);
 
+        Init_Student();
+
+        if (Student_Clone != null)
+            Destroy(Student_Clone);
+
+        yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임
+        animator.SetBool("IsDead", false);
+
+        All_Start();
+
+        yield break;
+    }
+    public void Init_Student()
+    {
         Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
         Student_Gaze.SetActive(false);
         FixedSlider = false;
 
-        if (targetStudent_t != null)
+        if (Student_Clone != null)
         {
-            targetStudent_t.GetComponent<Student>().NotBe_Attacked();
-            targetStudent_t.GetComponent<Student>().Start_Move();
-
-            Destroy(targetStudent_t);
+            Student_Clone.GetComponent<Student>().NotBe_Attacked();
+            Student_Clone.GetComponent<Student>().Start_Move();
         }
-        yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임
-        animator.SetBool("IsDead", false);
-        first_phase = First_Phase();
-        StartCoroutine(first_phase);
-        yield break;
     }
     IEnumerator Lazor_In_Second_Phase(GameObject targetStudent_t)
     {
@@ -337,64 +272,42 @@ public class PlayerCtrl_Sarang : Player_Info
 
         sliderClone.transform.SetParent(canvasTransform); 
         sliderClone.transform.position = transform.position + new Vector3(0, 2, 0);
-        sliderClone.transform.localScale = Vector3.one; 
-        sliderClone.GetComponent<Move_Gaze_Info>().HP_Down();
-        Debug.Log("뜀");
+        sliderClone.transform.localScale = Vector3.one;
+
+        Move_Gaze_Info move_Gaze_Info = sliderClone.GetComponent<Move_Gaze_Info>();
+
+        All_Stop();
+        Move_Able = true;
+        PlayerWalkSpeed = 0.06f;
         animator.SetBool("IsRun", true);
-        PlayerWalkSpeed *= 2;
 
-        IEnumerator check_button_off = Check_Button_Off(sliderClone);
-        StartCoroutine(check_button_off);
+        while (true)
+        {
+            yield return null;
+            move_Gaze_Info.HP_Down();
+            if (move_Gaze_Info.Get_HP() >= 1)
+                break;
+            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+            {
+                animator.SetBool("IsRun", false);
+                Destroy(sliderClone);
+                All_Start();
+                yield break;
 
-        yield return new WaitForSeconds(3f);
+            }
+        }
 
         Destroy(sliderClone);
-        StopCoroutine(check_button_off);
 
-        Dash_Able = false;
-        Move_Able = false;
-        PlayerWalkSpeed = 0;
-        if (first_phase != null)
-            StopCoroutine(first_phase);
+        All_Stop();
         animator.SetTrigger("Tired");
         yield return new WaitForSeconds(2.5f);
 
         animator.SetBool("IsWalk", false);
         animator.SetBool("IsRun", false);
-        yield return YieldInstructionCache.WaitForSeconds(0.1f);
+        All_Start();
 
-        Dash_Able = true;
-        Move_Able = true;
-        PlayerWalkSpeed = 0.03f;
-        first_phase = First_Phase();
-        StartCoroutine(first_phase);
-        PlayerWalkSpeed /= 2;
         yield return null;
-    }
-    IEnumerator Check_Button_Off(GameObject e)
-    {
-        while (true)
-        {
-            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
-            {
-                animator.SetBool("IsRun", false);
-                PlayerWalkSpeed = 0.03f;
-                Destroy(e);
-                Dash_Able = true;
-                if (move_delay != null)
-                    StopCoroutine(move_delay);
-                yield break;
-            }
-            yield return null;
-        }
-    }
-    IEnumerator Score_UP()
-    {
-       while(true)
-       {
-            Main_3_Score += 3;
-            yield return YieldInstructionCache.WaitForSeconds(0.125f);
-       }
     }
 
     private void Dash()
@@ -417,8 +330,9 @@ public class PlayerCtrl_Sarang : Player_Info
                 Dash_Able = false;
                 IsOneClick = false;
 
-                move_delay = Move_Delay();
-                StartCoroutine(move_delay);
+                if (first_phase != null)
+                    StopCoroutine(first_phase);
+                StartCoroutine(Move_Delay());
             }
         }
     }
@@ -460,33 +374,15 @@ public class PlayerCtrl_Sarang : Player_Info
             StartCoroutine(I_Move_Floor(0, "up"));
         }
     }
-
     IEnumerator I_Move_Floor(int Change_X, string CHK)
     {
-        if (second_phase != null)
-            StopCoroutine(second_phase);
-        if (move_delay != null)
-            StopCoroutine(move_delay);
-        if (first_phase != null)
-            StopCoroutine(first_phase);
-        if (score_up != null)
-            StopCoroutine(score_up);
-
-        Dash_Able = false;
-        Move_Able = false;
+        All_Stop();
         is_Domain = false;
-        PlayerWalkSpeed = 0;
 
         if (Down_Floor.activeSelf)
-        {
-            Down_Floor.GetComponent<Floor_Button>().Stop_Down_Or_UP();
             Down_Floor.SetActive(false);
-        }
         if (Up_Floor.activeSelf)
-        {
-            Up_Floor.GetComponent<Floor_Button>().Stop_Down_Or_UP();
             Up_Floor.SetActive(false);
-        }
 
         animator.SetBool("IsWalk", false);
         animator.SetBool("IsRun", false);
@@ -498,9 +394,9 @@ public class PlayerCtrl_Sarang : Player_Info
         GameObject.Find("Main Camera").GetComponent<Camera_Trace>().When_Walk_Floor();
         GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().When_Walk_Floor();
 
-        IEnumerator qq = backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(0, 0, 0, 1), 2);
+        IEnumerator change_color = backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(0, 0, 0, 1), 2);
+        StartCoroutine(change_color);
 
-        StartCoroutine(qq);
         if (CHK == "up")
         {
             stageData.LimitMax = stageData.LimitMax + new Vector2(0, 40);
@@ -514,7 +410,7 @@ public class PlayerCtrl_Sarang : Player_Info
             yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-6, -2, 0), 2, OriginCurve));
         }
            
-        StopCoroutine(qq);
+        StopCoroutine(change_color);
 
         yield return YieldInstructionCache.WaitForSeconds(1f);
 
@@ -526,20 +422,30 @@ public class PlayerCtrl_Sarang : Player_Info
 
         animator.SetBool("IsWalk", false);
 
-        first_phase = First_Phase();
-        StartCoroutine(first_phase);
-
+        All_Start();
         is_Domain = true;
-        Dash_Able = true;
-        Move_Able = true;
-        PlayerWalkSpeed = 0.03f;
 
         yield return null;
     }
-    public void Up()
+    void All_Stop()
     {
-        is_Domain = false;
-        StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(6, 2, 0), 3, OriginCurve));
+        if (first_phase != null)
+            StopCoroutine(first_phase);
+
+        Dash_Able = false;
+        Move_Able = false;
+        is_Button = false;
+        PlayerWalkSpeed = 0;
+    }
+    void All_Start()
+    {
+        Dash_Able = true;
+        Move_Able = true;
+        is_Button = true;
+        PlayerWalkSpeed = 0.03f;
+
+        first_phase = First_Phase();
+        StartCoroutine(first_phase);
     }
     public void Fever_Time()
     {
@@ -549,6 +455,10 @@ public class PlayerCtrl_Sarang : Player_Info
 
     void Update()
     {
+        if (Dash_Able)
+            Dash();
+        if (Move_Able)
+            Move();
         Main3_Score_Text.text = "점수 : " + Main_3_Score;
     }
     private void LateUpdate()
@@ -557,6 +467,9 @@ public class PlayerCtrl_Sarang : Player_Info
         {
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, stageData.LimitMin.x, stageData.LimitMax.x),
             Mathf.Clamp(transform.position.y, stageData.LimitMin.y, stageData.LimitMax.y));
+        }
+        if (is_Button)
+        {
             if (transform.position.x <= -3)
             {
                 if (Floor_Player_Place != 1)
@@ -568,10 +481,7 @@ public class PlayerCtrl_Sarang : Player_Info
             else
             {
                 if (Down_Floor.activeSelf)
-                {
-                    Down_Floor.GetComponent<Floor_Button>().Stop_Down_Or_UP();
                     Down_Floor.SetActive(false);
-                }
             }
             if (transform.position.x >= 40)
             {
@@ -584,15 +494,17 @@ public class PlayerCtrl_Sarang : Player_Info
             else
             {
                 if (Up_Floor.activeSelf)
-                {
-                    Up_Floor.GetComponent<Floor_Button>().Stop_Down_Or_UP();
                     Up_Floor.SetActive(false);
-                }
             }
+        }
+        else
+        {
+            if (Up_Floor.activeSelf)
+                Up_Floor.SetActive(false);
+            if (Down_Floor.activeSelf)
+                Down_Floor.SetActive(false);
         }
         if (Fever_Particle_Clone != null)
             Fever_Particle_Clone.transform.position = new Vector3(transform.position.x, Fever_Particle_Clone.transform.position.y, Fever_Particle_Clone.transform.position.z);
-
-      
     }
 }

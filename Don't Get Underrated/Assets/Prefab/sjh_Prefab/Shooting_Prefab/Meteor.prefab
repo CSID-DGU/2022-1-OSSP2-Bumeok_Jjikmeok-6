@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2649738351513854989}
   m_Layer: 0
   m_Name: Meteor
-  m_TagString: Meteor
+  m_TagString: Weapon_Devil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

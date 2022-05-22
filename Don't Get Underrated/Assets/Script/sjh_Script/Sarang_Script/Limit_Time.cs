@@ -47,7 +47,6 @@ public class Limit_Time : MonoBehaviour
                     StopCoroutine(flash_on);
                 flash_on = flashOn.Change_Color_Return_To_Origin(new Color(1, 0, 0, 0), new Color(1, 0, 0, 0.5f), .5f, false);
                 StartCoroutine(flash_on);
-                // ¾À ÀüÈ¯
             }
             if (Option_Limit_Time <= 0)
             {

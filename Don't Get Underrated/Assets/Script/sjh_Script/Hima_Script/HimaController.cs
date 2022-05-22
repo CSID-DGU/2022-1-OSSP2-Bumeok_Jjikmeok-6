@@ -82,7 +82,7 @@ public class HimaController : Player_Info {
         //h = 0;
         //maxSpeed = 7f;
         //yield return YieldInstructionCache.WaitForSeconds(.7f);
-        GameObject.FindGameObjectWithTag("SolGryn").GetComponent<SolGryn>().WelCome();
+        GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().WelCome();
 		yield return null;
 	}
 

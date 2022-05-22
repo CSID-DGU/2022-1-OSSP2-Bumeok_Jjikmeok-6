@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1856580104151119091}
   m_Layer: 0
   m_Name: SolGryn_Copy
-  m_TagString: SolGryn
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

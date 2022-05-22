@@ -22,37 +22,28 @@ public class MoveBackGround : MonoBehaviour
         get { return inGameSpeed; }
         set { inGameSpeed = value; }
     }
-
-
     private void Awake()
     {
         inGameSpeed = 0;   
     }
 
-
-
-    // Start is called before the first frame update
-
-    //IEnumerator Move_BackGround()
-    //{
-    //    while(true)
-    //    {
-    //        transform.position += Vector3.left * (Time.deltaTime * 5);
-    //        yield return null;
-    //        if (transform.position.x <= -move_value)
-    //        {
-    //            transform.position = Back_another.transform.position + (Vector3.right * move_value);
-    //        }
-    //    }
-     
-    //}
-
-    public IEnumerator Increase_Speed()
+    public IEnumerator Increase_Speed(float time_persist, float Speed_Limit)
     {
         while(true)
         {
-            inGameSpeed += Time.deltaTime;
-            if (inGameSpeed >= 6)
+            inGameSpeed += Time.deltaTime / time_persist;
+            if (inGameSpeed >= Speed_Limit)
+                yield break;
+            yield return null;
+        }
+    }
+
+    public IEnumerator Decrease_Speed(float time_persist, float Speed_Limit)
+    {
+        while (true)
+        {
+            inGameSpeed -= Time.deltaTime / time_persist;
+            if (inGameSpeed <= Speed_Limit)
                 yield break;
             yield return null;
         }

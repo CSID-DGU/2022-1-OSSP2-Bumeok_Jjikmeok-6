@@ -21,8 +21,8 @@ public class Weapon_Player : MonoBehaviour
         }
         if (collision.CompareTag("Boss") && collision.gameObject.TryGetComponent(out DoPhan user3))
         {
-            Debug.Log("¿Ö ¾ÈµÅ?");
-            user3.TakeDamage(3f);
+            if (!user3.Unbeatable)
+                user3.TakeDamage(3f);
             Destroy(gameObject);
         }
     }

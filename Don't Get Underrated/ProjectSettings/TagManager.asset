@@ -25,6 +25,7 @@ TagManager:
   - HeartSlider
   - StudentSlider
   - LimitTimeText
+  - Weapon_Devil
   layers:
   - Default
   - TransparentFX

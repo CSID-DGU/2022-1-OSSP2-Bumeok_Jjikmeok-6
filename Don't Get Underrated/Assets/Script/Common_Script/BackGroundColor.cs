@@ -28,16 +28,14 @@ public class BackGroundColor : MonoBehaviour
     {
         image.color = new_c;
     }
-    void Start()
-    {
-        
-    }
 
     public IEnumerator Change_Color(Color origin_color, Color change_color, float ratio)
     {
         percent = 0;
         while (percent < 1)
         {
+
+            Debug.Log(image.color);
             percent += Time.deltaTime / ratio;
             image.color = Color.Lerp(origin_color, change_color, percent);
             yield return null;
@@ -58,9 +56,9 @@ public class BackGroundColor : MonoBehaviour
         }
 
     }
-    public IEnumerator Thunder()
+    public IEnumerator Thunder(int bright_time, float time_persist)
     {
-        while(true)
+        for (int i = 0; i < bright_time; i++)
         {
             int Random_Color = Random.Range(0, 7);
             image.color = new Color(RGB_Color[Random_Color, 0], RGB_Color[Random_Color, 1], RGB_Color[Random_Color, 2], 1);
@@ -68,7 +66,7 @@ public class BackGroundColor : MonoBehaviour
             float percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime * 2.5f;
+                percent += Time.deltaTime / time_persist;
                 image.color = Color.Lerp(image.color, Color.clear, flashSpeed * Time.deltaTime);
                 yield return null;
             }
@@ -97,10 +95,9 @@ public class BackGroundColor : MonoBehaviour
                 break;
         }
     }
-
-    // Update is called once per frame
-    void Update()
+    public void Stop_Coroutine()
     {
-        
+        image.color = new Color(1, 1, 1, 0);
+        StopAllCoroutines();
     }
 }

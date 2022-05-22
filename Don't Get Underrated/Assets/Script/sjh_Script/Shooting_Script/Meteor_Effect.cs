@@ -33,7 +33,7 @@ public class Meteor_Effect : MonoBehaviour
         copy_Meteor_Traffic = Instantiate(Meteor_Traffic, new Vector3(temp, 3.5f, 0), Quaternion.identity);
 
         u = copy_Meteor_Line.GetComponent<Meteor_Line>().Change_Color(1, 1, 1, 0.15f, false);
-        q = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Shake_Act(0.3f);
+        q = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Shake_Act(0.3f, 0.3f);
         StartCoroutine(u);
         yield return StartCoroutine(q);
 
@@ -57,7 +57,7 @@ public class Meteor_Effect : MonoBehaviour
 
         u = copy_Meteor_Line.GetComponent<Meteor_Line>().Change_Color(R1, R2, R3, 0.25f, true);
         h = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Change_Color();
-        q = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Shake_Act(1);
+        q = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Shake_Act(0.6f, 1);
 
         StartCoroutine(u);
 

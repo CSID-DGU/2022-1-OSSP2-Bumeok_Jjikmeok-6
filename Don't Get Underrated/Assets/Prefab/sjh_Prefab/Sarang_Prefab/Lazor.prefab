@@ -136,7 +136,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.8139534
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -225,4 +225,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 8
-  moveDirection: {x: 1, y: 0, z: 0}
+  moveDirection: {x: -11.358329, y: -7, z: 0}

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -2261537564998828096}
   m_Layer: 0
   m_Name: ThunderBolt
-  m_TagString: Untagged
+  m_TagString: Weapon_Devil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,33 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60705937a4af7584e93482d2b270cea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapon: []
-  declineCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  OriginCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  inclineCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  De_In_Curve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  When_Dead_Effect: {fileID: 0}
-  stageData: {fileID: 0}
+  Explosion: {fileID: 0}
 --- !u!114 &-2261537564998828096
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -55,9 +55,9 @@ public class Student_Gaze_Info : Slider_Viewer
 
             return 0;
         }
-        else if (slider.value >= 1 && Interrupt_Num_On_NonActive.Count == 0 && Interrupt_Num_On_Active.Count == 0)
+        if (slider.value >= 1 && Interrupt_Num_On_NonActive.Count == 0 && Interrupt_Num_On_Active.Count == 0)
             return 1;
-        else if (slider.value >= 0.4f && Interrupt_Num_On_NonActive.Count == 0 && Interrupt_Num_On_Active.Count == 0)
+         if (slider.value >= 0.25f && Interrupt_Num_On_Active.Count == 0)
             return 3;
         return 2;
     }
@@ -66,7 +66,7 @@ public class Student_Gaze_Info : Slider_Viewer
     {
         slider.value = 0;
     }
-    public IEnumerator Competition(GameObject student)
+    public IEnumerator Competition(GameObject student, float student_power)
     {
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
         StartCoroutine(GameObject.Find("Flash_Interrupt").GetComponent<BackGroundColor>().Flash(new Color(1, 1, 1, 1), 0.2f, 5));
@@ -86,7 +86,7 @@ public class Student_Gaze_Info : Slider_Viewer
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, StudentLayerMask);
 
             if (Input.GetMouseButtonDown(0) && hit.collider != null && hit.transform.gameObject.CompareTag("Student"))
-                slider.value += 0.15f;
+                slider.value += 0.15f * student_power;
 
             if (slider.value <= 0 || slider.value >= 1)
             {
@@ -120,7 +120,6 @@ public class Student_Gaze_Info : Slider_Viewer
                     Destroy(student);
                 }
                 
-                gameObject.SetActive(false);
                 Stop_Interrupt_Arr_IEnum.Clear();
                 Interrupt_Num_On_Active.Clear();
                 Interrupt_Num_On_NonActive.Clear();
@@ -164,9 +163,6 @@ public class Student_Gaze_Info : Slider_Viewer
     private void LateUpdate()
     {
         if (YeonTa_Copy != null)
-        {
-            Debug.Log("¿¿");
             YeonTa_Copy.transform.position = new Vector3(transform.position.x - 1.78f + (slider.value * 3.56f), transform.position.y + 1f, 1);
-        }
     }
 }

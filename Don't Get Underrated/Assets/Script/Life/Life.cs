@@ -27,6 +27,8 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
     protected SpriteRenderer spriteRenderer;
 
+    protected Movement2D movement2D;
+
     protected IEnumerator camera_shake;
 
     protected CameraShake cameraShake;
@@ -144,14 +146,12 @@ public class Life : MonoBehaviour, Life_Of_Basic
         if (Effect != null)
             Instantiate(Effect, transform.position, Quaternion.identity);
         percent = 0;
-        Debug.Log("¿¿");
         while (percent < 1)
         {
             percent += Time.deltaTime / time_persist;
             spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
             yield return null;
         }
-        Debug.Log("æﬂ ø÷");
         yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
     }
     public IEnumerator Position_Lerp(Vector3 start_location, Vector3 last_location, float time_ratio, AnimationCurve curve)
