@@ -33,7 +33,7 @@ public class F1_Homming_Enemy : Enemy_Info
     {
         yield return YieldInstructionCache.WaitForSeconds(3.5f);
         OnDie();
-        yield return YieldInstructionCache.WaitForEndOfFrame;
+        yield return null;
     }
     public override void OnDie()
     {

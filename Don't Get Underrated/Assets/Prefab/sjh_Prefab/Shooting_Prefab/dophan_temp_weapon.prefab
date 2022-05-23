@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1043433220617109707}
   - component: {fileID: 1043433220617109704}
-  - component: {fileID: 1043433220617109706}
+  - component: {fileID: -2768969242289537269}
+  - component: {fileID: -953529126180573668}
   m_Layer: 0
   m_Name: dophan_temp_weapon
   m_TagString: Weapon_Devil
@@ -83,7 +84,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1043433220617109706
+--- !u!114 &-2768969242289537269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043433220617109705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
+--- !u!114 &-953529126180573668
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,5 +109,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07029b59c310ce148a311ab8ad8d07e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 8
-  moveDirection: {x: -0.9644118, y: 0.26440483, z: -0}
+  moveSpeed: 0
+  moveDirection: {x: 0, y: 0, z: 0}

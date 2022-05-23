@@ -20,7 +20,7 @@ public class BossHPSliderViewer : Slider_Viewer
     {
         this.boss_info = boss_info;
        
-        StartCoroutine("I_HPFull");
+        StartCoroutine(I_HPFull());
     }
     IEnumerator I_HPFull()
     {

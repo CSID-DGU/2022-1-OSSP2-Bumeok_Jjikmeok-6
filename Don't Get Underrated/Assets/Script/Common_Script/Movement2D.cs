@@ -22,6 +22,11 @@ public class Movement2D : MonoBehaviour
         set { moveSpeed = value; }
         get { return moveSpeed; }
     }
+    public Vector3 MoveDirection
+    {
+        set { moveDirection = value;  }
+        get { return moveDirection; }
+    }
     public void MoveTo(Vector3 direction)
     {
         moveDirection = direction;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SolGryn_Peanut : Enemy_Info
+public class SolGryn_Peanut : Weapon_Devil
 {
 
 	[SerializeField]
@@ -14,6 +14,8 @@ public class SolGryn_Peanut : Enemy_Info
 
 	private int groundLayerMask;
 
+	CameraShake cameraShake;
+
 	private int Count = 0;
 
 	// Use this for initialization
@@ -21,7 +23,7 @@ public class SolGryn_Peanut : Enemy_Info
 	{
 		base.Awake();
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
-
+		cameraShake = GetComponent<CameraShake>();
 		cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
 		Debug.Log(groundLayerMask);
 	}
@@ -50,7 +52,7 @@ public class SolGryn_Peanut : Enemy_Info
 	}
 	public void Die()
 	{
-		camera_shake = cameraShake.Shake_Act(.03f, .03f, 0.1f, false);
+		IEnumerator camera_shake = cameraShake.Shake_Act(.03f, .03f, 0.1f, false);
 		StartCoroutine(camera_shake);
 		Instantiate(deathParticle, transform.position, Quaternion.identity);
 		Destroy(gameObject);

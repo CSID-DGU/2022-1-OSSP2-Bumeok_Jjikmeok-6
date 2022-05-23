@@ -11,11 +11,9 @@ public class Student_Gaze_Info : Slider_Viewer
 
     GameObject Player_Heart_Slider;
 
-    ArrayList Interrupt_Num_On_Active; // 플레이어와 실제 경쟁 중인 인터럽트
-
     ArrayList Interrupt_Num_On_NonActive; // 맵을 떠도는 인터럽트
 
-    ArrayList Stop_Interrupt_Arr_IEnum; // IEnumrator를 담는 배열
+    Dictionary<GameObject, IEnumerator> Wow;
 
     [SerializeField]
     GameObject YeonTa;
@@ -29,35 +27,32 @@ public class Student_Gaze_Info : Slider_Viewer
         StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
         Player_Heart_Slider = GameObject.FindGameObjectWithTag("HeartSlider");
         Interrupt_Num_On_NonActive = new ArrayList();
-        Interrupt_Num_On_Active = new ArrayList();
-        Stop_Interrupt_Arr_IEnum = new ArrayList();
+        Wow = new Dictionary<GameObject, IEnumerator>();
         selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
     public int Check_Student_HP(Vector3 TempPosition)
     {
         slider.value += Time.deltaTime / 2;
 
-        if (slider.value >= 0.5f && Interrupt_Num_On_NonActive.Count >= 1 && Interrupt_Num_On_Active.Count == 0)
+        if (slider.value >= 0.5f && Interrupt_Num_On_NonActive.Count >= 1 && Wow.Count == 0)
         {
-            Stop_Interrupt_Arr_IEnum.Clear();
+            Wow.Clear();
             foreach (var interrupt in Interrupt_Num_On_NonActive)
             {
                 GameObject copy_interrupt = (GameObject)interrupt;
 
-                copy_interrupt.GetComponent<Interrupt>().Stop_Move();
-                Interrupt_Num_On_Active.Add(copy_interrupt);
-
-                IEnumerator temp_s = copy_interrupt.GetComponent<Interrupt>().Trigger_Lazor(TempPosition);
-                Stop_Interrupt_Arr_IEnum.Add(temp_s);
-
-                StartCoroutine(temp_s);
+                if (copy_interrupt.TryGetComponent(out Interrupt user))
+                {
+                    IEnumerator temp_s = user.Trigger_Lazor(TempPosition);
+                    user.StartCoroutine(temp_s);
+                    Wow.Add(copy_interrupt, temp_s);
+                }
             }
-
             return 0;
         }
-        if (slider.value >= 1 && Interrupt_Num_On_NonActive.Count == 0 && Interrupt_Num_On_Active.Count == 0)
+        if (slider.value >= 1 && Interrupt_Num_On_NonActive.Count == 0 && Wow.Count == 0)
             return 1;
-         if (slider.value >= 0.25f && Interrupt_Num_On_Active.Count == 0)
+         if (slider.value >= 0.25f && Wow.Count == 0)
             return 3;
         return 2;
     }
@@ -76,8 +71,8 @@ public class Student_Gaze_Info : Slider_Viewer
         transform.position = transform.position + 1.5f * Vector3.down;
         while (true)
         {
-            if (4 - Interrupt_Num_On_NonActive.Count > 0)
-                slider.value -= Time.deltaTime / (4 - Interrupt_Num_On_NonActive.Count);
+            if (4 - Wow.Count > 0)
+                slider.value -= Time.deltaTime / (4 - Wow.Count);
             else
                 slider.value -= Time.deltaTime;
 
@@ -93,35 +88,32 @@ public class Student_Gaze_Info : Slider_Viewer
                 GameObject.FindGameObjectWithTag("StudentSlider").GetComponent<Image>().color = new Color(1, 0, 0, 1);
                 transform.localScale = new Vector3(1, 1, 1);
                 Destroy(YeonTa_Copy);
-                foreach (var stop in Stop_Interrupt_Arr_IEnum)
+                foreach (var e in Wow)
                 {
-                    StopCoroutine((IEnumerator)stop);
+                   if (e.Key.TryGetComponent(out Interrupt user))
+                        user.StopCoroutine(e.Value);
                 }
                 if (slider.value <= 0)
                 {
-                    foreach (var u in Interrupt_Num_On_Active)
+                    foreach (var e in Wow)
                     {
-                        GameObject interrupt = (GameObject)u;
-                        interrupt.GetComponent<Interrupt>().Start_Move();
+                        if (e.Key.TryGetComponent(out Interrupt user))
+                            user.Start_Move();
                     }
                     Player_Heart_Slider.GetComponent<Heart_Gaze_Viewer>().When_Player_Defeat();
                     GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().animator.SetBool("IsDead", true);
                 }
                 else if (slider.value >= 1)
                 {
-                    foreach (var u in Interrupt_Num_On_Active)
-                    {
-                        GameObject copy_interrupt = (GameObject)u;
-                        Destroy(copy_interrupt);
-                    }
+                    foreach (var e in Wow)
+                        Destroy(e.Key);
+
                     Player_Heart_Slider.GetComponent<Heart_Gaze_Viewer>().When_Interrupt_Defeat();
                     slider.value = 0;
 
                     Destroy(student);
                 }
-                
-                Stop_Interrupt_Arr_IEnum.Clear();
-                Interrupt_Num_On_Active.Clear();
+                Wow.Clear();
                 Interrupt_Num_On_NonActive.Clear();
                 yield return null;
                 yield break;
@@ -141,19 +133,9 @@ public class Student_Gaze_Info : Slider_Viewer
                 bool OnScreen = screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
 
                 if (OnScreen)
-                {
                     Interrupt_Num_On_NonActive.Add(u);
-                }
             }
         }
-    }
-    public void Stop_Coroutine()
-    {
-        foreach (var stop in Stop_Interrupt_Arr_IEnum)
-        {
-            StopCoroutine((IEnumerator)stop);
-        }
-        StopAllCoroutines();
     }
     // Update is called once per frame
     void Update()

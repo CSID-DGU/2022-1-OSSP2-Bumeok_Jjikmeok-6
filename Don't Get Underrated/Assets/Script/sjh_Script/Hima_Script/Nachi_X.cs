@@ -31,6 +31,8 @@ public class Nachi_X : Enemy_Info
     public IEnumerator Move(int flag)
     {
         trailRenderer.enabled = true;
+        if (TryGetComponent(out TrailCollisions user1))
+            user1.Wow();
         yield return StartCoroutine(Circle_Move(90, flag * 4, 0, 0.3f, 0.3f, transform.position.x, transform.position.y, 0.5f));
 
         yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-4 * flag, 2f, 0), 0.8f, declineCurve));

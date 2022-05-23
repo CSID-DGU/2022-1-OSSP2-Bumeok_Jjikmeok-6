@@ -29,6 +29,8 @@ public class PlayerCtrl_Tengai : Player_Info
     [SerializeField]
     GameObject TalkPanel;
 
+    Emit_Motion emit_Motion;
+
     [SerializeField]
     int BoomCount = 3;
 
@@ -61,6 +63,7 @@ public class PlayerCtrl_Tengai : Player_Info
         boss_intend = false;
         is_Power_Up = false;
         Final_Score = 0;
+        emit_Motion = null;
         //TalkPanel.SetActive(true);
 
         PlayerScore.text = "점수 : " + Final_Score;
@@ -134,34 +137,22 @@ public class PlayerCtrl_Tengai : Player_Info
 
         LifeTime_Text.text = "Life x  : " + LifeTime;
 
-        if (Emit_Obj_Copy != null)
+        if (Emit_Obj_Copy != null && emit_Motion != null && i_start_emit != null)
         {
-            if (i_start_emit != null)
-                StopCoroutine(i_start_emit);
-            if (emit_expand_circle != null)
-                StopCoroutine(emit_expand_circle);
-            if (emit_change_size != null)
-                StopCoroutine(emit_change_size);
+            StopCoroutine(i_start_emit);
             Destroy(Emit_Obj_Copy);
         }
 
         if (LifeTime <= 0)
-        {
             OnDie();
-        }
 
         StartCoroutine(Damage_After());
     }
     IEnumerator Damage_After()
     {
-        //GameObject e = Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-        yield return null;
-
         yield return StartCoroutine(MovePath());
-        //Destroy(e);
 
         yield return StartCoroutine(Move_First());
-        yield break;
     }
     IEnumerator MovePath() // 여기 수정
     {
@@ -184,44 +175,45 @@ public class PlayerCtrl_Tengai : Player_Info
     {
         Emit_Obj_Copy = Instantiate(Emit_Obj, transform.position, Quaternion.identity);
 
-        emit_expand_circle = Emit_Obj_Copy.GetComponent<Emit_Motion>().Emit_Expand_Circle();
-        emit_change_size = Emit_Obj_Copy.GetComponent<Emit_Motion>().Emit_Change_Size();
+        emit_Motion = null;
 
-        StartCoroutine(emit_change_size);
+        if (Emit_Obj_Copy.TryGetComponent(out Emit_Motion user1))
+        {
+            emit_Motion = user1;
+            emit_expand_circle = emit_Motion.Emit_Expand_Circle();
+            emit_change_size = emit_Motion.Emit_Change_Size();
+        }
+        if (emit_Motion == null)
+            yield break;
+
+        emit_Motion.StartCoroutine(emit_change_size);
 
         yield return YieldInstructionCache.WaitForSeconds(5f);
 
         Unbeatable = true;
-        yield return null;
 
-        StopCoroutine(emit_change_size);
-        yield return StartCoroutine(emit_expand_circle);
+        emit_Motion.StopCoroutine(emit_change_size);
+        yield return emit_Motion.StartCoroutine(emit_expand_circle);
 
         Destroy(Emit_Obj_Copy);
 
-        StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 5));
+        backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 5));
 
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
         GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
         foreach (var e in enemy)
-        {
             Destroy(e);
-        }
         foreach (var e in meteor)
-        {
             Destroy(e);
-        }
         foreach (var e in weapon_devil)
-        {
             Destroy(e);
-        }
 
-        GameObject.FindGameObjectWithTag("Boss").GetComponent<DoPhan>().Stop_Meteor();
+        GameObject.FindGameObjectWithTag("Boss").GetComponent<Asura>().Stop_Meteor();
 
         GameObject u = Instantiate(When_Dead_Effect, Vector3.zero, Quaternion.identity);
 
-        StartCoroutine(cameraShake.Shake_Act(0.4f, 0.4f, 0.3f, false));
+        cameraShake.StartCoroutine(cameraShake.Shake_Act(0.4f, 0.4f, 0.3f, false));
         yield return YieldInstructionCache.WaitForSeconds(2f);
 
         Destroy(u);

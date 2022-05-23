@@ -39,10 +39,9 @@ public class Quantum_Bit : Enemy_Info
         spriteRenderer.color = new Color(1, 1, 1, 0);
         StartCoroutine(backGroundColor.Flash(Color.black, 0.5f, 2));
         StartCoroutine(cameraShake.Shake_Act(0.3f, 0.3f, 0.3f, false));
-
-        Weapon[0].GetComponent<Movement2D>().MoveTo(Vector3.zero);
-        Weapon[0].GetComponent<Movement2D>().MoveSpeed = 2;
-
+        
+        Weapon[0].GetComponent<Weapon_Devil>().W_MoveTo(Vector3.zero);
+        Weapon[0].GetComponent<Weapon_Devil>().W_MoveSpeed(2);
         for (int i = -9; i <= 9; i++)
         {
             for (int j = -9; j <= 9; j++)
@@ -51,23 +50,17 @@ public class Quantum_Bit : Enemy_Info
                 arrayList.Add(e);
             }
         }
-        yield return YieldInstructionCache.WaitForSeconds(2f);
+        yield return StartCoroutine(cameraShake.Shake_Act(0.1f, 0.1f, 2f, false));
         foreach (var e in arrayList)
         {
             int Ran1 = Random.Range(0, 8);
             GameObject u = (GameObject)e;
             if (u != null)
-                u.GetComponent<Movement2D>().MoveTo(new Vector3(Rand[0, Ran1], Rand[1, Ran1], 0));
+                u.GetComponent<Weapon_Devil>().W_MoveTo(new Vector3(Rand[0, Ran1], Rand[1, Ran1], 0));
         }
         arrayList.Clear();
         solGryn.Is_Next_Pattern = true;
         yield return null;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     private void OnDestroy()
     {

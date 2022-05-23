@@ -12,8 +12,10 @@ GameObject:
   - component: {fileID: 5135566848150843789}
   - component: {fileID: 3460914197368590941}
   - component: {fileID: 3814482341462605714}
+  - component: {fileID: -5987416232835028849}
   - component: {fileID: -9056934381080169243}
   - component: {fileID: -3010204263810986790}
+  - component: {fileID: 6601924916208325200}
   m_Layer: 0
   m_Name: Boss_W1_Lightning(2)
   m_TagString: Weapon_Devil
@@ -131,6 +133,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.162, y: 0.98}
   m_EdgeRadius: 0
+--- !u!114 &-5987416232835028849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892351702495847471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07029b59c310ce148a311ab8ad8d07e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 0
+  moveDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &-9056934381080169243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,3 +173,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+--- !u!114 &6601924916208325200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892351702495847471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1bb6da1af5abfd40a72b89011be5962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Destroy_Time: 2.5

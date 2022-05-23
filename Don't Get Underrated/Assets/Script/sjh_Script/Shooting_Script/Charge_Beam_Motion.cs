@@ -26,16 +26,16 @@ public class Charge_Beam_Motion : MonoBehaviour
             while (transform.localScale.x - temp_scale.x < .3f)
             {
                 transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * 3, transform.localScale.y + Time.deltaTime * 3, 0);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
             temp_scale = transform.localScale;
             while (temp_scale.x - transform.localScale.x < .24f)
             {
                 transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, 0);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + Time.deltaTime * 7);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
 
     }

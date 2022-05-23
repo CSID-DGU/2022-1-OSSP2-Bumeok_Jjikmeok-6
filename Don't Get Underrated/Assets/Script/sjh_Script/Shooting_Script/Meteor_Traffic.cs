@@ -9,7 +9,6 @@ public class Meteor_Traffic : MonoBehaviour
     private Vector3 originPosition;
     private Quaternion originRotation;
 
-    //private float shake_decay = 0.002f;
     private float shake_intensity;
     private float coef_shake_intensity = .2f;
     private float percent;
@@ -31,7 +30,7 @@ public class Meteor_Traffic : MonoBehaviour
             {
                 percent += Time.deltaTime * 8;
                 spriteRenderer.color = Color.Lerp(temp, new Color(1, 1, 1, 1), percent);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
 
             temp = spriteRenderer.color;
@@ -40,7 +39,7 @@ public class Meteor_Traffic : MonoBehaviour
             {
                 percent += Time.deltaTime * 8;
                 spriteRenderer.color = Color.Lerp(temp, new Color(1, 1, 1, 0), percent);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
         }
         percent = 0;

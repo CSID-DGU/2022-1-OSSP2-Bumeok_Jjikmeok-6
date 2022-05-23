@@ -2870,9 +2870,9 @@ GameObject:
   - component: {fileID: 1770839854}
   - component: {fileID: 1770839856}
   - component: {fileID: 1770839857}
-  - component: {fileID: 1770839858}
   - component: {fileID: 1770839859}
-  - component: {fileID: 1770839860}
+  - component: {fileID: 1770839861}
+  - component: {fileID: 1770839858}
   m_Layer: 0
   m_Name: SolGryn
   m_TagString: Boss
@@ -2920,7 +2920,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: b01db4e58d5d69d4b92dd5cc961a2843, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 92f9d5c871d4def40bd0550f0db1c3d2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2939,8 +2939,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770839853}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.83, y: -3.16, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 1}
+  m_LocalPosition: {x: 4.15, y: 2.2, z: 0}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -3092,8 +3092,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1436607220}
---- !u!60 &1770839858
-PolygonCollider2D:
+--- !u!70 &1770839858
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3106,64 +3106,8 @@ PolygonCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.16, y: 2.52}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.28, y: -1.0799999}
-      - {x: 0.45, y: -1.13}
-      - {x: 0.87, y: -1.15}
-      - {x: 0.95, y: -1.05}
-      - {x: 0.95, y: -0.9}
-      - {x: 0.85999995, y: -0.83}
-      - {x: 0.81, y: -0.78999996}
-      - {x: 0.76, y: -0.53}
-      - {x: 0.78999996, y: -0.41}
-      - {x: 0.78, y: -0.12}
-      - {x: 0.76, y: 0.049999997}
-      - {x: 0.71999997, y: 0.17}
-      - {x: 0.63, y: 0.34}
-      - {x: 0.52, y: 0.38}
-      - {x: 0.28, y: 0.39}
-      - {x: 0.28, y: 0.45}
-      - {x: 0.38, y: 0.42}
-      - {x: 0.41, y: 0.47}
-      - {x: 0.42999998, y: 0.88}
-      - {x: 0.34, y: 1}
-      - {x: 0.17, y: 1.16}
-      - {x: 0.01, y: 1.16}
-      - {x: -0.06, y: 1.14}
-      - {x: -0.22, y: 0.96999997}
-      - {x: -0.29, y: 0.78}
-      - {x: -0.29, y: 0.5}
-      - {x: -0.26999998, y: 0.44}
-      - {x: -0.17, y: 0.37}
-      - {x: -0.34, y: 0.35}
-      - {x: -0.58, y: 0.25}
-      - {x: -0.66999996, y: 0.19}
-      - {x: -0.69, y: 0.11}
-      - {x: -0.7, y: -0.07}
-      - {x: -0.66999996, y: -0.17}
-      - {x: -0.65, y: -0.44}
-      - {x: -0.7, y: -0.61}
-      - {x: -0.71, y: -0.78}
-      - {x: -0.76, y: -0.78999996}
-      - {x: -0.81, y: -0.81}
-      - {x: -0.88, y: -0.93}
-      - {x: -0.88, y: -1.16}
-      - {x: -0.82, y: -1.1999999}
-      - {x: -0.72999996, y: -1.2099999}
-      - {x: -0.64, y: -1.2099999}
-      - {x: -0.59999996, y: -1.1999999}
-      - {x: -0.39, y: -1.13}
-      - {x: -0.01, y: -1.02}
+  m_Size: {x: 4, y: 5.1199994}
+  m_Direction: 0
 --- !u!96 &1770839859
 TrailRenderer:
   serializedVersion: 2
@@ -3262,28 +3206,18 @@ TrailRenderer:
   m_MinVertexDistance: 0
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!68 &1770839860
-EdgeCollider2D:
+--- !u!114 &1770839861
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770839853}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -1.0799999, y: 0}
-  - {x: 1.0799999, y: 0}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c485d9c29427c8041ab91ab5bea15e40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1819633284
 GameObject:
   m_ObjectHideFlags: 0

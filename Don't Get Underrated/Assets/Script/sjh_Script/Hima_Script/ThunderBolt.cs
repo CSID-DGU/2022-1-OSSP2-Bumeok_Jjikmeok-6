@@ -9,8 +9,9 @@ public class ThunderBolt : Weapon_Devil
     BackGroundColor backGroundColor;
     CameraShake cameraShake;
     IEnumerator camera_shake;
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
         backGroundColor = GameObject.Find("Flash").GetComponent<BackGroundColor>();
         cameraShake = GetComponent<CameraShake>();
         cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();

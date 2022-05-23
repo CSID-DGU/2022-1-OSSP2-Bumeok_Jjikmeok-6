@@ -60,7 +60,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
         get { return spriteRenderer.color; }
         set { spriteRenderer.color = value; }
     }
-    public virtual void TakeDamage(float damage) {}
+    public virtual void TakeDamage(float damage) { }
 
     public virtual void TakeDamage(int damage) { }
     public virtual void OnDie()
@@ -84,26 +84,21 @@ public class Life : MonoBehaviour, Life_Of_Basic
         }
         yield return null;
     }
-
-    protected void Launch_Weapon_For_Move(GameObject weapon, Vector3 target, Quaternion Degree, float Destroy_Time) // 이외의 나머지
-    {
-        weapon.GetComponent<Movement2D>().MoveTo(target);
-        GameObject e = Instantiate(weapon, transform.position, Degree);
-        Destroy(e, Destroy_Time);
-    }
-
     protected void Launch_Weapon_For_Move_Blink(GameObject weapon, Vector3 Direction, Quaternion Degree, float speed, bool is_Blink, Vector3 Instantiate_Dir) // 이외의 나머지
     {
-        weapon.GetComponent<Movement2D>().MoveTo(Direction);
-        weapon.GetComponent<Movement2D>().MoveSpeed = speed;
-        weapon.GetComponent<Movement2D>().Is_Blink = is_Blink;
-        Instantiate(weapon, Instantiate_Dir, Degree);
-    }
-
-    protected void Launch_Weapon_For_Still(GameObject weapon, Vector3 instantiate_position, Quaternion Degree, float Destroy_Time)
-    {
-        GameObject e = Instantiate(weapon, instantiate_position, Degree);
-        Destroy(e, Destroy_Time);
+        GameObject Copy = Instantiate(weapon, Instantiate_Dir, Degree);
+        if (Copy.TryGetComponent(out Weapon_Devil user1))
+        {
+            user1.W_MoveTo(Direction);
+            user1.W_MoveSpeed(speed);
+        }
+        else if (Copy.TryGetComponent(out Weapon_Player user2))
+        {
+            user2.W_MoveTo(Direction);
+            user2.W_MoveSpeed(speed);
+        }
+        else
+            Destroy(Copy);
     }
     protected IEnumerator Change_Color_Return_To_Origin(Color Origin_C, Color Change_C, float time_persist, bool is_Continue)
     { 

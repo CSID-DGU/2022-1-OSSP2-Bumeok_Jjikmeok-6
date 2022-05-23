@@ -59,7 +59,7 @@ public class SolGryn : Boss_Info
         trailRenderer = GetComponent<TrailRenderer>();
         SolGryn_HP.SetActive(false);
         trailRenderer.enabled = false;
-        trailRenderer = GetComponent<TrailRenderer>();
+        
         SolG_Copy = new List<GameObject>();
         for (int i = 0; i < 5; i++)
             Pattern_Total.Add(phase);
@@ -88,11 +88,11 @@ public class SolGryn : Boss_Info
     }
     IEnumerator Blink_Bullet()
     {
-        transform.localScale = new Vector3(1.5f, 1.5f, 0);  // 임시
-        for (int i = 0; i < 10; i++)
+        transform.localScale = new Vector3(0.7f, 0.7f, 0);  // 임시
+        for (int i = 0; i < 5; i++)
         {
-            StartCoroutine(Boss_W1(72 + (20 * i), 25, 360, 2, true));
-            yield return YieldInstructionCache.WaitForSeconds(0.5f);
+            Boss_W1(72 + (20 * i), 25, 360, 4, true);
+            yield return YieldInstructionCache.WaitForSeconds(0.8f);
         }
         yield return null;
     }
@@ -154,7 +154,7 @@ public class SolGryn : Boss_Info
     {
         himaController.IsMove = true;
         transform.position = new Vector3(7, 4, 0);
-        transform.localScale = new Vector3(1.4f, 1.4f, 0);
+        transform.localScale = new Vector3(0.7f, 0.7f, 0);
         yield return YieldInstructionCache.WaitForSeconds(.5f);
 
         SolGryn_HP.SetActive(true);
@@ -168,9 +168,10 @@ public class SolGryn : Boss_Info
             Get_Center_Vector(transform.position, new Vector3(-4, 4, 0), Vector3.Distance(transform.position, new Vector3(-4, 4, 0)) * 0.85f, "anti_clock"), 4, OriginCurve, false));
         //yield return StartCoroutine(Pattern01());
         //yield return StartCoroutine(Pattern02());
-        //yield return StartCoroutine(Pattern05());
+        yield return StartCoroutine(Pattern03());
+        yield return StartCoroutine(Pattern04());
+        yield return StartCoroutine(Pattern05());
         yield return StartCoroutine(Pattern06());
-        //yield return StartCoroutine(Pattern04());
         //while(true)
         //{
         //    yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 0), 0.33f, 0, DisAppear_Effect_1));
@@ -197,11 +198,6 @@ public class SolGryn : Boss_Info
         //}
 
         ////yield return StartCoroutine(First_Move());
-
-        ////yield return StartCoroutine(Pattern_1());
-        ////yield return StartCoroutine(Pattern_2());
-        //yield return StartCoroutine(Pattern_3());
-        //yield return StartCoroutine(Pattern_4());
     }
     IEnumerator Pattern01()
     {
@@ -212,6 +208,8 @@ public class SolGryn : Boss_Info
         yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1));
 
         trailRenderer.enabled = true;
+        if (TryGetComponent(out TrailCollisions user1))
+            user1.Wow();
         for (int i = 0; i < 3; i++)
             yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(u1[i, 0], u1[i, 1], 0), 0.2f, declineCurve));
 
@@ -234,6 +232,8 @@ public class SolGryn : Boss_Info
 
         transform.position = new Vector3(7, 4, 0);
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 2f, inclineCurve));
+        if (GameObject.Find("TrailCollider"))
+            Destroy(GameObject.Find("TrailCollider"));
     }
     IEnumerator Nachi_Color_Change(Color Origin_C, Color Change_C, float time_persist)
     {
@@ -285,16 +285,13 @@ public class SolGryn : Boss_Info
 
         transform.position = new Vector3(0, 1.35f, 0);
         transform.rotation = Quaternion.identity;
-        change_color = Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 1f, 0, DisAppear_Effect_1);
-        yield return StartCoroutine(change_color);
+        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 1f, 0, DisAppear_Effect_1));
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 1.35f, 0), 0.5f, inclineCurve));
 
         SolG_Copy = new List<GameObject>();
 
         for (int i = 0; i < 2; i++)
             SolG_Copy.Add(Instantiate(Weapon[5], transform.position, Quaternion.identity));
-
-        // 이쪽도 코드 다시 짜자
 
         SolGryn_Copy solGryn_Copy_1 = null, solGryn_Copy_2 = null;
 
@@ -320,6 +317,10 @@ public class SolGryn : Boss_Info
                 yield return YieldInstructionCache.WaitForSeconds(0.7f);
             }
         }
+
+        Destroy(SolG_Copy[0]);
+        Destroy(SolG_Copy[1]);
+
 
         yield return null;
     }
@@ -371,7 +372,7 @@ public class SolGryn : Boss_Info
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 3, 0), 1, inclineCurve));
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, 11, 0), 1, declineCurve));
 
-        for (int i = -1; i < 1; i++)
+        for (int i = -1; i < 2; i++)
         {
             Instantiate(Weapon[4], new Vector3(2.52f * i, -8.31f, 0), Quaternion.identity);
             yield return YieldInstructionCache.WaitForSeconds(1.4f);
@@ -385,7 +386,7 @@ public class SolGryn : Boss_Info
 
         Is_Next_Pattern = false;
 
-        Instantiate(Weapon[3], new Vector3(-6.8f, 4.46f, 0), Quaternion.identity);
+        Instantiate(Weapon[3], new Vector3(6.8f, 4.46f, 0), Quaternion.identity);
         Instantiate(Weapon[3], new Vector3(-6.8f, 4.46f, 0), Quaternion.identity);
         
         while (!Is_Next_Pattern)
@@ -393,23 +394,14 @@ public class SolGryn : Boss_Info
         Is_Next_Pattern = false;
 
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 11, 0), 1, declineCurve));
-        Camera_Origin();
+        cameraShake.Origin_Camera();
     }
-    void Camera_Origin()
-    {
-        cameraShake.mainCamera.transform.position = new Vector3(0, 0, -10);
-        cameraShake.mainCamera.transform.rotation = Quaternion.identity;
-        cameraShake.mainCamera.transform.localScale = new Vector3(1, 1, 1);
-    }
-
     IEnumerator Pattern04()
     {
         IEnumerator rotate_bullet = Rotate_Bullet(7, 200, 0.02f, 4, Weapon[2]);
 
-        while (true)
+        for (int i = 0; i < 5; i++)
         {
-            yield return Change_Color_Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 0), 0.33f, 1.5f, DisAppear_Effect_2);
-
             camera_shake = cameraShake.Shake_Act(.035f, .2f, 1, true);
             StartCoroutine(camera_shake);
             StartCoroutine(rotate_bullet);
@@ -421,9 +413,11 @@ public class SolGryn : Boss_Info
             StopCoroutine(camera_shake);
             cameraShake.Origin_Camera();
             StopCoroutine(rotate_bullet);
-
-            yield return null;
+            yield return Change_Color_Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 0), 0.33f, 1f, DisAppear_Effect_2);
         }
+        transform.rotation = Quaternion.identity;
+        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 1, 0, DisAppear_Effect_1));
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 1, declineCurve));
     }
 
     IEnumerator Pattern05()
@@ -434,6 +428,8 @@ public class SolGryn : Boss_Info
             yield return YieldInstructionCache.WaitForSeconds(1f);
             Destroy(W1);
         }
+        StartCoroutine(backGroundColor.Flash(Color.white, 0.3f, 5));
+        yield return StartCoroutine(cameraShake.Shake_Act(0.1f, 0.1f, 2f, false));
 
         for (int i = 0; i < 3; i++)
         {
@@ -495,7 +491,7 @@ public class SolGryn : Boss_Info
         yield return StartCoroutine(Position_Lerp(new Vector3(7, 4, 0), new Vector3(7, 0, 0), 3, OriginCurve));
         yield return null;
     }
-    IEnumerator Boss_W1(float start_angle, int count, float range_angle, float speed, bool is_Blink)
+    void Boss_W1(float start_angle, int count, float range_angle, float speed, bool is_Blink)
     {
         float count_per_radian = range_angle / count;
         float intervalAngle = start_angle;
@@ -506,6 +502,5 @@ public class SolGryn : Boss_Info
             float y = Mathf.Sin(angle * Mathf.PI / 180.0f);
             Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(x, y), Quaternion.identity, speed, is_Blink, 4 * Vector3.up);
         }
-        yield return null;
     }
 }

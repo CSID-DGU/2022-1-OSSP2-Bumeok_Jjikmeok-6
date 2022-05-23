@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoyBean : MonoBehaviour
+public class SoyBean : Weapon_Devil
 {
     [SerializeField]
     [Range(500f, 2000f)] float speed = 1000f;
@@ -21,8 +21,9 @@ public class SoyBean : MonoBehaviour
     private int Count;
     // Start is called before the first frame update
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
         rb = GetComponent<Rigidbody2D>();
         cameraShake = GetComponent<CameraShake>();
         cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -31,7 +32,7 @@ public class SoyBean : MonoBehaviour
 
     private void Start()
     {
-        if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out HimaController user))
+        if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out HimaController user))
         {
             randomX = user.transform.position.x - transform.position.x;
             randomY = user.transform.position.y - transform.position.y;
@@ -47,7 +48,7 @@ public class SoyBean : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out HimaController user2))
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info user2))
         {
             user2.TakeDamage(1);
         }

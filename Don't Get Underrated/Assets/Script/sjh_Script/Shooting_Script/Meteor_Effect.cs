@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Meteor_Effect : MonoBehaviour
+public class Meteor_Effect : Weapon_Devil
 {
     // Start is called before the first frame update
     [SerializeField]
@@ -13,41 +13,44 @@ public class Meteor_Effect : MonoBehaviour
 
     GameObject copy_Meteor_Line, copy_Meteor_Traffic;
 
-    Movement2D movement2D;
-
     SpriteRenderer spriteRenderer;
 
-    IEnumerator u, h, q;
-
-    private void Awake()
+    private new void Awake()
     {
-        movement2D = GetComponent<Movement2D>();
+        base.Awake();
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = new Color(1, 1, 1, 0);
-
-        movement2D.MoveTo(Vector3.zero);
+        W_MoveTo(Vector3.zero);
     }
     public IEnumerator Pattern02_Meteor(float temp)
     {
         copy_Meteor_Line = Instantiate(Meteor_Line, new Vector3(temp, 0, 0), Quaternion.Euler(0, 0, 90));
         copy_Meteor_Traffic = Instantiate(Meteor_Traffic, new Vector3(temp, 3.5f, 0), Quaternion.identity);
 
-        u = copy_Meteor_Line.GetComponent<Meteor_Line>().Change_Color(1, 1, 1, 0.15f, false);
-        q = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Shake_Act(0.3f, 0.3f);
-        StartCoroutine(u);
-        yield return StartCoroutine(q);
+        Meteor_Line meteor_Line = null;
 
-        if (u != null)
-            StopCoroutine(u);
+        IEnumerator u = null;
+
+        if (copy_Meteor_Line.TryGetComponent(out Meteor_Line user1))
+        {
+            meteor_Line = user1;
+            u = meteor_Line.Change_Color(1, 1, 1, 0.15f, true);
+            meteor_Line.StartCoroutine(u);
+        }
+        if (copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic user2))
+        {
+            yield return user2.StartCoroutine(user2.Shake_Act(0.3f, 0.3f));
+        }
+        if (u != null && meteor_Line != null)
+            meteor_Line.StopCoroutine(u);
 
         Destroy(copy_Meteor_Traffic);
         Destroy(copy_Meteor_Line);
 
         spriteRenderer.color = new Color(1, 1, 1, 1);
-        movement2D.MoveTo(Vector3.down);
+        W_MoveTo(Vector3.down);
 
         yield return null;
-
     }
 
     public IEnumerator Meteor_Launch_Act(float temp, float R1, float R2, float R3)
@@ -55,26 +58,31 @@ public class Meteor_Effect : MonoBehaviour
         copy_Meteor_Line = Instantiate(Meteor_Line, new Vector3(0, temp, 0), Quaternion.identity);
         copy_Meteor_Traffic = Instantiate(Meteor_Traffic, new Vector3(8, temp, 0), Quaternion.identity);
 
-        u = copy_Meteor_Line.GetComponent<Meteor_Line>().Change_Color(R1, R2, R3, 0.25f, true);
-        h = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Change_Color();
-        q = copy_Meteor_Traffic.GetComponent<Meteor_Traffic>().Shake_Act(0.6f, 1);
+        Meteor_Line meteor_Line = null;
 
-        StartCoroutine(u);
+        IEnumerator u = null;
 
-        yield return StartCoroutine(h);
-        yield return StartCoroutine(q);
-
-        if (u != null)
-            StopCoroutine(u);
+        if (copy_Meteor_Line.TryGetComponent(out Meteor_Line user1))
+        {
+            meteor_Line = user1;
+            u = meteor_Line.Change_Color(R1, R2, R3, 0.25f, true);
+            meteor_Line.StartCoroutine(u);
+        }
+        if (copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic user2))
+        {
+            yield return user2.StartCoroutine(user2.Change_Color());
+            yield return user2.StartCoroutine(user2.Shake_Act(0.6f, 3));
+        }
+        if (u != null && meteor_Line != null)
+            meteor_Line.StopCoroutine(u);
 
         Destroy(copy_Meteor_Traffic);
         Destroy(copy_Meteor_Line);
         
         spriteRenderer.color = new Color(1, 1, 1, 1);
-        movement2D.MoveTo(Vector3.left);
+        W_MoveTo(Vector3.left);
         yield return null;
     }
-    // Update is called once per frame
 
     private void OnDestroy()
     {

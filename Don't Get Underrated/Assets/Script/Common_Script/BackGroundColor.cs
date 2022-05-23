@@ -34,8 +34,6 @@ public class BackGroundColor : MonoBehaviour
         percent = 0;
         while (percent < 1)
         {
-
-            Debug.Log(image.color);
             percent += Time.deltaTime / ratio;
             image.color = Color.Lerp(origin_color, change_color, percent);
             yield return null;

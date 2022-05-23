@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4417154464444090207}
   - component: {fileID: 5915873954208322338}
   - component: {fileID: 2516368607765559774}
-  - component: {fileID: 4914356049322991037}
+  - component: {fileID: 5335585762128728611}
   m_Layer: 0
   m_Name: Nachi_X
   m_TagString: Enemy
@@ -308,25 +308,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
---- !u!68 &4914356049322991037
-EdgeCollider2D:
+--- !u!114 &5335585762128728611
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4417154464444090204}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -0.5, y: 0}
-  - {x: 0.5, y: 0}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c485d9c29427c8041ab91ab5bea15e40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

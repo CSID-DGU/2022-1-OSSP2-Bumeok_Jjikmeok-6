@@ -60,10 +60,7 @@ public class Limit_Time : MonoBehaviour
 
 
                 if (ww != null)
-                {
-                    ww.GetComponent<Student_Gaze_Info>().Stop_Coroutine();
                     Destroy(ww);
-                }
 
                 if (rr != null)
                     Destroy(rr);

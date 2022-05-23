@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class DoPhan : Boss_Info
+public class Asura : Boss_Info
 {
     float[] Meteor_Move = new float[9] { 4, 3, 2, 1, 0, -1, -2, -3, -4 };  // 본인
 
@@ -46,8 +46,8 @@ public class DoPhan : Boss_Info
     new private void Awake()
     {
         base.Awake();
-        transform.position = new Vector3(0, -7, 0);
-        transform.localScale = new Vector3(8, 8, 0);
+        transform.position = new Vector3(0, -9, 0);
+        transform.localScale = new Vector3(1.2f, 1.2f, 0);
         WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, 0);
         backGroundColor = GameObject.FindGameObjectWithTag("Flash").GetComponent<BackGroundColor>();
         moveBackGround_1 = GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>();
@@ -76,8 +76,7 @@ public class DoPhan : Boss_Info
     }
     IEnumerator Hit()
     {
-        camera_shake = cameraShake.Shake_Act(.03f, .01f, 0.03f, false);
-        StartCoroutine(camera_shake);
+        cameraShake.StartCoroutine(cameraShake.Shake_Act(.03f, .01f, 0.03f, false));
 
         spriteRenderer.color = new Color(1, 1, 1, 0.25f);
         yield return new WaitForSeconds(0.07f);
@@ -110,13 +109,13 @@ public class DoPhan : Boss_Info
 
     IEnumerator Boss_Die_After()
     {
-        StartCoroutine(backGroundColor.Flash(Color.white, 0.2f, 5));
+        backGroundColor.StartCoroutine(backGroundColor.Flash(Color.white, 0.2f, 5));
         StartCoroutine(Shake_Act(0.2f, 0, 10, false));
-        StartCoroutine(moveBackGround_1.Decrease_Speed(1, 0));
-        yield return StartCoroutine(moveBackGround_2.Decrease_Speed(1, 0));
+        moveBackGround_1.StartCoroutine(moveBackGround_1.Decrease_Speed(1, 0));
+        yield return moveBackGround_2.StartCoroutine(moveBackGround_2.Decrease_Speed(1, 0));
         yield return YieldInstructionCache.WaitForSeconds(2f);
         
-        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), Color.black, 2));
+        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), Color.black, 2));
         backGroundColor.Set_BGColor(new Color(0, 0, 0, 1));
         Destroy(gameObject);
     }
@@ -127,7 +126,7 @@ public class DoPhan : Boss_Info
 
     IEnumerator Boss_Apprearance()
     {
-        StartCoroutine(Size_Change(transform.localScale, new Vector3(4, 4, 0), 5, OriginCurve));
+        StartCoroutine(Size_Change(transform.localScale, transform.localScale * 0.5f, 5, OriginCurve));
 
         transform.position = new Vector3(StaticData.DoPhan_Appearance_Move[0, 0], StaticData.DoPhan_Appearance_Move[0, 1], 0);
 
@@ -176,8 +175,8 @@ public class DoPhan : Boss_Info
             Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0)) * 0.85f, "anti_clock"),
             E / A * 1.2f, declineCurve, false));
 
-        StartCoroutine(moveBackGround_1.Increase_Speed(1, 9));
-        yield return StartCoroutine(moveBackGround_2.Increase_Speed(1, 9));
+        //moveBackGround_1.StartCoroutine(moveBackGround_1.Increase_Speed(1, 9));
+        //yield return moveBackGround_2.StartCoroutine(moveBackGround_2.Increase_Speed(1, 9));
 
 
         yield return StartCoroutine(Ready_To_Pattern());
@@ -196,8 +195,8 @@ public class DoPhan : Boss_Info
 
         Instantiate(Blink, transform.position, Quaternion.identity);
 
-        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 1));
-        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0), 1));
+        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 1));
+        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0), 1));
 
         Unbeatable = false;
 
@@ -211,7 +210,12 @@ public class DoPhan : Boss_Info
    
     IEnumerator Repeat_Phase()
     {
-        yield return StartCoroutine(Pattern01());
+        //yield return StartCoroutine(Pattern01());
+        //yield return StartCoroutine(Pattern02());
+        //yield return StartCoroutine(Pattern03());
+        yield return StartCoroutine(Pattern04());
+        //yield return StartCoroutine(Pattern05());
+        //yield return StartCoroutine(Pattern06());
         //while (true)
         //{
         //    Pattern_Num = Random.Range(0, 6);
@@ -249,25 +253,27 @@ public class DoPhan : Boss_Info
 
         yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(0, 0, 0, 1), 1, false));
 
-        Launch_Weapon_For_Move(Weapon[0], new Vector3(1, 0.5714f, 0), Quaternion.identity, 2.5f);
-        Launch_Weapon_For_Move(Weapon[0], new Vector3(1, -0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, -60)), 2.5f);
-        Launch_Weapon_For_Move(Weapon[0], new Vector3(-1, -0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, -180)), 2.5f);
-        Launch_Weapon_For_Move(Weapon[0], new Vector3(-1, 0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, 120)), 2.5f);
+
+        Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, 0.5714f, 0), Quaternion.identity, 8, false, transform.position);
+        Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, -0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, -60)), 8, false, transform.position);
+        Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(-1, 0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, -180)), 8, false, transform.position);
+        Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(-1, -0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, 120)), 8, false, transform.position);
 
         yield return YieldInstructionCache.WaitForSeconds(1f);
 
         change_boss_color = Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.25f, true);
         StartCoroutine(change_boss_color);
-        StartCoroutine(cameraShake.Shake_Act(0.3f, 0.3f, 0.5f, false));
+        cameraShake.StartCoroutine(cameraShake.Shake_Act(0.3f, 0.3f, 0.5f, false));
 
-        Launch_Weapon_For_Still(Weapon[1], new Vector3(0, 3, 0), Quaternion.Euler(new Vector3(0, 0, -9)), 2.5f);
-        Launch_Weapon_For_Still(Weapon[1], new Vector3(0, -4, 0), Quaternion.Euler(new Vector3(0, 0, -9)), 2.5f);
-        Launch_Weapon_For_Still(Weapon[2], new Vector3(-8, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)), 2.5f);
-        Launch_Weapon_For_Still(Weapon[2], new Vector3(6.6f, 0, 0), Quaternion.Euler(new Vector3(0, 0, -115)), 2.5f); 
+        Launch_Weapon_For_Move_Blink(Weapon[1], Vector3.zero, Quaternion.Euler(new Vector3(0, 0, -9)), 0, false, new Vector3(0, 3, 0));
+        Launch_Weapon_For_Move_Blink(Weapon[1], Vector3.zero, Quaternion.Euler(new Vector3(0, 0, -9)), 0, false, new Vector3(0, -4, 0));
+        Launch_Weapon_For_Move_Blink(Weapon[2], Vector3.zero, Quaternion.Euler(new Vector3(0, 0, -115)), 0, false, new Vector3(-8, 0, 0));
+        Launch_Weapon_For_Move_Blink(Weapon[2], Vector3.zero, Quaternion.Euler(new Vector3(0, 0, -115)), 0, false, new Vector3(6.6f, 0, 0));
+
 
         StopCoroutine(change_boss_color);
 
-        yield return StartCoroutine(backGroundColor.Thunder(5, 0.5f));
+        yield return backGroundColor.StartCoroutine(backGroundColor.Thunder(5, 0.5f));
 
         backGroundColor.Origin();
 
@@ -279,15 +285,18 @@ public class DoPhan : Boss_Info
     {
         GameObject c = Instantiate(Charge_Beam, transform.position + new Vector3(-1.22f, 0, 0), Quaternion.identity);
 
-        Unbeatable = true;
+        if (c.TryGetComponent(out Charge_Beam_Motion user1))
+        {
+            Unbeatable = true;
 
-        charge_beam = c.GetComponent<Charge_Beam_Motion>().Change_Size();
-        StartCoroutine(charge_beam);
+            charge_beam = user1.Change_Size();
+            user1.StartCoroutine(charge_beam);
 
-        yield return StartCoroutine(Warning("어디 한 번 지혜를 발휘해봐라", .5f));
+            yield return StartCoroutine(Warning("어디 한 번 지혜를 발휘해봐라", .5f));
 
-        StopCoroutine(charge_beam);
-        Destroy(c);
+            user1.StopCoroutine(charge_beam);
+            Destroy(c);
+        }
 
         Unbeatable = false;
 
@@ -314,7 +323,7 @@ public class DoPhan : Boss_Info
                 float param = 0.5714f;
                 for (int j = 0; j < 7; j++)
                 {
-                    Launch_Weapon_For_Move(Weapon[3], new Vector3(-1, param, 0), Quaternion.identity, 1);
+                    Launch_Weapon_For_Move_Blink(Weapon[3], new Vector3(-1, param, 0), Quaternion.identity, 80, false, transform.position);
                     param -= 0.1904f;
                 }
                 yield return YieldInstructionCache.WaitForSeconds(.1f);
@@ -332,7 +341,7 @@ public class DoPhan : Boss_Info
             float param = 0.5714f;
             for (int j = 0; j < 7; j++)
             {
-                Launch_Weapon_For_Move(Weapon[Pattern2_Meteor_Spawn[kuku, j]], new Vector3(-1, param, 0), Quaternion.identity, 1);
+                Launch_Weapon_For_Move_Blink(Weapon[Pattern2_Meteor_Spawn[kuku, j]], new Vector3(-1, param, 0), Quaternion.identity, 80, false, transform.position);
                 param -= 0.1904f;
             }
             yield return YieldInstructionCache.WaitForSeconds(.1f);
@@ -346,7 +355,10 @@ public class DoPhan : Boss_Info
         {
             int Rand = Random.Range(4, 9);
             GameObject e = Instantiate(Meteor, new Vector3(Rand, 3, 0), Quaternion.identity);
-            StartCoroutine(e.GetComponent<Meteor_Effect>().Pattern02_Meteor(Rand));
+            if (e.TryGetComponent(out Meteor_Effect user1))
+                user1.StartCoroutine(user1.Pattern02_Meteor(Rand));
+            else
+                Destroy(e);
             yield return YieldInstructionCache.WaitForSeconds(0.2f);
         }
         yield return null;
@@ -395,7 +407,7 @@ public class DoPhan : Boss_Info
                     yield return StartCoroutine(meteor_launch);
                     break;
             }
-            yield return YieldInstructionCache.WaitForSeconds(3f);
+            yield return YieldInstructionCache.WaitForSeconds(2f);
         }
         if (meteor_launch != null)
             StopCoroutine(meteor_launch);
@@ -405,11 +417,15 @@ public class DoPhan : Boss_Info
 
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
+        GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
 
         foreach (var e in meteor)
             Destroy(e);
 
         foreach (var e in enemy)
+            Destroy(e);
+
+        foreach (var e in weapon_devil)
             Destroy(e);
 
         Unbeatable = false;
@@ -438,6 +454,7 @@ public class DoPhan : Boss_Info
 
         Unbeatable = false;
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, transform.position.y, 0), 1, declineCurve));
+        StartCoroutine(Shake_Act(0.3f, 0, 2, false));
         
         yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어에게 무차별 폭격 받는 곳
         repeat_phase = Repeat_Phase();
@@ -461,8 +478,13 @@ public class DoPhan : Boss_Info
             case 1:
                 for (int i = 0; i < Meteor_Num; i++)
                 { 
+
                     GameObject e = Instantiate(Meteor, new Vector3(8, Meteor_Move[i], 0), Quaternion.identity);
-                    StartCoroutine(e.GetComponent<Meteor_Effect>().Meteor_Launch_Act(Meteor_Move[i], R1, R2, R3));
+                    if (e.TryGetComponent(out Meteor_Effect user1))
+                        user1.StartCoroutine(user1.Meteor_Launch_Act(Meteor_Move[i], R1, R2, R3));
+                    else
+                        Destroy(e);
+                    yield return YieldInstructionCache.WaitForSeconds(0.2f);
                 }
                 yield return YieldInstructionCache.WaitForSeconds(2f);
                 break;
@@ -474,7 +496,10 @@ public class DoPhan : Boss_Info
                     for (int j = 3 * i; j < 3 * (i + 1); j++)
                     {
                         GameObject e = Instantiate(Meteor, new Vector3(8, Meteor_Move[j], 0), Quaternion.identity);
-                        StartCoroutine(e.GetComponent<Meteor_Effect>().Meteor_Launch_Act(Meteor_Move[j], R1, R2, R3));
+                        if (e.TryGetComponent(out Meteor_Effect user1))
+                            user1.StartCoroutine(user1.Meteor_Launch_Act(Meteor_Move[j], R1, R2, R3));
+                        else
+                            Destroy(e);
                     }
                     yield return YieldInstructionCache.WaitForSeconds(.5f);
                 }
@@ -484,7 +509,10 @@ public class DoPhan : Boss_Info
                 for (int i = 0; i < 8; i++)
                 {
                     GameObject e = Instantiate(Meteor, new Vector3(8, Meteor_Move[i], 0), Quaternion.identity);
-                    StartCoroutine(e.GetComponent<Meteor_Effect>().Meteor_Launch_Act(Meteor_Move[i], R1, R2, R3));
+                    if (e.TryGetComponent(out Meteor_Effect user1))
+                        user1.StartCoroutine(user1.Meteor_Launch_Act(Meteor_Move[i], R1, R2, R3));
+                    else
+                        Destroy(e);
                 }
                 break;
         }
@@ -493,8 +521,8 @@ public class DoPhan : Boss_Info
 
     IEnumerator Pattern06()
     {
-        StartCoroutine(moveBackGround_1.Increase_Speed(0.3f, 16));
-        yield return StartCoroutine(moveBackGround_2.Increase_Speed(0.3f, 16));
+        moveBackGround_1.StartCoroutine(moveBackGround_1.Increase_Speed(0.3f, 16));
+        yield return moveBackGround_2.StartCoroutine(moveBackGround_2.Increase_Speed(0.3f, 16));
         yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.125f, false));
 
         transform.position = new Vector3(7, 0, 0);
@@ -594,7 +622,6 @@ public class DoPhan : Boss_Info
             yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(Boss_Move_float[i, 0], Boss_Move_float[i, 1], Boss_Move_float[i, 2]), .25f, declineCurve));
         }
     }
-
     private void OnDestroy()
     {
         StopAllCoroutines();

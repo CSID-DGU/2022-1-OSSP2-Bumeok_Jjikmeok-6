@@ -19,8 +19,8 @@ public class DynaBlade : Enemy_Info
         Minus_Start = new Dictionary<int, Vector3>();
         for (int i = 0; i < 6; i++)
         {
-            Plus_Start.Add(0, new Vector3(bangmeon[i, 0], bangmeon[i, 1], 0));
-            Minus_Start.Add(0, new Vector3(-bangmeon[i, 0], bangmeon[i, 1], 0));
+            Plus_Start.Add(i, new Vector3(bangmeon[i, 0], bangmeon[i, 1], 0));
+            Minus_Start.Add(i, new Vector3(-bangmeon[i, 0], bangmeon[i, 1], 0));
         }
     }
     private void Start()
@@ -31,17 +31,9 @@ public class DynaBlade : Enemy_Info
         else
             StartCoroutine(Move(Plus_Start));
     }
-   
-    void Camera_Origin()
-    {
-        cameraShake.mainCamera.transform.position = new Vector3(0, 0, -10);
-        cameraShake.mainCamera.transform.rotation = Quaternion.identity;
-        cameraShake.mainCamera.transform.localScale = new Vector3(1, 1, 1);
-    }
-
     IEnumerator Move(Dictionary<int, Vector3> U) // 루트3 / 2 (0.85)로 끝맺음 짓는게 좋다.
     {
-        Camera_Origin();
+        cameraShake.Origin_Camera();
         yield return null;
 
         IEnumerator size = Size_Change_Infinite(1.6f);
@@ -82,7 +74,7 @@ public class DynaBlade : Enemy_Info
         StopCoroutine(camera_shake);
         StopCoroutine(size);
 
-        Camera_Origin();
+        cameraShake.Origin_Camera();
         GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().Is_Next_Pattern = true;
         yield return null;
         Destroy(gameObject);

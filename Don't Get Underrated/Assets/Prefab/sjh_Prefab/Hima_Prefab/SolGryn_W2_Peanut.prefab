@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 5042893871676294655}
   - component: {fileID: 6433948227843900825}
   - component: {fileID: 1158394165772124150}
-  - component: {fileID: 9062908835663455839}
   m_Layer: 10
   m_Name: SolGryn_W2_Peanut
   m_TagString: Weapon_Devil
@@ -148,33 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf0ff1255216d040ba90b968549498d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weapon: []
-  declineCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  OriginCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  inclineCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  De_In_Curve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  When_Dead_Effect: {fileID: 0}
-  stageData: {fileID: 0}
+  Explosion: {fileID: 0}
   distanceToGround: 0.2
   deathParticle: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
 --- !u!114 &5042893871676294655
@@ -217,16 +190,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
---- !u!114 &9062908835663455839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 877967428950669577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Explosion: {fileID: 0}

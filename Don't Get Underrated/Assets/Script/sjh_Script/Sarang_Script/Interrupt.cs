@@ -47,6 +47,7 @@ public class Interrupt : Enemy_Info
     }
     public IEnumerator Trigger_Lazor(Vector3 tempPosition) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
     {
+        Stop_Move();
         u = Instantiate(Exclamation, transform.position, Quaternion.identity);
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
         Destroy(u);

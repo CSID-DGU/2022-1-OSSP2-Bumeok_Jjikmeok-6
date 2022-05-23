@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet_Move : MonoBehaviour {
+public class Bullet_Move : Weapon_Devil {
 
     public float speed = 10f;
+
+    private new void Awake()
+    {
+        base.Awake();
+    }
 
     private void Start()
     {

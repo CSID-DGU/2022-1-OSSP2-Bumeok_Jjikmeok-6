@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 614992313138681527}
   - component: {fileID: 3896236207010289992}
   - component: {fileID: -8726380027380259460}
-  - component: {fileID: 2748942466960127501}
   - component: {fileID: 4324476858576521594}
   m_Layer: 0
   m_Name: Boss_W5_Bullet
@@ -98,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a0f60e2e3448304ba49e7dadd5a0cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Explosion: {fileID: 0}
   speed: 10
 --- !u!58 &-8726380027380259460
 CircleCollider2D:
@@ -115,19 +115,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
---- !u!114 &2748942466960127501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2832031252176686515}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
 --- !u!114 &4324476858576521594
 MonoBehaviour:
   m_ObjectHideFlags: 0

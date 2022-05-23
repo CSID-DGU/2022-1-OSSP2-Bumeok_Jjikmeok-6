@@ -28,9 +28,8 @@ public class FinalStage_1_Total : MonoBehaviour
     {
         Boss.transform.position = new Vector3(0, -7, 0);
         BossHPSliderPrefab.SetActive(true);
-        BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<DoPhan>());
+        BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<Asura>());
         BossHPSliderLeft.SetActive(true);
-        Boss.GetComponent<DoPhan>().Phase_Start();
-
+        Boss.GetComponent<Asura>().Phase_Start();
     }
 }

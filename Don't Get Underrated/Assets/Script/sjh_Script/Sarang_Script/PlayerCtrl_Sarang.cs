@@ -77,7 +77,6 @@ public class PlayerCtrl_Sarang : Player_Info
         if (sliderClone != null)
             Destroy(sliderClone);
     }
-
     private new void Awake()
     {
         base.Awake();
@@ -105,7 +104,7 @@ public class PlayerCtrl_Sarang : Player_Info
     IEnumerator First_Phase()
     {
         while (true)
-        {    
+        {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, StudentLayerMask);
@@ -119,7 +118,10 @@ public class PlayerCtrl_Sarang : Player_Info
                     FixedTarget = true;
                 }
                 if (Input.GetMouseButtonDown(0))
-                    yield return StartCoroutine(Second_Phase());
+                {
+                    StartCoroutine(Second_Phase());
+                    yield break;
+                }
             }
             else
             {
@@ -127,7 +129,7 @@ public class PlayerCtrl_Sarang : Player_Info
                 Targetting_Object.SetActive(false);
                 FixedTarget = false;
             }
-                
+
             yield return null;
         }
     }
@@ -154,7 +156,7 @@ public class PlayerCtrl_Sarang : Player_Info
                     Targetting_Object.GetComponent<Targetting_Effect>().Init();
                     Targetting_Object.SetActive(false);
                     FixedTarget = false;
-                 
+
                     if (!FixedSlider)
                     {
                         Student_Gaze.transform.position = Student_Clone.transform.position + new Vector3(0, 2, 0);
@@ -172,7 +174,7 @@ public class PlayerCtrl_Sarang : Player_Info
 
                     if (temp == 0)
                     {
-                        yield return StartCoroutine(Third_Phase(Student_Clone));
+                        StartCoroutine(Third_Phase(Student_Clone));
                         yield break;
                     }
                     else if (temp == 1)
@@ -187,14 +189,14 @@ public class PlayerCtrl_Sarang : Player_Info
                     }
                     else if (temp == 3)
                         Main_3_Score += 1;
-                       
+
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
                     Init_Student();
                     Student_Clone = null;
                     All_Start();
-                 
+
                     yield return YieldInstructionCache.WaitForSeconds(0.2f);
                     yield break;
                 }
@@ -209,7 +211,7 @@ public class PlayerCtrl_Sarang : Player_Info
                 yield break;
             }
             yield return null;
-            
+
         }
     }
 
@@ -221,7 +223,7 @@ public class PlayerCtrl_Sarang : Player_Info
     {
         StopAllCoroutines();
     }
-    
+
     IEnumerator Third_Phase(GameObject targetStudent_t)
     {
         All_Stop();
@@ -229,7 +231,10 @@ public class PlayerCtrl_Sarang : Player_Info
         IEnumerator lazor_in_second_phase = Lazor_In_Second_Phase(targetStudent_t);
 
         StartCoroutine(lazor_in_second_phase);
-        yield return StartCoroutine(Student_Gaze.GetComponent<Student_Gaze_Info>().Competition(targetStudent_t, Student_Power));
+
+        if (Student_Gaze.TryGetComponent(out Student_Gaze_Info user))
+            yield return user.StartCoroutine(user.Competition(targetStudent_t, Student_Power));
+
         StopCoroutine(lazor_in_second_phase);
 
         Init_Student();
@@ -258,7 +263,7 @@ public class PlayerCtrl_Sarang : Player_Info
     }
     IEnumerator Lazor_In_Second_Phase(GameObject targetStudent_t)
     {
-        while(true)
+        while (true)
         {
             if (targetStudent_t != null)
                 Lazor_In_Second_Phase(Weapon[0], targetStudent_t.transform.position, transform.position);
@@ -270,7 +275,7 @@ public class PlayerCtrl_Sarang : Player_Info
     {
         sliderClone = Instantiate(Move_Slider, transform.position, Quaternion.identity);
 
-        sliderClone.transform.SetParent(canvasTransform); 
+        sliderClone.transform.SetParent(canvasTransform);
         sliderClone.transform.position = transform.position + new Vector3(0, 2, 0);
         sliderClone.transform.localScale = Vector3.one;
 
@@ -284,6 +289,7 @@ public class PlayerCtrl_Sarang : Player_Info
         while (true)
         {
             yield return null;
+
             move_Gaze_Info.HP_Down();
             if (move_Gaze_Info.Get_HP() >= 1)
                 break;
@@ -293,7 +299,6 @@ public class PlayerCtrl_Sarang : Player_Info
                 Destroy(sliderClone);
                 All_Start();
                 yield break;
-
             }
         }
 
@@ -330,8 +335,6 @@ public class PlayerCtrl_Sarang : Player_Info
                 Dash_Able = false;
                 IsOneClick = false;
 
-                if (first_phase != null)
-                    StopCoroutine(first_phase);
                 StartCoroutine(Move_Delay());
             }
         }
@@ -395,7 +398,7 @@ public class PlayerCtrl_Sarang : Player_Info
         GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().When_Walk_Floor();
 
         IEnumerator change_color = backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(0, 0, 0, 1), 2);
-        StartCoroutine(change_color);
+        backGroundColor.StartCoroutine(change_color);
 
         if (CHK == "up")
         {
@@ -409,16 +412,16 @@ public class PlayerCtrl_Sarang : Player_Info
             stageData.LimitMin = stageData.LimitMin + new Vector2(0, -40);
             yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-6, -2, 0), 2, OriginCurve));
         }
-           
-        StopCoroutine(change_color);
+
+        backGroundColor.StopCoroutine(change_color);
 
         yield return YieldInstructionCache.WaitForSeconds(1f);
 
         transform.position = new Vector3(Change_X, -2.5f + 40 * (Floor_Player_Place - 1), 0);
         GameObject.Find("Main Camera").GetComponent<Camera_Trace>().Final_Walk_Floor(Floor_Player_Place);
         GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().Final_Walk_Floor();
-        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0.5f), 0.5f));
-        yield return StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0), 0.2f));
+        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0.5f), 0.5f));
+        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 0), 0.2f));
 
         animator.SetBool("IsWalk", false);
 
@@ -449,7 +452,7 @@ public class PlayerCtrl_Sarang : Player_Info
     }
     public void Fever_Time()
     {
-        StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.2f, 5));
+        backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.2f, 5));
         Fever_Particle_Clone = Instantiate(Fever_Particle, transform.position - Vector3.down * 1.5f, Quaternion.Euler(-90, 0, 0));
     }
 

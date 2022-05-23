@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4300123804911615986}
   - component: {fileID: 3402004394259985216}
-  - component: {fileID: -1550931899359126748}
   - component: {fileID: -824944830412944213}
+  - component: {fileID: -1550931899359126748}
+  - component: {fileID: 3499416095870493202}
   - component: {fileID: 7785089156977254898}
+  - component: {fileID: -3906738149393121906}
   m_Layer: 0
   m_Name: Boss_W1_Lightning(3)
   m_TagString: Weapon_Devil
@@ -85,6 +87,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &-824944830412944213
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422771892401474626}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9d2b04450ebeba149b12aadf4d88dd79, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!61 &-1550931899359126748
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -111,25 +132,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.162, y: 0.98}
   m_EdgeRadius: 0
---- !u!95 &-824944830412944213
-Animator:
-  serializedVersion: 3
+--- !u!114 &3499416095870493202
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1422771892401474626}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9d2b04450ebeba149b12aadf4d88dd79, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07029b59c310ce148a311ab8ad8d07e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 0
+  moveDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &7785089156977254898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,3 +159,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 0}
+--- !u!114 &-3906738149393121906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422771892401474626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1bb6da1af5abfd40a72b89011be5962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Destroy_Time: 2.5

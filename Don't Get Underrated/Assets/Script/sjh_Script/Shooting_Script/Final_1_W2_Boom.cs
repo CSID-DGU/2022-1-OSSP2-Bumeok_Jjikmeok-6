@@ -9,8 +9,9 @@ public class Final_1_W2_Boom : Weapon_Player
 
     Animator animator;
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
         animator = GetComponent<Animator>();
     }
     void Start()
@@ -29,5 +30,30 @@ public class Final_1_W2_Boom : Weapon_Player
             yield return null;
         }
         animator.SetTrigger("onBoom");
+    }
+    public void OnBoom() // 최종 스테이지 (1) - 폭탄의 경우
+    {
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] devil_weapon = GameObject.FindGameObjectsWithTag("Weapon_Devil");
+        GameObject boss = GameObject.FindGameObjectWithTag("Boss");
+        GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
+
+        foreach (var e in meteor)
+        {
+            Destroy(e);
+        }
+        foreach (var e in enemy)
+        {
+            e.GetComponent<F1_Homming_Enemy>().OnDie();
+        }
+        foreach (var e in devil_weapon)
+        {
+            e.GetComponent<Weapon_Devil>().Weak_Weapon();
+        }
+        if (boss != null)
+        {
+            boss.GetComponent<Asura>().TakeDamage(30.0f);
+        }
+        Destroy(gameObject);
     }
 }

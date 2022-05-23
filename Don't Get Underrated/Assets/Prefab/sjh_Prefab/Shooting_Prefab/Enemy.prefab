@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1007418396252536624}
   - component: {fileID: 1007418396252536625}
   - component: {fileID: 1237595746762495752}
-  - component: {fileID: 1102636073480303114}
   - component: {fileID: -1391084154194980928}
   - component: {fileID: 107024717335685559}
   - component: {fileID: 1646967279181538332}
@@ -103,51 +102,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.4
---- !u!114 &1102636073480303114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1007418396252536626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fda9542d3ec52b142a814e996d3a2a79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Weapon: []
-  declineCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  OriginCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  inclineCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  De_In_Curve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  When_Dead_Effect: {fileID: 0}
-  stageData: {fileID: 0}
-  maxHP: 7
-  DisAppear_Effect_1: {fileID: 0}
-  DisAppear_Effect_2: {fileID: 0}
-  WarningText: {fileID: 0}
-  speed: 15
-  rotateSpeed: 200
 --- !u!114 &-1391084154194980928
 MonoBehaviour:
   m_ObjectHideFlags: 0
