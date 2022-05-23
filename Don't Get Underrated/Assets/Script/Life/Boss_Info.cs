@@ -50,14 +50,8 @@ public class Boss_Info : Life
 
     public void OnTriggerEnter2D(Collider2D collision) // ¾ê¸¸
     {
-        if (collision.CompareTag("Player"))
-        {
-            if (collision.TryGetComponent(out PlayerCtrl_Tengai user1))
-                user1.TakeDamage(1);
-               
-            if (collision.TryGetComponent(out HimaController user2))
-                user2.GetComponent<HimaController>().TakeDamage(1);
-        }
+        if (collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info user1))
+            user1.TakeDamage(1);
     }
 
     protected IEnumerator Warning(string warning_message, float time_ratio)

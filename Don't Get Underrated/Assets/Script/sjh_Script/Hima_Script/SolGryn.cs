@@ -166,8 +166,8 @@ public class SolGryn : Boss_Info
 
         yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(-4, 4, 0),
             Get_Center_Vector(transform.position, new Vector3(-4, 4, 0), Vector3.Distance(transform.position, new Vector3(-4, 4, 0)) * 0.85f, "anti_clock"), 4, OriginCurve, false));
-        //yield return StartCoroutine(Pattern01());
-        //yield return StartCoroutine(Pattern02());
+       // yield return StartCoroutine(Pattern01());
+        yield return StartCoroutine(Pattern02());
         yield return StartCoroutine(Pattern03());
         yield return StartCoroutine(Pattern04());
         yield return StartCoroutine(Pattern05());
@@ -211,14 +211,15 @@ public class SolGryn : Boss_Info
         if (TryGetComponent(out TrailCollisions user1))
             user1.Wow();
         for (int i = 0; i < 3; i++)
-            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(u1[i, 0], u1[i, 1], 0), 0.2f, declineCurve));
+            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(u1[i, 0], u1[i, 1], 0), 0.1f, declineCurve));
 
         transform.position = new Vector3(4, 2, 0);
         yield return StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 0.5f, 0, DisAppear_Effect_1));
 
         for (int i = 0; i < 3; i++)
-            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(u2[i, 0], u2[i, 1], 0), 0.2f, declineCurve));
+            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(u2[i, 0], u2[i, 1], 0), 0.1f, declineCurve));
 
+        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 0), 0.4f, 0, DisAppear_Effect_1));
         yield return StartCoroutine(Nachi_Color_Change(Color.red, Color.blue, 0.4f));
 
         GameObject nachi_x_g_1 = Instantiate(Weapon[6], new Vector3(6.3f, 1.87f, 0), Quaternion.identity);
@@ -230,6 +231,7 @@ public class SolGryn : Boss_Info
 
         trailRenderer.enabled = false;
 
+        SpriteRenderer_Color = Color.white;
         transform.position = new Vector3(7, 4, 0);
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 2f, inclineCurve));
         if (GameObject.Find("TrailCollider"))
@@ -422,20 +424,27 @@ public class SolGryn : Boss_Info
 
     IEnumerator Pattern05()
     {
+        IEnumerator camera_shake = cameraShake.Shake_Act(0.05f, 0.05f, 2f, true);
+
         for (int i = 11; i < 14; i++)
         {
             GameObject W1 = Instantiate(Weapon[i], Vector3.zero, Quaternion.identity);
+            if (i == 13)
+            {
+                backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 0.7f), 0.3f, 5));
+                cameraShake.StartCoroutine(camera_shake);
+            }
             yield return YieldInstructionCache.WaitForSeconds(1f);
             Destroy(W1);
         }
-        StartCoroutine(backGroundColor.Flash(Color.white, 0.3f, 5));
-        yield return StartCoroutine(cameraShake.Shake_Act(0.1f, 0.1f, 2f, false));
+        
 
         for (int i = 0; i < 3; i++)
         {
             Instantiate(Weapon[8], new Vector3(0, 2.5f - (2.5f * i), 0), Quaternion.Euler(-90, 0, 0));
             yield return YieldInstructionCache.WaitForSeconds(0.5f);
         }
+        cameraShake.StopCoroutine(camera_shake);
 
         Is_Next_Pattern = false;
 
@@ -452,8 +461,14 @@ public class SolGryn : Boss_Info
     IEnumerator Pattern06()
     {
         Is_Next_Pattern = false;
-        GameObject e = Instantiate(Weapon[10], Vector3.zero, Quaternion.identity);
-        e.GetComponent<Monster>().Start_F(new Vector3(-7, 4, 0), himaController.transform.position);
+       
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject e = Instantiate(Weapon[10], Vector3.zero, Quaternion.identity);
+            e.GetComponent<Monster>().Start_F(new Vector3(bangmeon[0, i] * 7, bangmeon[1, i] * 4, 0), Vector3.zero);
+            yield return YieldInstructionCache.WaitForSeconds(1.5f);
+        }
+      
         while (!Is_Next_Pattern)
             yield return null;
         Is_Next_Pattern = false;

@@ -60,12 +60,22 @@ public class Life : MonoBehaviour, Life_Of_Basic
         get { return spriteRenderer.color; }
         set { spriteRenderer.color = value; }
     }
-    public virtual void TakeDamage(float damage) { }
+    public virtual void TakeDamage(float damage) 
+    {
 
-    public virtual void TakeDamage(int damage) { }
+    }
+
+    public virtual void TakeDamage(int damage) 
+    {
+
+    }
     public virtual void OnDie()
     {
-        Destroy(gameObject);
+        if (When_Dead_Effect != null)
+        {
+            Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
     }
     protected IEnumerator Circle_Move(int Degree, int is_ClockWise_And_Speed, float Start_Degree, float x, float y, float start_x, float start_y, float ratio)
     {
@@ -159,29 +169,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
             yield return null;
         }
     }
-    protected IEnumerator Position_Slerp(Vector3 start_location, Vector3 last_location, float time_ratio, float decline_ratio, string dir, AnimationCurve curve)
-    {
-        float percent = 0;
-        int dir_int;
-        if (dir == "down")
-            dir_int = -1;
-        else
-            dir_int = 1;
-        while (percent < 1)
-        {
-            percent += Time.deltaTime / time_ratio;
-            Vector3 center = (start_location + last_location) * 0.5f;
-            center -= new Vector3(0, dir_int * decline_ratio, 0);
-            Vector3 riseRelCenter = start_location - center;
-            Vector3 setRelCenter = last_location - center;
-
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent));
-
-            transform.position += center;
-            yield return null;
-        }
-        yield return null;
-    }
     protected float Get_Slerp_Distance(Vector3 Start, Vector3 End, Vector3 Center)
     {
         Vector3 Center_to_Start = Start - Center;
@@ -239,19 +226,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
         }
         yield return null;
     }
-
-    protected IEnumerator Size_Change(Vector3 Origin_Size, Vector3 Change_Size, float time_persist, AnimationCurve curve)
-    {
-        percent = 0;
-        while(percent < 1)
-        {
-            percent += Time.deltaTime / time_persist;
-            transform.localScale = Vector3.Lerp(Origin_Size, Change_Size, curve.Evaluate(percent));
-            yield return null;
-        }
-        yield break;
-    }
-
     protected IEnumerator Size_Change_Infinite(float delta_ratio)
     {
         while (true)

@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - Playerrr
   - Boss
   - EnemyAndBoss
   - Devil_Weapon
@@ -18,14 +17,14 @@ TagManager:
   - Student
   - Flash
   - Meteor
-  - Meteor_Line
-  - Meteor_Traffic
-  - SolGryn
   - Ground
   - HeartSlider
-  - StudentSlider
   - LimitTimeText
   - Weapon_Devil
+  - StudentSlider
+  - Weapon_Player
+  - PowerItem
+  - BoomItem
   layers:
   - Default
   - TransparentFX

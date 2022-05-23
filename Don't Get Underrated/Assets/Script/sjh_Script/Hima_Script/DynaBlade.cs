@@ -51,7 +51,7 @@ public class DynaBlade : Enemy_Info
         float W = Get_Slerp_Distance(U[4], U[5], Get_Center_Vector(U[4], U[5], Vector3.Distance(U[4], U[5]) * 0.85f, "anti_clock"));
 
         camera_shake = cameraShake.Shake_Act(.05f, .24f, 1, true);
-        StartCoroutine(camera_shake);
+        cameraShake.StartCoroutine(camera_shake);
 
         yield return StartCoroutine(Position_Slerp_Temp(U[0], U[1], Get_Center_Vector(U[0], U[1], Vector3.Distance(U[0], U[1]) * 0.85f, "anti_clock"), 15f, OriginCurve, true));
 
@@ -70,8 +70,8 @@ public class DynaBlade : Enemy_Info
         yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 270), Quaternion.Euler(0, 0, 360), 13));
 
         yield return StartCoroutine(Position_Slerp_Temp(U[4], U[5], Get_Center_Vector(U[4], U[5], Vector3.Distance(U[4], U[5]) * 0.85f, "anti_clock"), W/A * 20f, OriginCurve, true));
-       
-        StopCoroutine(camera_shake);
+
+        cameraShake.StopCoroutine(camera_shake);
         StopCoroutine(size);
 
         cameraShake.Origin_Camera();

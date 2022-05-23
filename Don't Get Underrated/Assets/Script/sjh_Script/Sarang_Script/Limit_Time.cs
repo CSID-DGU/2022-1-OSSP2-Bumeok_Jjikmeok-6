@@ -46,14 +46,14 @@ public class Limit_Time : MonoBehaviour
                 if (flash_on != null)
                     StopCoroutine(flash_on);
                 flash_on = flashOn.Change_Color_Return_To_Origin(new Color(1, 0, 0, 0), new Color(1, 0, 0, 0.5f), .5f, false);
-                StartCoroutine(flash_on);
+                flashOn.StartCoroutine(flash_on);
             }
             if (Option_Limit_Time <= 0)
             {
                 GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Stop_Coroutine();
                 GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Destroy_sliderClone();
 
-                GameObject[] e = GameObject.FindGameObjectsWithTag("Interrupt");
+                GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
                 GameObject[] q = GameObject.FindGameObjectsWithTag("Student");
                 GameObject ww = GameObject.Find("Student_Gaze");
                 GameObject rr = GameObject.Find("Targetting_Object");
@@ -81,7 +81,7 @@ public class Limit_Time : MonoBehaviour
                 }
 
                 yield return YieldInstructionCache.WaitForSeconds(3f);
-                Instantiate(Time_Over_Text, new Vector3(GameObject.FindGameObjectWithTag("Player").transform.position.x, 0, 0), Quaternion.identity);
+                Instantiate(Time_Over_Text, new Vector3(GameObject.FindGameObjectWithTag("Player").transform.position.x, GameObject.FindGameObjectWithTag("Player").transform.position.y + 2, 0), Quaternion.identity);
                 yield break;
                 // ¾À ÀüÈ¯ 
             }
@@ -101,7 +101,6 @@ public class Limit_Time : MonoBehaviour
         descent_time = Descent_Time();
         StartCoroutine(descent_time);
     }
-
 
     void Update()
     {

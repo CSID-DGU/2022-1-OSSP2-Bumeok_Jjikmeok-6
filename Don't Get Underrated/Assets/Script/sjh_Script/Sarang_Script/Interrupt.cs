@@ -16,7 +16,6 @@ public class Interrupt : Enemy_Info
     [SerializeField]
     GameObject Exclamation;
 
-
     [SerializeField]
     bool followPlayer;
 
@@ -35,7 +34,7 @@ public class Interrupt : Enemy_Info
     IEnumerator move;
     IEnumerator wander_routine;
 
-    GameObject u;
+    GameObject Exclamation_Copy;
 
     private new void Awake()
     {
@@ -48,23 +47,22 @@ public class Interrupt : Enemy_Info
     public IEnumerator Trigger_Lazor(Vector3 tempPosition) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
     {
         Stop_Move();
-        u = Instantiate(Exclamation, transform.position, Quaternion.identity);
+        Exclamation_Copy = Instantiate(Exclamation, transform.position, Quaternion.identity);
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
-        Destroy(u);
+        Destroy(Exclamation_Copy);
 
         while (true)
         {
-            Weapon[0].GetComponent<Movement2D>().MoveTo(new Vector3(tempPosition.x - transform.position.x,
-                         tempPosition.y - transform.position.y, 0));
-            Instantiate(Weapon[0], transform.position, Quaternion.identity);
+            Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(tempPosition.x - transform.position.x,
+                         tempPosition.y - transform.position.y, 0), Quaternion.identity, 9, false, transform.position);
             yield return null;
         }
     }
 
     public void Stop_Coroutine()
     {
-        if (u != null)
-            Destroy(u);
+        if (Exclamation_Copy != null)
+            Destroy(Exclamation_Copy);
         StopAllCoroutines();
     }
 
@@ -196,7 +194,6 @@ public class Interrupt : Enemy_Info
     }
     private void OnDestroy()
     {
-
         StopAllCoroutines();
     }
 

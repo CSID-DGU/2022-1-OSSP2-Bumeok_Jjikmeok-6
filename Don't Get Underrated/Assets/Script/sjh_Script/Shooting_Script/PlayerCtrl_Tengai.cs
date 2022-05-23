@@ -64,7 +64,6 @@ public class PlayerCtrl_Tengai : Player_Info
         is_Power_Up = false;
         Final_Score = 0;
         emit_Motion = null;
-        //TalkPanel.SetActive(true);
 
         PlayerScore.text = "Á¡¼ö : " + Final_Score;
         PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
@@ -82,13 +81,14 @@ public class PlayerCtrl_Tengai : Player_Info
    
     IEnumerator Move_First()
     {
+        animator.SetBool("Dead", false);
         color_when_unbeatable = Color_When_UnBeatable();
         StartCoroutine(color_when_unbeatable);
 
         transform.position = new Vector3(-9, 0, 0);
-
+       
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-4.6f, transform.position.y, transform.position.z), 2.5f, OriginCurve));
-
+           
         weapon_able = true;
         is_LateUpdate = true;
         is_Update = true;
@@ -98,7 +98,7 @@ public class PlayerCtrl_Tengai : Player_Info
 
         StartCoroutine(FadeText());
         yield return new WaitForSeconds(2f);
-        //TalkPanel.SetActive(true);
+
         if (!boss_intend)
         {
             GameObject.Find("EnemyAndBoss").GetComponent<FinalStage_1_Total>().Boss_First_Appear();
@@ -126,9 +126,9 @@ public class PlayerCtrl_Tengai : Player_Info
     {
         if (Unbeatable)
             return;
-        Debug.Log("Èì");
         LifeTime -= damage;
-
+        animator.SetBool("Dead", true);
+       
         Unbeatable = true;
         weapon_able = false;
         is_LateUpdate = false;
@@ -152,7 +152,7 @@ public class PlayerCtrl_Tengai : Player_Info
     {
         yield return StartCoroutine(MovePath());
 
-        yield return StartCoroutine(Move_First());
+        StartCoroutine(Move_First());
     }
     IEnumerator MovePath() // ¿©±â ¼öÁ¤
     {
@@ -164,6 +164,7 @@ public class PlayerCtrl_Tengai : Player_Info
 
         float B = Vector3.Distance(transform.position, new Vector3(kuku, -7, 0));
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(kuku, -7, 0), B/A * 0.3f, OriginCurve));
+       
     }
 
     public void Start_Emit()
@@ -232,26 +233,20 @@ public class PlayerCtrl_Tengai : Player_Info
             float x = Input.GetAxisRaw("Horizontal");
             float y = Input.GetAxisRaw("Vertical");
             movement2D.MoveTo(new Vector3(x, y, 0));
-            if (x < 0 || y < 0)
-            {
-                animator.SetBool("HasExit", true);
-            }
-            else
-                animator.SetBool("HasExit", false);
         }
         PlayerScore.text = "Á¡¼ö : " + Final_Score;
         if (Input.GetKeyDown(keyCodeAttack) && weapon_able)
         {
+            animator.SetBool("Launch", true);
             StartFiring();
         }
         else if (Input.GetKeyUp(keyCodeAttack) || !weapon_able)
         {
+            animator.SetBool("Launch", false);
             StopFiring();
         }
         if (Input.GetKeyDown(keyCodeBoom))
-        {
             StartBoom();
-        }
     }
     void StartFiring()
     {
@@ -267,8 +262,18 @@ public class PlayerCtrl_Tengai : Player_Info
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.1f);
-            Instantiate(Weapon[0], transform.position, Quaternion.identity);
+            if (is_Power_Up)
+            {
+                yield return new WaitForSeconds(0.1f);
+                Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, -0.1f, 0), Quaternion.identity, 18, false, transform.position);
+                Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, 0.1f, 0), Quaternion.identity, 18, false, transform.position);
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.1f);
+                Launch_Weapon_For_Move_Blink(Weapon[0], Vector3.right, Quaternion.identity, 18, false, transform.position);
+            }
+           
         }
     }
     void StartBoom()
@@ -286,6 +291,19 @@ public class PlayerCtrl_Tengai : Player_Info
         {
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, stageData.LimitMin.x, stageData.LimitMax.x),
             Mathf.Clamp(transform.position.y, stageData.LimitMin.y, stageData.LimitMax.y));
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log(collision);
+        if (collision.CompareTag("BoomItem"))
+        {
+            BoomCount++;
+            BoomCountText.text = "ÆøÅº : " + BoomCount;
+        }
+        if (collision.CompareTag("PowerItem"))
+        {
+            is_Power_Up = true;
         }
     }
 }

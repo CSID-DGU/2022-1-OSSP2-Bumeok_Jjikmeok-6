@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4300123804911615986}
   - component: {fileID: 3402004394259985216}
   - component: {fileID: -824944830412944213}
-  - component: {fileID: -1550931899359126748}
   - component: {fileID: 3499416095870493202}
   - component: {fileID: 7785089156977254898}
   - component: {fileID: -3906738149393121906}
+  - component: {fileID: 8870507040139302920}
   m_Layer: 0
   m_Name: Boss_W1_Lightning(3)
   m_TagString: Weapon_Devil
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 4212638247082229019, guid: a391563587b80e04ca0b5ab55ea93eb8, type: 3}
+  m_Sprite: {fileID: 3228470197227286834, guid: 74c00e7c2f3fc164684e79faee941dbd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -106,32 +106,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!61 &-1550931899359126748
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1422771892401474626}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.162, y: 0.98}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.162, y: 0.98}
-  m_EdgeRadius: 0
 --- !u!114 &3499416095870493202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,3 +146,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Destroy_Time: 2.5
+--- !u!60 &8870507040139302920
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422771892401474626}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.38, y: 0.83}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.45999998, y: -0.255}
+      - {x: -0.44, y: -0.275}
+      - {x: -0.41, y: -0.265}
+      - {x: -0.41, y: -0.235}
+      - {x: -0.42999998, y: -0.21499999}
+      - {x: -0.45999998, y: -0.225}
+    - - {x: 0.25, y: -0.005}
+      - {x: 0.55, y: 0.21499999}
+      - {x: 0.66999996, y: 0.325}
+      - {x: 0.66999996, y: 0.39499998}
+      - {x: 0.65999997, y: 0.415}
+      - {x: 0.55, y: 0.415}
+      - {x: 0.29, y: 0.285}
+      - {x: 0.22, y: 0.074999996}
+      - {x: 0.08, y: 0.145}
+      - {x: -0.04, y: 0.114999995}
+      - {x: -0.12, y: 0.035}
+      - {x: -0.12, y: 0.015}
+      - {x: -0.089999996, y: 0.005}
+      - {x: -0.22, y: -0.085}
+      - {x: -0.31, y: -0.074999996}
+      - {x: -0.32999998, y: -0.105}
+      - {x: -0.41, y: -0.21499999}
+      - {x: -0.41, y: -0.235}
+      - {x: -0.39, y: -0.255}
+      - {x: -0.32, y: -0.24499999}
+      - {x: -0.099999994, y: -0.185}
+      - {x: 0.049999997, y: 0.065}
+      - {x: 0.17, y: 0.015}

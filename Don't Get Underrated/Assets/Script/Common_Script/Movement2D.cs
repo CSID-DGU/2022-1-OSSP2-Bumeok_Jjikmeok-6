@@ -36,19 +36,4 @@ public class Movement2D : MonoBehaviour
     {
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student user1))
-        {
-            if (user1.get_Color() == new Color(0, 0, 1, 1))
-                Destroy(gameObject);
-        }
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out HimaController user2))
-        {
-            user2.TakeDamage(1);
-        }
-    }
 }

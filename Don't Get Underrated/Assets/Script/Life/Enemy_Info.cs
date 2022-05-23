@@ -12,12 +12,6 @@ public class Enemy_Info : Life
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Playerrr"))
-        {
-            if (!collision.GetComponent<Player_Info>().Unbeatable)
-                Weak_Weapon();
-            collision.GetComponent<Player_Info>().TakeDamage(1);
-        }
         if (collision.CompareTag("Player"))
         {
             if (!collision.GetComponent<Player_Info>().Unbeatable)

@@ -39,7 +39,7 @@ public class Meteor_Effect : Weapon_Devil
         }
         if (copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic user2))
         {
-            yield return user2.StartCoroutine(user2.Shake_Act(0.3f, 0.3f));
+            yield return user2.StartCoroutine(user2.Shake_Act(0.3f, 0.8f));
         }
         if (u != null && meteor_Line != null)
             meteor_Line.StopCoroutine(u);

@@ -31,6 +31,11 @@ public class Weapon_Devil : MonoBehaviour
                 Weak_Weapon();
             user2.TakeDamage(1);
         }
+        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student user1))
+        {
+            if (user1.get_Color() == new Color(0, 0, 1, 1))
+                Destroy(gameObject);
+        }
     }
     public void Weak_Weapon()
     {

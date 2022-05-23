@@ -26,13 +26,15 @@ public class ThunderBolt : Weapon_Devil
         //yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, 0, 0), 0.5f, OriginCurve));
         StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 7));
         camera_shake = cameraShake.Shake_Act(.1f, .26f, 0.3f, false);
-        StartCoroutine(camera_shake);
+        cameraShake.StartCoroutine(camera_shake);
         
         yield return null;
     }
 
     public void DestroyNow()
     {
+        if (camera_shake != null)
+            cameraShake.StopCoroutine(camera_shake);
         Destroy(gameObject);
     }
 }

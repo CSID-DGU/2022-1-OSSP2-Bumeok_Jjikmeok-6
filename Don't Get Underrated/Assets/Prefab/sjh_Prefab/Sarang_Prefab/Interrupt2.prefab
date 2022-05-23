@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5254857107998314}
   m_Layer: 6
   m_Name: Interrupt2
-  m_TagString: Interrupt
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weapon:
-  - {fileID: 5058595808972261254, guid: c5ab8b444345de6479fbf0575b75c2ba, type: 3}
+  - {fileID: 6810756140096031183, guid: 641a71acf6891a442a233c5ec9332dda, type: 3}
   declineCurve:
     serializedVersion: 2
     m_Curve: []

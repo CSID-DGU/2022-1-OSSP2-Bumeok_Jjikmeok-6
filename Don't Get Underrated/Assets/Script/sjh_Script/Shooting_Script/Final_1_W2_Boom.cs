@@ -44,15 +44,18 @@ public class Final_1_W2_Boom : Weapon_Player
         }
         foreach (var e in enemy)
         {
-            e.GetComponent<F1_Homming_Enemy>().OnDie();
+            if (e.TryGetComponent(out F1_Homming_Enemy f1))
+                f1.OnDie();
         }
         foreach (var e in devil_weapon)
         {
-            e.GetComponent<Weapon_Devil>().Weak_Weapon();
+            if (e.TryGetComponent(out Weapon_Devil f1))
+                f1.Weak_Weapon();
         }
         if (boss != null)
         {
-            boss.GetComponent<Asura>().TakeDamage(30.0f);
+            if (boss.TryGetComponent(out Asura f1))
+                f1.TakeDamage(30.0f);
         }
         Destroy(gameObject);
     }

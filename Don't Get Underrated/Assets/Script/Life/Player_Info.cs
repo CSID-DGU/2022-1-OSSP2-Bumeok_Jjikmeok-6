@@ -52,4 +52,6 @@ public class Player_Info : Life
         Destroy(gameObject);
     }
 
+    
+
 }
