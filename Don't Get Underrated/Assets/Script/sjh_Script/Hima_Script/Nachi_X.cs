@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class Nachi_X : Enemy_Info
 {
@@ -18,7 +17,7 @@ public class Nachi_X : Enemy_Info
     {
         for (int i = 0; i < 3; i++)
         {
-            percent = 0;
+            float percent = 0;
             while (percent < 1)
             {
                 percent += Time.deltaTime / time_persist;
@@ -32,11 +31,11 @@ public class Nachi_X : Enemy_Info
     {
         trailRenderer.enabled = true;
         if (TryGetComponent(out TrailCollisions user1))
-            user1.Wow();
+            user1.Draw_Collision_Line();
         yield return StartCoroutine(Circle_Move(90, flag * 4, 0, 0.3f, 0.3f, transform.position.x, transform.position.y, 0.5f));
 
-        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-4 * flag, 2f, 0), 0.8f, declineCurve));
-        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(16 * flag, -8f, 0), 0.2f, declineCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-4 * flag, 2f, 0), 0.6f, declineCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(16 * flag, -8f, 0), 0.1f, declineCurve));
         StartCoroutine(cameraShake.Shake_Act(0.2f, 0.2f, 0.4f, false));
         yield return StartCoroutine(X_Color_Change(Color.white, new Color(1, 1, 1, 0), 1));
 
@@ -46,11 +45,5 @@ public class Nachi_X : Enemy_Info
     private void OnDestroy()
     {
         StopAllCoroutines();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

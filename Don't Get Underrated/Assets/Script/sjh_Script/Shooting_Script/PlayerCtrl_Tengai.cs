@@ -34,6 +34,18 @@ public class PlayerCtrl_Tengai : Player_Info
     [SerializeField]
     int BoomCount = 3;
 
+    [SerializeField]
+    GameObject Boom_Effect;
+
+    [SerializeField]
+    GameObject Boom_Up_Text;
+
+    [SerializeField]
+    GameObject Power_Effect;
+
+    [SerializeField]
+    GameObject Power_Up_Text;
+
     Animator animator; // 애니메이터는 여러개 추가될 수 있어서 상속 생략
 
     GameObject Emit_Obj_Copy; // 고유
@@ -184,7 +196,7 @@ public class PlayerCtrl_Tengai : Player_Info
             emit_expand_circle = emit_Motion.Emit_Expand_Circle();
             emit_change_size = emit_Motion.Emit_Change_Size();
         }
-        if (emit_Motion == null)
+        else
             yield break;
 
         emit_Motion.StartCoroutine(emit_change_size);
@@ -247,6 +259,25 @@ public class PlayerCtrl_Tengai : Player_Info
         }
         if (Input.GetKeyDown(keyCodeBoom))
             StartBoom();
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GameObject e = Instantiate(Boom_Up_Text, Vector3.zero, Quaternion.identity);
+            e.transform.SetParent(transform);
+            GameObject f = Instantiate(Boom_Effect, transform.position, Quaternion.Euler(-90, 0, 0));
+            f.transform.SetParent(transform);
+            f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+            BoomCount++;
+            BoomCountText.text = "폭탄 : " + BoomCount;
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GameObject e = Instantiate(Power_Up_Text, Vector3.zero, Quaternion.identity);
+            e.transform.SetParent(transform);
+            GameObject f = Instantiate(Power_Effect, transform.position, Quaternion.Euler(-90, 0, 0));
+            f.transform.SetParent(transform);
+            f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+            is_Power_Up = true;
+        }
     }
     void StartFiring()
     {
@@ -265,13 +296,13 @@ public class PlayerCtrl_Tengai : Player_Info
             if (is_Power_Up)
             {
                 yield return new WaitForSeconds(0.1f);
-                Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, -0.1f, 0), Quaternion.identity, 18, false, transform.position);
-                Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, 0.1f, 0), Quaternion.identity, 18, false, transform.position);
+                Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, -0.1f, 0), Quaternion.identity, 18, false, transform.position + new Vector3(0.77f, -0.3f, 0));
+                Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, 0.1f, 0), Quaternion.identity, 18, false, transform.position + new Vector3(0.77f, -0.3f, 0));
             }
             else
             {
                 yield return new WaitForSeconds(0.1f);
-                Launch_Weapon_For_Move_Blink(Weapon[0], Vector3.right, Quaternion.identity, 18, false, transform.position);
+                Launch_Weapon_For_Move_Blink(Weapon[0], Vector3.right, Quaternion.identity, 18, false, transform.position + new Vector3(0.77f, -0.3f, 0));
             }
            
         }
@@ -291,19 +322,6 @@ public class PlayerCtrl_Tengai : Player_Info
         {
             transform.position = new Vector3(Mathf.Clamp(transform.position.x, stageData.LimitMin.x, stageData.LimitMax.x),
             Mathf.Clamp(transform.position.y, stageData.LimitMin.y, stageData.LimitMax.y));
-        }
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log(collision);
-        if (collision.CompareTag("BoomItem"))
-        {
-            BoomCount++;
-            BoomCountText.text = "폭탄 : " + BoomCount;
-        }
-        if (collision.CompareTag("PowerItem"))
-        {
-            is_Power_Up = true;
         }
     }
 }

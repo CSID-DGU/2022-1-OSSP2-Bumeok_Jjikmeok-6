@@ -42,29 +42,30 @@ public class Boss_Info : Life
     public override void TakeDamage(float damage)
     {
         CurrentHP -= damage;
+        if (CurrentHP <= 0)
+            OnDie();
     }
     public override void OnDie()
     {
-        Destroy(gameObject);
+        base.OnDie();
     }
-
     public void OnTriggerEnter2D(Collider2D collision) // ¾ê¸¸
     {
         if (collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info user1))
             user1.TakeDamage(1);
-    }
 
+    }
     protected IEnumerator Warning(string warning_message, float time_ratio)
     {
         WarningText.text = warning_message;
         while (WarningText.color.a < 1.0f)
         {
-            WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, WarningText.color.a + Time.deltaTime * time_ratio);
+            WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, WarningText.color.a + Time.deltaTime / time_ratio);
             yield return null;
         }
         while (WarningText.color.a > 0.0f)
         {
-            WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, WarningText.color.a - Time.deltaTime * time_ratio);
+            WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, WarningText.color.a - Time.deltaTime / time_ratio);
             yield return null;
         }
     }
@@ -89,8 +90,6 @@ public class Boss_Info : Life
         transform.rotation = Quaternion.Euler(0, 0, 0);
         yield return YieldInstructionCache.WaitForEndOfFrame;
     }
-
-
     public IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
     {
         Vector3 originPosition;

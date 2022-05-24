@@ -106,7 +106,7 @@ public class Asura : Boss_Info
         
         yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color(backGroundColor.Get_BGColor(), Color.black, 2));
         backGroundColor.Set_BGColor(new Color(0, 0, 0, 1));
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
     public void Phase_Start()
     {
@@ -115,57 +115,57 @@ public class Asura : Boss_Info
 
     IEnumerator Boss_Apprearance()
     {
-        //StartCoroutine(Size_Change(transform.localScale, transform.localScale * 0.5f, 5, OriginCurve));
+        StartCoroutine(Size_Change(transform.localScale, transform.localScale * 0.5f, 5, OriginCurve));
 
-        //transform.position = new Vector3(StaticData.DoPhan_Appearance_Move[0, 0], StaticData.DoPhan_Appearance_Move[0, 1], 0);
+        transform.position = new Vector3(StaticData.DoPhan_Appearance_Move[0, 0], StaticData.DoPhan_Appearance_Move[0, 1], 0);
 
-        //float A = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
-        //   Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
-        //   Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0)) * 0.85f, "anti_clock"));
+        float A = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
+           Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
+           Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0)) * 0.85f, "anti_clock"));
 
-        //yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
-        //    Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
-        //    Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0)) * 0.85f, "anti_clock"),
-        //    0.4f, OriginCurve, false));
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[1, 0], StaticData.DoPhan_Appearance_Move[1, 1], 0)) * 0.85f, "anti_clock"),
+            0.4f, OriginCurve, false));
 
-        //float B = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
-        //    Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
-        //    Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0)) * 0.85f, "anti_clock"));
+        float B = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0)) * 0.85f, "anti_clock"));
 
-        //yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
-        //    Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
-        //    Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0)) * 0.85f, "anti_clock"),
-        //    B / A * 0.6f, OriginCurve, false));
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[2, 0], StaticData.DoPhan_Appearance_Move[2, 1], 0)) * 0.85f, "anti_clock"),
+            B / A * 0.6f, OriginCurve, false));
 
-        //float C = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
-        //   Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
-        //   Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0)) * 0.85f, "clock"));
+        float C = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
+           Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
+           Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0)) * 0.85f, "clock"));
 
-        //yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
-        //    Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
-        //    Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0)) * 0.85f, "clock"),
-        //    C / A * 0.8f, OriginCurve, false));
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[3, 0], StaticData.DoPhan_Appearance_Move[3, 1], 0)) * 0.85f, "clock"),
+            C / A * 0.8f, OriginCurve, false));
 
-        //float D = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
-        //   Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
-        //   Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0)) * 0.85f, "anti_clock"));
+        float D = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
+           Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
+           Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0)) * 0.85f, "anti_clock"));
 
-        //yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
-        //    Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
-        //    Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0)) * 0.85f, "anti_clock"),
-        //    D / A * 1f, OriginCurve, false));
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[4, 0], StaticData.DoPhan_Appearance_Move[4, 1], 0)) * 0.85f, "anti_clock"),
+            D / A * 1f, OriginCurve, false));
 
-        //float E = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
-        // Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
-        // Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0)) * 0.85f, "anti_clock"));
+        float E = Get_Slerp_Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
+         Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
+         Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0)) * 0.85f, "anti_clock"));
 
-        //yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
-        //    Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
-        //    Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0)) * 0.85f, "anti_clock"),
-        //    E / A * 1.2f, declineCurve, false));
+        yield return StartCoroutine(Position_Slerp_Temp(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
+            Get_Center_Vector(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0),
+            Vector3.Distance(transform.position, new Vector3(StaticData.DoPhan_Appearance_Move[5, 0], StaticData.DoPhan_Appearance_Move[5, 1], 0)) * 0.85f, "anti_clock"),
+            E / A * 1.2f, declineCurve, false));
 
-        //moveBackGround_1.StartCoroutine(moveBackGround_1.Increase_Speed(1, 9));
-        //yield return moveBackGround_2.StartCoroutine(moveBackGround_2.Increase_Speed(1, 9));
+        moveBackGround_1.StartCoroutine(moveBackGround_1.Increase_Speed(1, 9));
+        yield return moveBackGround_2.StartCoroutine(moveBackGround_2.Increase_Speed(1, 9));
 
         transform.position = new Vector3(7, 0, 0);
         transform.localScale = new Vector3(0.6f, 0.6f, 0);
@@ -201,13 +201,13 @@ public class Asura : Boss_Info
    
     IEnumerator Repeat_Phase()
     {
-
         yield return StartCoroutine(Pattern01());
         yield return StartCoroutine(Pattern02());
         yield return StartCoroutine(Pattern03());
-
         yield return StartCoroutine(Pattern05());
+        yield return StartCoroutine(Ready_To_Pattern());
         yield return StartCoroutine(Pattern06());
+        yield return StartCoroutine(Ready_To_Pattern());
         yield return StartCoroutine(Pattern04());
         //while (true)
         //{
@@ -285,7 +285,7 @@ public class Asura : Boss_Info
             charge_beam = user1.Change_Size();
             user1.StartCoroutine(charge_beam);
 
-            yield return StartCoroutine(Warning("어디 한 번 지혜를 발휘해봐라", .5f));
+            yield return StartCoroutine(Warning("어디 한 번 지혜를 발휘해봐라", 1f));
 
             user1.StopCoroutine(charge_beam);
             Destroy(c);
@@ -446,7 +446,7 @@ public class Asura : Boss_Info
         yield return YieldInstructionCache.WaitForSeconds(2f);
 
         Unbeatable = false;
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, transform.position.y, 0), 1, declineCurve));
+        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 1, declineCurve));
         StartCoroutine(Shake_Act(0.3f, 0, 2, false));
         
         yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어에게 무차별 폭격 받는 곳
@@ -516,7 +516,7 @@ public class Asura : Boss_Info
     {
         moveBackGround_1.StartCoroutine(moveBackGround_1.Increase_Speed(0.3f, 16));
         yield return moveBackGround_2.StartCoroutine(moveBackGround_2.Increase_Speed(0.3f, 16));
-        yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.125f, false));
+        yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.8f, false));
 
         transform.position = new Vector3(7, 0, 0);
         pattern06_weapon = Pattern06_Weapon();
@@ -587,7 +587,8 @@ public class Asura : Boss_Info
 
         Unbeatable = true;
 
-        yield return StartCoroutine(StaticFunc.Warning(WarningText, "플레이어를 랜덤으로 자동 추격합니다. (반드시 즉사)", 1));
+        for (int i = 0; i < 2; i++)
+            yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.5f, false));
 
         Unbeatable = false;
 

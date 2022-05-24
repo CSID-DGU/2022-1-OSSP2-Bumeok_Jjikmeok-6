@@ -25,13 +25,11 @@ public class Student : MonoBehaviour
     Vector3 endPosition;
     int randomAngle = 0;
     float currentSpeed;
-    int StudentLayerMask;  // Player 레이어만 충돌 체크함
     // Start is called before the first frame update
 
     private void Awake()
     {
         currentSpeed = wanderSpeed;
-        StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -40,6 +38,10 @@ public class Student : MonoBehaviour
         //animator = GetComponent<Animator>(); // TBD
         wander_routine = WanderRoutine();
         StartCoroutine(wander_routine);
+    }
+    public void Disappear()
+    {
+        StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null));
     }
 
     // Update is called once per frame
@@ -56,9 +58,8 @@ public class Student : MonoBehaviour
             ChooseNewEndpoint();
 
             if (move != null)
-            {
                 StopCoroutine(move);
-            }
+
             move = Move(rb, currentSpeed);
 
             StartCoroutine(move);

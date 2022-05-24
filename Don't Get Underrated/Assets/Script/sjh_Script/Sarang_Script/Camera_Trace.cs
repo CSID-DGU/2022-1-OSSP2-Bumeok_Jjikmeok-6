@@ -13,7 +13,6 @@ public class Camera_Trace : MonoBehaviour // 이건 카메라가 플레이어 추적하는 코�
     private void Awake()
     {
         Floor_On = true;
-        Debug.Log(transform.position);
     }
 
     private void Update()
@@ -30,7 +29,7 @@ public class Camera_Trace : MonoBehaviour // 이건 카메라가 플레이어 추적하는 코�
         }
     }
 
-    public void When_Walk_Floor()
+    public void DoNot_Trace_Player()
     {
         Floor_On = false;
     }

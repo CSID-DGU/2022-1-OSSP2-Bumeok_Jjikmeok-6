@@ -45,11 +45,13 @@ public class Player_Info : Life
     public override void TakeDamage(int damage)
     {
         LifeTime -= damage;
+        if (LifeTime <= 0)
+            OnDie();
     }
 
     public override void OnDie()
     {
-        Destroy(gameObject);
+        base.OnDie();
     }
 
     

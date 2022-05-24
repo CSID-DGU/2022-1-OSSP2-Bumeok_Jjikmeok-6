@@ -39,9 +39,8 @@ public class Final_1_W2_Boom : Weapon_Player
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
 
         foreach (var e in meteor)
-        {
             Destroy(e);
-        }
+
         foreach (var e in enemy)
         {
             if (e.TryGetComponent(out F1_Homming_Enemy f1))

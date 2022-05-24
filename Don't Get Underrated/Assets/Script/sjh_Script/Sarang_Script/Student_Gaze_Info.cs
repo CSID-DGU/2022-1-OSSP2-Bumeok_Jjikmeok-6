@@ -52,7 +52,7 @@ public class Student_Gaze_Info : Slider_Viewer
         }
         if (slider.value >= 1 && Interrupt_NonActive.Count == 0 && Interrupt_Active.Count == 0)
             return 1;
-         if (slider.value >= 0.25f && Interrupt_Active.Count == 0)
+         if (slider.value >= 0.35f && Interrupt_Active.Count == 0)
             return 3;
         return 2;
     }

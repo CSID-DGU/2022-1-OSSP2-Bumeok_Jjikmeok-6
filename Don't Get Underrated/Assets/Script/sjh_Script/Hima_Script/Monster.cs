@@ -17,15 +17,10 @@ public class Monster : Enemy_Info
     {
         this.Monster_Pos = Monster_Pos;
         this.Target_Pos = Target_Pos;
-        StartCoroutine(I_Start());
-    }
-    IEnumerator I_Start()
-    {
         transform.DOMove(Monster_Pos, 0.5f).SetEase(Ease.OutBounce).OnComplete(() =>
         {
             animator.SetTrigger("hehe");
         });
-        yield return null;
     }
     public void OnLazor()
     {
@@ -34,8 +29,8 @@ public class Monster : Enemy_Info
 
     IEnumerator Monster_Only_Lazor(Vector3 Origin, Vector3 Target, float time_persist)
     {
-        percent = 0;
-        while(percent < 1)
+        float percent = 0;
+        while (percent < 1)
         {
             percent += Time.deltaTime / time_persist;
             Launch_Weapon_For_Move_Blink(Weapon[0], Target - Origin, Quaternion.identity, 14, false, Origin);

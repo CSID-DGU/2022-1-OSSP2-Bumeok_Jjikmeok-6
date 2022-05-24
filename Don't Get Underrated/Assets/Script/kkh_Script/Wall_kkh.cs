@@ -5,6 +5,7 @@ using UnityEngine;
 public class Wall_kkh : MonoBehaviour
 {
     public PhysicsMaterial2D bounceMat, normalMat;
+
     [SerializeField]
     public GameObject Player;
 

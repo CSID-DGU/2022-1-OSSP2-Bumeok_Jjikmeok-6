@@ -55,4 +55,8 @@ public class Weapon_Devil : MonoBehaviour
             user2.TakeDamage(1);
         }
     }
+    //private void OnDisable()
+    //{
+    //    ObjectPooler.ReturnToPool(gameObject);
+    //}
 }

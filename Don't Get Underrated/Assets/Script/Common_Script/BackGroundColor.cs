@@ -50,7 +50,7 @@ public class BackGroundColor : MonoBehaviour
             yield return null;
             if (image.color.a <= 0)
                 yield break;
-            image.color = Color.Lerp(image.color, Color.clear, flashSpeed * Time.deltaTime);
+            image.color = Color.Lerp(image.color, Color.clear, Time.deltaTime * flashSpeed);
         }
 
     }

@@ -18,17 +18,9 @@ public class ThunderBolt : Weapon_Devil
     }
     void Start()
     {
-        StartCoroutine(Move());
-    }
-
-    IEnumerator Move()
-    {
-        //yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, 0, 0), 0.5f, OriginCurve));
-        StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 7));
+        backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 7));
         camera_shake = cameraShake.Shake_Act(.1f, .26f, 0.3f, false);
         cameraShake.StartCoroutine(camera_shake);
-        
-        yield return null;
     }
 
     public void DestroyNow()

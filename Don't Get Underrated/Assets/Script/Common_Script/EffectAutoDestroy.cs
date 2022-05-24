@@ -9,8 +9,6 @@ public class EffectAutoDestroy : MonoBehaviour
     [SerializeField]
     float Destroy_Time;
 
-
-
     void Start()
     {
         StartCoroutine(Auto_Destroy());

@@ -6,7 +6,6 @@ public class TrailCollisions : MonoBehaviour
 {
     TrailRenderer myTrail;
     EdgeCollider2D myCollider;
-    
 
     static List<EdgeCollider2D> unusedColliders = new List<EdgeCollider2D>();
 
@@ -14,7 +13,7 @@ public class TrailCollisions : MonoBehaviour
     {
         myTrail = GetComponent<TrailRenderer>();
     }
-    public void Wow()
+    public void Draw_Collision_Line()
     {
         myCollider = GetVaildCollider();
     }

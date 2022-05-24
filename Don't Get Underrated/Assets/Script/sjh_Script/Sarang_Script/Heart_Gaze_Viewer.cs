@@ -9,7 +9,7 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     private new void Awake()
     {
         base.Awake();
-        slider.value = 0.86f;
+        slider.value = 0.5f;
     }
 
     public void Decrease_HP(float ratio)

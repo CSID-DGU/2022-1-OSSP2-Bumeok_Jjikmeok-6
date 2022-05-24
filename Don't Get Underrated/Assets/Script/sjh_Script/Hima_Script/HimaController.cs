@@ -47,6 +47,7 @@ public class HimaController : Player_Info {
 
 	IEnumerator Load()
     {
+		Unbeatable = true;
         //h = 0;
         //yield return YieldInstructionCache.WaitForSeconds(2f);
 
@@ -82,6 +83,7 @@ public class HimaController : Player_Info {
         //h = 0;
         //maxSpeed = 7f;
         //yield return YieldInstructionCache.WaitForSeconds(.7f);
+
         GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().WelCome();
 		yield return null;
 	}
@@ -106,7 +108,8 @@ public class HimaController : Player_Info {
 
     public override void TakeDamage(int damage)
     {
-		OnDie();
+		if (!Unbeatable)
+			OnDie();
     }
 
     void FixedUpdate() {

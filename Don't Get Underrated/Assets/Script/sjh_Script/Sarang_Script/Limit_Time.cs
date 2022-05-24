@@ -23,10 +23,13 @@ public class Limit_Time : MonoBehaviour
     [SerializeField]
     int Option_Limit_Time;
 
+    int wow_Time;
+
     private void Awake()
     {
         Limit_Time_Text = GetComponent<TextMeshProUGUI>();
-        Limit_Time_Text.text = "제한시간 : " + Option_Limit_Time;
+        wow_Time = Option_Limit_Time;
+        Limit_Time_Text.text = "제한시간 : " + wow_Time;
         image = GameObject.Find("Flash_TimeOut").GetComponent<Image>();
         flashOn = image.GetComponent<BackGroundColor>();
     }
@@ -41,17 +44,24 @@ public class Limit_Time : MonoBehaviour
     {
         while(true)
         {
-            if (Option_Limit_Time <= 10)
+            if (wow_Time <= 10)
             {
                 if (flash_on != null)
-                    StopCoroutine(flash_on);
+                    flashOn.StopCoroutine(flash_on);
                 flash_on = flashOn.Change_Color_Return_To_Origin(new Color(1, 0, 0, 0), new Color(1, 0, 0, 0.5f), .5f, false);
                 flashOn.StartCoroutine(flash_on);
             }
-            if (Option_Limit_Time <= 0)
+            if (wow_Time <= 0)
             {
-                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Stop_Coroutine();
-                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().Destroy_sliderClone();
+                PlayerCtrl_Sarang playerCtrl_Sarang;
+
+                if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Sarang user1))
+                    playerCtrl_Sarang = user1;
+                else
+                    yield break;
+
+                playerCtrl_Sarang.Stop_Coroutine();
+                playerCtrl_Sarang.Destroy_sliderClone();
 
                 GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
                 GameObject[] q = GameObject.FindGameObjectsWithTag("Student");
@@ -68,29 +78,32 @@ public class Limit_Time : MonoBehaviour
 
                 foreach (var u in e)
                 {
-                    u.GetComponent<Interrupt>().Stop_Coroutine();
-                    disappear = u.GetComponent<Interrupt>().Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null);
-                    StartCoroutine(disappear);
+                    if (u.TryGetComponent(out Interrupt user))
+                    {
+                        user.Stop_Coroutine();
+                        user.Disappear();
+                    }
                 }
                 
                 foreach (var u in q)
                 {
-                    u.GetComponent<Student>().Stop_Coroutine();
-                    disappear = u.GetComponent<Student>().Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null);
-                    StartCoroutine(disappear);
+                    if (u.TryGetComponent(out Student user))
+                    {
+                        user.Stop_Coroutine();
+                        user.Disappear();
+                    }
                 }
 
                 yield return YieldInstructionCache.WaitForSeconds(3f);
-                Instantiate(Time_Over_Text, new Vector3(GameObject.FindGameObjectWithTag("Player").transform.position.x, GameObject.FindGameObjectWithTag("Player").transform.position.y + 2, 0), Quaternion.identity);
+                Instantiate(Time_Over_Text, new Vector3(playerCtrl_Sarang.transform.position.x, playerCtrl_Sarang.transform.position.y + 2, 0), Quaternion.identity);
                 yield break;
                 // 씬 전환 
             }
             yield return YieldInstructionCache.WaitForSeconds(1f);
-            Option_Limit_Time -= 1;
+            wow_Time -= 1;
         }
     }
-
-    public void When_Walk_Floor()
+    public void Stop_Time_Persist()
     {
         if (descent_time != null)
             StopCoroutine(descent_time);
@@ -104,6 +117,6 @@ public class Limit_Time : MonoBehaviour
 
     void Update()
     {
-        Limit_Time_Text.text = "제한시간 : " + Option_Limit_Time;
+        Limit_Time_Text.text = "제한시간 : " + wow_Time;
     }
 }

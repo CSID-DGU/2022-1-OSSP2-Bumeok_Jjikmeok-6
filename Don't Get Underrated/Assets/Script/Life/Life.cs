@@ -35,8 +35,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
     protected BackGroundColor backGroundColor;
 
-    protected float percent;
-
     protected float Plus_Speed;
 
     private bool unbeatable;
@@ -53,7 +51,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
         cameraShake = GetComponent<CameraShake>();
         Unbeatable = false;
         Plus_Speed = 0;
-        percent = 0;
     }
     public Color SpriteRenderer_Color
     {
@@ -62,20 +59,22 @@ public class Life : MonoBehaviour, Life_Of_Basic
     }
     public virtual void TakeDamage(float damage) 
     {
-
+        if (When_Dead_Effect != null)
+            Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 
     public virtual void TakeDamage(int damage) 
     {
-
+        if (When_Dead_Effect != null)
+            Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
     public virtual void OnDie()
     {
         if (When_Dead_Effect != null)
-        {
             Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
     protected IEnumerator Circle_Move(int Degree, int is_ClockWise_And_Speed, float Start_Degree, float x, float y, float start_x, float start_y, float ratio)
     {
@@ -83,7 +82,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
         for (int th = 0; th < Degree; th++)
         {
-
             float rad = Mathf.Deg2Rad * (is_ClockWise_And_Speed * th + Start_Degree);
 
             float rad_x = x * Mathf.Sin(rad);
@@ -110,8 +108,19 @@ public class Life : MonoBehaviour, Life_Of_Basic
         else
             Destroy(Copy);
     }
+    protected IEnumerator Size_Change(Vector3 Origin, Vector3 Change, float time_persist, AnimationCurve curve)
+    {
+        float percent = 0;
+        while(percent < 1)
+        {
+            percent += Time.deltaTime / time_persist;
+            transform.localScale = Vector3.Lerp(Origin, Change, curve.Evaluate(percent));
+            yield return null;
+        }
+    }
     protected IEnumerator Change_Color_Return_To_Origin(Color Origin_C, Color Change_C, float time_persist, bool is_Continue)
-    { 
+    {
+        float percent = 0;
         while (true)
         {
             percent = 0;
@@ -146,8 +155,9 @@ public class Life : MonoBehaviour, Life_Of_Basic
             ee = !ee;
         }
     }
-    public IEnumerator Change_Color_Lerp(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
+    protected IEnumerator Change_Color_Lerp(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
     {
+        float percent = 0;
         if (Effect != null)
             Instantiate(Effect, transform.position, Quaternion.identity);
         percent = 0;
@@ -159,6 +169,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
         }
         yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
     }
+
     public IEnumerator Position_Lerp(Vector3 start_location, Vector3 last_location, float time_ratio, AnimationCurve curve)
     {
         float percent = 0;
@@ -234,13 +245,13 @@ public class Life : MonoBehaviour, Life_Of_Basic
             yield return null;
         }
     }
-    protected IEnumerator Rotate_Dec(Quaternion A, Quaternion B, float speed)
+    protected IEnumerator Rotate_Dec(Quaternion A, Quaternion B, float speed, AnimationCurve curve)
     {
-        percent = 0;
+        float percent = 0;
         while (percent < 1)
         {
             percent += (Time.deltaTime * speed);
-            transform.rotation = Quaternion.Lerp(A, B, percent);
+            transform.rotation = Quaternion.Lerp(A, B, curve.Evaluate(percent));
             yield return null;
         }
     }

@@ -46,6 +46,5 @@ public class Spawn_Student_Interrupt : MonoBehaviour
         }
         yield break;
     }
-
     // Update is called once per frame
 }

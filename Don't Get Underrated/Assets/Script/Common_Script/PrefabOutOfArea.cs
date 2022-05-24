@@ -10,11 +10,6 @@ public class PrefabOutOfArea : MonoBehaviour
     StageData stageData;
 
     float destroyWeight = 2.0f;
-
-    void Start()
-    {
-        
-    }
     private void LateUpdate()
     {
         if ((transform.position.y < stageData.LimitMin.y - destroyWeight) ||
@@ -24,12 +19,5 @@ public class PrefabOutOfArea : MonoBehaviour
         {
             Destroy(gameObject);
         }
-           
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

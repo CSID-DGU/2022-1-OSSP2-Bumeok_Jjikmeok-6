@@ -35,15 +35,19 @@ public class Enemy_Info : Life
             Destroy(gameObject);
         }
     }
+    public override void TakeDamage(float damage)
+    {
+        OnDie();
+    }
     public override void OnDie()
     {
-        Destroy(gameObject);
+        base.OnDie();
     }
     private void OnDestroy()
     {
         StopAllCoroutines();
     }
-    public IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
+    protected IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
     {
         Vector3 originPosition;
         Quaternion originRotation;

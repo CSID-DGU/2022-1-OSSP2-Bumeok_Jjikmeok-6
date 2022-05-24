@@ -7,9 +7,6 @@ using TMPro;
 
 public class Login : MonoBehaviour
 {
-    // Start is called before the first frame update
-
-   
     void Start()
     {
         Debug.Log(PlayerPrefs.GetInt("keycode"));

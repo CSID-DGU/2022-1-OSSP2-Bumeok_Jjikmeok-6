@@ -14,14 +14,8 @@ public class Targetting_Effect : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    public void Init()
-    {
-        transform.localScale = new Vector3(.5f, .5f, 0);
-        spriteRenderer.color = new Color(0, 0, 0, 1);
-    }
     public void Scale_Color(GameObject e)
     {
-       
         if (change_color_and_scale != null)
             StopCoroutine(change_color_and_scale);
         change_color_and_scale = Change_Color_And_Scale(e);
@@ -29,6 +23,8 @@ public class Targetting_Effect : MonoBehaviour
     }
     IEnumerator Change_Color_And_Scale(GameObject e)
     {
+        transform.localScale = new Vector3(.5f, .5f, 0);
+        spriteRenderer.color = new Color(0, 0, 0, 1);
         float percent = 0;
         while(true)
         {
@@ -47,11 +43,9 @@ public class Targetting_Effect : MonoBehaviour
 
                 else if (percent >= 0.5f && percent < 1)
                     spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + Time.deltaTime * 4);
-
                 else
                     percent = 0;
             }
-               
             yield return null;
         }
         

@@ -125,7 +125,6 @@ public class PlayerCtrl_Sarang : Player_Info
             }
             else
             {
-                Targetting_Object.GetComponent<Targetting_Effect>().Init();
                 Targetting_Object.SetActive(false);
                 FixedTarget = false;
             }
@@ -153,7 +152,6 @@ public class PlayerCtrl_Sarang : Player_Info
                 {
                     float dir_Change = transform.position.x - Student_Clone.transform.position.x;
                     transform.localScale = new Vector3((dir_Change / Mathf.Abs(dir_Change)) * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-                    Targetting_Object.GetComponent<Targetting_Effect>().Init();
                     Targetting_Object.SetActive(false);
                     FixedTarget = false;
 
@@ -318,9 +316,7 @@ public class PlayerCtrl_Sarang : Player_Info
     private void Dash()
     {
         if (IsOneClick && ((Time.time - Timer) > IsDoubleClick))
-        {
             IsOneClick = false;
-        }
 
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.A))
         {
@@ -334,7 +330,6 @@ public class PlayerCtrl_Sarang : Player_Info
             {
                 Dash_Able = false;
                 IsOneClick = false;
-
                 StartCoroutine(Move_Delay());
             }
         }
@@ -357,9 +352,7 @@ public class PlayerCtrl_Sarang : Player_Info
         }
 
         if (key != 0)
-        {
             transform.localScale = new Vector3(-key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
         else
             animator.SetBool("IsWalk", false);
     }
@@ -390,12 +383,10 @@ public class PlayerCtrl_Sarang : Player_Info
         animator.SetBool("IsWalk", false);
         animator.SetBool("IsRun", false);
         animator.SetBool("IsDead", false);
-        yield return null;
-
         animator.SetBool("IsWalk", true);
 
-        GameObject.Find("Main Camera").GetComponent<Camera_Trace>().When_Walk_Floor();
-        GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().When_Walk_Floor();
+        GameObject.Find("Main Camera").GetComponent<Camera_Trace>().DoNot_Trace_Player();
+        GameObject.FindGameObjectWithTag("LimitTimeText").GetComponent<Limit_Time>().Stop_Time_Persist();
 
         IEnumerator change_color = backGroundColor.Change_Color(backGroundColor.Get_BGColor(), new Color(0, 0, 0, 1), 2);
         backGroundColor.StartCoroutine(change_color);

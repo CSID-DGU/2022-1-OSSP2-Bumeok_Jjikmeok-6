@@ -28,7 +28,7 @@ public class Quantum_Bit : Enemy_Info
         Sequence mysequence = DOTween.Sequence();
         mysequence.Append(transform.DOMove(new Vector3(Solve * 7, 2, 0), 1f).SetEase(Ease.OutBounce));
         mysequence.Append(transform.DOMove(new Vector3(0, 2, 0), 1f).SetEase(Ease.InExpo));
-        mysequence.Join(transform.DOScale(new Vector3(1.3f, 1.3f, 0), 1f).SetEase(Ease.Linear));
+        mysequence.Join(transform.DOScale(new Vector3(1.3f, 1.3f, 0), 1f).SetEase(Ease.InCirc));
         mysequence.OnComplete(() =>
         {
             if (Solve >= 0)
@@ -49,6 +49,7 @@ public class Quantum_Bit : Enemy_Info
         {
             for (int j = -9; j <= 9; j++)
             {
+                //GameObject f = ObjectPooler.SpawnFromPool("Time_Stop_For_Damage", new Vector3(i, j, 0));
                 GameObject e = Instantiate(Weapon[0], new Vector3(i, j, 0), Quaternion.identity);
                 if (e.TryGetComponent(out Weapon_Devil user))
                 {
@@ -75,4 +76,5 @@ public class Quantum_Bit : Enemy_Info
     {
         StopAllCoroutines();
     }
+
 }

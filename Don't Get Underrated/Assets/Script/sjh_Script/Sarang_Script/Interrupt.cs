@@ -58,6 +58,10 @@ public class Interrupt : Enemy_Info
             yield return null;
         }
     }
+    public void Disappear()
+    {
+        StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null));
+    }
 
     public void Stop_Coroutine()
     {

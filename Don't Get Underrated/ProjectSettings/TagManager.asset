@@ -25,6 +25,7 @@ TagManager:
   - Weapon_Player
   - PowerItem
   - BoomItem
+  - Jebal
   layers:
   - Default
   - TransparentFX

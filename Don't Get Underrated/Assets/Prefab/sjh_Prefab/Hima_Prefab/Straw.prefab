@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2913166130661082143}
   - component: {fileID: 2913166130661082142}
-  - component: {fileID: -4323498286507373064}
   - component: {fileID: -6249647646530030775}
+  - component: {fileID: 697363480230055458}
   m_Layer: 0
   m_Name: Straw
   m_TagString: Weapon_Devil
@@ -84,19 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-4323498286507373064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2913166130661082141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Explosion: {fileID: 0}
 --- !u!60 &-6249647646530030775
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -143,3 +130,16 @@ PolygonCollider2D:
       - {x: 0.71, y: -3.925}
       - {x: 0.91999996, y: -3.8249998}
       - {x: 0.96, y: -3.7749999}
+--- !u!114 &697363480230055458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2913166130661082141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 0}

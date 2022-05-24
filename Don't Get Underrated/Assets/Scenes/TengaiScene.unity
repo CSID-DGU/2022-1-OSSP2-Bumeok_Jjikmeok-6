@@ -1671,7 +1671,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 50, y: 0}
+  m_AnchoredPosition: {x: 48, y: 14}
   m_SizeDelta: {x: 550, y: 40}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1005747522
@@ -2347,16 +2347,20 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.12, y: 0.19}
-      - {x: -0.089999996, y: 0.19}
-      - {x: -0.12, y: 0.17999999}
-      - {x: -0.16, y: 0.13}
-      - {x: -0.16, y: -0.07}
-      - {x: -0.13, y: -0.32}
-      - {x: 0.049999997, y: -0.32}
-      - {x: 0.14, y: -0.28}
-      - {x: 0.21, y: -0.17999999}
-      - {x: 0.21, y: 0.049999997}
+    - - {x: 0.22, y: 0.26}
+      - {x: 0.12, y: 0.32}
+      - {x: -0.06, y: 0.32}
+      - {x: -0.099999994, y: 0.28}
+      - {x: -0.25, y: 0.049999997}
+      - {x: -0.25, y: -0.049999997}
+      - {x: -0.22, y: -0.11}
+      - {x: -0.25, y: -0.17}
+      - {x: -0.21, y: -0.28}
+      - {x: -0.13, y: -0.28}
+      - {x: -0.01, y: -0.26}
+      - {x: 0.16, y: -0.17999999}
+      - {x: 0.22999999, y: -0.11}
+      - {x: 0.22999999, y: 0.19999999}
 --- !u!95 &1324609397
 Animator:
   serializedVersion: 3
@@ -2526,6 +2530,10 @@ MonoBehaviour:
   Emit_Obj: {fileID: 7552215502891305466, guid: d31f3a815c296d74abab8dbb89d4b5a7, type: 3}
   TalkPanel: {fileID: 0}
   BoomCount: 3
+  Boom_Effect: {fileID: 2829389467210685502, guid: 8189082aab014d647affe4806c73d5d1, type: 3}
+  Boom_Up_Text: {fileID: 6735421058520093813, guid: 23ebdd31d78f5804995a0eb3f7dbaf51, type: 3}
+  Power_Effect: {fileID: 227703385401004343, guid: 7eb282ddb9108c340bcecd48dcb06722, type: 3}
+  Power_Up_Text: {fileID: 1796663397694158426, guid: 110603a2603138e46aab0550cee5f64b, type: 3}
 --- !u!1 &1529927746
 GameObject:
   m_ObjectHideFlags: 0
@@ -2821,7 +2829,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
-  maxHP: 100
+  maxHP: 1
   DisAppear_Effect_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
   DisAppear_Effect_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
   WarningText: {fileID: 431468218}
