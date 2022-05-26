@@ -5,8 +5,8 @@ using DG.Tweening;
 
 public class Monster : Enemy_Info
 {
-
     Animator animator;
+
     Vector3 Monster_Pos, Target_Pos;
     private new void Awake()
     {
@@ -33,7 +33,7 @@ public class Monster : Enemy_Info
         while (percent < 1)
         {
             percent += Time.deltaTime / time_persist;
-            Launch_Weapon_For_Move_Blink(Weapon[0], Target - Origin, Quaternion.identity, 14, false, Origin);
+            Launch_Weapon_For_Move(ref Weapon[0], Target - Origin, Quaternion.identity, 14, Origin);
             yield return null;
         }
         animator.SetTrigger("die");

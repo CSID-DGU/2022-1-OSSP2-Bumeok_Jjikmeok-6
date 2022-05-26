@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using TMPro;
+using UnityEngine.UI;
 
 public class HimaController : Player_Info {
 
@@ -11,33 +11,61 @@ public class HimaController : Player_Info {
 	[HideInInspector]
 	public bool jump = false;
 
+	[SerializeField]
+	Text Death_Count;
 
-	public float moveAccel = 30f;
-	public float maxSpeed = 7f;
-	public float jumpSpeed = 10f;
-	public int maxAirJumps = 2;
-	public float distanceToGround = 0.78f;
-	private bool isMove = false;
-	private float h = 0;
+	[SerializeField]
+	float moveAccel = 30f;
+
+	[SerializeField]
+	float maxSpeed = 7f;
+
+	[SerializeField]
+	float jumpSpeed = 10f;
+
+	[SerializeField]
+	int maxAirJumps = 2;
+
+	[SerializeField]
+	float distanceToGround = 0;
+
+	Animator anim;
+
+	Rigidbody2D rb2d;
+
+	bool isMove = false;
+
+	bool isJump = false;
+
+	float h = 0;
+
+	bool grounded = false;
+
+	int jumpCount;
+
+	int groundLayerMask;
 
 	public bool IsMove
     {
         get { return isMove; }
         set { isMove = value; }
     }
-
-	private bool grounded = false;
-	private Animator anim;
-	private Rigidbody2D rb2d;
-	private int jumpCount;
-	private int groundLayerMask;
+	public bool IsJump
+	{
+		get { return isJump; }
+		set { isJump = value; }
+	}
 
 	// Use this for initialization
 	private new void Awake() 
 	{
+		base.Awake();
 		anim = GetComponent<Animator>();
 		rb2d = GetComponent<Rigidbody2D>();
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
+		LifeTime = 0;
+		Death_Count.text = "Death Count : " + LifeTime;
+
 	}
 
 	void Start() 
@@ -47,50 +75,53 @@ public class HimaController : Player_Info {
 
 	IEnumerator Load()
     {
-		Unbeatable = true;
-        //h = 0;
-        //yield return YieldInstructionCache.WaitForSeconds(2f);
+		Unbeatable = false;
+		IsMove = true;
+		IsJump = true;
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(2f);
 
-        //h = 1;
-        //yield return YieldInstructionCache.WaitForSeconds(.3f);
-        //h = 0;
-        //yield return YieldInstructionCache.WaitForSeconds(1f);
+		//h = 1;
+		//yield return YieldInstructionCache.WaitForSeconds(.3f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(1f);
 
-        //h = -1;
-        //yield return YieldInstructionCache.WaitForSeconds(.6f);
-        //h = 0;
-        //yield return YieldInstructionCache.WaitForSeconds(1f);
+		//h = -1;
+		//yield return YieldInstructionCache.WaitForSeconds(.6f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(1f);
 
-        //h = 1;
-        //maxSpeed = 1f;
-        //yield return YieldInstructionCache.WaitForSeconds(2f);
-        //h = 0;
-        //yield return YieldInstructionCache.WaitForSeconds(2f);
+		//h = 1;
+		//maxSpeed = 1f;
+		//yield return YieldInstructionCache.WaitForSeconds(2f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(2f);
 
-        //maxSpeed = 2f;
-        //h = 1;
-        //yield return YieldInstructionCache.WaitForSeconds(.25f);
-        //h = 0;
-        //yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//maxSpeed = 2f;
+		//h = 1;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
 
-        //h = -1;
-        //yield return YieldInstructionCache.WaitForSeconds(.25f);
-        //h = 0;
-        //yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//h = -1;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//h = 0;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
 
-        //h = 1;
-        //yield return YieldInstructionCache.WaitForSeconds(.25f);
-        //h = 0;
-        //maxSpeed = 7f;
-        //yield return YieldInstructionCache.WaitForSeconds(.7f);
-
-        GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().WelCome();
+		//h = 1;
+		//yield return YieldInstructionCache.WaitForSeconds(.25f);
+		//h = 0;
+		//maxSpeed = 7f;
+		//yield return YieldInstructionCache.WaitForSeconds(.7f);
+		GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().WelCome();
 		yield return null;
 	}
 
-	// Update is called once per frame
-	void Update() {
-		if (Input.GetButtonDown("Jump") && jumpCount < maxAirJumps) {
+    // Update is called once per frame
+    void Update() 
+	{
+		if (Input.GetButtonDown("Jump") && jumpCount < maxAirJumps) 
+		{
 			jump = true;
 			jumpCount += 1;
 		}
@@ -108,68 +139,99 @@ public class HimaController : Player_Info {
 
     public override void TakeDamage(int damage)
     {
-		if (!Unbeatable)
-			OnDie();
+        if (!Unbeatable)
+        {
+			LifeTime++;
+			Death_Count.text = "Death Count : " + LifeTime;
+			Unbeatable = true;
+			isMove = false;
+			float velo_x = rb2d.velocity.x;
+			rb2d.velocity = Vector2.zero;
+			Vector2 dir = new Vector2(-Mathf.Sign(velo_x) * 1, 1).normalized;
+			rb2d.AddForce(dir * 14, ForceMode2D.Impulse);
+
+			StartCoroutine(Whilee());
+		}
+
+    }
+	IEnumerator Whilee()
+    {
+		IEnumerator user = Color_When_UnBeatable();
+		StartCoroutine(user);
+		float percent = 0;
+		while(percent < 0.3f)
+        {
+			percent += Time.deltaTime;
+			yield return null;
+        } // 정확한 시간 계산을 위해 식을 좀 복잡하게 썼음
+		isMove = true;
+		yield return YieldInstructionCache.WaitForSeconds(2f);
+		StopCoroutine(user);
+		Unbeatable = false;
+		yield return null;
     }
 
     void FixedUpdate() {
 		
 		if (isMove)
+        {
+			Debug.Log("야");
 			h = Input.GetAxisRaw("Horizontal");
+			float vh = Mathf.Sign(h);
 
-		if (h == 0)
-		{
-			rb2d.velocity = new Vector2(0, rb2d.velocity.y);
-			anim.SetBool("Walking", false);
-		}
-		else
-		{
-			float vx = Mathf.Sign(h) * maxSpeed;
-			rb2d.velocity = new Vector2(vx, rb2d.velocity.y);
-			anim.SetBool("Walking", true);
-		}
+			if (h == 0)
+			{
+				rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+				anim.SetBool("Walking", false);
+			}
+			else
+			{
+				float vx = vh * maxSpeed;
+				rb2d.velocity = new Vector2(vx, rb2d.velocity.y);
+				anim.SetBool("Walking", true);
+			}
+			anim.SetFloat("VelocityY", rb2d.velocity.y); 
 
-		anim.SetFloat("VelocityY", rb2d.velocity.y);
+			if (h > 0 && !facingRight)
+				Flip();
+			else if (h < 0 && facingRight)
+				Flip();
 
-		if (h > 0 && !facingRight)
-			Flip();
-		else if (h < 0 && facingRight)
-			Flip();
-
-		bool nextGrounded = isGrounded();
+			bool nextGrounded = isGrounded();
 
 
-		if (jump)
-		{
-			rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeed);
-			jump = false;
-		}
+			if (jump)
+			{
+				rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeed);
+				jump = false;
+			}
 
-		if (nextGrounded)
-		{
-			jumpCount = 0;
-		}
+			if (nextGrounded)
+			{
+				jumpCount = 0;
+			}
 
-		if (nextGrounded && !grounded)
-		{
+			if (nextGrounded && !grounded)
+			{
 
-			anim.SetTrigger("Land");
-		}
+				anim.SetTrigger("Land");
+			}
 
-		if (!nextGrounded && grounded)
-		{
-			anim.SetTrigger("Midair");
-		}
+			if (!nextGrounded && grounded)
+			{
+				anim.SetTrigger("Midair");
+			}
 
-		grounded = nextGrounded;
+			grounded = nextGrounded;
 
-		if (isInsideGround())
-		{
-			OnDie();
-		}
-	}
+			if (IsInsideGround())
+			{
+				OnDie();
+			}
+		}		
+    }
 
-	bool isInsideGround() {
+	bool IsInsideGround() {
 		return Physics2D.OverlapPoint(transform.position, groundLayerMask);
 	}
 
@@ -183,6 +245,6 @@ public class HimaController : Player_Info {
 	}
     public override void OnDie()
     {
-		base.OnDie();
+		TakeDamage(1);
     }
 }

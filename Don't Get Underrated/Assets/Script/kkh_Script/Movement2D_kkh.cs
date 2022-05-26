@@ -32,8 +32,6 @@ public class Movement2D_kkh : MonoBehaviour
     private bool isGrounded;
     private bool isfainted;
     private bool isStuck_left;
-    private bool isStuck_right;
-    private bool isStuck_upper;
     private bool isAir = false;
     private Vector3 footPosition;
     public PhysicsMaterial2D bounceMat, normalMat;

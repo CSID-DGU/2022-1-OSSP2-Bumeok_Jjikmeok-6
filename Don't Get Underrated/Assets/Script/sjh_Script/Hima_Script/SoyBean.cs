@@ -12,10 +12,9 @@ public class SoyBean : Weapon_Devil
 
     Rigidbody2D rb;
 
-    CameraShake cameraShake;
-
     [SerializeField]
     GameObject Disappear_Effect;
+
     float randomX, randomY;
 
     private int Count;
@@ -25,8 +24,6 @@ public class SoyBean : Weapon_Devil
     {
         base.Awake();
         rb = GetComponent<Rigidbody2D>();
-        cameraShake = GetComponent<CameraShake>();
-        cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         Count = 0;
     }
 
@@ -52,10 +49,7 @@ public class SoyBean : Weapon_Devil
             user2.TakeDamage(1);
         if (collision.gameObject != null && collision.gameObject.CompareTag("Ground"))
         {
-            cameraShake.mainCamera.transform.position = new Vector3(0, 0, -10);
-            cameraShake.mainCamera.transform.rotation = Quaternion.identity;
-            cameraShake.mainCamera.transform.localScale = new Vector3(1, 1, 1);
-            StartCoroutine(cameraShake.Shake_Act(0.15f, 0.15f, 0.05f, false));
+            Start_Camera_Shake(0.01f, 0.1f, false, false);
             Count++;
             if (Count >= 4)
                 OnDie();
@@ -64,10 +58,7 @@ public class SoyBean : Weapon_Devil
 
     void OnDie()
     {
-        cameraShake.mainCamera.transform.position = new Vector3(0, 0, -10);
-        cameraShake.mainCamera.transform.rotation = Quaternion.identity;
-        cameraShake.mainCamera.transform.localScale = new Vector3(1, 1, 1);
-
+        cameraShake.Init_Camera();
         Instantiate(Disappear_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

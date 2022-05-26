@@ -11,7 +11,7 @@ public class Nachi_X : Enemy_Info
     {
         base.Awake();
         trailRenderer = GetComponent<TrailRenderer>();
-        cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        
     }
     IEnumerator X_Color_Change(Color Origin_C, Color Change_C, float time_persist)
     {
@@ -36,7 +36,7 @@ public class Nachi_X : Enemy_Info
 
         yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-4 * flag, 2f, 0), 0.6f, declineCurve));
         yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(16 * flag, -8f, 0), 0.1f, declineCurve));
-        StartCoroutine(cameraShake.Shake_Act(0.2f, 0.2f, 0.4f, false));
+        Start_Camera_Shake(0.05f, 0.5f, true, false);
         yield return StartCoroutine(X_Color_Change(Color.white, new Color(1, 1, 1, 0), 1));
 
         trailRenderer.enabled = false;

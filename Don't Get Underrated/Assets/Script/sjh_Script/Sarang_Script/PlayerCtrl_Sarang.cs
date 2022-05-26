@@ -195,7 +195,7 @@ public class PlayerCtrl_Sarang : Player_Info
                     Student_Clone = null;
                     All_Start();
 
-                    yield return YieldInstructionCache.WaitForSeconds(0.2f);
+                    yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
                     yield break;
                 }
             }
@@ -205,7 +205,7 @@ public class PlayerCtrl_Sarang : Player_Info
                 Student_Clone = null;
                 All_Start();
 
-                yield return YieldInstructionCache.WaitForSeconds(0.2f);
+                yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
                 yield break;
             }
             yield return null;
@@ -215,7 +215,7 @@ public class PlayerCtrl_Sarang : Player_Info
 
     private void Lazor_In_Second_Phase(GameObject weapon, Vector3 target, Vector3 self)
     {
-        Launch_Weapon_For_Move_Blink(weapon, target - self, Quaternion.identity, 8, false, transform.position);
+        Launch_Weapon_For_Move(ref weapon, target - self, Quaternion.identity, 8, transform.position);
     }
     public void Stop_Coroutine()
     {

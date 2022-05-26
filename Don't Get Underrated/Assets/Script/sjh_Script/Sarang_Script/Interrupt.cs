@@ -53,8 +53,8 @@ public class Interrupt : Enemy_Info
 
         while (true)
         {
-            Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(tempPosition.x - transform.position.x,
-                         tempPosition.y - transform.position.y, 0), Quaternion.identity, 9, false, transform.position);
+            Launch_Weapon_For_Move(ref Weapon[0], new Vector3(tempPosition.x - transform.position.x,
+                         tempPosition.y - transform.position.y, 0), Quaternion.identity, 9, transform.position);
             yield return null;
         }
     }

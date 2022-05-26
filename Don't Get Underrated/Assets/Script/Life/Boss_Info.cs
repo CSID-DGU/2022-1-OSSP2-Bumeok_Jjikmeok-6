@@ -55,6 +55,21 @@ public class Boss_Info : Life
             user1.TakeDamage(1);
 
     }
+    protected virtual void Killed_All_Mine()
+    {
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
+        GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
+
+        foreach (var e in meteor)
+            Destroy(e);
+
+        foreach (var e in enemy)
+            Destroy(e);
+
+        foreach (var e in weapon_devil)
+            Destroy(e);
+    }
     protected IEnumerator Warning(string warning_message, float time_ratio)
     {
         WarningText.text = warning_message;
@@ -147,5 +162,4 @@ public class Boss_Info : Life
         }
         yield return null; // 깔끔한 정지를 위해 한 프레임 넘겨줌
     }
-
 }

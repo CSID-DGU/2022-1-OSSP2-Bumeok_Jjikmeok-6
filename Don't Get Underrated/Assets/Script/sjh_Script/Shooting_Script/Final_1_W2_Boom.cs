@@ -20,7 +20,7 @@ public class Final_1_W2_Boom : Weapon_Player
     }
     IEnumerator MoveToCenter()
     {
-        Vector3 startPosition = transform.position;
+        Vector3 startPosition = new Vector3(0, 7.7f, 0);
         Vector3 endPosition = Vector3.zero;
         float percent = 0;
         while (percent < 1)
@@ -29,9 +29,9 @@ public class Final_1_W2_Boom : Weapon_Player
             transform.position = Vector3.Lerp(startPosition, endPosition, curve.Evaluate(percent));
             yield return null;
         }
-        animator.SetTrigger("onBoom");
+        StartCoroutine(OnBoom());
     }
-    public void OnBoom() // 최종 스테이지 (1) - 폭탄의 경우
+    IEnumerator OnBoom() // 최종 스테이지 (1) - 폭탄의 경우
     {
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] devil_weapon = GameObject.FindGameObjectsWithTag("Weapon_Devil");
@@ -56,6 +56,9 @@ public class Final_1_W2_Boom : Weapon_Player
             if (boss.TryGetComponent(out Asura f1))
                 f1.TakeDamage(30.0f);
         }
+        Create_Explode();
+        yield return StartCoroutine(Start_Camera_Shake_For_Wait(0.07f, 2f, true, false));
+
         Destroy(gameObject);
     }
 }

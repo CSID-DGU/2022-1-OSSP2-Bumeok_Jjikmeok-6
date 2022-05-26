@@ -14,7 +14,6 @@ public class Quantum_Bit : Enemy_Info
     private new void Awake()
     {
         base.Awake();
-        cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         backGroundColor = GameObject.Find("Flash").GetComponent<BackGroundColor>();
         arrayList = new ArrayList();
 
@@ -42,8 +41,7 @@ public class Quantum_Bit : Enemy_Info
     {
         spriteRenderer.color = new Color(1, 1, 1, 0);
         backGroundColor.StartCoroutine(backGroundColor.Flash(Color.black, 0.5f, 2));
-        cameraShake.StartCoroutine(cameraShake.Shake_Act(0.3f, 0.3f, 0.3f, false));
-        yield return null;
+        Start_Camera_Shake(0.02f, 2f, true, false);
 
         for (int i = -9; i <= 9; i++)
         {
@@ -59,8 +57,7 @@ public class Quantum_Bit : Enemy_Info
                 arrayList.Add(e);
             }
         }
-        cameraShake.Origin_Camera();
-        yield return cameraShake.StartCoroutine(cameraShake.Shake_Act(0.1f, 0.1f, 2f, false));
+        yield return YieldInstructionCache.WaitForSeconds(2f);
         foreach (var e in arrayList)
         {
             int Ran1 = Random.Range(0, 8);

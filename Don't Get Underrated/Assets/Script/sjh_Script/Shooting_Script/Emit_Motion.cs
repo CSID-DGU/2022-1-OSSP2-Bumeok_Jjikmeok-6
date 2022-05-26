@@ -11,11 +11,14 @@ public class Emit_Motion : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
+    PlayerCtrl_Tengai playerCtrl_Tengai;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         transform.localScale = Vector3.zero;
-
+        if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Tengai user))
+            playerCtrl_Tengai = user;
     }
     void Start()
     {
@@ -31,16 +34,16 @@ public class Emit_Motion : MonoBehaviour
             while (transform.localScale.x - temp_scale.x < .3f)
             {
                 transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * 3, transform.localScale.y + Time.deltaTime * 3, 0);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
             temp_scale = transform.localScale;
             while (temp_scale.x - transform.localScale.x < .25f)
             {
                 transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, 0);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + Time.deltaTime * 7);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
     }
     public IEnumerator Emit_Expand_Circle()
@@ -52,7 +55,7 @@ public class Emit_Motion : MonoBehaviour
         {
             percent += Time.deltaTime;
             transform.localScale = Vector3.Lerp(temp_scale, temp_scale * 21, curve.Evaluate(percent));
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
            
         }
     }
@@ -63,7 +66,8 @@ public class Emit_Motion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
+        if (playerCtrl_Tengai != null)
+            transform.position = playerCtrl_Tengai.transform.position;
     }
     private void OnDestroy()
     {

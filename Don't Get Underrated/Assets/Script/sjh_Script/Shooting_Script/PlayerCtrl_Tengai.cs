@@ -27,7 +27,7 @@ public class PlayerCtrl_Tengai : Player_Info
     GameObject Emit_Obj;
 
     [SerializeField]
-    GameObject TalkPanel;
+    GameObject Explode;
 
     Emit_Motion emit_Motion;
 
@@ -170,7 +170,7 @@ public class PlayerCtrl_Tengai : Player_Info
     {
         float A = Get_Slerp_Distance(transform.position, transform.position + 2.5f * Vector3.left, Get_Center_Vector(transform.position, transform.position + 2.5f * Vector3.left, Vector3.Distance(transform.position, transform.position + 2.5f * Vector3.left) * 0.85f, "clock"));
 
-        yield return StartCoroutine(Position_Slerp_Temp(transform.position, transform.position + 2.5f * Vector3.left, Get_Center_Vector(transform.position, transform.position + 2.5f * Vector3.left, Vector3.Distance(transform.position, transform.position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.3f, OriginCurve, false));
+        yield return StartCoroutine(Position_Slerp(transform.position, transform.position + 2.5f * Vector3.left, Get_Center_Vector(transform.position, transform.position + 2.5f * Vector3.left, Vector3.Distance(transform.position, transform.position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.3f, OriginCurve, false));
 
         float kuku = ((1.215f * transform.position.x) - transform.position.y - 7) / 1.215f;
 
@@ -178,9 +178,9 @@ public class PlayerCtrl_Tengai : Player_Info
         yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(kuku, -7, 0), B/A * 0.3f, OriginCurve));
        
     }
-
     public void Start_Emit()
     {
+        Unbeatable = true;
         i_start_emit = I_Start_Emit();
         StartCoroutine(i_start_emit);
     }
@@ -210,7 +210,7 @@ public class PlayerCtrl_Tengai : Player_Info
 
         Destroy(Emit_Obj_Copy);
 
-        backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 5));
+        backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 2));
 
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
@@ -224,16 +224,13 @@ public class PlayerCtrl_Tengai : Player_Info
 
         GameObject.FindGameObjectWithTag("Boss").GetComponent<Asura>().Stop_Meteor();
 
-        GameObject u = Instantiate(When_Dead_Effect, Vector3.zero, Quaternion.identity);
+        Instantiate(Explode, Vector3.zero, Quaternion.identity);
+        Start_Camera_Shake(0.07f, 2, true, false);
 
-        cameraShake.StartCoroutine(cameraShake.Shake_Act(0.4f, 0.4f, 0.3f, false));
-        yield return YieldInstructionCache.WaitForSeconds(2f);
-
-        Destroy(u);
     }
     public override void OnDie()
     {
-        Destroy(gameObject); // 씬 추가해야한다.
+        Destroy(gameObject); // 게임오버 씬 + 에니메이션 추가해야한다.
         return;
     }
 
@@ -293,17 +290,14 @@ public class PlayerCtrl_Tengai : Player_Info
     {
         while (true)
         {
+            yield return new WaitForSeconds(0.1f);
             if (is_Power_Up)
             {
-                yield return new WaitForSeconds(0.1f);
-                Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, -0.1f, 0), Quaternion.identity, 18, false, transform.position + new Vector3(0.77f, -0.3f, 0));
-                Launch_Weapon_For_Move_Blink(Weapon[0], new Vector3(1, 0.1f, 0), Quaternion.identity, 18, false, transform.position + new Vector3(0.77f, -0.3f, 0));
+                Launch_Weapon_For_Move(ref Weapon[0], new Vector3(1, -0.1f, 0), Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
+                Launch_Weapon_For_Move(ref Weapon[0], new Vector3(1, 0.1f, 0), Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
             }
             else
-            {
-                yield return new WaitForSeconds(0.1f);
-                Launch_Weapon_For_Move_Blink(Weapon[0], Vector3.right, Quaternion.identity, 18, false, transform.position + new Vector3(0.77f, -0.3f, 0));
-            }
+                Launch_Weapon_For_Move(ref Weapon[0], Vector3.right, Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
            
         }
     }
@@ -313,7 +307,7 @@ public class PlayerCtrl_Tengai : Player_Info
         {
             BoomCount--;
             BoomCountText.text = "폭탄 : " + BoomCount;
-            Instantiate(Weapon[1], transform.position, Quaternion.identity);
+            Instantiate(Weapon[1], new Vector3(0, 7.7f, 0), Quaternion.identity);
         }
     }
     void LateUpdate()

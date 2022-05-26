@@ -24,23 +24,6 @@ internal static class StaticFunc
     {
         float startTime = Time.realtimeSinceStartup;
         while (Time.realtimeSinceStartup - startTime < seconds)
-        {
             yield return null;
-        }
     }
-    public static IEnumerator Warning(TextMeshProUGUI warning_UI, string warning_message, float time_ratio)
-    {
-        warning_UI.text = warning_message;
-        while (warning_UI.color.a < 1.0f)
-        {
-            warning_UI.color = new Color(warning_UI.color.r, warning_UI.color.g, warning_UI.color.b, warning_UI.color.a + Time.deltaTime * time_ratio);
-            yield return null;
-        }
-        while (warning_UI.color.a > 0.0f)
-        {
-            warning_UI.color = new Color(warning_UI.color.r, warning_UI.color.g, warning_UI.color.b, warning_UI.color.a - Time.deltaTime * time_ratio);
-            yield return null;
-        }
-    }
-
 }

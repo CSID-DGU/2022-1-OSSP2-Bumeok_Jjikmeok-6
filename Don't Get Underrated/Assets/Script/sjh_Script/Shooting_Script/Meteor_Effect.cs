@@ -25,8 +25,7 @@ public class Meteor_Effect : Weapon_Devil
     public IEnumerator Pattern02_Meteor(float temp)
     {
         copy_Meteor_Line = Instantiate(Meteor_Line, new Vector3(temp, 0, 0), Quaternion.Euler(0, 0, 90));
-        copy_Meteor_Traffic = Instantiate(Meteor_Traffic, new Vector3(temp, 3.5f, 0), Quaternion.identity);
-
+        copy_Meteor_Traffic = Instantiate(Meteor_Traffic, new Vector3(temp, 3.7f, 0), Quaternion.identity);
         Meteor_Line meteor_Line = null;
 
         IEnumerator u = null;
@@ -80,6 +79,12 @@ public class Meteor_Effect : Weapon_Devil
         spriteRenderer.color = new Color(1, 1, 1, 1);
         W_MoveTo(Vector3.left);
         yield return null;
+    }
+
+    private void LateUpdate()
+    {
+        if (transform.position.x <= -10 || transform.position.y <= -5.7f)
+            Destroy(gameObject);
     }
 
     private void OnDestroy()

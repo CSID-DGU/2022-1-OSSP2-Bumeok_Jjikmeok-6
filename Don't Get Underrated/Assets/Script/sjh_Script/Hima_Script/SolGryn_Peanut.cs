@@ -14,8 +14,6 @@ public class SolGryn_Peanut : Weapon_Devil
 
 	private int groundLayerMask;
 
-	CameraShake cameraShake;
-
 	private int Count = 0;
 
 	// Use this for initialization
@@ -23,11 +21,13 @@ public class SolGryn_Peanut : Weapon_Devil
 	{
 		base.Awake();
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
-		cameraShake = GetComponent<CameraShake>();
-		cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
 		Debug.Log(groundLayerMask);
 	}
-	bool isGrounded()
+    private void Start()
+    {
+		Start_Camera_Shake(0.015f, 0.1f, false, false);
+	}
+    bool IsGrounded()
 	{
 		Vector2 position = transform.position;
 		Vector2 direction = Vector2.down;
@@ -38,7 +38,7 @@ public class SolGryn_Peanut : Weapon_Devil
 
 	void FixedUpdate()
 	{
-		bool nextGrounded = isGrounded();
+		bool nextGrounded = IsGrounded();
 
 		if (nextGrounded)
 		{
@@ -46,14 +46,11 @@ public class SolGryn_Peanut : Weapon_Devil
 			Count++;
 		}
 		if (Count == 1)
-		{
 			Die();
-		}
 	}
 	public void Die()
 	{
-		IEnumerator camera_shake = cameraShake.Shake_Act(.03f, .03f, 0.1f, false);
-		StartCoroutine(camera_shake);
+		Start_Camera_Shake(0.015f, 0.1f, false, false);
 		Instantiate(deathParticle, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 	}

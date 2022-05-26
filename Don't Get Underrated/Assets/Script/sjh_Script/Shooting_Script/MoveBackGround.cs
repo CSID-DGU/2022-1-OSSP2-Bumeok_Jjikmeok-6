@@ -27,11 +27,11 @@ public class MoveBackGround : MonoBehaviour
         inGameSpeed = 0;   
     }
 
-    public IEnumerator Increase_Speed(float time_persist, float Speed_Limit)
+    public IEnumerator Increase_Speed(float grant_speed, float Speed_Limit)
     {
         while(true)
         {
-            inGameSpeed += Time.deltaTime / time_persist;
+            inGameSpeed += Time.deltaTime / grant_speed;
             if (inGameSpeed >= Speed_Limit)
                 yield break;
             yield return null;
@@ -52,7 +52,7 @@ public class MoveBackGround : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += moveDirection * inGameSpeed * Time.deltaTime;
+        transform.position += inGameSpeed * Time.deltaTime * moveDirection;
         if (transform.position.x <= -move_value)
         {
             transform.position = Back_another.transform.position + (Vector3.right * move_value);

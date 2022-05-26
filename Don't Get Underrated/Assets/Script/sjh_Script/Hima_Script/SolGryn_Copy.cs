@@ -16,7 +16,7 @@ public class SolGryn_Copy : Enemy_Info
 
     public void Move_Slerp_Distance(Vector3 Target, string dir)
     {
-        StartCoroutine(Position_Slerp_Temp(transform.position, Target,
+        StartCoroutine(Position_Slerp(transform.position, Target,
               Get_Center_Vector(transform.position, Target, Vector3.Distance(transform.position, Target) * 0.85f, dir), 1, declineCurve, false));
     }
     public void Shake_Act()

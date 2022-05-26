@@ -2,6 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class For_Continuous_Slerp_Move
+{
+    private Vector3 next_Position;
+    private string dir;
+    public For_Continuous_Slerp_Move(Vector3 _next_Position, string _dir)
+    {
+        next_Position = _next_Position;
+        dir = _dir;
+    }
+    public Vector3 Next_Position => next_Position;
+    public string Dir => dir;
+}
+
 public class Life : MonoBehaviour, Life_Of_Basic
 {
     [SerializeField]
@@ -29,11 +42,11 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
     protected Movement2D movement2D;
 
-    protected IEnumerator camera_shake;
-
-    protected CameraShake cameraShake;
+    private CameraShake cameraShake;
 
     protected BackGroundColor backGroundColor;
+
+    protected IEnumerator camera_shake;
 
     protected float Plus_Speed;
 
@@ -41,16 +54,18 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
     public bool Unbeatable
     {
-        set { unbeatable = value; }
         get { return unbeatable; }
-    }
+        set { unbeatable = value; }    }
 
     protected virtual void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        cameraShake = GetComponent<CameraShake>();
         Unbeatable = false;
         Plus_Speed = 0;
+        if (TryGetComponent(out CameraShake user))
+            cameraShake = user;
+        if (cameraShake != null && cameraShake.mainCamera == null && GameObject.Find("Main Camera").TryGetComponent(out Camera camera))
+            cameraShake.mainCamera = camera;
     }
     public Color SpriteRenderer_Color
     {
@@ -92,9 +107,27 @@ public class Life : MonoBehaviour, Life_Of_Basic
         }
         yield return null;
     }
-    protected void Launch_Weapon_For_Move_Blink(GameObject weapon, Vector3 Direction, Quaternion Degree, float speed, bool is_Blink, Vector3 Instantiate_Dir) // 이외의 나머지
+    protected void Launch_Weapon_For_Move(ref GameObject weapon, Vector3 Direction, Quaternion Degree, float speed, Vector3 Instantiate_Dir) // 이외의 나머지
     {
         GameObject Copy = Instantiate(weapon, Instantiate_Dir, Degree);
+        if (Copy.TryGetComponent(out Weapon_Devil user1))
+        {
+            user1.W_MoveTo(Direction);
+            user1.W_MoveSpeed(speed);
+        }
+        else if (Copy.TryGetComponent(out Weapon_Player user2))
+        {
+            user2.W_MoveTo(Direction);
+            user2.W_MoveSpeed(speed);
+        }
+        else
+            Destroy(Copy);
+    }
+    protected void Launch_Weapon_For_Move_Another(GameObject weapon, Vector3 Direction, Vector3 Scale, Quaternion Degree, float speed, Vector3 Instantiate_Dir) // 이외의 나머지
+    {
+        GameObject Copy = Instantiate(weapon, Instantiate_Dir, Degree);
+        if (Scale != null)
+            Copy.transform.localScale = Scale;
         if (Copy.TryGetComponent(out Weapon_Devil user1))
         {
             user1.W_MoveTo(Direction);
@@ -120,7 +153,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
     }
     protected IEnumerator Change_Color_Return_To_Origin(Color Origin_C, Color Change_C, float time_persist, bool is_Continue)
     {
-        float percent = 0;
+        float percent;
         while (true)
         {
             percent = 0;
@@ -157,7 +190,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
     }
     protected IEnumerator Change_Color_Lerp(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
     {
-        float percent = 0;
+        float percent;
         if (Effect != null)
             Instantiate(Effect, transform.position, Quaternion.identity);
         percent = 0;
@@ -180,18 +213,33 @@ public class Life : MonoBehaviour, Life_Of_Basic
             yield return null;
         }
     }
+    protected IEnumerator Position_Slerp(Vector3 start_location, Vector3 last_location, Vector3 center, float time_ratio, AnimationCurve curve, bool is_Plus_Speed)
+    {
+        float percent = 0;
+        while (percent < 1)
+        {
+            if (is_Plus_Speed)
+                percent += (Time.deltaTime + Plus_Speed) / time_ratio;
+            else
+                percent += Time.deltaTime / time_ratio;
+            Vector3 riseRelCenter = start_location - center;
+            Vector3 setRelCenter = last_location - center;
+
+            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent));
+
+            transform.position += center;
+            Plus_Speed += 0.0006f;
+            yield return null;
+        }
+        yield return null;
+    }
     protected float Get_Slerp_Distance(Vector3 Start, Vector3 End, Vector3 Center)
     {
         Vector3 Center_to_Start = Start - Center;
         Vector3 Center_to_Last = End - Center;
 
         float theta = Vector3.Dot(Center_to_Start, Center_to_Last) / (Center_to_Start.magnitude * Center_to_Last.magnitude);
-        //Vector3 dirAngle = Vector3.Cross(Center_to_Start, Center_to_Last);
         float angle = Mathf.Acos(theta) * Mathf.Rad2Deg;
-        //if (dirAngle.z < 0.0f) angle = 360 - angle;
-
-        //Debug.Log(angle);
-        //Debug.Log("dirAngle : " + dirAngle);
         return (2 * Mathf.PI * Vector3.Distance(Center_to_Start, Vector3.zero) * angle) / 360;
     }
     protected Vector3 Get_Center_Vector(Vector3 Start, Vector3 End, float Center_To_Real_Center_Distance, string is_Clock)
@@ -217,26 +265,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
         return new Vector3(Center.x - Dot_Vector.x * Center_To_Real_Center_Distance, Center.y - Dot_Vector.y * Center_To_Real_Center_Distance);
     }
-    protected IEnumerator Position_Slerp_Temp(Vector3 start_location, Vector3 last_location, Vector3 center, float time_ratio, AnimationCurve curve, bool is_Plus_Speed)
-    {
-        float percent = 0;
-        while (percent < 1)
-        {
-            if (is_Plus_Speed)
-                percent += (Time.deltaTime + Plus_Speed) / time_ratio;
-            else
-                percent += Time.deltaTime / time_ratio;
-            Vector3 riseRelCenter = start_location - center;
-            Vector3 setRelCenter = last_location - center;
-
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent));
-
-            transform.position += center;
-            Plus_Speed += 0.0006f;
-            yield return null;
-        }
-        yield return null;
-    }
     protected IEnumerator Size_Change_Infinite(float delta_ratio)
     {
         while (true)
@@ -245,14 +273,25 @@ public class Life : MonoBehaviour, Life_Of_Basic
             yield return null;
         }
     }
-    protected IEnumerator Rotate_Dec(Quaternion A, Quaternion B, float speed, AnimationCurve curve)
+    protected IEnumerator Rotate_Dec(Quaternion A, Quaternion B, float time_persist, AnimationCurve curve)
     {
         float percent = 0;
         while (percent < 1)
         {
-            percent += (Time.deltaTime * speed);
+            percent += (Time.deltaTime / time_persist);
             transform.rotation = Quaternion.Lerp(A, B, curve.Evaluate(percent));
             yield return null;
         }
     }
+    protected void Start_Camera_Shake(float shake_intensity, float time_persist, bool is_Decline_Camera_Shake, bool is_Continue)
+    {
+        if (camera_shake != null)
+            cameraShake.StopCoroutine(camera_shake);
+        camera_shake = cameraShake.Shake_Act(shake_intensity, time_persist, is_Decline_Camera_Shake, is_Continue);
+        cameraShake.StartCoroutine(camera_shake);
+    }
+    protected IEnumerator Start_Camera_Shake_For_Wait(float shake_intensity, float time_persist, bool is_Decline_Camera_Shake, bool is_Continue)
+    {
+        yield return cameraShake.StartCoroutine(cameraShake.Shake_Act(shake_intensity, time_persist, is_Decline_Camera_Shake, is_Continue));
+    } // 되도록이면 사용 자제
 }

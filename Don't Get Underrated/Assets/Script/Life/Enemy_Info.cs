@@ -72,8 +72,7 @@ public class Enemy_Info : Life
             }
             if (!is_Continue)
             {
-                transform.position = originPosition;
-                transform.rotation = originRotation;
+                transform.SetPositionAndRotation(originPosition, originRotation);
                 transform.localScale = originScale;
                 yield return null;
                 yield break;
