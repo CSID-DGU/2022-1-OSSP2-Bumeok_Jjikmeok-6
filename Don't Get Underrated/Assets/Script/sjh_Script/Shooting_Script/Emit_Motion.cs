@@ -59,10 +59,6 @@ public class Emit_Motion : MonoBehaviour
            
         }
     }
-    public void Set_Color()
-    {
-        spriteRenderer.color = new Color(1, 1, 1, 0);
-    }
     // Update is called once per frame
     void Update()
     {

@@ -26,6 +26,7 @@ TagManager:
   - PowerItem
   - BoomItem
   - Jebal
+  - Item
   layers:
   - Default
   - TransparentFX

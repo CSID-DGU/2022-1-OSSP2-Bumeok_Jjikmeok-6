@@ -13,8 +13,6 @@ public class Limit_Time : MonoBehaviour
 
     IEnumerator flash_on;
 
-    IEnumerator disappear;
-
     IEnumerator descent_time;
 
     [SerializeField]
@@ -28,7 +26,7 @@ public class Limit_Time : MonoBehaviour
     private void Awake()
     {
         Limit_Time_Text = GetComponent<TextMeshProUGUI>();
-        wow_Time = Option_Limit_Time;
+        wow_Time = 100;
         Limit_Time_Text.text = "제한시간 : " + wow_Time;
         image = GameObject.Find("Flash_TimeOut").GetComponent<Image>();
         flashOn = image.GetComponent<BackGroundColor>();
@@ -42,7 +40,7 @@ public class Limit_Time : MonoBehaviour
 
     IEnumerator Descent_Time()
     {
-        while(true)
+        while (true)
         {
             if (wow_Time <= 10)
             {
@@ -60,7 +58,7 @@ public class Limit_Time : MonoBehaviour
                 else
                     yield break;
 
-                playerCtrl_Sarang.Stop_Coroutine();
+                playerCtrl_Sarang.StopAllCoroutines();
                 playerCtrl_Sarang.Destroy_sliderClone();
 
                 GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
@@ -68,14 +66,12 @@ public class Limit_Time : MonoBehaviour
                 GameObject ww = GameObject.Find("Student_Gaze");
                 GameObject rr = GameObject.Find("Targetting_Object");
 
-
                 if (ww != null)
                     Destroy(ww);
 
                 if (rr != null)
                     Destroy(rr);
                     
-
                 foreach (var u in e)
                 {
                     if (u.TryGetComponent(out Interrupt user))

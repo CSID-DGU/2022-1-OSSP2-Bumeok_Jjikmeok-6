@@ -9,10 +9,13 @@ public class Final_1_W2_Boom : Weapon_Player
 
     Animator animator;
 
+    SpriteRenderer spriteRenderer;
+
     private new void Awake()
     {
         base.Awake();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     void Start()
     {
@@ -57,7 +60,8 @@ public class Final_1_W2_Boom : Weapon_Player
                 f1.TakeDamage(30.0f);
         }
         Create_Explode();
-        yield return StartCoroutine(Start_Camera_Shake_For_Wait(0.07f, 2f, true, false));
+        spriteRenderer.color = new Color(1, 1, 1, 0);
+        yield return StartCoroutine(Start_Camera_Shake_For_Wait(0.04f, 2f, true, false));
 
         Destroy(gameObject);
     }

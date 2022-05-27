@@ -138,28 +138,4 @@ public class Boss_Info : Life
             }
         }
     }
-    protected IEnumerator Position_Curve(Vector3 start_location, Vector3 standard_location, Vector3 last_location, float standard_time_ratio, AnimationCurve curve)
-    {
-        float percent = 0;
-
-        float Length = Vector3.Distance(start_location, last_location);
-        float journeyTime = standard_time_ratio * Vector3.Distance(standard_location, last_location) / Length; // 3차원 좌표 (-7, -4, 0), (7, 0, 0) 사이를 선형보간하는 시간을 1초로 기준을 두고 계산
-
-        while (true)
-        {
-            if (percent / journeyTime >= 1)
-                break;
-            percent += Time.deltaTime;
-            Vector3 center = (start_location + last_location) * 0.5f;
-            center -= new Vector3(0, -7f, 0);
-            Vector3 riseRelCenter = start_location - center;
-            Vector3 setRelCenter = last_location - center;
-
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent / journeyTime));
-
-            transform.position += center;
-            yield return null;
-        }
-        yield return null; // 깔끔한 정지를 위해 한 프레임 넘겨줌
-    }
 }

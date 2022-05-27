@@ -753,7 +753,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ..
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7b7429507436338488892056bb9816c3, type: 2}
   m_sharedMaterial: {fileID: -7833688596593056086, guid: 7b7429507436338488892056bb9816c3, type: 2}
@@ -2518,7 +2518,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  When_Dead_Effect: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 3}
+  When_Dead_Effect: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
   LifeTime: 20
   Item: []
@@ -2684,7 +2684,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1596555459}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.59, y: -0.26, z: 0}
+  m_LocalPosition: {x: -3.42, y: 1.76, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2730,7 +2730,7 @@ MonoBehaviour:
   - {fileID: 9106550428233493024, guid: 44f886a01bd8baf45aecf74e9656e740, type: 3}
   - {fileID: 3002268227658072674, guid: f14b93f4358fc8b4ca57c75511e6bed3, type: 3}
   - {fileID: 2832031252176686515, guid: 519cf4bf2b4904646a146395dd0b5141, type: 3}
-  - {fileID: 1043433220617109705, guid: e239d25e0e548f343a4238c5676bc484, type: 3}
+  - {fileID: 1344810313329756703, guid: 7604bbd5e237ec044a4f061923c3bc69, type: 3}
   declineCurve:
     serializedVersion: 2
     m_Curve:
@@ -2830,8 +2830,8 @@ MonoBehaviour:
   When_Dead_Effect: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
   maxHP: 1
-  DisAppear_Effect_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
-  DisAppear_Effect_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
+  DisAppear_Effect_1: {fileID: 8966546711943512021, guid: 6190486d24cfa094c8342e5ca2391e16, type: 3}
+  DisAppear_Effect_2: {fileID: 8612685064222628149, guid: a6ced76fc3afaac4c9840f6869944b2e, type: 3}
   WarningText: {fileID: 431468218}
   speed: 15
   rotateSpeed: 200

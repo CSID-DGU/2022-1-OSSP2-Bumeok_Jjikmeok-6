@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4794043405585894024}
   - component: {fileID: 4794043405585894027}
   - component: {fileID: 4794043405585894026}
-  - component: {fileID: 9116013737010295488}
+  - component: {fileID: 6972931259006462998}
   m_Layer: 0
   m_Name: Impact01
   m_TagString: Untagged
@@ -4875,7 +4875,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &9116013737010295488
+--- !u!114 &6972931259006462998
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4884,7 +4884,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4794043405585894037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1bb6da1af5abfd40a72b89011be5962, type: 3}
+  m_Script: {fileID: 11500000, guid: c2a8c8c40c1bd8f4c8b2820fb7fd93d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Destroy_Time: 2

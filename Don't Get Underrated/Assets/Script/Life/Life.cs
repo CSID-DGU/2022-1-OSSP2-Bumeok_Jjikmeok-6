@@ -14,7 +14,6 @@ public class For_Continuous_Slerp_Move
     public Vector3 Next_Position => next_Position;
     public string Dir => dir;
 }
-
 public class Life : MonoBehaviour, Life_Of_Basic
 {
     [SerializeField]
@@ -48,6 +47,8 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
     protected IEnumerator camera_shake;
 
+    protected IEnumerator back_ground_color;
+
     protected float Plus_Speed;
 
     private bool unbeatable;
@@ -55,7 +56,8 @@ public class Life : MonoBehaviour, Life_Of_Basic
     public bool Unbeatable
     {
         get { return unbeatable; }
-        set { unbeatable = value; }    }
+        set { unbeatable = value; }    
+    }
 
     protected virtual void Awake()
     {
@@ -72,6 +74,17 @@ public class Life : MonoBehaviour, Life_Of_Basic
         get { return spriteRenderer.color; }
         set { spriteRenderer.color = value; }
     }
+    public Vector3 This_Scale
+    {
+        get { return transform.localScale; }
+        set { transform.localScale = value; }
+    }
+    public Vector3 This_Position
+    {
+        get { return transform.position; }
+        set { transform.position = value; }
+    }
+
     public virtual void TakeDamage(float damage) 
     {
         if (When_Dead_Effect != null)
@@ -192,7 +205,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         float percent;
         if (Effect != null)
-            Instantiate(Effect, transform.position, Quaternion.identity);
+            Instantiate(Effect, transform.position, Effect.transform.localRotation);
         percent = 0;
         while (percent < 1)
         {
@@ -294,4 +307,5 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         yield return cameraShake.StartCoroutine(cameraShake.Shake_Act(shake_intensity, time_persist, is_Decline_Camera_Shake, is_Continue));
     } // 되도록이면 사용 자제
+
 }

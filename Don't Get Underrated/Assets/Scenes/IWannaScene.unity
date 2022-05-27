@@ -1255,7 +1255,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1176409220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.04, y: -2.62, z: 0}
+  m_LocalPosition: {x: 0.03, y: -1.43, z: 0}
   m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1305,7 +1305,6 @@ MonoBehaviour:
   facingRight: 1
   jump: 0
   Death_Count: {fileID: 691772754}
-  moveAccel: 200
   maxSpeed: 7
   jumpSpeed: 12
   maxAirJumps: 1

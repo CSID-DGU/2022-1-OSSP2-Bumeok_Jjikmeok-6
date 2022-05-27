@@ -138,8 +138,11 @@ public class PlayerCtrl_Tengai : Player_Info
     {
         if (Unbeatable)
             return;
+        Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         LifeTime -= damage;
         animator.SetBool("Dead", true);
+
+        
        
         Unbeatable = true;
         weapon_able = false;
@@ -225,7 +228,7 @@ public class PlayerCtrl_Tengai : Player_Info
         GameObject.FindGameObjectWithTag("Boss").GetComponent<Asura>().Stop_Meteor();
 
         Instantiate(Explode, Vector3.zero, Quaternion.identity);
-        Start_Camera_Shake(0.07f, 2, true, false);
+        Start_Camera_Shake(0.06f, 2, true, false);
 
     }
     public override void OnDie()

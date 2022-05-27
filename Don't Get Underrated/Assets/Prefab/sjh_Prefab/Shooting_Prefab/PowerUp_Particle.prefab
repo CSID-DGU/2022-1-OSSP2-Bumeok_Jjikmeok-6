@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 227703385401004340}
   - component: {fileID: 227703385401004341}
   - component: {fileID: 227703385401004342}
-  - component: {fileID: 3296920441359807749}
+  - component: {fileID: -5901885699939024636}
   m_Layer: 0
   m_Name: PowerUp_Particle
   m_TagString: Untagged
@@ -4805,7 +4805,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &3296920441359807749
+--- !u!114 &-5901885699939024636
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4814,7 +4814,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 227703385401004343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1bb6da1af5abfd40a72b89011be5962, type: 3}
+  m_Script: {fileID: 11500000, guid: c2a8c8c40c1bd8f4c8b2820fb7fd93d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Destroy_Time: 1

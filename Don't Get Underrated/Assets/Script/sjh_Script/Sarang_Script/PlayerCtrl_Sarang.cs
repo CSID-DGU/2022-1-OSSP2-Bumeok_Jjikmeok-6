@@ -1,11 +1,20 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class PlayerCtrl_Sarang : Player_Info
 {
-    public float IsDoubleClick = 0.25f;
+    // 게임의 전체적인 요소는 1. 플레이어 2. 적 3. 학생 4. 학생 게이지 
+
+    //GameObject Fever_Particle_Clone;
+
+    GameObject sliderClone;
+
+    GameObject Student_Clone;
+
+    GameObject Fever_Particle_Copy;
+
+    public Animator animator;
 
     private bool IsOneClick = false;
 
@@ -19,23 +28,17 @@ public class PlayerCtrl_Sarang : Player_Info
 
     private bool FixedTarget = false;
 
-    private bool is_Domain = false;
+    public bool is_Domain = false;
 
     private bool is_Button = false;
+
+    public bool Is_Fever = false;
 
     private IEnumerator first_phase;
 
     private int Floor_Player_Place;
 
-    private float Student_Power = 1;
-
-    int StudentLayerMask;  // Player 레이어만 충돌 체크함
-
-    [SerializeField]
-    float PlayerWalkSpeed = 0.03f;
-
-    [SerializeField]
-    float Decrease_HP_ratio = 0.0006f;
+    private int StudentLayerMask;  // Player 레이어만 충돌 체크함
 
     [SerializeField]
     GameObject Move_Slider;
@@ -64,13 +67,17 @@ public class PlayerCtrl_Sarang : Player_Info
     [SerializeField]
     GameObject Up_Floor;
 
-    GameObject Fever_Particle_Clone;
+    [SerializeField]
+    float IsDoubleClick = 0.25f;
 
-    GameObject sliderClone;
+    [SerializeField]
+    float PlayerWalkSpeed = 0.03f;
 
-    public Animator animator;
+    [SerializeField]
+    public int Student_Power = 1;
 
-    GameObject Student_Clone;
+    [SerializeField]
+    public int Fever_Power = 2;
 
     public void Destroy_sliderClone()
     {
@@ -80,25 +87,41 @@ public class PlayerCtrl_Sarang : Player_Info
     private new void Awake()
     {
         base.Awake();
-        first_phase = null;
+
+        backGroundColor = GameObject.Find("Flash_Interrupt").GetComponent<BackGroundColor>();
+        animator = GetComponent<Animator>();
+
+        IsOneClick = false;
+        Timer = 0;
+        Dash_Able = true;
+        Move_Able = true;
+        FixedSlider = false;
+        FixedTarget = false;
         is_Domain = true;
         is_Button = true;
-        transform.position = new Vector3(0, -2.5f, 0);
+        Is_Fever = false;
+        Student_Clone = null;
+        first_phase = null;
+        Fever_Particle_Copy = null;
         Floor_Player_Place = 1;
-        Student_Gaze.SetActive(false);
+        StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
+
         Targetting_Object.SetActive(false);
         Down_Floor.SetActive(false);
         Up_Floor.SetActive(false);
+        Student_Gaze.SetActive(false);
+
+        transform.position = new Vector3(0, -2.5f, 0);
         stageData.LimitMin = new Vector2(-3, -6);
         stageData.LimitMax = new Vector2(40, 8);
-        StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
-        animator = GetComponent<Animator>();
-        backGroundColor = GameObject.Find("Flash_Interrupt").GetComponent<BackGroundColor>();
     }
+
+    // 플레이어의 코루틴 순서 : First_Phase --> Second_Phase --> Third_Phase
 
     // Start is called before the first frame update
     void Start()
     {
+        //StartCoroutine(Start_Game());
         All_Start();
     }
     IEnumerator First_Phase()
@@ -113,9 +136,11 @@ public class PlayerCtrl_Sarang : Player_Info
             {
                 if (!FixedTarget)
                 {
-                    Targetting_Object.SetActive(true);
-                    Targetting_Object.GetComponent<Targetting_Effect>().Scale_Color(hit.transform.gameObject);
                     FixedTarget = true;
+                    Targetting_Object.SetActive(true);
+                    if (Targetting_Object.TryGetComponent(out Targetting_Effect targetting_effect))
+                        targetting_effect.Change_Scale_And_Color(hit.transform.gameObject);
+                   
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -128,7 +153,6 @@ public class PlayerCtrl_Sarang : Player_Info
                 Targetting_Object.SetActive(false);
                 FixedTarget = false;
             }
-
             yield return null;
         }
     }
@@ -138,6 +162,7 @@ public class PlayerCtrl_Sarang : Player_Info
         All_Stop();
         if (!Student_Gaze.activeSelf)
             Student_Gaze.SetActive(true);
+
         while (true)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -148,6 +173,7 @@ public class PlayerCtrl_Sarang : Player_Info
             {
                 if (Student_Clone == null)
                     Student_Clone = hit.transform.gameObject;
+                 
                 if (Input.GetMouseButton(0))
                 {
                     float dir_Change = transform.position.x - Student_Clone.transform.position.x;
@@ -157,10 +183,8 @@ public class PlayerCtrl_Sarang : Player_Info
 
                     if (!FixedSlider)
                     {
-                        Student_Gaze.transform.position = Student_Clone.transform.position + new Vector3(0, 2, 0);
                         FixedSlider = true;
-
-                        Student_Clone.GetComponent<Student>().Be_Attacked();
+                        Student_Gaze.transform.position = Student_Clone.transform.position + new Vector3(0, 2, 0);
                         Student_Clone.GetComponent<Student>().Stop_Move(); // 공격 받는 중 + 움직임 정지
                     }
 
@@ -184,16 +208,37 @@ public class PlayerCtrl_Sarang : Player_Info
 
                         if (Student_Clone != null)
                             Destroy(Student_Clone);
+
+                        if (!Is_Fever)
+                        {
+                            Main_3_Score += 100;
+                            animator.SetBool("Heart_Gain", true);
+                            This_Scale = new Vector3(1.1f, 1.1f, 0);
+                            yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
+                            animator.SetBool("Heart_Gain", false);
+                            This_Scale = new Vector3(4.9f, 4.9f, 0);
+                            All_Start();
+                        }
+                        else
+                            Main_3_Score += 100 * 2;
+
                     }
                     else if (temp == 3)
-                        Main_3_Score += 1;
-
+                    {
+                        if (Is_Fever)
+                            Main_3_Score += Student_Power * Fever_Power;
+                        else
+                            Main_3_Score += Student_Power;
+                    }
                 }
                 else if (Input.GetMouseButtonUp(0))
                 {
                     Init_Student();
                     Student_Clone = null;
-                    All_Start();
+                    if (Is_Fever)
+                        Enter_Fever();
+                    else
+                        All_Start();
 
                     yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
                     yield break;
@@ -203,7 +248,10 @@ public class PlayerCtrl_Sarang : Player_Info
             {
                 Init_Student();
                 Student_Clone = null;
-                All_Start();
+                if (Is_Fever)
+                    Enter_Fever();
+                else
+                    All_Start();
 
                 yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
                 yield break;
@@ -216,10 +264,6 @@ public class PlayerCtrl_Sarang : Player_Info
     private void Lazor_In_Second_Phase(GameObject weapon, Vector3 target, Vector3 self)
     {
         Launch_Weapon_For_Move(ref weapon, target - self, Quaternion.identity, 8, transform.position);
-    }
-    public void Stop_Coroutine()
-    {
-        StopAllCoroutines();
     }
 
     IEnumerator Third_Phase(GameObject targetStudent_t)
@@ -237,14 +281,19 @@ public class PlayerCtrl_Sarang : Player_Info
 
         Init_Student();
 
-        if (Student_Clone != null)
-            Destroy(Student_Clone);
+        if (targetStudent_t != null)
+            Destroy(targetStudent_t);
 
-        yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임
-        animator.SetBool("IsDead", false);
-
-        All_Start();
-
+        if (Is_Fever)
+            Enter_Fever();
+        else
+        {
+            yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
+            This_Scale = new Vector3(4.9f, 4.9f, 0);
+            animator.SetBool("IsDead", false);
+            animator.SetBool("Heart_Gain", false);
+            All_Start();
+        }
         yield break;
     }
     public void Init_Student()
@@ -254,10 +303,7 @@ public class PlayerCtrl_Sarang : Player_Info
         FixedSlider = false;
 
         if (Student_Clone != null)
-        {
-            Student_Clone.GetComponent<Student>().NotBe_Attacked();
             Student_Clone.GetComponent<Student>().Start_Move();
-        }
     }
     IEnumerator Lazor_In_Second_Phase(GameObject targetStudent_t)
     {
@@ -267,6 +313,55 @@ public class PlayerCtrl_Sarang : Player_Info
                 Lazor_In_Second_Phase(Weapon[0], targetStudent_t.transform.position, transform.position);
             yield return null;
         }
+    }
+
+    public void Enter_Fever()
+    {
+        if (Fever_Particle_Copy == null)
+            Fever_Particle_Copy = Instantiate(Fever_Particle, transform.position + Vector3.down * 1.5f, Quaternion.Euler(-90, 0, 0));
+        All_Stop();
+        All_Start();
+        Dash_Able = false;
+        PlayerWalkSpeed = 0.06f;
+    }
+    public void Out_Fever()
+    {
+        if (Fever_Particle_Copy != null)
+        {
+            //Fever_Particle_Copy = null;
+            if (Fever_Particle_Copy.TryGetComponent(out ParticleSystem user))
+            {
+                if (user.IsAlive())
+                    Destroy(user.gameObject);
+            }
+        }
+        Is_Fever = false;
+        transform.localScale = new Vector3(4.9f, 4.9f, 1);
+        animator.SetBool("BulSang", false);
+        animator.SetBool("Heart_Gain", false);
+        animator.SetBool("IsWalk", false);
+        animator.SetBool("IsRun", false);
+        animator.SetBool("IsDead", false); // 애니메이션 초기화
+        GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] f = GameObject.FindGameObjectsWithTag("Student");
+
+        foreach (var u in e)
+        {
+            if (u.TryGetComponent(out Interrupt user1))
+                user1.When_Fever_End();
+        }
+        foreach (var u in f)
+        {
+            if (u.TryGetComponent(out Student user2))
+                user2.When_Fever_End();
+        }
+
+        Student_Gaze.GetComponent<Student_Gaze_Info>().When_Fever_End();
+        Student_Gaze.SetActive(false);
+     
+        StopAllCoroutines();
+        All_Stop();
+        All_Start();
     }
 
     IEnumerator Move_Delay()
@@ -342,7 +437,6 @@ public class PlayerCtrl_Sarang : Player_Info
             animator.SetBool("IsWalk", true);
             key = 1;
             transform.position = new Vector3(transform.position.x + PlayerWalkSpeed * key, transform.position.y, transform.position.z);
-
         }
         if (Input.GetKey(KeyCode.A))
         {
@@ -353,6 +447,7 @@ public class PlayerCtrl_Sarang : Player_Info
 
         if (key != 0)
             transform.localScale = new Vector3(-key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+           
         else
             animator.SetBool("IsWalk", false);
     }
@@ -377,6 +472,7 @@ public class PlayerCtrl_Sarang : Player_Info
 
         if (Down_Floor.activeSelf)
             Down_Floor.SetActive(false);
+        
         if (Up_Floor.activeSelf)
             Up_Floor.SetActive(false);
 
@@ -405,6 +501,7 @@ public class PlayerCtrl_Sarang : Player_Info
         }
 
         backGroundColor.StopCoroutine(change_color);
+        backGroundColor.Set_BGColor(Color.black);
 
         yield return YieldInstructionCache.WaitForSeconds(1f);
 
@@ -425,10 +522,13 @@ public class PlayerCtrl_Sarang : Player_Info
     {
         if (first_phase != null)
             StopCoroutine(first_phase);
-
         Dash_Able = false;
         Move_Able = false;
         is_Button = false;
+        FixedSlider = false;
+        FixedTarget = false;
+        Student_Clone = null;
+
         PlayerWalkSpeed = 0;
     }
     void All_Start()
@@ -436,17 +536,14 @@ public class PlayerCtrl_Sarang : Player_Info
         Dash_Able = true;
         Move_Able = true;
         is_Button = true;
+        FixedSlider = false;
+        FixedTarget = false;
+        Student_Clone = null;
         PlayerWalkSpeed = 0.03f;
 
         first_phase = First_Phase();
         StartCoroutine(first_phase);
     }
-    public void Fever_Time()
-    {
-        backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.2f, 5));
-        Fever_Particle_Clone = Instantiate(Fever_Particle, transform.position - Vector3.down * 1.5f, Quaternion.Euler(-90, 0, 0));
-    }
-
     void Update()
     {
         if (Dash_Able)
@@ -498,7 +595,7 @@ public class PlayerCtrl_Sarang : Player_Info
             if (Down_Floor.activeSelf)
                 Down_Floor.SetActive(false);
         }
-        if (Fever_Particle_Clone != null)
-            Fever_Particle_Clone.transform.position = new Vector3(transform.position.x, Fever_Particle_Clone.transform.position.y, Fever_Particle_Clone.transform.position.z);
+        if (Fever_Particle_Copy != null)
+            Fever_Particle_Copy.transform.position = new Vector3(transform.position.x, Fever_Particle_Copy.transform.position.y, Fever_Particle_Copy.transform.position.z);
     }
 }

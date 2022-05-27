@@ -89,7 +89,7 @@ public class SolGryn : Boss_Info
     {
         yield return StartCoroutine(Position_Lerp(new Vector3(0, 7, 0), new Vector3(0, 0, 0), 7f, declineCurve));
 
-        Start_Camera_Shake(0.01f, 1, false, true);
+        Start_Camera_Shake(0.01f, 2, true, false);
         yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(1, 69 / 255, 69 / 255, 1), 1, false));
 
         for (int i = 0; i < 4; i++)
@@ -98,10 +98,10 @@ public class SolGryn : Boss_Info
         for (int i = 0; i < 4; i++)
             SolG_Copy[i].GetComponent<SolGryn_Copy>().Move_Lerp_Distance(new Vector3(bangmeon[0, i] * 7, bangmeon[1, i] * 2.5f, 0));
 
-        backGroundColor.StartCoroutine(backGroundColor.Change_Color_Return_To_Origin(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 2, false));
-        yield return PalJeongDo.StartCoroutine(PalJeongDo.Change_Color(PalJeongDo.Get_BGColor(), new Color(1, 1, 1, 1), 2));
+        PalJeongDo.StartCoroutine(PalJeongDo.Change_Color(PalJeongDo.Get_BGColor(), new Color(1, 1, 1, 1), 1));
+        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color_Return_To_Origin(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 1, false));
 
-        yield return PalJeongDo.StartCoroutine(PalJeongDo.Change_Color(PalJeongDo.Get_BGColor(), new Color(1, 1, 1, 0.5f), 2)); // 효과음 넣어야한다 (낮아지는 소리)
+        yield return PalJeongDo.StartCoroutine(PalJeongDo.Change_Color(PalJeongDo.Get_BGColor(), new Color(1, 1, 1, 0.3f), 2)); // 효과음 넣어야한다 (낮아지는 소리)
         GameObject.Find("Flash").transform.SetAsLastSibling();
 
         for (int i = -1; i < 2; i++)
@@ -145,14 +145,15 @@ public class SolGryn : Boss_Info
         SolGryn_HP.GetComponent<BossHPSliderViewer>().F_HPFull(gameObject.GetComponent<SolGryn>());
         StartCoroutine(HP_Decrease());
 
+
         Continue_Camera_Shake();
 
         yield return StartCoroutine(Position_Slerp(transform.position, new Vector3(-4, 4, 0),
             Get_Center_Vector(transform.position, new Vector3(-4, 4, 0), Vector3.Distance(transform.position, new Vector3(-4, 4, 0)) * 0.85f, "anti_clock"), 4, OriginCurve, false));
-        //yield return StartCoroutine(Pattern01());
-       // yield return StartCoroutine(Pattern02());
-        //yield return StartCoroutine(Pattern03());
-        //yield return StartCoroutine(Pattern04());
+        yield return StartCoroutine(Pattern01());
+        yield return StartCoroutine(Pattern02());
+        yield return StartCoroutine(Pattern03());
+        yield return StartCoroutine(Pattern04());
         yield return StartCoroutine(Pattern05());
         yield return StartCoroutine(Pattern06());
         //while(true)
@@ -207,7 +208,7 @@ public class SolGryn : Boss_Info
             yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(u2[i, 0], u2[i, 1], 0), 0.15f, declineCurve));
 
         yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 0), 0.4f, 0, DisAppear_Effect_1));
-        yield return StartCoroutine(Nachi_Color_Change(Color.red, Color.blue, 0.8f, true));
+        yield return StartCoroutine(Nachi_Color_Change(Color.red, Color.blue, 0.7f, true));
 
         GameObject nachi_x_g_1 = Instantiate(Weapon[6], new Vector3(6.3f, 1.87f, 0), Quaternion.identity);
         GameObject nachi_x_g_2 = Instantiate(Weapon[6], new Vector3(-5.61f, 1.64f, 0), Quaternion.identity);
@@ -220,11 +221,15 @@ public class SolGryn : Boss_Info
         trailRenderer.enabled = false;
 
         if (GameObject.Find("TrailCollider"))
+        {
+            Debug.Log("씨발 왜 삭제 안 되는데...");
             Destroy(GameObject.Find("TrailCollider"));
+        }
+           
     }
     IEnumerator Nachi_Color_Change(Color Origin_C, Color Change_C, float time_persist, bool Is_Continue)
     {
-        float percent = 0;
+        float percent;
         for (int i = 0; i < 2; i++)
         {
             percent = 0;

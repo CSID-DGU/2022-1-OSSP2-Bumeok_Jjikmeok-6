@@ -27,11 +27,16 @@ public class Student : MonoBehaviour
     float currentSpeed;
     // Start is called before the first frame update
 
-    private void Awake()
+    void Init_Start()
     {
         currentSpeed = wanderSpeed;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void Awake()
+    {
+        Init_Start();
     }
     void Start()
     {
@@ -39,6 +44,9 @@ public class Student : MonoBehaviour
         wander_routine = WanderRoutine();
         StartCoroutine(wander_routine);
     }
+    // Student의 코루틴 순서 : WanderRoutine -> Move
+    //                         Change_Lerp_Color (안 중요함)
+    //                          
     public void Disappear()
     {
         StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null));
@@ -74,13 +82,24 @@ public class Student : MonoBehaviour
     }
     public void Start_Move()
     {
+        NotBe_Attacked();
         wander_routine = WanderRoutine();
         StartCoroutine(wander_routine);
     }
     public void Stop_Move()
     {
-        StopCoroutine(move);
-        StopCoroutine(wander_routine);
+        Be_Attacked();
+        if (move != null)
+            StopCoroutine(move);
+        if (wander_routine != null)
+            StopCoroutine(wander_routine);
+    }
+    public void When_Fever_End()
+    {
+        StopAllCoroutines();
+        Init_Start();
+        Stop_Move();
+        Start_Move();
     }
     Vector3 Vector3FromAngle(int inputAngleDegrees) // Changing the degree into the radian
     {

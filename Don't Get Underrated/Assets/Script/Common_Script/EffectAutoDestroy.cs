@@ -19,10 +19,4 @@ public class EffectAutoDestroy : MonoBehaviour
         Destroy(gameObject);
         yield break;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

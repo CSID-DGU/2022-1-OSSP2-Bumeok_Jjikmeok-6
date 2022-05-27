@@ -14,7 +14,6 @@ public class Camera_Trace : MonoBehaviour // ÀÌ°Ç Ä«¸Þ¶ó°¡ ÇÃ·¹ÀÌ¾î ÃßÀûÇÏ´Â ÄÚµ
     {
         Floor_On = true;
     }
-
     private void Update()
     {
         if (Floor_On)
@@ -28,7 +27,6 @@ public class Camera_Trace : MonoBehaviour // ÀÌ°Ç Ä«¸Þ¶ó°¡ ÇÃ·¹ÀÌ¾î ÃßÀûÇÏ´Â ÄÚµ
                 player = GameObject.FindGameObjectWithTag("Player");
         }
     }
-
     public void DoNot_Trace_Player()
     {
         Floor_On = false;
@@ -38,5 +36,4 @@ public class Camera_Trace : MonoBehaviour // ÀÌ°Ç Ä«¸Þ¶ó°¡ ÇÃ·¹ÀÌ¾î ÃßÀûÇÏ´Â ÄÚµ
         transform.position = new Vector3(0, 40 * (Floor_Num - 1), -10);
         Floor_On = true;
     }
-
 }

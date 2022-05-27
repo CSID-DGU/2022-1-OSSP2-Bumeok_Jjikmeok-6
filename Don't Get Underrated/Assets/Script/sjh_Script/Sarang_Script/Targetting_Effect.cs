@@ -14,7 +14,7 @@ public class Targetting_Effect : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    public void Scale_Color(GameObject e)
+    public void Change_Scale_And_Color(GameObject e)
     {
         if (change_color_and_scale != null)
             StopCoroutine(change_color_and_scale);

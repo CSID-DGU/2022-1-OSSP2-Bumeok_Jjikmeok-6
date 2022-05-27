@@ -15,9 +15,6 @@ public class HimaController : Player_Info {
 	Text Death_Count;
 
 	[SerializeField]
-	float moveAccel = 30f;
-
-	[SerializeField]
 	float maxSpeed = 7f;
 
 	[SerializeField]
@@ -65,7 +62,6 @@ public class HimaController : Player_Info {
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
 		LifeTime = 0;
 		Death_Count.text = "Death Count : " + LifeTime;
-
 	}
 
 	void Start() 
@@ -75,45 +71,10 @@ public class HimaController : Player_Info {
 
 	IEnumerator Load()
     {
-		Unbeatable = false;
+		Unbeatable = true;
 		IsMove = true;
 		IsJump = true;
-		//h = 0;
-		//yield return YieldInstructionCache.WaitForSeconds(2f);
-
-		//h = 1;
-		//yield return YieldInstructionCache.WaitForSeconds(.3f);
-		//h = 0;
-		//yield return YieldInstructionCache.WaitForSeconds(1f);
-
-		//h = -1;
-		//yield return YieldInstructionCache.WaitForSeconds(.6f);
-		//h = 0;
-		//yield return YieldInstructionCache.WaitForSeconds(1f);
-
-		//h = 1;
-		//maxSpeed = 1f;
-		//yield return YieldInstructionCache.WaitForSeconds(2f);
-		//h = 0;
-		//yield return YieldInstructionCache.WaitForSeconds(2f);
-
-		//maxSpeed = 2f;
-		//h = 1;
-		//yield return YieldInstructionCache.WaitForSeconds(.25f);
-		//h = 0;
-		//yield return YieldInstructionCache.WaitForSeconds(.25f);
-
-		//h = -1;
-		//yield return YieldInstructionCache.WaitForSeconds(.25f);
-		//h = 0;
-		//yield return YieldInstructionCache.WaitForSeconds(.25f);
-
-		//h = 1;
-		//yield return YieldInstructionCache.WaitForSeconds(.25f);
-		//h = 0;
-		//maxSpeed = 7f;
-		//yield return YieldInstructionCache.WaitForSeconds(.7f);
-		GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().WelCome();
+        GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().WelCome();
 		yield return null;
 	}
 

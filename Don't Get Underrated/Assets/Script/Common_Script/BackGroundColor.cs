@@ -47,6 +47,7 @@ public class BackGroundColor : MonoBehaviour
 
         while(true)
         {
+            Debug.Log(image.color);
             yield return null;
             if (image.color.a <= 0)
                 yield break;

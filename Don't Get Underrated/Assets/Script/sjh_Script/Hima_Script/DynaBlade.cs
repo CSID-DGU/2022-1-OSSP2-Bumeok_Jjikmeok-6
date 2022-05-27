@@ -47,23 +47,23 @@ public class DynaBlade : Enemy_Info
 
         float W = Get_Slerp_Distance(U[4], U[5], Get_Center_Vector(U[4], U[5], Vector3.Distance(U[4], U[5]) * 0.85f, "anti_clock"));
 
-        yield return StartCoroutine(Position_Slerp(U[0], U[1], Get_Center_Vector(U[0], U[1], Vector3.Distance(U[0], U[1]) * 0.85f, "anti_clock"), 15f, OriginCurve, true));
+        yield return StartCoroutine(Position_Slerp(U[0], U[1], Get_Center_Vector(U[0], U[1], Vector3.Distance(U[0], U[1]) * 0.85f, "anti_clock"), 0.5f, OriginCurve, false));
 
         yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 0), Quaternion.Euler(0, 0, 90), 0.08f, OriginCurve));
 
-        yield return StartCoroutine(Position_Slerp(U[1], U[2], Get_Center_Vector(U[1], U[2], Vector3.Distance(U[1], U[2]) * 0.85f, "anti_clock"), B/A * 15f, OriginCurve, true));
+        yield return StartCoroutine(Position_Slerp(U[1], U[2], Get_Center_Vector(U[1], U[2], Vector3.Distance(U[1], U[2]) * 0.85f, "anti_clock"), B/A * 0.5f, OriginCurve, false));
 
         yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 90), Quaternion.Euler(0, 0, 180), 0.08f, OriginCurve));
 
-        yield return StartCoroutine(Position_Slerp(U[2], U[3], Get_Center_Vector(U[2], U[3], Vector3.Distance(U[2], U[3]) * 0.85f, "anti_clock"), C/A * 15f, OriginCurve, true));
+        yield return StartCoroutine(Position_Slerp(U[2], U[3], Get_Center_Vector(U[2], U[3], Vector3.Distance(U[2], U[3]) * 0.85f, "anti_clock"), C/A * 0.4f, OriginCurve, false));
 
         yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 180), Quaternion.Euler(0, 0, 270), 0.08f, OriginCurve));
        
-        yield return StartCoroutine(Position_Slerp(U[3], U[4], Get_Center_Vector(U[3], U[4], Vector3.Distance(U[3], U[4]) * 0.85f, "clock"), Q/A * 15f, OriginCurve, true));
+        yield return StartCoroutine(Position_Slerp(U[3], U[4], Get_Center_Vector(U[3], U[4], Vector3.Distance(U[3], U[4]) * 0.85f, "clock"), Q/A * 0.3f, OriginCurve, false));
 
         yield return StartCoroutine(Rotate_Dec(Quaternion.Euler(0, 0, 270), Quaternion.Euler(0, 0, 360), 0.08f, OriginCurve));
 
-        yield return StartCoroutine(Position_Slerp(U[4], U[5], Get_Center_Vector(U[4], U[5], Vector3.Distance(U[4], U[5]) * 0.85f, "anti_clock"), W/A * 20f, OriginCurve, true));
+        yield return StartCoroutine(Position_Slerp(U[4], U[5], Get_Center_Vector(U[4], U[5], Vector3.Distance(U[4], U[5]) * 0.85f, "anti_clock"), W/A * 0.25f, OriginCurve, false));
 
         StopCoroutine(size);
         GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().Is_Next_Pattern = true;

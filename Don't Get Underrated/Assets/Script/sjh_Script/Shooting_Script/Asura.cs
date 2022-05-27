@@ -12,7 +12,10 @@ public class Asura : Boss_Info
 
     int[,] Pattern2_Beam_Spawn = new int[3, 7] { { 4, 4, 4, 3, 3, 3, 3 }, { 3, 3, 3, 4, 3, 3, 3 }, { 3, 3, 3, 3, 4, 4, 4 } };
 
-    public List<For_Continuous_Slerp_Move> DoPhan_Appearance = new List<For_Continuous_Slerp_Move>() 
+    // Snow Particle - by https://notyu.tistory.com/60
+
+    [SerializeField]
+    List<For_Continuous_Slerp_Move> DoPhan_Appearance = new List<For_Continuous_Slerp_Move>() 
     {  new For_Continuous_Slerp_Move(new Vector3(-6.61f, 2.21f, 0), "anti_clock"),  new For_Continuous_Slerp_Move(new Vector3(-5f, 3.66f, 0), "anti_clock"), 
         new For_Continuous_Slerp_Move(new Vector3(6.85f, -2.9f, 0), "clock"), new For_Continuous_Slerp_Move(new Vector3(-6.52f, -0.6f, 0), "anti_clock"), 
         new For_Continuous_Slerp_Move(new Vector3(7, 0, 0), "anti_clock" )
@@ -26,8 +29,9 @@ public class Asura : Boss_Info
 
     [SerializeField]
     List<Vector3> DoPhan_Pattern05_Move = new List<Vector3>()  { 
-        new Vector3(-6.64f, 1.95f, 0), new Vector3(-3.11f, 0.04f, 0), new Vector3(2.31f, 2.78f, 0), new Vector3(3.4f, -2.91f, 0), new Vector3(-4.92f, -3.07f, 0),
-        new Vector3(-7.55f, -1.43f, 0)
+        new Vector3(-6.56f, 1.72f, 0), new Vector3(-3.42f, 1.72f, 0), new Vector3(0.28f, 1.72f, 0), new Vector3(3.7f, 1.72f, 0), new Vector3(5, 1.72f, 0),
+        new Vector3(-6.56f, 0, 0), new Vector3(-3.42f, 0, 0), new Vector3(0.28f, 0, 0), new Vector3(3.7f, 0, 0), new Vector3(5, 0, 0),
+        new Vector3(-6.56f, -1.72f, 0), new Vector3(-3.42f, -1.72f, 0), new Vector3(0.28f, -1.72f, 0), new Vector3(3.7f, -1.72f, 0), new Vector3(5, -1.72f, 0)
     };
 
     [SerializeField]
@@ -69,7 +73,6 @@ public class Asura : Boss_Info
         moveBackGround_1 = GameObject.FindGameObjectWithTag("BackGround1").GetComponent<MoveBackGround>();
         moveBackGround_2 = GameObject.FindGameObjectWithTag("BackGround2").GetComponent<MoveBackGround>();
         playerCtrl_Tengai = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Tengai>();
-
         phase = Pattern01();
        
         for (int i = 0; i < 5; i++)
@@ -157,6 +160,7 @@ public class Asura : Boss_Info
         transform.position = new Vector3(7, 0, 0);
         transform.localScale = new Vector3(0.6f, 0.6f, 0);
 
+
         yield return StartCoroutine(Ready_To_Pattern());
         repeat_phase = Repeat_Phase();
         StartCoroutine(repeat_phase);
@@ -173,10 +177,10 @@ public class Asura : Boss_Info
 
         Instantiate(Blink, transform.position, Quaternion.identity);
 
-        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color_Return_To_Origin(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 1, false));
+        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color_Return_To_Origin(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 0.8f, false));
 
         Unbeatable = false;
-        playerCtrl_Tengai.Unbeatable = false;
+        //playerCtrl_Tengai.Unbeatable = false;
 
         foreach (var e in DoPhan_Ready_To_Pattern_Move)
             yield return StartCoroutine(Position_Lerp(transform.position, transform.position + e, 0.125f, OriginCurve));
@@ -186,14 +190,13 @@ public class Asura : Boss_Info
    
     IEnumerator Repeat_Phase()
     {
-        //yield return StartCoroutine(Pattern01());
-        //yield return StartCoroutine(Pattern02());
-        //yield return StartCoroutine(Pattern03());
-        //yield return StartCoroutine(Pattern05());
-        //yield return StartCoroutine(Ready_To_Pattern());
-        //yield return StartCoroutine(Pattern06());
-        yield return StartCoroutine(Ready_To_Pattern());
         yield return StartCoroutine(Pattern01());
+        yield return StartCoroutine(Pattern02());
+        yield return StartCoroutine(Pattern03());
+        yield return StartCoroutine(Pattern05());
+        yield return StartCoroutine(Ready_To_Pattern());
+        yield return StartCoroutine(Pattern06());
+        yield return StartCoroutine(Ready_To_Pattern());
         yield return StartCoroutine(Pattern04());
         //while (true)
         //{
@@ -241,7 +244,7 @@ public class Asura : Boss_Info
 
         change_boss_color = Change_Color_Return_To_Origin(Color.white, new Color(159 / 255, 43 / 255, 43 / 255), 0.25f, true);
         StartCoroutine(change_boss_color);
-        Start_Camera_Shake(0.03f, 1.5f, true, false);
+        Start_Camera_Shake(0.04f, 1.5f, true, false);
 
         Launch_Weapon_For_Move(ref Weapon[1], Vector3.zero, Quaternion.Euler(new Vector3(0, 0, -9)), 0, new Vector3(0, 4, 0));
         Launch_Weapon_For_Move(ref Weapon[1], Vector3.zero, Quaternion.Euler(new Vector3(0, 0, -9)), 0, new Vector3(0, -4.5f, 0));
@@ -525,27 +528,32 @@ public class Asura : Boss_Info
             Launch_Weapon_For_Move(ref Weapon[6], normal_dir, Quaternion.identity, 10, transform.position + new Vector3(-0.5f, -2f, 0));
 
             Randomly = transform.position.y;
-            yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime * 20);
+            yield return YieldInstructionCache.WaitForSeconds(0.05f);
         }
     }
 
     IEnumerator Pattern05()
     {
         int Random_Move;
+        float Random_Time = 0.2f;
+
         Color Alpha_1 = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1);
         Color Alpha_0 = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0);
         for (int i = 0; i < 15; i++)
         {
+            if (i == 6)
+            {
+                yield return YieldInstructionCache.WaitForSeconds(2f);
+                Random_Time = 0.05f;
+            }
             Random_Move = Random.Range(0, 6);
-
-            yield return StartCoroutine(Change_Color_Lerp(Alpha_1, Alpha_0, 0.1f, .2f, DisAppear_Effect_1));
+            yield return StartCoroutine(Change_Color_Lerp(Alpha_1, Alpha_0, 0.1f, Random_Time, DisAppear_Effect_1));
 
             transform.position = DoPhan_Pattern05_Move[Random_Move];
 
-            yield return StartCoroutine(Change_Color_Lerp(Alpha_0, Alpha_1, 0.1f, .4f, DisAppear_Effect_1));
+            yield return StartCoroutine(Change_Color_Lerp(Alpha_0, Alpha_1, 0.1f, Random_Time, DisAppear_Effect_2));
         }
-        yield return YieldInstructionCache.WaitForSeconds(0.5f);
-
+        yield return YieldInstructionCache.WaitForSeconds(1f);
         yield return StartCoroutine(Position_Slerp(transform.position, new Vector3(7, 0, 0),
             Vector3.zero, 2, declineCurve, false));
     }

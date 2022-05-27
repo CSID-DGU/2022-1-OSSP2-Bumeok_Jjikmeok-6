@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6192724089161036652}
   - component: {fileID: 6192724089161036655}
   - component: {fileID: 6192724089161036654}
-  - component: {fileID: 3939126427330034940}
+  - component: {fileID: 5283280342716356309}
   m_Layer: 0
   m_Name: Impact02
   m_TagString: Untagged
@@ -4830,7 +4830,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 68334d56da6cd0044bdfb728a30c93d7, type: 2}
-  - {fileID: 2100000, guid: 68334d56da6cd0044bdfb728a30c93d7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4876,7 +4875,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &3939126427330034940
+--- !u!114 &5283280342716356309
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4885,7 +4884,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6192724089161036641}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1bb6da1af5abfd40a72b89011be5962, type: 3}
+  m_Script: {fileID: 11500000, guid: c2a8c8c40c1bd8f4c8b2820fb7fd93d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Destroy_Time: 2

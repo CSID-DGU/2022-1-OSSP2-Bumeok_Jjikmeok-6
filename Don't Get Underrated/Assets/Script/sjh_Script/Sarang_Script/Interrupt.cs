@@ -36,13 +36,18 @@ public class Interrupt : Enemy_Info
 
     GameObject Exclamation_Copy;
 
-    private new void Awake()
+    void Init_Start()
     {
-        base.Awake();
         rb = GetComponent<Rigidbody2D>();
         circleColliderObject = GetComponent<CircleCollider2D>();
         targetTransform = null;
         currentSpeed = wanderSpeed;
+    }
+
+    private new void Awake()
+    {
+        base.Awake();
+        Init_Start();
     }
     public IEnumerator Trigger_Lazor(Vector3 tempPosition) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
     {
@@ -70,6 +75,14 @@ public class Interrupt : Enemy_Info
         StopAllCoroutines();
     }
 
+    public void When_Fever_End() // 모든 코루틴 중지 후 다시 이동
+    {
+        Stop_Coroutine();
+        Init_Start();
+        Stop_Move();
+        Start_Move();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -78,6 +91,8 @@ public class Interrupt : Enemy_Info
         StartCoroutine(wander_routine);
     }
 
+    // Interrupt의 코루틴 순서 : WanderRoutine -> Move
+    //                           (외부 호출)Trigger
 
     public IEnumerator WanderRoutine()
     {
@@ -103,8 +118,10 @@ public class Interrupt : Enemy_Info
     }
     public void Stop_Move()
     {
-        StopCoroutine(move);
-        StopCoroutine(wander_routine);
+        if (move != null)
+            StopCoroutine(move);
+        if (wander_routine != null)
+            StopCoroutine(wander_routine);
     }
 
     void ChooseNewEndpoint() // Setting a destination of an object
@@ -163,9 +180,7 @@ public class Interrupt : Enemy_Info
             targetTransform = collision.gameObject.transform;
             
             if (move != null)
-            {
                 StopCoroutine(move);
-            }
 
             move = Move(rb, currentSpeed);
             StartCoroutine(move);

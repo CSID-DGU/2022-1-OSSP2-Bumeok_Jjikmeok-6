@@ -40,9 +40,8 @@ public class Quantum_Bit : Enemy_Info
     IEnumerator Tr_Co()
     {
         spriteRenderer.color = new Color(1, 1, 1, 0);
-        backGroundColor.StartCoroutine(backGroundColor.Flash(Color.black, 0.5f, 2));
-        Start_Camera_Shake(0.02f, 2f, true, false);
-
+        backGroundColor.StartCoroutine(backGroundColor.Flash(Color.black, 0.5f, 0.3f));
+        Start_Camera_Shake(0.05f, 2f, true, false);
         for (int i = -9; i <= 9; i++)
         {
             for (int j = -9; j <= 9; j++)

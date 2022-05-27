@@ -9,9 +9,11 @@ public class Student_Gaze_Info : Slider_Viewer
 
     Camera selectedCamera;
 
-    GameObject Player_Heart_Slider;
+    Heart_Gaze_Viewer heart_Gaze_Viewer;
 
     ArrayList Interrupt_NonActive; // 맵을 떠도는 인터럽트
+
+    PlayerCtrl_Sarang playerCtrl_Sarang;
 
     Dictionary<GameObject, IEnumerator> Interrupt_Active;
 
@@ -21,18 +23,35 @@ public class Student_Gaze_Info : Slider_Viewer
     GameObject YeonTa_Copy;
 
     int StudentLayerMask;  // Player 레이어만 충돌 체크함
+
+    void Init_Start()
+    {
+        StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
+        selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        if (GameObject.FindGameObjectWithTag("HeartSlider").TryGetComponent(out Heart_Gaze_Viewer user1))
+            heart_Gaze_Viewer = user1;
+        if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Sarang user2))
+            playerCtrl_Sarang = user2;
+        Interrupt_NonActive = new ArrayList();
+        Interrupt_Active = new Dictionary<GameObject, IEnumerator>();
+    }
     private new void Awake()
     {
         base.Awake();
-        StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
-        Player_Heart_Slider = GameObject.FindGameObjectWithTag("HeartSlider");
-        Interrupt_NonActive = new ArrayList();
-        Interrupt_Active = new Dictionary<GameObject, IEnumerator>();
-        selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        Init_Start();
+    }
+    public void When_Fever_End()
+    {
+        StopAllCoroutines();
+        Init_Start();
+        Change_Red_Slider();
     }
     public int Check_Student_HP(Vector3 TempPosition)
     {
-        slider.value += Time.deltaTime / 2;
+        if (playerCtrl_Sarang.Is_Fever)
+            slider.value += (Time.deltaTime / 2) * playerCtrl_Sarang.Student_Power * playerCtrl_Sarang.Fever_Power;
+        else
+            slider.value += (Time.deltaTime / 2) * playerCtrl_Sarang.Student_Power;
 
         if (slider.value >= 0.5f && Interrupt_NonActive.Count >= 1 && Interrupt_Active.Count == 0)
         {
@@ -61,20 +80,42 @@ public class Student_Gaze_Info : Slider_Viewer
     {
         slider.value = 0;
     }
+    public void Change_Pink_Slider()
+    {
+        YeonTa_Copy = Instantiate(YeonTa, transform.position + 0.5f * Vector3.up, Quaternion.identity);
+        if (GameObject.FindGameObjectWithTag("StudentSlider") && GameObject.FindGameObjectWithTag("StudentSlider").TryGetComponent(out Image user1))
+            user1.color = new Color(1, 0.2f, 0.6f, 1);
+        transform.localScale = new Vector3(2, 1.5f, 1);
+        transform.position = transform.position + 0.7f * Vector3.down;
+    }
+    public void Change_Red_Slider()
+    {
+        if (YeonTa_Copy != null)
+            Destroy(YeonTa_Copy);
+        slider.value = 0;
+        if (GameObject.FindGameObjectWithTag("StudentSlider") && GameObject.FindGameObjectWithTag("StudentSlider").TryGetComponent(out Image user1))
+            user1.color = Color.red;
+        transform.localScale = new Vector3(1, 1, 1);
+        // 슬라이더를 분홍색으로 바꾸면서 변경된 위치를 여기서 재정의 할 필요가 없는 이유는 
+        // 플레이어 쪽에서 학생의 게이지의 위치를 알아서 설정해주기 때문이다.
+    }
     public IEnumerator Competition(GameObject student, float student_power)
     {
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
-        GameObject.Find("Flash_Interrupt").GetComponent<BackGroundColor>().StartCoroutine(GameObject.Find("Flash_Interrupt").GetComponent<BackGroundColor>().Flash(new Color(1, 1, 1, 1), 0.2f, 5));
-        YeonTa_Copy = Instantiate(YeonTa, transform.position + 0.5f * Vector3.up, Quaternion.identity);
-        GameObject.FindGameObjectWithTag("StudentSlider").GetComponent<Image>().color = new Color(1, 0.2f, 0.6f, 1);
-        transform.localScale = new Vector3(2, 1.5f, 1);
-        transform.position = transform.position + 0.7f * Vector3.down;
+        if (GameObject.Find("Flash_Interrupt") && GameObject.Find("Flash_Interrupt").TryGetComponent(out BackGroundColor user1))
+            user1.StartCoroutine(user1.Flash(new Color(1, 1, 1, 1), 0.3f, 3));
+        
+        Change_Pink_Slider();
+        
         while (true)
         {
-            if (4 - Interrupt_Active.Count > 0)
-                slider.value -= Time.deltaTime / (4 - Interrupt_Active.Count);
-            else
-                slider.value -= Time.deltaTime;
+            if (!playerCtrl_Sarang.Is_Fever)
+            {
+                if (4 - Interrupt_Active.Count > 0)
+                    slider.value -= Time.deltaTime / (4 - Interrupt_Active.Count);
+                else
+                    slider.value -= Time.deltaTime; // 예외 처리
+            }
 
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -85,9 +126,6 @@ public class Student_Gaze_Info : Slider_Viewer
 
             if (slider.value <= 0 || slider.value >= 1)
             {
-                GameObject.FindGameObjectWithTag("StudentSlider").GetComponent<Image>().color = new Color(1, 0, 0, 1);
-                transform.localScale = new Vector3(1, 1, 1);
-                Destroy(YeonTa_Copy);
                 foreach (var e in Interrupt_Active)
                 {
                    if (e.Key.TryGetComponent(out Interrupt user))
@@ -100,19 +138,23 @@ public class Student_Gaze_Info : Slider_Viewer
                         if (e.Key.TryGetComponent(out Interrupt user))
                             user.Start_Move();
                     }
-                    Player_Heart_Slider.GetComponent<Heart_Gaze_Viewer>().When_Player_Defeat();
-                    GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCtrl_Sarang>().animator.SetBool("IsDead", true);
+                    heart_Gaze_Viewer.When_Player_Defeat();
+                    playerCtrl_Sarang.animator.SetBool("IsDead", true);
                 }
                 else if (slider.value >= 1)
                 {
                     foreach (var e in Interrupt_Active)
                         Destroy(e.Key);
 
-                    Player_Heart_Slider.GetComponent<Heart_Gaze_Viewer>().When_Interrupt_Defeat();
+                    heart_Gaze_Viewer.When_Interrupt_Defeat();
                     slider.value = 0;
-
-                    Destroy(student);
+                    if (!playerCtrl_Sarang.Is_Fever)
+                    {
+                        playerCtrl_Sarang.animator.SetBool("Heart_Gain", true);
+                        playerCtrl_Sarang.This_Scale = new Vector3(1.1f, 1.1f, 0);
+                    }
                 }
+                Change_Red_Slider();
                 Interrupt_Active.Clear();
                 Interrupt_NonActive.Clear();
                 yield break;
