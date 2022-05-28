@@ -33,6 +33,7 @@ public class Interrupt : Enemy_Info
 
     IEnumerator move;
     IEnumerator wander_routine;
+    IEnumerator trigger_lazor;
 
     GameObject Exclamation_Copy;
 
@@ -49,7 +50,7 @@ public class Interrupt : Enemy_Info
         base.Awake();
         Init_Start();
     }
-    public IEnumerator Trigger_Lazor(Vector3 tempPosition) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
+    IEnumerator Trigger_Lazor(Vector3 TargetPos) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
     {
         Stop_Move();
         Exclamation_Copy = Instantiate(Exclamation, transform.position, Quaternion.identity);
@@ -58,14 +59,22 @@ public class Interrupt : Enemy_Info
 
         while (true)
         {
-            Launch_Weapon_For_Move(ref Weapon[0], new Vector3(tempPosition.x - transform.position.x,
-                         tempPosition.y - transform.position.y, 0), Quaternion.identity, 9, transform.position);
+            Launch_Weapon(ref Weapon[0], new Vector3(TargetPos.x - transform.position.x,
+                         TargetPos.y - transform.position.y, 0), Quaternion.identity, 9, transform.position);
             yield return null;
         }
     }
+    public void Fight_With_Player(Vector3 TargetPos)
+    {
+        Run_Life_Act_And_Continue(ref trigger_lazor, Trigger_Lazor(TargetPos));
+    }
+    public void Stop_Fight_With_Player()
+    {
+        Stop_Life_Act(ref trigger_lazor);
+    }
     public void Disappear()
     {
-        StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null));
+        Run_Life_Act(Change_My_Color(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null));
     }
 
     public void Stop_Coroutine()
@@ -87,8 +96,7 @@ public class Interrupt : Enemy_Info
     void Start()
     {
         //animator = GetComponent<Animator>();
-        wander_routine = WanderRoutine();
-        StartCoroutine(wander_routine);
+        Run_Life_Act_And_Continue(ref wander_routine, WanderRoutine());
     }
 
     // Interrupt의 코루틴 순서 : WanderRoutine -> Move
@@ -100,28 +108,20 @@ public class Interrupt : Enemy_Info
         {
             ChooseNewEndpoint();
 
-            if (move != null)
-            {
-                StopCoroutine(move);
-            }
-            move = Move(rb, currentSpeed);
+            Run_Life_Act_And_Continue(ref move, Move(rb, currentSpeed));
 
-            StartCoroutine(move);
             yield return new WaitForSeconds(directionChangeInterval);
         }
     }
 
     public void Start_Move()
     {
-        wander_routine = WanderRoutine();
-        StartCoroutine(wander_routine);
+        Run_Life_Act_And_Continue(ref wander_routine, WanderRoutine());
     }
     public void Stop_Move()
     {
-        if (move != null)
-            StopCoroutine(move);
-        if (wander_routine != null)
-            StopCoroutine(wander_routine);
+        Stop_Life_Act(ref move);
+        Stop_Life_Act(ref wander_routine);
     }
 
     void ChooseNewEndpoint() // Setting a destination of an object
@@ -178,12 +178,8 @@ public class Interrupt : Enemy_Info
             currentSpeed = pursuitSpeed;
 
             targetTransform = collision.gameObject.transform;
-            
-            if (move != null)
-                StopCoroutine(move);
 
-            move = Move(rb, currentSpeed);
-            StartCoroutine(move);
+            Run_Life_Act_And_Continue(ref move, Move(rb, currentSpeed));
         }
     }
 
@@ -195,10 +191,7 @@ public class Interrupt : Enemy_Info
 
             currentSpeed = wanderSpeed;
 
-            if (move != null)
-            {
-                StopCoroutine(move);
-            }
+            Stop_Life_Act(ref move);
 
             targetTransform = null;
         }

@@ -61,8 +61,7 @@ public class Final_1_W2_Boom : Weapon_Player
         }
         Create_Explode();
         spriteRenderer.color = new Color(1, 1, 1, 0);
-        yield return StartCoroutine(Start_Camera_Shake_For_Wait(0.04f, 2f, true, false));
-
+        yield return Start_Camera_Shake_For_Wait(0.02f, 2f, true, false);
         Destroy(gameObject);
     }
 }

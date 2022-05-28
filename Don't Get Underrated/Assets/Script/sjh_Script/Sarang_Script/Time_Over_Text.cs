@@ -20,13 +20,13 @@ public class Time_Over_Text : MonoBehaviour
     }
     IEnumerator Change()
     {
-        yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.05f, 4, 0), true));
+        yield return Size_Change(transform.localScale, new Vector3(0.05f, 4, 0), true);
 
-        yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.65f, 0.65f, 0), false));
+        yield return Size_Change(transform.localScale, new Vector3(0.65f, 0.65f, 0), false);
 
-        yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.1f, 3, 0), false));
+        yield return Size_Change(transform.localScale, new Vector3(0.1f, 3, 0), false);
 
-        yield return StartCoroutine(Size_Change(transform.localScale, new Vector3(0.5f, 0.5f, 0), false));
+        yield return Size_Change(transform.localScale, new Vector3(0.5f, 0.5f, 0), false);
     }
     IEnumerator Size_Change(Vector3 Origin, Vector3 Change, bool is_Plus_Speed)
     {

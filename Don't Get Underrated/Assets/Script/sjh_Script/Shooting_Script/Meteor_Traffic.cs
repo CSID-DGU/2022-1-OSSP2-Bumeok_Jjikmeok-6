@@ -19,6 +19,30 @@ public class Meteor_Traffic : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = new Color(1, 1, 1, 1);
     }
+    public IEnumerator Change_Color(int Count, float time_persist)
+    {
+        Color Change_A_1 = Color.white;
+        Color Change_A_0 = new Color(1, 1, 1, 0);
+        for (int j = 0; j < Count; j++)
+        {
+            float percent = 0;
+            while (percent < 1)
+            {
+                percent += Time.deltaTime / time_persist;
+                spriteRenderer.color = Color.Lerp(Change_A_0, Change_A_1, percent);
+                yield return null;
+            }
+            percent = 0;
+            while (percent < 1)
+            {
+                percent += Time.deltaTime / time_persist;
+                spriteRenderer.color = Color.Lerp(Change_A_1, Change_A_0, percent);
+                yield return null;
+            }
+        }
+        spriteRenderer.color = Change_A_1;
+        yield return null;
+    }
     public IEnumerator Change_Color()
     {
         spriteRenderer.color = new Color(1, 1, 1, 0);
@@ -62,7 +86,7 @@ public class Meteor_Traffic : MonoBehaviour
         {
             percent += Time.deltaTime / time_persist;
             transform.position = originPosition + Random.insideUnitSphere * shake_intensity;
-            transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime / scale_dif, transform.localScale.y + Time.deltaTime / scale_dif, 0);
+            transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * scale_dif, transform.localScale.y + Time.deltaTime * scale_dif, 0);
             transform.transform.rotation = new Quaternion(
                                 originRotation.x + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                 originRotation.y + Random.Range(-shake_intensity, shake_intensity) * 0.2f,

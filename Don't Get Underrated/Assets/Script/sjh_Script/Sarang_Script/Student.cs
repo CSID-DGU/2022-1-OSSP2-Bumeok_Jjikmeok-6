@@ -157,7 +157,7 @@ public class Student : MonoBehaviour
         {
             percent += Time.deltaTime / time_persist;
             spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
         yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
     }

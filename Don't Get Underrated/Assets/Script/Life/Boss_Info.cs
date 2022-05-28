@@ -19,10 +19,6 @@ public class Boss_Info : Life
     [SerializeField]
     protected TextMeshProUGUI WarningText; // 상위
 
-    protected IEnumerator phase; // 상위
-
-    protected ArrayList Pattern_Total; // 상위
-
     public float speed = 15; // 둘다
     public float rotateSpeed = 200f; // 상위
 
@@ -37,7 +33,6 @@ public class Boss_Info : Life
     {
         base.Awake();
         CurrentHP = MaxHP;
-        Pattern_Total = new ArrayList();
     }
     public override void TakeDamage(float damage)
     {
@@ -60,6 +55,7 @@ public class Boss_Info : Life
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
         GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
+        GameObject[] item = GameObject.FindGameObjectsWithTag("Item");
 
         foreach (var e in meteor)
             Destroy(e);
@@ -68,6 +64,9 @@ public class Boss_Info : Life
             Destroy(e);
 
         foreach (var e in weapon_devil)
+            Destroy(e);
+
+        foreach (var e in item)
             Destroy(e);
     }
     protected IEnumerator Warning(string warning_message, float time_ratio)

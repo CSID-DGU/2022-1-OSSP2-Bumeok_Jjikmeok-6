@@ -8,6 +8,8 @@ public class SpriteColor : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
+    IEnumerator param;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -16,14 +18,22 @@ public class SpriteColor : MonoBehaviour
     {
         return spriteRenderer.color;
     }
-    public IEnumerator Change_Color(Color origin_color, Color change_color, float ratio)
+    public IEnumerator Change_Color(Color change_color, float ratio)
     {
         float percent = 0;
+        Color origin_color = Get_BGColor();
         while (percent < 1)
         {
             percent += Time.deltaTime / ratio;
             spriteRenderer.color = Color.Lerp(origin_color, change_color, percent);
             yield return null;
         }
+    }
+    public void Change_C(Color color, float time_persist)
+    {
+        if (param != null)
+            StopCoroutine(param);
+        param = Change_Color(color, time_persist);
+        StartCoroutine(param);
     }
 }

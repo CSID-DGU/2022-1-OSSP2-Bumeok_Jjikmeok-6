@@ -9,7 +9,7 @@ public class Limit_Time : MonoBehaviour
     TextMeshProUGUI Limit_Time_Text;
     Image image;
 
-    BackGroundColor flashOn;
+    ImageColor flashOn;
 
     IEnumerator flash_on;
 
@@ -29,7 +29,7 @@ public class Limit_Time : MonoBehaviour
         wow_Time = 100;
         Limit_Time_Text.text = "제한시간 : " + wow_Time;
         image = GameObject.Find("Flash_TimeOut").GetComponent<Image>();
-        flashOn = image.GetComponent<BackGroundColor>();
+        flashOn = image.GetComponent<ImageColor>();
     }
 
     private void Start()
@@ -46,7 +46,7 @@ public class Limit_Time : MonoBehaviour
             {
                 if (flash_on != null)
                     flashOn.StopCoroutine(flash_on);
-                flash_on = flashOn.Change_Color_Return_To_Origin(new Color(1, 0, 0, 0), new Color(1, 0, 0, 0.5f), .5f, false);
+                flash_on = flashOn.Change_Origin_BG(new Color(1, 0, 0, 0.5f), .5f);
                 flashOn.StartCoroutine(flash_on);
             }
             if (wow_Time <= 0)
@@ -74,19 +74,19 @@ public class Limit_Time : MonoBehaviour
                     
                 foreach (var u in e)
                 {
-                    if (u.TryGetComponent(out Interrupt user))
+                    if (u.TryGetComponent(out Interrupt I1))
                     {
-                        user.Stop_Coroutine();
-                        user.Disappear();
+                        I1.Stop_Coroutine();
+                        I1.Disappear();
                     }
                 }
                 
                 foreach (var u in q)
                 {
-                    if (u.TryGetComponent(out Student user))
+                    if (u.TryGetComponent(out Student S1))
                     {
-                        user.Stop_Coroutine();
-                        user.Disappear();
+                        S1.Stop_Coroutine();
+                        S1.Disappear();
                     }
                 }
 

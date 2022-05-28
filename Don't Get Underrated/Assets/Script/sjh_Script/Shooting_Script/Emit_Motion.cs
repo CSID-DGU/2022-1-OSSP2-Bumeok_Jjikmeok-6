@@ -17,7 +17,7 @@ public class Emit_Motion : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         transform.localScale = Vector3.zero;
-        if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Tengai user))
+        if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Tengai user))
             playerCtrl_Tengai = user;
     }
     void Start()

@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 7920678373976755458}
   - component: {fileID: 8235758799209648400}
   - component: {fileID: 22935516131544687}
+  - component: {fileID: -804262391352175315}
   m_Layer: 0
   m_Name: Real_Bullet
-  m_TagString: Untagged
+  m_TagString: Weapon_Devil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,3 +139,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.6, y: 1.01}
   m_EdgeRadius: 0
+--- !u!114 &-804262391352175315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344810313329756703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}

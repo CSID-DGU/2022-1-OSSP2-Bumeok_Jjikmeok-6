@@ -50,7 +50,7 @@ public class SolGryn_Peanut : Weapon_Devil
 	}
 	public void Die()
 	{
-		Start_Camera_Shake(0.015f, 0.1f, false, false);
+		Start_Camera_Shake(0.001f, 0.1f, false, false);
 		Instantiate(deathParticle, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 	}

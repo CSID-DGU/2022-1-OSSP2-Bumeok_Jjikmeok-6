@@ -13,31 +13,28 @@ public class Meteor_Line : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = new Color(1, 1, 1, 1);
     }
-    public IEnumerator Change_Color(float R1, float R2, float R3, float time_persist, bool is_Continue)
+    public IEnumerator Change_Color(Color Change, int Count, float time_persist)
     {
-        spriteRenderer.color = new Color(1, 1, 1, 0);
-        while (true)
+        Color Change_A_1 = Change;
+        Color Change_A_0 = new Color(Change.r, Change.g, Change.b, 0);
+        for (int i = 0; i < Count; i++)
         {
             float percent = 0;
-            Color temp = spriteRenderer.color;
             while (percent < 1)
             {
                 percent += Time.deltaTime / time_persist;
-                spriteRenderer.color = Color.Lerp(temp, new Color(R1, R2, R3, 1), percent);
+                spriteRenderer.color = Color.Lerp(Change_A_0, Change_A_1, percent);
                 yield return null;
             }
-
-            temp = spriteRenderer.color;
             percent = 0;
             while (percent < 1)
             {
                 percent += Time.deltaTime / time_persist;
-                spriteRenderer.color = Color.Lerp(temp, new Color(R1, R2, R3, 0), percent);
+                spriteRenderer.color = Color.Lerp(Change_A_1, Change_A_0, percent);
                 yield return null;
             }
-            if (!is_Continue)
-                break;
         }
+        yield return null;
     }
     // Update is called once per frame
     private void OnDestroy()

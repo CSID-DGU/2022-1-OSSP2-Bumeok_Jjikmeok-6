@@ -24,7 +24,7 @@ public class Monster : Enemy_Info
     }
     public void OnLazor()
     {
-        StartCoroutine(Monster_Only_Lazor(Monster_Pos, Target_Pos, 1));
+        Run_Life_Act(Monster_Only_Lazor(Monster_Pos, Target_Pos, 1));
     }
 
     IEnumerator Monster_Only_Lazor(Vector3 Origin, Vector3 Target, float time_persist)
@@ -33,7 +33,7 @@ public class Monster : Enemy_Info
         while (percent < 1)
         {
             percent += Time.deltaTime / time_persist;
-            Launch_Weapon_For_Move(ref Weapon[0], Target - Origin, Quaternion.identity, 14, Origin);
+            Launch_Weapon(ref Weapon[0], Target - Origin, Quaternion.identity, 14, Origin);
             yield return null;
         }
         animator.SetTrigger("die");

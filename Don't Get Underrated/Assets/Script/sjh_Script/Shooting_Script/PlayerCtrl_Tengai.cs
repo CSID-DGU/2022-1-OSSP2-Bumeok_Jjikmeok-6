@@ -46,6 +46,9 @@ public class PlayerCtrl_Tengai : Player_Info
     [SerializeField]
     GameObject Power_Up_Text;
 
+    [SerializeField]
+    GameObject naum_ani;
+
     Animator animator; // 애니메이터는 여러개 추가될 수 있어서 상속 생략
 
     GameObject Emit_Obj_Copy; // 고유
@@ -65,7 +68,7 @@ public class PlayerCtrl_Tengai : Player_Info
         base.Awake();
         movement2D = GetComponent<Movement2D>();
         animator = GetComponent<Animator>();
-        backGroundColor = GameObject.FindGameObjectWithTag("Flash").GetComponent<BackGroundColor>();
+        backGroundColor = GameObject.FindGameObjectWithTag("Flash").GetComponent<ImageColor>();
 
         is_Update = false;
         is_LateUpdate = false;
@@ -94,12 +97,11 @@ public class PlayerCtrl_Tengai : Player_Info
     IEnumerator Move_First()
     {
         animator.SetBool("Dead", false);
-        color_when_unbeatable = Color_When_UnBeatable();
-        StartCoroutine(color_when_unbeatable);
+        Run_Life_Act_And_Continue(ref color_when_unbeatable, My_Color_When_UnBeatable());
 
-        transform.position = new Vector3(-9, 0, 0);
+        My_Position = new Vector3(-9, 0, 0);
        
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(-4.6f, transform.position.y, transform.position.z), 2.5f, OriginCurve));
+        yield return Move_Straight(My_Position, new Vector3(-4.6f, My_Position.y, My_Position.z), 2.5f, OriginCurve);
            
         weapon_able = true;
         is_LateUpdate = true;
@@ -108,7 +110,7 @@ public class PlayerCtrl_Tengai : Player_Info
         movement2D.MoveSpeed = 10;
         
 
-        StartCoroutine(FadeText());
+        Run_Life_Act(FadeText());
         yield return new WaitForSeconds(2f);
 
         if (!boss_intend)
@@ -119,7 +121,7 @@ public class PlayerCtrl_Tengai : Player_Info
         else
             Unbeatable = false;
 
-        StopCoroutine(color_when_unbeatable);
+        Stop_Life_Act(ref color_when_unbeatable);
         spriteRenderer.color = new Color(1, 1, 1, 1);
     }
     IEnumerator FadeText()
@@ -141,8 +143,6 @@ public class PlayerCtrl_Tengai : Player_Info
         Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         LifeTime -= damage;
         animator.SetBool("Dead", true);
-
-        
        
         Unbeatable = true;
         weapon_able = false;
@@ -161,35 +161,37 @@ public class PlayerCtrl_Tengai : Player_Info
         if (LifeTime <= 0)
             OnDie();
 
-        StartCoroutine(Damage_After());
+        Run_Life_Act(Damage_After());
     }
     IEnumerator Damage_After()
     {
-        yield return StartCoroutine(MovePath());
+        yield return MovePath();
 
-        StartCoroutine(Move_First());
+        Run_Life_Act(Move_First());
     }
     IEnumerator MovePath() // 여기 수정
     {
-        float A = Get_Slerp_Distance(transform.position, transform.position + 2.5f * Vector3.left, Get_Center_Vector(transform.position, transform.position + 2.5f * Vector3.left, Vector3.Distance(transform.position, transform.position + 2.5f * Vector3.left) * 0.85f, "clock"));
+        float A = Get_Curve_Distance(My_Position, My_Position + 2.5f * Vector3.left, 
+            Get_Center_Vector(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"));
 
-        yield return StartCoroutine(Position_Slerp(transform.position, transform.position + 2.5f * Vector3.left, Get_Center_Vector(transform.position, transform.position + 2.5f * Vector3.left, Vector3.Distance(transform.position, transform.position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.3f, OriginCurve, false));
+        yield return Move_Curve(My_Position, My_Position + 2.5f * Vector3.left, 
+            Get_Center_Vector(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.3f, OriginCurve);
 
-        float kuku = ((1.215f * transform.position.x) - transform.position.y - 7) / 1.215f;
+        float kuku = ((1.215f * My_Position.x) - My_Position.y - 7) / 1.215f;
 
-        float B = Vector3.Distance(transform.position, new Vector3(kuku, -7, 0));
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(kuku, -7, 0), B/A * 0.3f, OriginCurve));
+        float B = Vector3.Distance(My_Position, new Vector3(kuku, -7, 0));
+        yield return Move_Straight(My_Position, new Vector3(kuku, -7, 0), B/A * 0.3f, OriginCurve);
        
     }
     public void Start_Emit()
     {
         Unbeatable = true;
-        i_start_emit = I_Start_Emit();
-        StartCoroutine(i_start_emit);
+        Run_Life_Act_And_Continue(ref i_start_emit, I_Start_Emit());
     }
     IEnumerator I_Start_Emit()
     {
-        Emit_Obj_Copy = Instantiate(Emit_Obj, transform.position, Quaternion.identity);
+        yield return null;
+        Emit_Obj_Copy = Instantiate(Emit_Obj, My_Position, Quaternion.identity);
 
         emit_Motion = null;
 
@@ -209,11 +211,13 @@ public class PlayerCtrl_Tengai : Player_Info
         Unbeatable = true;
 
         emit_Motion.StopCoroutine(emit_change_size);
-        yield return emit_Motion.StartCoroutine(emit_expand_circle);
+
+        Change_BG(Color.white, 2);
+        yield return emit_expand_circle;
 
         Destroy(Emit_Obj_Copy);
 
-        backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 1), 0.1f, 2));
+        Flash(new Color(1, 1, 1, 1), 0.1f, 2);
 
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
@@ -228,8 +232,8 @@ public class PlayerCtrl_Tengai : Player_Info
         GameObject.FindGameObjectWithTag("Boss").GetComponent<Asura>().Stop_Meteor();
 
         Instantiate(Explode, Vector3.zero, Quaternion.identity);
-        Start_Camera_Shake(0.06f, 2, true, false);
-
+        Instantiate(naum_ani, Vector3.zero, Quaternion.identity);
+        Camera_Shake(0.025f, 2, true, false);
     }
     public override void OnDie()
     {
@@ -296,11 +300,11 @@ public class PlayerCtrl_Tengai : Player_Info
             yield return new WaitForSeconds(0.1f);
             if (is_Power_Up)
             {
-                Launch_Weapon_For_Move(ref Weapon[0], new Vector3(1, -0.1f, 0), Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
-                Launch_Weapon_For_Move(ref Weapon[0], new Vector3(1, 0.1f, 0), Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
+                Launch_Weapon(ref Weapon[0], new Vector3(1, -0.1f, 0), Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
+                Launch_Weapon(ref Weapon[0], new Vector3(1, 0.1f, 0), Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
             }
             else
-                Launch_Weapon_For_Move(ref Weapon[0], Vector3.right, Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
+                Launch_Weapon(ref Weapon[0], Vector3.right, Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
            
         }
     }

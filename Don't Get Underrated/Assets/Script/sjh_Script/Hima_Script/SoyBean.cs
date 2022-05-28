@@ -58,7 +58,6 @@ public class SoyBean : Weapon_Devil
 
     void OnDie()
     {
-        cameraShake.Init_Camera();
         Instantiate(Disappear_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

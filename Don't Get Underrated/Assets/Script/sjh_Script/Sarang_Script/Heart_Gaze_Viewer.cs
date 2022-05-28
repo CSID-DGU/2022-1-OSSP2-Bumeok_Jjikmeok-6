@@ -44,7 +44,7 @@ public class Heart_Gaze_Viewer : Slider_Viewer
             if (playerCtrl_Sarang.Is_Fever && playerCtrl_Sarang.is_Domain)
             {
                 slider.value -= Time.deltaTime / 40;
-                if (slider.value <= 0.2)
+                if (slider.value <= 0.1)
                     playerCtrl_Sarang.Out_Fever();
             }
             else

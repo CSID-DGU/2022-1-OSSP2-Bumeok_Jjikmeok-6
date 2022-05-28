@@ -7,15 +7,15 @@ public class Quantum_Bit : Enemy_Info
 {
     SolGryn solGryn;
 
-    ArrayList arrayList;
+    List<Weapon_Devil> Particle;
 
     int[,] Rand = new int[2, 8] { { -1, 0, 1, 0, 1, 1, -1, -1 }, { 0, 1, 0, -1, 1, -1, 1, -1 } };
 
     private new void Awake()
     {
         base.Awake();
-        backGroundColor = GameObject.Find("Flash").GetComponent<BackGroundColor>();
-        arrayList = new ArrayList();
+        backGroundColor = GameObject.Find("Flash").GetComponent<ImageColor>();
+        Particle = new List<Weapon_Devil>();
 
         if (GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn user))
             solGryn = user;
@@ -24,53 +24,45 @@ public class Quantum_Bit : Enemy_Info
     void Start()
     {
         float Solve = Mathf.Sign(transform.position.x);
-        Sequence mysequence = DOTween.Sequence();
-        mysequence.Append(transform.DOMove(new Vector3(Solve * 7, 2, 0), 1f).SetEase(Ease.OutBounce));
-        mysequence.Append(transform.DOMove(new Vector3(0, 2, 0), 1f).SetEase(Ease.InExpo));
-        mysequence.Join(transform.DOScale(new Vector3(1.3f, 1.3f, 0), 1f).SetEase(Ease.InCirc));
-        mysequence.OnComplete(() =>
+
+        DOTween.Sequence()
+        .Append(transform.DOMove(new Vector3(Solve * 7, 2, 0), 1f).SetEase(Ease.OutBounce))
+        .Append(transform.DOMove(new Vector3(0, 2, 0), 1f).SetEase(Ease.InExpo))
+        .Join(transform.DOScale(new Vector3(1.3f, 1.3f, 0), 1f).SetEase(Ease.InCirc))
+        .OnComplete(() =>
         {
             if (Solve >= 0)
-                StartCoroutine(Tr_Co());
+                Run_Life_Act(Tr_Co());
             else
                 spriteRenderer.color = new Color(1, 1, 1, 0);
         });
-   
     }
     IEnumerator Tr_Co()
     {
         spriteRenderer.color = new Color(1, 1, 1, 0);
-        backGroundColor.StartCoroutine(backGroundColor.Flash(Color.black, 0.5f, 0.3f));
-        Start_Camera_Shake(0.05f, 2f, true, false);
+        Flash(Color.black, 0.5f, 1f);
         for (int i = -9; i <= 9; i++)
         {
             for (int j = -9; j <= 9; j++)
             {
-                //GameObject f = ObjectPooler.SpawnFromPool("Time_Stop_For_Damage", new Vector3(i, j, 0));
                 GameObject e = Instantiate(Weapon[0], new Vector3(i, j, 0), Quaternion.identity);
-                if (e.TryGetComponent(out Weapon_Devil user))
+                if (e.TryGetComponent(out Weapon_Devil WD))
                 {
-                    user.W_MoveSpeed(2);
-                    user.W_MoveTo(Vector3.zero);
+                    WD.W_MoveSpeed(2);
+                    WD.W_MoveTo(Vector3.zero);
+                    Particle.Add(WD);
                 }
-                arrayList.Add(e);
             }
         }
-        yield return YieldInstructionCache.WaitForSeconds(2f);
-        foreach (var e in arrayList)
+        yield return Camera_Shake_And_Wait(0.02f, 2f, true, false);
+        foreach (var e in Particle)
         {
             int Ran1 = Random.Range(0, 8);
-            GameObject u = (GameObject)e;
-            if (u != null && u.TryGetComponent(out Weapon_Devil user))
-                user.W_MoveTo(new Vector3(Rand[0, Ran1], Rand[1, Ran1], 0));
+            if (e.gameObject != null)
+                e.W_MoveTo(new Vector3(Rand[0, Ran1], Rand[1, Ran1], 0));
         }
-        arrayList.Clear();
+        Particle.Clear();
         solGryn.Is_Next_Pattern = true;
         yield return null;
     }
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
-    }
-
 }

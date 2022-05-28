@@ -15,9 +15,9 @@ public class Nachi_X : Enemy_Info
         trailRenderer = GetComponent<TrailRenderer>();
         Decide_Camera_Shake = transform.position.x;
     }
-    IEnumerator X_Color_Change(Color Origin_C, Color Change_C, float time_persist)
+    IEnumerator X_Color_Change(Color Origin_C, Color Change_C, float time_persist, int Count)
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < Count; i++)
         {
             float percent = 0;
             while (percent < 1)
@@ -34,14 +34,14 @@ public class Nachi_X : Enemy_Info
         trailRenderer.enabled = true;
         if (TryGetComponent(out TrailCollisions user1))
             user1.Draw_Collision_Line();
-        yield return StartCoroutine(Circle_Move(90, flag * 4, 0, 0.3f, 0.3f, transform.position.x, transform.position.y, 0.3f));
+        yield return Move_Circle(90, flag * 4, 0, 0.3f, 0.3f, transform.position.x, transform.position.y, 0.3f);
 
-        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(-4 * flag, 2f, 0), 0.4f, declineCurve));
-        yield return StartCoroutine(Position_Lerp(transform.position, transform.position + new Vector3(16 * flag, -8f, 0), 0.1f, OriginCurve));
+        yield return Move_Straight(transform.position, transform.position + new Vector3(-4 * flag, 2f, 0), 0.4f, declineCurve);
+        yield return Move_Straight(transform.position, transform.position + new Vector3(16 * flag, -8f, 0), 0.1f, OriginCurve);
 
         if (Decide_Camera_Shake < 0)
-            Start_Camera_Shake(0.05f, 2f, true, false);
-        yield return StartCoroutine(X_Color_Change(Color.white, new Color(1, 1, 1, 0), 1));
+            Camera_Shake(0.02f, 2f, true, false);
+        yield return X_Color_Change(Color.white, new Color(1, 1, 1, 0), 1, 3);
 
         trailRenderer.enabled = false;
         Destroy(gameObject);

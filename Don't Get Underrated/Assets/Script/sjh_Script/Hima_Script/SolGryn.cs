@@ -18,7 +18,7 @@ public class SolGryn : Boss_Info
 
     HimaController himaController;
 
-    BackGroundColor PalJeongDo;
+    ImageColor PalJeongDo;
 
     TrailRenderer trailRenderer;
 
@@ -28,7 +28,7 @@ public class SolGryn : Boss_Info
 
     List<GameObject> SolG_Copy;
 
-    IEnumerator change_color;
+    IEnumerator pattern, change_color, rotate_bullet;
 
     int[,] bangmeon = new int[2, 4] { { 1, -1, -1, 1 }, { 1, 1, -1, -1 } };
 
@@ -52,32 +52,36 @@ public class SolGryn : Boss_Info
     {
         base.Awake();
         CurrentHP = MaxHP;
-        
-        backGroundColor = GameObject.Find("Flash").GetComponent<BackGroundColor>();
-        PalJeongDo = GameObject.Find("PalJeongDo").GetComponent<BackGroundColor>();
-        himaController = GameObject.FindGameObjectWithTag("Player").GetComponent<HimaController>();
-        trailRenderer = GetComponent<TrailRenderer>();
+
+        if (GameObject.Find("Flash") && GameObject.Find("Flash").TryGetComponent(out ImageColor i1))
+            backGroundColor = i1;
+        if (GameObject.Find("PalJeongDo") && GameObject.Find("PalJeongDo").TryGetComponent(out ImageColor i2))
+            PalJeongDo = i2;
+        if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out HimaController i3))
+            himaController = i3;
+        if (TryGetComponent(out TrailRenderer t1))
+            trailRenderer = t1;
+        if (GameObject.Find("Jebal") && GameObject.Find("Jebal").TryGetComponent(out SpriteColor s1))
+            spriteColor = s1;
+
         SolGryn_HP.SetActive(false);
         trailRenderer.enabled = false;
+        pattern = null;
 
-        if (GameObject.Find("Jebal").TryGetComponent(out SpriteColor user))
-            spriteColor = user;
         SolG_Copy = new List<GameObject>();
-        for (int i = 0; i < 5; i++)
-            Pattern_Total.Add(phase);
     }
     public void WelCome()
     {
-        StartCoroutine(TeoKisis());
+        Run_Life_Act(TeoKisis());
     }
     
     void Launch_SoyBean()
     {
-        Instantiate(Weapon[7], transform.position, Quaternion.identity);
+        Instantiate(Weapon[7], My_Position, Quaternion.identity);
     }
     IEnumerator Blink_Bullet()
     {
-        transform.localScale = new Vector3(0.7f, 0.7f, 0);  // 임시
+        My_Scale = new Vector3(0.7f, 0.7f, 0);  // 임시
         for (int i = 0; i < 5; i++)
         {
             Boss_W1(72 + (20 * i), 25, 360, 4, true);
@@ -87,104 +91,109 @@ public class SolGryn : Boss_Info
     }
     IEnumerator TeoKisis()
     {
-        yield return StartCoroutine(Position_Lerp(new Vector3(0, 7, 0), new Vector3(0, 0, 0), 7f, declineCurve));
+        yield return Move_Straight(new Vector3(0, 7, 0), new Vector3(0, 0, 0), 7f, declineCurve);
 
-        Start_Camera_Shake(0.01f, 2, true, false);
-        yield return StartCoroutine(Change_Color_Return_To_Origin(Color.white, new Color(1, 69 / 255, 69 / 255, 1), 1, false));
-
-        for (int i = 0; i < 4; i++)
-            SolG_Copy.Add(Instantiate(Weapon[5], transform.position, Quaternion.identity));
+        Camera_Shake(0.01f, 2, true, false);
+        yield return Change_My_Color_And_Back(Color.white, new Color(1, 69 / 255, 69 / 255, 1), 1, false);
 
         for (int i = 0; i < 4; i++)
-            SolG_Copy[i].GetComponent<SolGryn_Copy>().Move_Lerp_Distance(new Vector3(bangmeon[0, i] * 7, bangmeon[1, i] * 2.5f, 0));
+            SolG_Copy.Add(Instantiate(Weapon[5], My_Position, Quaternion.identity));
 
-        PalJeongDo.StartCoroutine(PalJeongDo.Change_Color(PalJeongDo.Get_BGColor(), new Color(1, 1, 1, 1), 1));
-        yield return backGroundColor.StartCoroutine(backGroundColor.Change_Color_Return_To_Origin(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 1, false));
+        for (int i = 0; i < 4; i++)
+        {
+            if (SolG_Copy[i].TryGetComponent(out SolGryn_Copy SC1))
+                SC1.Move_Straight(new Vector3(bangmeon[0, i] * 7, bangmeon[1, i] * 2.5f, 0));
+        }
+        
+        yield return Change_BG_And_Wait(new Color(1, 1, 1, 1), 0.5f);
+        PalJeongDo.Set_BGColor(Color.white);
+        yield return Change_BG_And_Wait(new Color(1, 1, 1, 0), 1);
 
-        yield return PalJeongDo.StartCoroutine(PalJeongDo.Change_Color(PalJeongDo.Get_BGColor(), new Color(1, 1, 1, 0.3f), 2)); // 효과음 넣어야한다 (낮아지는 소리)
-        GameObject.Find("Flash").transform.SetAsLastSibling();
+        yield return Change_BG_And_Wait(new Color(0, 0, 0, 0.6f), 2);
 
         for (int i = -1; i < 2; i++)
-            Instantiate(PalJeongDo_Thunder, transform.position + (5 * new Vector3(i, 0, 0)), Quaternion.identity);
+            Instantiate(PalJeongDo_Thunder, My_Position + (5 * new Vector3(i, 0, 0)), Quaternion.identity);
 
-        backGroundColor.StartCoroutine(backGroundColor.Change_Color_Return_To_Origin(backGroundColor.Get_BGColor(), new Color(1, 1, 1, 1), 0.5f, false));
-        yield return PalJeongDo.StartCoroutine(PalJeongDo.Change_Color(PalJeongDo.Get_BGColor(), new Color(1, 0, 0, 1), 0.5f));
+
+        yield return Change_BG_And_Wait(new Color(1, 1, 1, 1), 0.5f);
+        PalJeongDo.Set_BGColor(Color.red);
+        yield return Change_BG_And_Wait(new Color(1, 1, 1, 0), 1);
 
         yield return YieldInstructionCache.WaitForSeconds(1f);
 
         foreach (var u in SolG_Copy)
             Destroy(u);
 
-        yield return StartCoroutine(Size_Change(transform.localScale, transform.localScale / 2, 0.5f, OriginCurve));
+        yield return Change_My_Size(My_Scale, My_Scale / 2, 0.5f, OriginCurve);
 
-        spriteColor.StartCoroutine(spriteColor.Change_Color(spriteColor.Get_BGColor(), new Color(1, 1, 1, 1), 1));
-        yield return StartCoroutine(Size_Change(transform.localScale, transform.localScale * 20, 1f, inclineCurve));
+        spriteColor.Change_C(new Color(1, 1, 1, 1), 1);
+        yield return Change_My_Size(My_Scale, My_Scale * 20, 1f, inclineCurve);
 
-        backGroundColor.Set_BGColor(new Color(1, 1, 1, 0));
         PalJeongDo.Set_BGColor(new Color(1, 1, 1, 0));
         yield return YieldInstructionCache.WaitForSeconds(1.5f); // 이동 후 카메라 정지 + 1.5초 정지
 
-        spriteColor.StartCoroutine(spriteColor.Change_Color(spriteColor.Get_BGColor(), new Color(0, 0, 0, 1), 1));
+        spriteColor.Change_C(new Color(0, 0, 0, 1), 1);
         yield return YieldInstructionCache.WaitForSeconds(1.5f);  // 검정색 플래시 후 1.5초 정지
 
-        spriteColor.StartCoroutine(spriteColor.Change_Color(spriteColor.Get_BGColor(), new Color(1, 1, 1, 0), 1));
-        yield return StartCoroutine(Boss_Pattern());
+        spriteColor.Change_C(new Color(1, 1, 1, 0), 1);
+        yield return Boss_Pattern();
     }
     void Continue_Camera_Shake()
     {
-        Start_Camera_Shake(0.0025f, 1, false, true);
+        Camera_Shake(0.002f, 1, false, true);
     }
     IEnumerator Boss_Pattern()
     {
         himaController.IsMove = true;
         himaController.Unbeatable = false;
-        transform.position = new Vector3(7, 4, 0);
-        transform.localScale = new Vector3(0.7f, 0.7f, 0);
+        My_Position = new Vector3(7, 4, 0);
+        My_Scale = new Vector3(0.7f, 0.7f, 0);
 
         SolGryn_HP.SetActive(true);
-        SolGryn_HP.GetComponent<BossHPSliderViewer>().F_HPFull(gameObject.GetComponent<SolGryn>());
-        StartCoroutine(HP_Decrease());
+        if (SolGryn_HP.TryGetComponent(out BossHPSliderViewer B1))
+            B1.F_HPFull(this);
 
+        Run_Life_Act(HP_Decrease());
 
         Continue_Camera_Shake();
 
-        yield return StartCoroutine(Position_Slerp(transform.position, new Vector3(-4, 4, 0),
-            Get_Center_Vector(transform.position, new Vector3(-4, 4, 0), Vector3.Distance(transform.position, new Vector3(-4, 4, 0)) * 0.85f, "anti_clock"), 4, OriginCurve, false));
-        yield return StartCoroutine(Pattern01());
-        yield return StartCoroutine(Pattern02());
-        yield return StartCoroutine(Pattern03());
-        yield return StartCoroutine(Pattern04());
-        yield return StartCoroutine(Pattern05());
-        yield return StartCoroutine(Pattern06());
-        //while(true)
+        yield return Move_Curve(My_Position, new Vector3(-4, 4, 0),
+            Get_Center_Vector(My_Position, new Vector3(-4, 4, 0), Vector3.Distance(My_Position, new Vector3(-4, 4, 0)) * 0.85f, "anti_clock"), 4, OriginCurve);
+        yield return Pattern01();
+        yield return Pattern02();
+        yield return Pattern03();
+        yield return Pattern04();
+        yield return Pattern05();
+        yield return Pattern06();
+        //while (true)
         //{
-        //    yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 0), 0.33f, 0, DisAppear_Effect_1));
+        //    yield return Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.33f, 0, DisAppear_Effect_1);
         //    int Pattern_Num = Random.Range(0, 5);
         //    switch (Pattern_Num)
         //    {
         //        case 0:
-        //            Pattern_Total[Pattern_Num] = Pattern01();
+        //            pattern = Pattern01();
         //            break;
         //        case 1:
-        //            Pattern_Total[Pattern_Num] = Pattern02();
+        //            pattern = Pattern02();
         //            break;
         //        case 2:
-        //            Pattern_Total[Pattern_Num] = Pattern03();
+        //            pattern = Pattern03();
         //            break;
         //        case 3:
-        //            Pattern_Total[Pattern_Num] = Pattern04();
+        //            pattern = Pattern04();
         //            break;
         //        case 4:
-        //            Pattern_Total[Pattern_Num] = Pattern05();
+        //            pattern = Pattern05();
         //            break;
         //    }
-        //    SpriteRenderer_Color = Color.white;
-        //    transform.position = new Vector3(7, 4, 0);
-        //    yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 1f, inclineCurve));
-        //    yield return StartCoroutine((IEnumerator)Pattern_Total[Pattern_Num]);
+        //    My_Color = Color.white;
+        //    My_Position = new Vector3(7, 4, 0);
+        //    yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, inclineCurve);
+        //    yield return pattern;
         //}
 
-        ////yield return StartCoroutine(First_Move());
+        //yield return StartCoroutine(First_Move());
     }
     IEnumerator Pattern01() // 완료
     {
@@ -195,36 +204,39 @@ public class SolGryn : Boss_Info
         if (TryGetComponent(out TrailCollisions user1))
             user1.Draw_Collision_Line();
 
-        transform.position = new Vector3(-4, 4, 0);
-        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1));
+        My_Position = new Vector3(-4, 4, 0);
+        Flash(Color.white, 0, 0.5f);
+        yield return Change_My_Color(My_Color, new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1);
 
         for (int i = 0; i < 3; i++)
-            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(u1[i, 0], u1[i, 1], 0), 0.15f, declineCurve));
+            yield return Move_Straight(My_Position, new Vector3(u1[i, 0], u1[i, 1], 0), 0.15f, declineCurve);
 
-        transform.position = new Vector3(4, 2, 0);
-        yield return StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 0.5f, 0, DisAppear_Effect_1));
+        My_Position = new Vector3(4, 2, 0);
+        Flash(Color.white, 0, 0.5f);
+        yield return Change_My_Color(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 0.5f, 0, DisAppear_Effect_1);
 
         for (int i = 0; i < 3; i++)
-            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(u2[i, 0], u2[i, 1], 0), 0.15f, declineCurve));
+            yield return Move_Straight(My_Position, new Vector3(u2[i, 0], u2[i, 1], 0), 0.15f, declineCurve);
 
-        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 0), 0.4f, 0, DisAppear_Effect_1));
-        yield return StartCoroutine(Nachi_Color_Change(Color.red, Color.blue, 0.7f, true));
+        yield return Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.4f, 0, DisAppear_Effect_1);
+        yield return Nachi_Color_Change(Color.red, Color.blue, 0.5f, true);
 
         GameObject nachi_x_g_1 = Instantiate(Weapon[6], new Vector3(6.3f, 1.87f, 0), Quaternion.identity);
         GameObject nachi_x_g_2 = Instantiate(Weapon[6], new Vector3(-5.61f, 1.64f, 0), Quaternion.identity);
 
-        StartCoroutine(Blink_Bullet());
-        nachi_x_g_1.GetComponent<Nachi_X>().StartCoroutine(nachi_x_g_1.GetComponent<Nachi_X>().Move(-1));
-        yield return nachi_x_g_1.GetComponent<Nachi_X>().StartCoroutine(nachi_x_g_2.GetComponent<Nachi_X>().Move(1));
-        yield return StartCoroutine(Nachi_Color_Change(Color.red, new Color(1, 1, 1, 0), 1f, false));
+        Run_Life_Act(Blink_Bullet());
+
+        if (nachi_x_g_1.TryGetComponent(out Nachi_X user3) && nachi_x_g_2.TryGetComponent(out Nachi_X user4))
+        {
+            user3.StartCoroutine(user3.Move(-1));
+            yield return user4.StartCoroutine(user4.Move(1));
+        }
+        yield return Nachi_Color_Change(Color.red, new Color(1, 1, 1, 0), 1f, false);
 
         trailRenderer.enabled = false;
 
         if (GameObject.Find("TrailCollider"))
-        {
-            Debug.Log("씨발 왜 삭제 안 되는데...");
             Destroy(GameObject.Find("TrailCollider"));
-        }
            
     }
     IEnumerator Nachi_Color_Change(Color Origin_C, Color Change_C, float time_persist, bool Is_Continue)
@@ -254,63 +266,55 @@ public class SolGryn : Boss_Info
     }
     IEnumerator Pattern02()
     {
-        transform.position = new Vector3(-7, 2.5f, 0);
-        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1));
+        My_Position = new Vector3(-7, 2.5f, 0);
+        yield return Change_My_Color(My_Color, new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1);
 
-        yield return StartCoroutine(Straw_Launch(new Vector3(-7, -2.5f, 0), Quaternion.Euler(0, 0, -90), new Vector3(-4.5f, -2.5f, 0), Quaternion.Euler(0, 0, -90),
-          new Vector3(-3.1f, -2.5f, 0), Quaternion.identity, Vector3.right, 0.3f, 10, 0.2f));
+        yield return Straw_Launch(new Vector3(-7, -2.5f, 0), Quaternion.Euler(0, 0, -90), new Vector3(-4.5f, -2.5f, 0), Quaternion.Euler(0, 0, -90),
+          new Vector3(-3.1f, -2.5f, 0), Quaternion.identity, Vector3.right, 0.3f, 10, 0.2f);
 
-        yield return StartCoroutine(Straw_Launch(new Vector3(7, -2.5f, 0), Quaternion.Euler(0, 0, 90), new Vector3(4.6f, -2.5f, 0), Quaternion.Euler(0, 0, 90),
-          new Vector3(3.2f, -2.5f, 0), Quaternion.identity, Vector3.left, 0.3f, 10, 0.2f));
+        yield return Straw_Launch(new Vector3(7, -2.5f, 0), Quaternion.Euler(0, 0, 90), new Vector3(4.6f, -2.5f, 0), Quaternion.Euler(0, 0, 90),
+          new Vector3(3.2f, -2.5f, 0), Quaternion.identity, Vector3.left, 0.3f, 10, 0.2f);
 
-        yield return StartCoroutine(Straw_Launch(new Vector3(-3.11f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(-3.11f, 1.92f, 0), Quaternion.identity,
-          new Vector3(-3.11f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f));
+        yield return Straw_Launch(new Vector3(-3.11f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(-3.11f, 1.92f, 0), Quaternion.identity,
+          new Vector3(-3.11f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
 
-        yield return StartCoroutine(Straw_Launch(new Vector3(0, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(0, 1.92f, 0), Quaternion.identity,
-          new Vector3(0, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f));
+        yield return Straw_Launch(new Vector3(0, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(0, 1.92f, 0), Quaternion.identity,
+          new Vector3(0, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
 
-        yield return StartCoroutine(Straw_Launch(new Vector3(3.11f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(3.11f, 1.92f, 0), Quaternion.identity,
-          new Vector3(3.11f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f));
+        yield return Straw_Launch(new Vector3(3.11f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(3.11f, 1.92f, 0), Quaternion.identity,
+          new Vector3(3.11f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
 
-        yield return StartCoroutine(Straw_Launch(new Vector3(-1.5f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(-1.5f, 1.92f, 0), Quaternion.identity,
-          new Vector3(-1.5f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f));
+        yield return Straw_Launch(new Vector3(-1.5f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(-1.5f, 1.92f, 0), Quaternion.identity,
+          new Vector3(-1.5f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
 
-        yield return StartCoroutine(Straw_Launch(new Vector3(1.5f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(1.5f, 1.92f, 0), Quaternion.identity,
-          new Vector3(1.5f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f));
+        yield return Straw_Launch(new Vector3(1.5f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(1.5f, 1.92f, 0), Quaternion.identity,
+          new Vector3(1.5f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
 
         transform.SetPositionAndRotation(new Vector3(0, 1.35f, 0), Quaternion.identity);
-        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 1f, 0, DisAppear_Effect_1));
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 1.35f, 0), 0.5f, inclineCurve));
+        yield return Change_My_Color(My_Color, new Color(1, 1, 1, 1), 1f, 0, DisAppear_Effect_1);
+        yield return Move_Straight(My_Position, new Vector3(My_Position.x, My_Position.y - 1.35f, 0), 0.5f, inclineCurve);
 
         SolG_Copy = new List<GameObject>();
         for (int i = 0; i < 2; i++)
-            SolG_Copy.Add(Instantiate(Weapon[5], transform.position, Quaternion.identity));
+            SolG_Copy.Add(Instantiate(Weapon[5], My_Position, Quaternion.identity));
 
-        SolGryn_Copy solGryn_Copy_1 = null, solGryn_Copy_2 = null;
-
-        if (SolG_Copy[0].TryGetComponent(out SolGryn_Copy user1))
-            solGryn_Copy_1 = user1;
-        if (SolG_Copy[1].TryGetComponent(out SolGryn_Copy user2))
-            solGryn_Copy_2 = user2;
-
-        if (solGryn_Copy_1 != null && solGryn_Copy_2 != null)
+        if (SolG_Copy[0].TryGetComponent(out SolGryn_Copy SC1) && SolG_Copy[1].TryGetComponent(out SolGryn_Copy SC2))
         {
-            solGryn_Copy_1.Move_Slerp_Distance(new Vector3(6.5f, 2.68f, 0), "anti_clock");
-            solGryn_Copy_2.Move_Slerp_Distance(new Vector3(-6.5f, 2.68f, 0), "clock");
+            SC1.Move_Slerp_Distance(new Vector3(6.5f, 2.68f, 0), "anti_clock");
+            SC2.Move_Slerp_Distance(new Vector3(-6.5f, 2.68f, 0), "clock");
 
-            yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, 2.68f, 0), 0.75f, declineCurve));
+            yield return Move_Straight(My_Position, new Vector3(My_Position.x, 2.68f, 0), 0.75f, declineCurve);
 
             for (int i = 0; i < 4; i++)
             {
-                solGryn_Copy_1.Shake_Act(); solGryn_Copy_2.Shake_Act();
-                yield return StartCoroutine(Shake_Act(0.2f, 0.2f, 0.5f, false));
+                SC1.Shake_Act(); SC2.Shake_Act();
+                yield return Shake_Act(0.2f, 0.2f, 0.5f, false);
 
-                solGryn_Copy_1.Launch_SoyBean(); solGryn_Copy_2.Launch_SoyBean();
+                SC1.Launch_SoyBean(); SC2.Launch_SoyBean();
                 Launch_SoyBean();
                 yield return YieldInstructionCache.WaitForSeconds(0.7f);
             }
         }
-
         Destroy(SolG_Copy[0]);
         Destroy(SolG_Copy[1]);
         yield return null;
@@ -320,9 +324,8 @@ public class SolGryn : Boss_Info
         Quaternion Peanut_Lot, Vector3 Peanut_Dir, float Straw_Lot_time_persist, int Peanut_Launch_Num, float Peanut_Launch_Interval)
     {
         transform.SetPositionAndRotation(SolGryn_Pos, SolGryn_Lot);
-      
-        change_color = Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), Peanut_Launch_Num * Peanut_Launch_Interval + Straw_Lot_time_persist, 0, DisAppear_Effect_1);
-        StartCoroutine(change_color);
+
+        Run_Life_Act_And_Continue(ref change_color, Change_My_Color(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), Peanut_Launch_Num * Peanut_Launch_Interval + Straw_Lot_time_persist, 0, DisAppear_Effect_1));
 
         Straw_Copy = Instantiate(Straw, Straw_Create_Pos, Quaternion.Euler(0, 0, 0));
 
@@ -337,15 +340,15 @@ public class SolGryn : Boss_Info
             }
         }
 
-        backGroundColor.StartCoroutine(backGroundColor.Flash(Color.white, 0.3f, 5));
+        Flash(Color.white, 0.3f, 0.2f);
 
         for (int i = 0; i < Peanut_Launch_Num; i++)
         {
-            Launch_Weapon_For_Move(ref Weapon[1], Peanut_Dir, Peanut_Lot, 15, Peanut_Create_Pos);
+            Launch_Weapon(ref Weapon[1], Peanut_Dir, Peanut_Lot, 15, Peanut_Create_Pos);
             yield return YieldInstructionCache.WaitForSeconds(Peanut_Launch_Interval); // 0.2초는 고정
         }
 
-        StopCoroutine(change_color);
+        Stop_Life_Act(ref change_color);
         Destroy(Straw_Copy);
         yield return null;
     }
@@ -354,9 +357,9 @@ public class SolGryn : Boss_Info
     {
         transform.SetPositionAndRotation(new Vector3(6, 0, 0), Quaternion.identity);
 
-        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1));
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 3, 0), 1, inclineCurve));
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, 11, 0), 1, declineCurve));
+        yield return Change_My_Color(My_Color, new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1);
+        yield return Move_Straight(My_Position, new Vector3(My_Position.x, My_Position.y - 3, 0), 1, inclineCurve);
+        yield return Move_Straight(My_Position, new Vector3(My_Position.x, 11, 0), 1, declineCurve);
 
         for (int i = -1; i < 2; i++)
         {
@@ -379,27 +382,27 @@ public class SolGryn : Boss_Info
             yield return null;
         Is_Next_Pattern = false;
 
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(transform.position.x, transform.position.y - 11, 0), 1, declineCurve));
+        yield return Move_Straight(My_Position, new Vector3(My_Position.x, My_Position.y - 11, 0), 1, declineCurve);
     }
     IEnumerator Pattern04()
     {
-        IEnumerator rotate_bullet = Rotate_Bullet(7, 200, 0.02f, 4, Weapon[2]);
 
         for (int i = 0; i < 5; i++)
         {
             int x = Random.Range(0, 5);
-            transform.position = new Vector3(Pattern04_Move[x, 0], Pattern04_Move[x, 1], 0);
+            My_Position = new Vector3(Pattern04_Move[x, 0], Pattern04_Move[x, 1], 0);
            
-            yield return Change_Color_Lerp(new Color(1, 1, 1, 0), new Color(1, 1, 1, 0), 0.33f, 1.5f, DisAppear_Effect_2);
-            
-            StartCoroutine(rotate_bullet);
-            Start_Camera_Shake(0.03f, 1.4f, true, false);
-            yield return StartCoroutine(Change_Color_Return_To_Origin(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 0.7f, false));
-            StopCoroutine(rotate_bullet);
+            yield return Change_My_Color(new Color(1, 1, 1, 0), new Color(1, 1, 1, 0), 0.33f, 1.5f, DisAppear_Effect_2);
+
+            Run_Life_Act_And_Continue(ref rotate_bullet, Rotate_Bullet(7, 200, 0.02f, 4, Weapon[2]));
+
+            Camera_Shake(0.02f, 1.4f, true, false);
+            yield return Change_My_Color_And_Back(new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 0.7f, false);
+            Stop_Life_Act(ref rotate_bullet);
         }
         transform.rotation = Quaternion.identity;
-        yield return StartCoroutine(Change_Color_Lerp(SpriteRenderer_Color, new Color(1, 1, 1, 1), 1, 0, DisAppear_Effect_1));
-        yield return StartCoroutine(Position_Lerp(transform.position, new Vector3(7, 0, 0), 1, declineCurve));
+        yield return Change_My_Color(My_Color, new Color(1, 1, 1, 1), 1, 0, DisAppear_Effect_1);
+        yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1, declineCurve);
     }
 
     IEnumerator Pattern05()
@@ -410,11 +413,11 @@ public class SolGryn : Boss_Info
             
             if (i == 13)
             {
-                backGroundColor.StartCoroutine(backGroundColor.Flash(new Color(1, 1, 1, 0.7f), 0.3f, 5));
-                Start_Camera_Shake(0.03f, 3, true, false);
+                Flash(new Color(1, 1, 1, 0.7f), 0.3f, 0.2f);
+                Camera_Shake(0.02f, 3, true, false);
             }
             else
-                Start_Camera_Shake(0.02f, 1, true, false);
+                Camera_Shake(0.015f, 1, true, false);
             yield return YieldInstructionCache.WaitForSeconds(1f);
             Destroy(W1);
         }
@@ -434,7 +437,7 @@ public class SolGryn : Boss_Info
             yield return null;
 
         Is_Next_Pattern = false;
-        yield return StartCoroutine(Position_Lerp(new Vector3(7, 8, 0), new Vector3(7, 0, 0), 5, declineCurve));
+        yield return StartCoroutine(Move_Straight(new Vector3(7, 8, 0), new Vector3(7, 0, 0), 5, declineCurve));
     }
 
     IEnumerator Pattern06()
@@ -443,8 +446,9 @@ public class SolGryn : Boss_Info
 
         for (int i = 0; i < 4; i++)
         {
-            GameObject e = Instantiate(Weapon[10], Vector3.zero, Quaternion.identity);
-            e.GetComponent<Monster>().Start_F(new Vector3(bangmeon[0, i] * 7, bangmeon[1, i] * 4, 0), Vector3.zero);
+            GameObject UnderTail = Instantiate(Weapon[10], Vector3.zero, Quaternion.identity);
+            if (UnderTail.TryGetComponent(out Monster M1))
+                M1.Start_F(new Vector3(bangmeon[0, i] * 7, bangmeon[1, i] * 4, 0), Vector3.zero);
             yield return YieldInstructionCache.WaitForSeconds(1.5f);
         }
 
@@ -471,23 +475,12 @@ public class SolGryn : Boss_Info
     public override void OnDie()
     {
         backGroundColor.Stop_Coroutine();
-        GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
-        GameObject[] f = GameObject.FindGameObjectsWithTag("Weapon_Devil");
-        GameObject[] g = GameObject.FindGameObjectsWithTag("Enemy");
-        GameObject[] h = GameObject.FindGameObjectsWithTag("Item");
-        foreach (var u in e)
-            Destroy(u);
-        foreach (var u in f)
-            Destroy(u);
-        foreach (var u in g)
-            Destroy(u);
-        foreach (var u in h)
-            Destroy(u);
+        Killed_All_Mine();
         StartCoroutine(I_OnDie());
     }
     IEnumerator I_OnDie()
     {
-        yield return StartCoroutine(Position_Lerp(new Vector3(7, 5, 0), new Vector3(7, 0, 0), 3, OriginCurve));
+        yield return Move_Straight(new Vector3(7, 5, 0), new Vector3(7, 0, 0), 3, OriginCurve);
         yield return null;
     }
     void Boss_W1(float start_angle, int count, float range_angle, float speed, bool is_Blink)
@@ -499,7 +492,7 @@ public class SolGryn : Boss_Info
             float angle = intervalAngle + (i * count_per_radian);
             float x = Mathf.Cos(angle * Mathf.PI / 180.0f);
             float y = Mathf.Sin(angle * Mathf.PI / 180.0f);
-            Launch_Weapon_For_Move(ref Weapon[0], new Vector3(x, y), Quaternion.identity, speed, 4 * Vector3.up);
+            Launch_Weapon(ref Weapon[0], new Vector3(x, y), Quaternion.identity, speed, 4 * Vector3.up);
         }
     }
 }

@@ -43,10 +43,6 @@ public class Enemy_Info : Life
     {
         base.OnDie();
     }
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
-    }
     protected IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
     {
         Vector3 originPosition;

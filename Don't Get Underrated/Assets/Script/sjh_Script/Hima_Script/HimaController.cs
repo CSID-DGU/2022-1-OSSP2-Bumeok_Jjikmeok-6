@@ -42,6 +42,8 @@ public class HimaController : Player_Info {
 
 	int groundLayerMask;
 
+	IEnumerator color_unbeatable;
+
 	public bool IsMove
     {
         get { return isMove; }
@@ -66,7 +68,7 @@ public class HimaController : Player_Info {
 
 	void Start() 
 	{
-		StartCoroutine(Load());
+		Run_Life_Act(Load());
 	}
 
 	IEnumerator Load()
@@ -111,14 +113,14 @@ public class HimaController : Player_Info {
 			Vector2 dir = new Vector2(-Mathf.Sign(velo_x) * 1, 1).normalized;
 			rb2d.AddForce(dir * 14, ForceMode2D.Impulse);
 
-			StartCoroutine(Whilee());
+			Run_Life_Act(Whilee());
 		}
 
     }
 	IEnumerator Whilee()
     {
-		IEnumerator user = Color_When_UnBeatable();
-		StartCoroutine(user);
+		Run_Life_Act_And_Continue(ref color_unbeatable, My_Color_When_UnBeatable());
+
 		float percent = 0;
 		while(percent < 0.3f)
         {
@@ -127,7 +129,7 @@ public class HimaController : Player_Info {
         } // 정확한 시간 계산을 위해 식을 좀 복잡하게 썼음
 		isMove = true;
 		yield return YieldInstructionCache.WaitForSeconds(2f);
-		StopCoroutine(user);
+		Stop_Life_Act(ref color_unbeatable);
 		Unbeatable = false;
 		yield return null;
     }

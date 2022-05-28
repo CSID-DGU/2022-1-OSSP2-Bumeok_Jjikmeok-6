@@ -12,6 +12,8 @@ public class MoveBackGround : MonoBehaviour
 
     Vector3 moveDirection = Vector3.left;
 
+    IEnumerator increase_speed, decrease_speed;
+
     [SerializeField]
     float moveSpeed= 9f;
 
@@ -27,26 +29,61 @@ public class MoveBackGround : MonoBehaviour
         inGameSpeed = 0;   
     }
 
-    public IEnumerator Increase_Speed(float grant_speed, float Speed_Limit)
+    IEnumerator Increase_Speed(float time_persist, float Speed_Limit)
     {
-        while(true)
+        float temp_Speed = inGameSpeed;
+        float percent = 0;
+        if (time_persist <= 0)
+            time_persist = 1;
+        while(percent < 1)
         {
-            inGameSpeed += Time.deltaTime / grant_speed;
-            if (inGameSpeed >= Speed_Limit)
-                yield break;
+            percent += Time.deltaTime / time_persist;
+            inGameSpeed = Mathf.Lerp(temp_Speed, Speed_Limit, percent);
             yield return null;
         }
     }
-
-    public IEnumerator Decrease_Speed(float time_persist, float Speed_Limit)
+    IEnumerator Decrease_Speed(float time_persist, float Speed_Limit)
     {
-        while (true)
+        float temp_Speed = inGameSpeed;
+        float percent = 0;
+        if (time_persist <= 0)
+            time_persist = 1;
+        while (percent < 1)
         {
-            inGameSpeed -= Time.deltaTime / time_persist;
-            if (inGameSpeed <= Speed_Limit)
-                yield break;
+            percent += Time.deltaTime / time_persist;
+            inGameSpeed = Mathf.Lerp(temp_Speed, Speed_Limit, percent);
             yield return null;
         }
+
+    }
+    public void Increase_Speed_F(float time_persist, float Speed_Limit)
+    {
+        if (increase_speed != null)
+            StopCoroutine(increase_speed);
+        increase_speed = Increase_Speed(time_persist, Speed_Limit);
+        StartCoroutine(increase_speed);
+    }
+    public void Decrease_Speed_F(float time_persist, float Speed_Limit)
+    {
+        if (decrease_speed != null)
+            StopCoroutine(decrease_speed);
+        decrease_speed = Decrease_Speed(time_persist, Speed_Limit);
+        StartCoroutine(decrease_speed);
+    }
+
+    public IEnumerator Increase_Speed_W(float time_persist, float Speed_Limit)
+    {
+        if (increase_speed != null)
+            StopCoroutine(increase_speed);
+        increase_speed = Increase_Speed(time_persist, Speed_Limit);
+        yield return StartCoroutine(increase_speed);
+    }
+    public IEnumerator Decrease_Speed_W(float time_persist, float Speed_Limit)
+    {
+        if (decrease_speed != null)
+            StopCoroutine(decrease_speed);
+        decrease_speed = Decrease_Speed(time_persist, Speed_Limit);
+        yield return StartCoroutine(decrease_speed);
     }
 
     // Update is called once per frame
@@ -54,8 +91,6 @@ public class MoveBackGround : MonoBehaviour
     {
         transform.position += inGameSpeed * Time.deltaTime * moveDirection;
         if (transform.position.x <= -move_value)
-        {
             transform.position = Back_another.transform.position + (Vector3.right * move_value);
-        }
     }
 }

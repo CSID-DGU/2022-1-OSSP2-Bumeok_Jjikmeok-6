@@ -9,19 +9,19 @@ public class SolGryn_Copy : Enemy_Info
     {
         base.Awake();
     }
-    public void Move_Lerp_Distance(Vector3 late_vector)
+    public void Move_Straight(Vector3 late_vector)
     {
-        StartCoroutine(Position_Lerp(transform.position, late_vector, 0.15f, OriginCurve));        
+        Run_Life_Act(Move_Straight(transform.position, late_vector, 0.15f, OriginCurve));        
     }
 
     public void Move_Slerp_Distance(Vector3 Target, string dir)
     {
-        StartCoroutine(Position_Slerp(transform.position, Target,
-              Get_Center_Vector(transform.position, Target, Vector3.Distance(transform.position, Target) * 0.85f, dir), 1, declineCurve, false));
+       Run_Life_Act(Move_Curve(transform.position, Target,
+              Get_Center_Vector(transform.position, Target, Vector3.Distance(transform.position, Target) * 0.85f, dir), 1, declineCurve));
     }
     public void Shake_Act()
     {
-        StartCoroutine(Shake_Act(0.2f, 0.2f, 0.5f, false));
+        Run_Life_Act(Shake_Act(0.2f, 0.2f, 0.5f, false));
     }
 
     public void Launch_SoyBean()

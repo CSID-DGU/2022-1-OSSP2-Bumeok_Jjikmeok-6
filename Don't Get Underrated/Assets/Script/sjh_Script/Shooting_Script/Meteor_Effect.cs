@@ -2,6 +2,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class Meteor_Line_Info
+{
+    public Vector3 Line_Pos;
+    public Color Line_Color;
+    public Quaternion Line_Rotation;
+    public Meteor_Line_Info(Vector3 Line_Pos, Color Line_Color, Quaternion Line_Rotation)
+    {
+        this.Line_Pos = Line_Pos;
+        this.Line_Color = Line_Color;
+        this.Line_Rotation = Line_Rotation;
+    }
+    public Meteor_Line_Info(Meteor_Line_Info mine)
+    {
+        Line_Pos = mine.Line_Pos;
+        Line_Color = mine.Line_Color;
+        Line_Rotation = mine.Line_Rotation;
+    }
+}
+public class Meteor_Traffic_Info : Meteor_Line_Info
+{
+    public Vector3 Traffic_Pos;
+    public float Bright_Time;
+    public int Bright_Count;
+    public float Shake_Time;
+    public float Shake_Intensity;
+    public Meteor_Traffic_Info(Meteor_Line_Info mine, Vector3 Traffic_Pos, float Bright_Time, int _bright_Count, float Shake_Time, float Shake_Intensity) : base(mine)
+    {
+        this.Traffic_Pos = Traffic_Pos;
+        this.Bright_Time = Bright_Time;
+        Bright_Count = _bright_Count;
+        this.Shake_Time = Shake_Time;
+        this.Shake_Intensity = Shake_Intensity;
+    }
+}
+
+// case 1 : 선이 빛날 때
+// case 2 : 선이 빛나지 않을 때
 public class Meteor_Effect : Weapon_Devil
 {
     // Start is called before the first frame update
@@ -22,71 +59,44 @@ public class Meteor_Effect : Weapon_Devil
         spriteRenderer.color = new Color(1, 1, 1, 0);
         W_MoveTo(Vector3.zero);
     }
-    public IEnumerator Pattern02_Meteor(float temp)
+    public IEnumerator Pattern02_Meteor(Meteor_Traffic_Info MT, Vector3 Target)
     {
-        copy_Meteor_Line = Instantiate(Meteor_Line, new Vector3(temp, 0, 0), Quaternion.Euler(0, 0, 90));
-        copy_Meteor_Traffic = Instantiate(Meteor_Traffic, new Vector3(temp, 3.7f, 0), Quaternion.identity);
-        Meteor_Line meteor_Line = null;
+        copy_Meteor_Line = Instantiate(Meteor_Line, MT.Line_Pos, MT.Line_Rotation);
+        copy_Meteor_Traffic = Instantiate(Meteor_Traffic, MT.Traffic_Pos, Quaternion.identity);
 
-        IEnumerator u = null;
-
-        if (copy_Meteor_Line.TryGetComponent(out Meteor_Line user1))
+        if (copy_Meteor_Line.TryGetComponent(out Meteor_Line user1) && copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic user2))
         {
-            meteor_Line = user1;
-            u = meteor_Line.Change_Color(1, 1, 1, 0.15f, true);
-            meteor_Line.StartCoroutine(u);
+            user1.StartCoroutine(user1.Change_Color(MT.Line_Color, MT.Bright_Count, MT.Bright_Time));
+            yield return user2.Change_Color(MT.Bright_Count, MT.Bright_Time);
+            yield return user2.Shake_Act(MT.Shake_Time, MT.Shake_Intensity);
         }
-        if (copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic user2))
-            yield return user2.StartCoroutine(user2.Shake_Act(0.3f, 0.8f));
-        if (u != null && meteor_Line != null)
-            meteor_Line.StopCoroutine(u);
-
         Destroy(copy_Meteor_Traffic);
         Destroy(copy_Meteor_Line);
 
         spriteRenderer.color = new Color(1, 1, 1, 1);
-        W_MoveTo(Vector3.down);
+        W_MoveTo(Target);
 
         yield return null;
     }
-
-    public IEnumerator Meteor_Launch_Act(float temp, float R1, float R2, float R3)
+    public void Pattern04_Meteor_Launch(float temp, float R1, float R2, float R3)
     {
-        copy_Meteor_Line = Instantiate(Meteor_Line, new Vector3(0, temp, 0), Quaternion.identity);
-        copy_Meteor_Traffic = Instantiate(Meteor_Traffic, new Vector3(8, temp, 0), Quaternion.identity);
-
-        Meteor_Line meteor_Line = null;
-
-        IEnumerator u = null;
-
-        if (copy_Meteor_Line.TryGetComponent(out Meteor_Line user1))
-        {
-            meteor_Line = user1;
-            u = meteor_Line.Change_Color(R1, R2, R3, 0.25f, true);
-            meteor_Line.StartCoroutine(u);
-        }
-        if (copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic user2))
-        {
-            yield return user2.StartCoroutine(user2.Change_Color());
-            yield return user2.StartCoroutine(user2.Shake_Act(0.6f, 3));
-        }
-        if (u != null && meteor_Line != null)
-            meteor_Line.StopCoroutine(u);
-
-        Destroy(copy_Meteor_Traffic);
-        Destroy(copy_Meteor_Line);
-        
-        spriteRenderer.color = new Color(1, 1, 1, 1);
-        W_MoveTo(Vector3.left);
-        yield return null;
+        Meteor_Traffic_Info MT = new Meteor_Traffic_Info(
+            new Meteor_Line_Info(new Vector3(0, temp, 0), new Color(R1, R2, R3, 1), Quaternion.identity),
+            new Vector3(8, temp, 0), 0.25f, 2, 0.6f, 1);
+        StartCoroutine(Pattern02_Meteor(MT, Vector3.left));
     }
-
+    public void Pattern02_Meteor_Launch(int Rand)
+    {
+        Meteor_Traffic_Info MT = new Meteor_Traffic_Info(
+            new Meteor_Line_Info(new Vector3(Rand, 0, 0), Color.white, Quaternion.Euler(0, 0, 90)), 
+            new Vector3(Rand, 3.7f, 0), 0, 0, 0.2f, 3);
+        StartCoroutine(Pattern02_Meteor(MT, Vector3.down));
+    }
     private void LateUpdate()
     {
         if (transform.position.x <= -10 || transform.position.y <= -5.7f)
             Destroy(gameObject);
     }
-
     private void OnDestroy()
     {
         StopAllCoroutines();
