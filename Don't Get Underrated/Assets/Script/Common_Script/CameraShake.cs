@@ -18,6 +18,7 @@ public class CameraShake : MonoBehaviour
     }
     public IEnumerator Shake_Act(float shake_intensity, float time_persist, bool is_Decline_Camera_Shake, bool is_Continue)
     {
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         Init_Camera();
         yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
         originPosition = mainCamera.transform.position;
@@ -26,15 +27,13 @@ public class CameraShake : MonoBehaviour
         int decline_camera_Shake = 0;
         if (is_Decline_Camera_Shake)
             decline_camera_Shake = 1;
-        if (time_persist == 0)
-            time_persist = 1;
         while (true)
         {
             float percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
-                use_shake_intensity -= shake_intensity * decline_camera_Shake * (Time.deltaTime / time_persist);
+                percent += Time.deltaTime * inverse_time_persist;
+                use_shake_intensity -= shake_intensity * decline_camera_Shake * (Time.deltaTime * inverse_time_persist);
                 mainCamera.transform.position = originPosition + Random.insideUnitSphere * use_shake_intensity;
                 mainCamera.transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * use_shake_intensity, transform.localScale.y + Time.deltaTime * use_shake_intensity, 0);
                 mainCamera.transform.transform.rotation = new Quaternion(

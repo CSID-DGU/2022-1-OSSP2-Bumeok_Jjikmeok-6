@@ -195,9 +195,9 @@ public class PlayerCtrl_Tengai : Player_Info
 
         emit_Motion = null;
 
-        if (Emit_Obj_Copy.TryGetComponent(out Emit_Motion user1))
+        if (Emit_Obj_Copy.TryGetComponent(out Emit_Motion EM))
         {
-            emit_Motion = user1;
+            emit_Motion = EM;
             emit_expand_circle = emit_Motion.Emit_Expand_Circle();
             emit_change_size = emit_Motion.Emit_Change_Size();
         }

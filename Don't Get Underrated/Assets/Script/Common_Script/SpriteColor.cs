@@ -22,9 +22,10 @@ public class SpriteColor : MonoBehaviour
     {
         float percent = 0;
         Color origin_color = Get_BGColor();
+        float inverse_time_persist = StaticFunc.Reverse_Time(ratio);
         while (percent < 1)
         {
-            percent += Time.deltaTime / ratio;
+            percent += Time.deltaTime * inverse_time_persist;
             spriteRenderer.color = Color.Lerp(origin_color, change_color, percent);
             yield return null;
         }

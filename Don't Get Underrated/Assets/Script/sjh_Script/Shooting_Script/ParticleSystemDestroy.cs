@@ -8,8 +8,8 @@ public class ParticleSystemDestroy : MonoBehaviour
 
     void Start()
     {
-        if (TryGetComponent(out ParticleSystem user))
-            ps = user;
+        if (TryGetComponent(out ParticleSystem PS))
+            ps = PS;
     }
 
     void Update()

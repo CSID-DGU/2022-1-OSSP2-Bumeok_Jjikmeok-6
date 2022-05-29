@@ -20,24 +20,24 @@ public class Weapon_Devil : Weapon
     }
     private void OnCollisionEnter2D(Collision2D collision) // 콜리전
     {
-        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info user2))
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info PI))
         {
-            if (!user2.Unbeatable)
+            if (!PI.Unbeatable)
                 Weak_Weapon();
-            user2.TakeDamage(1);
+            PI.TakeDamage(1);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision) // 트리거(콜라이더)
     {
-        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info user2))
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info PI))
         {
-            if (!user2.Unbeatable)
+            if (!PI.Unbeatable)
                 Weak_Weapon();
-            user2.TakeDamage(1);
+            PI.TakeDamage(1);
         }
-        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student user1))
+        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student S))
         {
-            if (user1.get_Color() == new Color(0, 0, 1, 1))
+            if (S.get_Color() == new Color(0, 0, 1, 1))
                 Destroy(gameObject);
         }
     }

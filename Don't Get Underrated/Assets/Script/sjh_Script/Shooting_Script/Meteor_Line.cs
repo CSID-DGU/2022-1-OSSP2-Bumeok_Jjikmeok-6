@@ -15,6 +15,7 @@ public class Meteor_Line : MonoBehaviour
     }
     public IEnumerator Change_Color(Color Change, int Count, float time_persist)
     {
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         Color Change_A_1 = Change;
         Color Change_A_0 = new Color(Change.r, Change.g, Change.b, 0);
         for (int i = 0; i < Count; i++)
@@ -22,14 +23,14 @@ public class Meteor_Line : MonoBehaviour
             float percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 spriteRenderer.color = Color.Lerp(Change_A_0, Change_A_1, percent);
                 yield return null;
             }
             percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 spriteRenderer.color = Color.Lerp(Change_A_1, Change_A_0, percent);
                 yield return null;
             }

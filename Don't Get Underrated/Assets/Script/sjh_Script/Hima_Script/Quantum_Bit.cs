@@ -17,8 +17,8 @@ public class Quantum_Bit : Enemy_Info
         backGroundColor = GameObject.Find("Flash").GetComponent<ImageColor>();
         Particle = new List<Weapon_Devil>();
 
-        if (GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn user))
-            solGryn = user;
+        if (GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
+            solGryn = SG;
     }
     // Start is called before the first frame update
     void Start()

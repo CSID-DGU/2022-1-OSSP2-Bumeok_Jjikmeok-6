@@ -153,9 +153,10 @@ public class Student : MonoBehaviour
         if (Effect != null)
             Instantiate(Effect, transform.position, Quaternion.identity);
         float percent = 0;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (percent < 1)
         {
-            percent += Time.deltaTime / time_persist;
+            percent += Time.deltaTime * inverse_time_persist;
             spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
             yield return null;
         }

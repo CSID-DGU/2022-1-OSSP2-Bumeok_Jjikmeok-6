@@ -30,7 +30,7 @@ public class FinalStage_1_Total : MonoBehaviour
         BossHPSliderPrefab.SetActive(true);
         BossHPSliderPrefab.GetComponent<BossHPSliderViewer>().F_HPFull(Boss.GetComponent<Asura>());
         BossHPSliderLeft.SetActive(true);
-        if (Boss.TryGetComponent(out Asura user))
-             user.Phase_Start();
+        if (Boss.TryGetComponent(out Asura A))
+             A.Phase_Start();
     }
 }

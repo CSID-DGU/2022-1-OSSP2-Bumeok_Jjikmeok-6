@@ -30,9 +30,10 @@ public class Monster : Enemy_Info
     IEnumerator Monster_Only_Lazor(Vector3 Origin, Vector3 Target, float time_persist)
     {
         float percent = 0;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (percent < 1)
         {
-            percent += Time.deltaTime / time_persist;
+            percent += Time.deltaTime * inverse_time_persist;
             Launch_Weapon(ref Weapon[0], Target - Origin, Quaternion.identity, 14, Origin);
             yield return null;
         }

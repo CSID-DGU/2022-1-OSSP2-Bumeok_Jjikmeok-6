@@ -21,20 +21,20 @@ public class Weapon_Player : Weapon
     }
     private void OnTriggerEnter2D(Collider2D collision) // 트리거(콜라이더)
     {
-        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student user1))
+        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student S))
         {
-            if (user1.get_Color() == new Color(0, 0, 1, 1))
+            if (S.get_Color() == new Color(0, 0, 1, 1))
                 Destroy(gameObject);
         }
-        if (collision.gameObject != null && collision.CompareTag("Enemy") && collision.TryGetComponent(out F1_Homming_Enemy user))
+        if (collision.gameObject != null && collision.CompareTag("Enemy") && collision.TryGetComponent(out F1_Homming_Enemy F1_H))
         {
-            user.OnDie();
+            F1_H.OnDie();
             Destroy(gameObject);
         }
-        if (collision.CompareTag("Boss") && collision.gameObject.TryGetComponent(out Asura user3))
+        if (collision.CompareTag("Boss") && collision.gameObject.TryGetComponent(out Asura A))
         {
-            if (!user3.Unbeatable)
-                user3.TakeDamage(3f);
+            if (!A.Unbeatable)
+                A.TakeDamage(3f);
             Destroy(gameObject);
         }
     }

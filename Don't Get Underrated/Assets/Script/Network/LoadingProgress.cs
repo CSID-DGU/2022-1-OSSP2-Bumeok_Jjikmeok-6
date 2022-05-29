@@ -60,7 +60,7 @@ public class LoadingProgress : MonoBehaviour
                 op.allowSceneActivation = true;
                 yield break;
             }
-            slider.value = currentValue / 100;
+            slider.value = currentValue * 0.01f;
         }
     }
     IEnumerator Wait_Text_IEnum()

@@ -59,16 +59,16 @@ public class Meteor_Effect : Weapon_Devil
         spriteRenderer.color = new Color(1, 1, 1, 0);
         W_MoveTo(Vector3.zero);
     }
-    public IEnumerator Pattern02_Meteor(Meteor_Traffic_Info MT, Vector3 Target)
+    public IEnumerator Pattern02_Meteor(Meteor_Traffic_Info MT_I, Vector3 Target)
     {
-        copy_Meteor_Line = Instantiate(Meteor_Line, MT.Line_Pos, MT.Line_Rotation);
-        copy_Meteor_Traffic = Instantiate(Meteor_Traffic, MT.Traffic_Pos, Quaternion.identity);
+        copy_Meteor_Line = Instantiate(Meteor_Line, MT_I.Line_Pos, MT_I.Line_Rotation);
+        copy_Meteor_Traffic = Instantiate(Meteor_Traffic, MT_I.Traffic_Pos, Quaternion.identity);
 
-        if (copy_Meteor_Line.TryGetComponent(out Meteor_Line user1) && copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic user2))
+        if (copy_Meteor_Line.TryGetComponent(out Meteor_Line ML) && copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic MT))
         {
-            user1.StartCoroutine(user1.Change_Color(MT.Line_Color, MT.Bright_Count, MT.Bright_Time));
-            yield return user2.Change_Color(MT.Bright_Count, MT.Bright_Time);
-            yield return user2.Shake_Act(MT.Shake_Time, MT.Shake_Intensity);
+            ML.StartCoroutine(ML.Change_Color(MT_I.Line_Color, MT_I.Bright_Count, MT_I.Bright_Time));
+            yield return MT.Change_Color(MT_I.Bright_Count, MT_I.Bright_Time);
+            yield return MT.Shake_Act(MT_I.Shake_Time, MT_I.Shake_Intensity);
         }
         Destroy(copy_Meteor_Traffic);
         Destroy(copy_Meteor_Line);

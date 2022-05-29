@@ -17,8 +17,8 @@ public class Emit_Motion : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         transform.localScale = Vector3.zero;
-        if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Tengai user))
-            playerCtrl_Tengai = user;
+        if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Tengai PC_T))
+            playerCtrl_Tengai = PC_T;
     }
     void Start()
     {
@@ -56,7 +56,6 @@ public class Emit_Motion : MonoBehaviour
             percent += Time.deltaTime;
             transform.localScale = Vector3.Lerp(temp_scale, temp_scale * 21, curve.Evaluate(percent));
             yield return null;
-           
         }
     }
     // Update is called once per frame

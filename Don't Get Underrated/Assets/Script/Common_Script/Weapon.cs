@@ -15,11 +15,11 @@ public class Weapon : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (TryGetComponent(out Movement2D user1))
-            movement2D = user1;
-        if (TryGetComponent(out CameraShake user2) && GameObject.Find("Main Camera"))
+        if (TryGetComponent(out Movement2D M_2D))
+            movement2D = M_2D;
+        if (TryGetComponent(out CameraShake CS) && GameObject.Find("Main Camera"))
         {
-            cameraShake = user2;
+            cameraShake = CS;
             cameraShake.mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         }
     }

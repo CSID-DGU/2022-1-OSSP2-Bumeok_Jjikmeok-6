@@ -46,8 +46,8 @@ public class Boss_Info : Life
     }
     public void OnTriggerEnter2D(Collider2D collision) // ¾ê¸¸
     {
-        if (collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info user1))
-            user1.TakeDamage(1);
+        if (collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info PI))
+            PI.TakeDamage(1);
 
     }
     protected virtual void Killed_All_Mine()
@@ -69,17 +69,18 @@ public class Boss_Info : Life
         foreach (var e in item)
             Destroy(e);
     }
-    protected IEnumerator Warning(string warning_message, float time_ratio)
+    protected IEnumerator Warning(string warning_message, float time_persist)
     {
         WarningText.text = warning_message;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (WarningText.color.a < 1.0f)
         {
-            WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, WarningText.color.a + Time.deltaTime / time_ratio);
+            WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, WarningText.color.a + Time.deltaTime * inverse_time_persist);
             yield return null;
         }
         while (WarningText.color.a > 0.0f)
         {
-            WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, WarningText.color.a - Time.deltaTime / time_ratio);
+            WarningText.color = new Color(WarningText.color.r, WarningText.color.g, WarningText.color.b, WarningText.color.a - Time.deltaTime * inverse_time_persist);
             yield return null;
         }
     }
@@ -112,12 +113,13 @@ public class Boss_Info : Life
         originPosition = transform.position;
         originRotation = transform.rotation;
         originScale = transform.localScale;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (true)
         {
             float percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 transform.position = originPosition + Random.insideUnitSphere * shake_intensity;
                 transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * scale_ratio, transform.localScale.y + Time.deltaTime * scale_ratio, 0);
                 transform.transform.rotation = new Quaternion(

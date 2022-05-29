@@ -26,4 +26,12 @@ internal static class StaticFunc
         while (Time.realtimeSinceStartup - startTime < seconds)
             yield return null;
     }
+    
+    public static float Reverse_Time(float persist_time)
+    {
+        if (persist_time <= 0)
+            return 1;
+        else
+            return 1 / persist_time;
+    }
 }

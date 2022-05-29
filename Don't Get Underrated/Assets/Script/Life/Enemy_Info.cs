@@ -21,10 +21,10 @@ public class Enemy_Info : Life
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out HimaController user))
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out HimaController HC))
         {
             Weak_Weapon();
-            user.TakeDamage(1);
+            HC.TakeDamage(1);
         }
     }
     void Weak_Weapon()
@@ -51,12 +51,13 @@ public class Enemy_Info : Life
         originPosition = transform.position;
         originRotation =  transform.rotation;
         originScale = transform.localScale;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (true)
         {
             float percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 transform.position = originPosition + Random.insideUnitSphere * shake_intensity;
                 transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * scale_ratio, transform.localScale.y + Time.deltaTime * scale_ratio, 0);
                 transform.transform.rotation = new Quaternion(

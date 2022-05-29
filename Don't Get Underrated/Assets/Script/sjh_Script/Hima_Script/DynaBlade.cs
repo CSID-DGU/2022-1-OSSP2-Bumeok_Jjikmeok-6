@@ -11,6 +11,8 @@ public class DynaBlade : Enemy_Info
 
     float[,] bangmeon = new float[6, 2] { { 6.8f, 4.46f }, { -5.67f, 2.44f }, { -5.67f, 1 }, { 5.81f, -1.29f }, { 5.81f, -3 }, { -13.77f, 3.77f } };
 
+    IEnumerator size;
+
     private new void Awake()
     {
         base.Awake();
@@ -26,16 +28,14 @@ public class DynaBlade : Enemy_Info
     {
         transform.localScale = new Vector3(0.1f, 0.1f, 0);
         if (Mathf.Sign(transform.position.x) < 0)
-            StartCoroutine(Move(Minus_Start));
+            Run_Life_Act(Move(Minus_Start));
         else
-            StartCoroutine(Move(Plus_Start));
+            Run_Life_Act(Move(Plus_Start));
     }
 
     IEnumerator Move(Dictionary<int, Vector3> U) // 루트3 / 2 (0.85)로 끝맺음 짓는게 좋다.
     {
-
-        IEnumerator size = Change_My_Size_Infinite(1.6f);
-        StartCoroutine(size);
+        Run_Life_Act_And_Continue(ref size, Change_My_Size_Infinite(1.6f));
 
         float A = Get_Curve_Distance(U[0], U[1], Get_Center_Vector(U[0], U[1], Vector3.Distance(U[0], U[1]) * 0.85f, "anti_clock"));
 
@@ -65,7 +65,7 @@ public class DynaBlade : Enemy_Info
 
         yield return Move_Curve(U[4], U[5], Get_Center_Vector(U[4], U[5], Vector3.Distance(U[4], U[5]) * 0.85f, "anti_clock"), W/A * 0.25f, OriginCurve);
 
-        StopCoroutine(size);
+        Stop_Life_Act(ref size);
         GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().Is_Next_Pattern = true;
         Destroy(gameObject);
     }

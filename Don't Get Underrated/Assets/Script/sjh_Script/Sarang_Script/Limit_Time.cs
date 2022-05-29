@@ -42,6 +42,7 @@ public class Limit_Time : MonoBehaviour
     {
         while (true)
         {
+            Debug.Log(wow_Time);
             if (wow_Time <= 10)
             {
                 if (flash_on != null)
@@ -53,8 +54,8 @@ public class Limit_Time : MonoBehaviour
             {
                 PlayerCtrl_Sarang playerCtrl_Sarang;
 
-                if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Sarang user1))
-                    playerCtrl_Sarang = user1;
+                if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerCtrl_Sarang PC_S))
+                    playerCtrl_Sarang = PC_S;
                 else
                     yield break;
 

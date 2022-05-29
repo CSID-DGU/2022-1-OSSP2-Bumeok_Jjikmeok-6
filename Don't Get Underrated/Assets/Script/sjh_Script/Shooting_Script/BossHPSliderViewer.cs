@@ -26,7 +26,7 @@ public class BossHPSliderViewer : Slider_Viewer
     {
         while(slider.value < 1)
         {
-            slider.value += Time.deltaTime / 2;
+            slider.value += Time.deltaTime * 0.5f;
             yield return null;
         }
         OnUpdate = true;

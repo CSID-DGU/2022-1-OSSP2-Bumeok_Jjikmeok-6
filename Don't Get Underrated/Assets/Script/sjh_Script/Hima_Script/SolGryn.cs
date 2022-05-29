@@ -165,35 +165,23 @@ public class SolGryn : Boss_Info
         yield return Pattern04();
         yield return Pattern05();
         yield return Pattern06();
-        //while (true)
-        //{
-        //    yield return Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.33f, 0, DisAppear_Effect_1);
-        //    int Pattern_Num = Random.Range(0, 5);
-        //    switch (Pattern_Num)
-        //    {
-        //        case 0:
-        //            pattern = Pattern01();
-        //            break;
-        //        case 1:
-        //            pattern = Pattern02();
-        //            break;
-        //        case 2:
-        //            pattern = Pattern03();
-        //            break;
-        //        case 3:
-        //            pattern = Pattern04();
-        //            break;
-        //        case 4:
-        //            pattern = Pattern05();
-        //            break;
-        //    }
-        //    My_Color = Color.white;
-        //    My_Position = new Vector3(7, 4, 0);
-        //    yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, inclineCurve);
-        //    yield return pattern;
-        //}
-
-        //yield return StartCoroutine(First_Move());
+        while (true)
+        {
+            yield return Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.33f, 0, DisAppear_Effect_1);
+            int Pattern_Num = Random.Range(0, 5);
+            switch (Pattern_Num)
+            {
+                case 0: pattern = Pattern01(); break;
+                case 1: pattern = Pattern02(); break;
+                case 2: pattern = Pattern03(); break;
+                case 3: pattern = Pattern04(); break;
+                case 4: pattern = Pattern05(); break;
+            }
+            My_Color = Color.white;
+            My_Position = new Vector3(7, 4, 0);
+            yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, inclineCurve);
+            yield return pattern;
+        }
     }
     IEnumerator Pattern01() // ¿Ï·á
     {
@@ -201,8 +189,8 @@ public class SolGryn : Boss_Info
         float[,] u2 = new float[3, 2] { { 0, 2 }, { 0, -3.35f }, { -4, -3.35f } };
 
         trailRenderer.enabled = true;
-        if (TryGetComponent(out TrailCollisions user1))
-            user1.Draw_Collision_Line();
+        if (TryGetComponent(out TrailCollisions TC))
+            TC.Draw_Collision_Line();
 
         My_Position = new Vector3(-4, 4, 0);
         Flash(Color.white, 0, 0.5f);
@@ -226,10 +214,10 @@ public class SolGryn : Boss_Info
 
         Run_Life_Act(Blink_Bullet());
 
-        if (nachi_x_g_1.TryGetComponent(out Nachi_X user3) && nachi_x_g_2.TryGetComponent(out Nachi_X user4))
+        if (nachi_x_g_1.TryGetComponent(out Nachi_X NX_1) && nachi_x_g_2.TryGetComponent(out Nachi_X NX_2))
         {
-            user3.StartCoroutine(user3.Move(-1));
-            yield return user4.StartCoroutine(user4.Move(1));
+            NX_1.StartCoroutine(NX_1.Move(-1));
+            yield return NX_2.StartCoroutine(NX_2.Move(1));
         }
         yield return Nachi_Color_Change(Color.red, new Color(1, 1, 1, 0), 1f, false);
 
@@ -242,12 +230,13 @@ public class SolGryn : Boss_Info
     IEnumerator Nachi_Color_Change(Color Origin_C, Color Change_C, float time_persist, bool Is_Continue)
     {
         float percent;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         for (int i = 0; i < 2; i++)
         {
             percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 trailRenderer.endColor = Color.Lerp(Origin_C, Change_C, percent);
                 trailRenderer.startColor = Color.Lerp(Origin_C, Change_C, percent);
                 yield return null;
@@ -257,7 +246,7 @@ public class SolGryn : Boss_Info
             percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 trailRenderer.endColor = Color.Lerp(Change_C, Origin_C, percent);
                 trailRenderer.startColor = Color.Lerp(Change_C, Origin_C, percent);
                 yield return null;
@@ -386,7 +375,6 @@ public class SolGryn : Boss_Info
     }
     IEnumerator Pattern04()
     {
-
         for (int i = 0; i < 5; i++)
         {
             int x = Random.Range(0, 5);

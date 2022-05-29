@@ -33,11 +33,10 @@ public class MoveBackGround : MonoBehaviour
     {
         float temp_Speed = inGameSpeed;
         float percent = 0;
-        if (time_persist <= 0)
-            time_persist = 1;
-        while(percent < 1)
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+        while (percent < 1)
         {
-            percent += Time.deltaTime / time_persist;
+            percent += Time.deltaTime * inverse_time_persist;
             inGameSpeed = Mathf.Lerp(temp_Speed, Speed_Limit, percent);
             yield return null;
         }
@@ -46,15 +45,13 @@ public class MoveBackGround : MonoBehaviour
     {
         float temp_Speed = inGameSpeed;
         float percent = 0;
-        if (time_persist <= 0)
-            time_persist = 1;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (percent < 1)
         {
-            percent += Time.deltaTime / time_persist;
+            percent += Time.deltaTime * inverse_time_persist;
             inGameSpeed = Mathf.Lerp(temp_Speed, Speed_Limit, percent);
             yield return null;
         }
-
     }
     public void Increase_Speed_F(float time_persist, float Speed_Limit)
     {

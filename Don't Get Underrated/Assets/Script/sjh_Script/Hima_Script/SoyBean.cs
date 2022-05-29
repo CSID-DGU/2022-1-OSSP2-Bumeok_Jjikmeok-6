@@ -34,10 +34,10 @@ public class SoyBean : Weapon_Devil
             randomX = Random.Range(-1f, 1f);
             randomY = Random.Range(-1f, 1f);
         }
-        else if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out HimaController user))
+        else if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out HimaController HC))
         {
-            randomX = user.transform.position.x - transform.position.x;
-            randomY = user.transform.position.y - transform.position.y;
+            randomX = HC.transform.position.x - transform.position.x;
+            randomY = HC.transform.position.y - transform.position.y;
         }
         Vector2 dir = new Vector2(randomX, randomY).normalized;
         rb.AddForce(dir * speed);
@@ -45,8 +45,8 @@ public class SoyBean : Weapon_Devil
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info user2))
-            user2.TakeDamage(1);
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info PI))
+            PI.TakeDamage(1);
         if (collision.gameObject != null && collision.gameObject.CompareTag("Ground"))
         {
             Start_Camera_Shake(0.01f, 0.1f, false, false);

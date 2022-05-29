@@ -48,8 +48,6 @@ public class Movement2D2_kkh : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid2D = GetComponent<Rigidbody2D>();
-        
-
     }
     // Update is called once per frame
     private void Update()

@@ -59,8 +59,8 @@ public class Interrupt : Enemy_Info
 
         while (true)
         {
-            Launch_Weapon(ref Weapon[0], new Vector3(TargetPos.x - transform.position.x,
-                         TargetPos.y - transform.position.y, 0), Quaternion.identity, 9, transform.position);
+            Launch_Weapon(ref Weapon[0], new Vector3(TargetPos.x - My_Position.x,
+                         TargetPos.y - My_Position.y, 0), Quaternion.identity, 9, My_Position);
             yield return null;
         }
     }
@@ -142,14 +142,14 @@ public class Interrupt : Enemy_Info
 
     public IEnumerator Move(Rigidbody2D rigidBodyToMove, float speed) // Acutual movement of an object according to the value of an endPosition
     {
-        float remainingDistance = (transform.position - endPosition).sqrMagnitude;
+        float remainingDistance = (My_Position - endPosition).sqrMagnitude;
 
         while (remainingDistance > float.Epsilon)
         {
             if (targetTransform != null) // If chaisng a player
             {
                 Debug.Log("Caught!!");
-                endPosition = new Vector3(targetTransform.position.x, this.transform.position.y, 0); // an object moves towards to taregeted player
+                endPosition = new Vector3(targetTransform.position.x, My_Position.y, 0); // an object moves towards to taregeted player
             }
 
 
@@ -161,7 +161,7 @@ public class Interrupt : Enemy_Info
 
                 rb.MovePosition(newPosition);
 
-                remainingDistance = (transform.position - endPosition).sqrMagnitude;
+                remainingDistance = (My_Position - endPosition).sqrMagnitude;
             }
 
             yield return new WaitForFixedUpdate();

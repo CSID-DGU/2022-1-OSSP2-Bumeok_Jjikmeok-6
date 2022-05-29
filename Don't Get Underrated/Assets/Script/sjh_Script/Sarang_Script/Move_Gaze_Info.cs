@@ -14,7 +14,7 @@ public class Move_Gaze_Info : MonoBehaviour // 플레이어 달릴 때의 게이지바
     }
     public void HP_Down()
     {
-        slider.value += Time.deltaTime / 3;
+        slider.value += Time.deltaTime * 0.5f;
     }
     public void HP_Stop()
     {

@@ -17,12 +17,13 @@ public class Nachi_X : Enemy_Info
     }
     IEnumerator X_Color_Change(Color Origin_C, Color Change_C, float time_persist, int Count)
     {
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         for (int i = 0; i < Count; i++)
         {
             float percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 trailRenderer.endColor = Color.Lerp(Origin_C, Change_C, percent);
                 trailRenderer.startColor = Color.Lerp(Origin_C, Change_C, percent);
                 yield return null;
@@ -32,8 +33,8 @@ public class Nachi_X : Enemy_Info
     public IEnumerator Move(int flag)
     {
         trailRenderer.enabled = true;
-        if (TryGetComponent(out TrailCollisions user1))
-            user1.Draw_Collision_Line();
+        if (TryGetComponent(out TrailCollisions TC))
+            TC.Draw_Collision_Line();
         yield return Move_Circle(90, flag * 4, 0, 0.3f, 0.3f, transform.position.x, transform.position.y, 0.3f);
 
         yield return Move_Straight(transform.position, transform.position + new Vector3(-4 * flag, 2f, 0), 0.4f, declineCurve);

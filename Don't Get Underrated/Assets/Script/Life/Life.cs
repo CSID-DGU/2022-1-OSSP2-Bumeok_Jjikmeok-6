@@ -61,8 +61,8 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         Unbeatable = false;
-        if (TryGetComponent(out CameraShake user))
-            cameraShake = user;
+        if (TryGetComponent(out CameraShake CS))
+            cameraShake = CS;
         if (cameraShake != null && cameraShake.mainCamera == null && GameObject.Find("Main Camera").TryGetComponent(out Camera camera))
             cameraShake.mainCamera = camera;
     }
@@ -120,15 +120,15 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected void Launch_Weapon(ref GameObject weapon, Vector3 Direction, Quaternion Degree, float speed, Vector3 Instantiate_Dir) // 이외의 나머지
     {
         GameObject Copy = Instantiate(weapon, Instantiate_Dir, Degree);
-        if (Copy.TryGetComponent(out Weapon_Devil user1))
+        if (Copy.TryGetComponent(out Weapon_Devil WD))
         {
-            user1.W_MoveTo(Direction);
-            user1.W_MoveSpeed(speed);
+            WD.W_MoveTo(Direction);
+            WD.W_MoveSpeed(speed);
         }
-        else if (Copy.TryGetComponent(out Weapon_Player user2))
+        else if (Copy.TryGetComponent(out Weapon_Player WP))
         {
-            user2.W_MoveTo(Direction);
-            user2.W_MoveSpeed(speed);
+            WP.W_MoveTo(Direction);
+            WP.W_MoveSpeed(speed);
         }
         else
             Destroy(Copy);
@@ -136,9 +136,10 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected IEnumerator Change_My_Size(Vector3 Origin, Vector3 Change, float time_persist, AnimationCurve curve)
     {
         float percent = 0;
-        while(percent < 1)
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+        while (percent < 1)
         {
-            percent += Time.deltaTime / time_persist;
+            percent += Time.deltaTime * inverse_time_persist;
             transform.localScale = Vector3.Lerp(Origin, Change, curve.Evaluate(percent));
             yield return null;
         }
@@ -146,19 +147,20 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected IEnumerator Change_My_Color_And_Back(Color Origin_C, Color Change_C, float time_persist, bool is_Continue)
     {
         float percent;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (true)
         {
             percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
                 yield return null;
             }
             percent = 0;
             while (percent < 1)
             {
-                percent += Time.deltaTime / time_persist;
+                percent += Time.deltaTime * inverse_time_persist;
                 spriteRenderer.color = Color.Lerp(Change_C, Origin_C, percent);
                 yield return null;
             }
@@ -183,40 +185,43 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected IEnumerator Change_My_Color(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
     {
         float percent;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         if (Effect != null)
             Instantiate(Effect, transform.position, Effect.transform.localRotation);
         percent = 0;
         while (percent < 1)
         {
-            percent += Time.deltaTime / time_persist;
+            percent += Time.deltaTime * inverse_time_persist;
             spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
             yield return null;
         }
         yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
     }
 
-    public IEnumerator Move_Straight(Vector3 start_location, Vector3 last_location, float time_ratio, AnimationCurve curve)
+    public IEnumerator Move_Straight(Vector3 start_location, Vector3 last_location, float time_persist, AnimationCurve curve)
     {
         float percent = 0;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (percent < 1)
         {
-            percent += (Time.deltaTime / time_ratio);
-            transform.position = Vector3.Lerp(start_location, last_location, curve.Evaluate(percent));
+            percent += Time.deltaTime * inverse_time_persist;
+            My_Position = Vector3.Lerp(start_location, last_location, curve.Evaluate(percent));
             yield return null;
         }
     }
-    protected IEnumerator Move_Curve(Vector3 start_location, Vector3 last_location, Vector3 center, float time_ratio, AnimationCurve curve)
+    protected IEnumerator Move_Curve(Vector3 start_location, Vector3 last_location, Vector3 center, float time_persist, AnimationCurve curve)
     {
         float percent = 0;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (percent < 1)
         {
-            percent += Time.deltaTime / time_ratio;
+            percent += Time.deltaTime * inverse_time_persist;
             Vector3 riseRelCenter = start_location - center;
             Vector3 setRelCenter = last_location - center;
 
-            transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent));
+            My_Position = Vector3.Slerp(riseRelCenter, setRelCenter, curve.Evaluate(percent));
 
-            transform.position += center;
+            My_Position += center;
             yield return null;
         }
         yield return null;
@@ -233,7 +238,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected Vector3 Get_Center_Vector(Vector3 Start, Vector3 End, float Center_To_Real_Center_Distance, string is_Clock)
     {
         Vector3 Origin_V = Start - End;
-        Vector3 Center = (Start + End) / 2;
+        Vector3 Center = (Start + End) * 0.5f;
         Vector3 Dot_Vector = Vector3.zero;
 
         if (Origin_V.x != 0 && Origin_V.y == 0)
@@ -257,17 +262,18 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         while (true)
         {
-            transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * delta_ratio, transform.localScale.y + Time.deltaTime * delta_ratio, 0);
+            My_Scale = new Vector3(My_Scale.x + Time.deltaTime * delta_ratio, My_Scale.y + Time.deltaTime * delta_ratio, 0);
             yield return null;
         }
     }
-    protected IEnumerator My_Rotate_Dec(Quaternion A, Quaternion B, float time_persist, AnimationCurve curve)
+    protected IEnumerator My_Rotate_Dec(Quaternion Origin, Quaternion Change, float time_persist, AnimationCurve curve)
     {
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         float percent = 0;
         while (percent < 1)
         {
-            percent += (Time.deltaTime / time_persist);
-            transform.rotation = Quaternion.Lerp(A, B, curve.Evaluate(percent));
+            percent += Time.deltaTime * inverse_time_persist;
+            transform.rotation = Quaternion.Lerp(Origin, Change, curve.Evaluate(percent));
             yield return null;
         }
     }
@@ -377,7 +383,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         StartCoroutine(Send);
     }
-
     private void OnDestroy()
     {
         StopAllCoroutines();

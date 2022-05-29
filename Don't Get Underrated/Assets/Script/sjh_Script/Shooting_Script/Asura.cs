@@ -7,7 +7,7 @@ public class Asura : Boss_Info
 {
     float[] Meteor_Move = new float[9] { 4, 3, 2, 1, 0, -1, -2, -3, -4 };  // 본인
 
-    private int Total_Pattern_Num; // 본인
+    private int Total_Pattern_Num = 0; // 본인
 
     private int Pattern2_Meteor_Random_Num;
 
@@ -258,13 +258,13 @@ public class Asura : Boss_Info
     IEnumerator Pattern02()
     {
         GameObject Light_To_Death = Instantiate(Charge_Beam, My_Position, Quaternion.identity);
-        if (Light_To_Death.TryGetComponent(out ParticleSystem user1))
+        if (Light_To_Death.TryGetComponent(out ParticleSystem PS))
         {
             Unbeatable = true;
             yield return Warning("어디 한 번 지혜를 발휘해봐라", 1f);
 
-            if (user1.IsAlive())
-                Destroy(user1.gameObject);
+            if (PS.IsAlive())
+                Destroy(PS.gameObject);
         }
 
         Unbeatable = false;
@@ -324,8 +324,8 @@ public class Asura : Boss_Info
         {
             int Rand = Random.Range(4, 9);
             GameObject e = Instantiate(Meteor1, new Vector3(Rand, 5.6f, 0), Quaternion.identity);
-            if (e.TryGetComponent(out Meteor_Effect user1))
-                user1.Pattern02_Meteor_Launch(Rand);
+            if (e.TryGetComponent(out Meteor_Effect ME))
+                ME.Pattern02_Meteor_Launch(Rand);
             else
                 Destroy(e);
             yield return YieldInstructionCache.WaitForSeconds(0.2f);
