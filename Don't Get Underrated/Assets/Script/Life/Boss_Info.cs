@@ -8,7 +8,7 @@ public class Boss_Info : Life
     // Start is called before the first frame update
 
     [SerializeField]
-    float maxHP = 100;
+    private float maxHP = 100; // 최대 HP는 보스 본인도 변경할 수 없도록 private
 
     [SerializeField]
     protected GameObject DisAppear_Effect_1; // 상위
@@ -36,6 +36,8 @@ public class Boss_Info : Life
     }
     public override void TakeDamage(float damage)
     {
+        if (Unbeatable)
+            return;
         CurrentHP -= damage;
         if (CurrentHP <= 0)
             OnDie();
@@ -44,12 +46,12 @@ public class Boss_Info : Life
     {
         base.OnDie();
     }
-    public void OnTriggerEnter2D(Collider2D collision) // 얘만
+    protected virtual void OnTriggerEnter2D(Collider2D collision) // 얘만
     {
         if (collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info PI))
             PI.TakeDamage(1);
-
     }
+
     protected virtual void Killed_All_Mine()
     {
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
@@ -90,7 +92,7 @@ public class Boss_Info : Life
         int Index = 0;
         while (percent < 1)
         {
-            percent += (Time.deltaTime * ratio);
+            percent += Time.deltaTime * ratio;
             transform.Rotate(Vector3.forward * rot_Speed * rot_Radius * Time.deltaTime);
             Index++;
             if (Index >= Launch_Num)
@@ -103,7 +105,7 @@ public class Boss_Info : Life
             yield return null;
         }
         transform.rotation = Quaternion.Euler(0, 0, 0);
-        yield return YieldInstructionCache.WaitForEndOfFrame;
+        yield return null;
     }
     public IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
     {

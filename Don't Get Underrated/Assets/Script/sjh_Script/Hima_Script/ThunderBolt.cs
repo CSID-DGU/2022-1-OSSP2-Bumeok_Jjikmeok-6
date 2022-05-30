@@ -9,10 +9,12 @@ public class ThunderBolt : Weapon_Devil
     private new void Awake()
     {
         base.Awake();
-
+        if (GameObject.Find("Flash") && GameObject.Find("Flash").TryGetComponent(out ImageColor IC))
+            backGroundColor = IC;
     }
     void Start()
     {
         Start_Camera_Shake(0.006f, 0.3f, false, false);
+        Flash(Color.white, 0.1f, 0.5f);
     }
 }

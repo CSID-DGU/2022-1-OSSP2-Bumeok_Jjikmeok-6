@@ -10,24 +10,29 @@ public class Enemy_Info : Life
     {
         base.Awake();
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info HC))
         {
-            if (!collision.GetComponent<Player_Info>().Unbeatable)
-                Weak_Weapon();
-            collision.GetComponent<Player_Info>().TakeDamage(1);
+            if (!HC.Unbeatable)
+            {
+                HC.TakeDamage(1);
+                Weak_Enemy();
+            }
         }
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out HimaController HC))
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info HC))
         {
-            Weak_Weapon();
-            HC.TakeDamage(1);
+            if (!HC.Unbeatable)
+            {
+                HC.TakeDamage(1);
+                Weak_Enemy();
+            }
         }
     }
-    void Weak_Weapon()
+    private void Weak_Enemy()
     {
         if (When_Dead_Effect != null)
         {
@@ -65,7 +70,7 @@ public class Enemy_Info : Life
                                     originRotation.y + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                     originRotation.z + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                     originRotation.w + Random.Range(-shake_intensity, shake_intensity) * 0.2f);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
             if (!is_Continue)
             {

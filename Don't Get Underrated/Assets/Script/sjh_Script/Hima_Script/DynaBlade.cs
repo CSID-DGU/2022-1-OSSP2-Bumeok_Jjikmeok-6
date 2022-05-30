@@ -7,11 +7,28 @@ public class DynaBlade : Enemy_Info
 {
     // Start is called before the first frame update
 
-    Dictionary<int, Vector3> Plus_Start, Minus_Start;
+    private Dictionary<int, Vector3> Plus_Start, Minus_Start;
 
-    float[,] bangmeon = new float[6, 2] { { 6.8f, 4.46f }, { -5.67f, 2.44f }, { -5.67f, 1 }, { 5.81f, -1.29f }, { 5.81f, -3 }, { -13.77f, 3.77f } };
+    private float[,] bangmeon = new float[6, 2] { { 6.8f, 4.46f }, { -5.67f, 2.44f }, { -5.67f, 1 }, { 5.81f, -1.29f }, { 5.81f, -3 }, { -13.77f, 3.77f } };
 
-    IEnumerator size;
+    private IEnumerator size;
+
+    private new void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info HC))
+        {
+            if (!HC.Unbeatable)
+                HC.TakeDamage(1);
+        }
+    }
+    private new void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info HC))
+        {
+            if (!HC.Unbeatable)
+                HC.TakeDamage(1);
+        }
+    }
 
     private new void Awake()
     {
@@ -26,14 +43,14 @@ public class DynaBlade : Enemy_Info
     }
     private void Start()
     {
-        transform.localScale = new Vector3(0.1f, 0.1f, 0);
-        if (Mathf.Sign(transform.position.x) < 0)
+        My_Scale = new Vector3(0.1f, 0.1f, 0);
+        if (Mathf.Sign(My_Position.x) < 0)
             Run_Life_Act(Move(Minus_Start));
         else
             Run_Life_Act(Move(Plus_Start));
     }
 
-    IEnumerator Move(Dictionary<int, Vector3> U) // 루트3 / 2 (0.85)로 끝맺음 짓는게 좋다.
+    private IEnumerator Move(Dictionary<int, Vector3> U) // 루트3 / 2 (0.85)로 끝맺음 짓는게 좋다.
     {
         Run_Life_Act_And_Continue(ref size, Change_My_Size_Infinite(1.6f));
 

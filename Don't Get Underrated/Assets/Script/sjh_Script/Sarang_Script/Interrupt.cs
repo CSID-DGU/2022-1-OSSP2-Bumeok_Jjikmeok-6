@@ -60,7 +60,7 @@ public class Interrupt : Enemy_Info
         while (true)
         {
             Launch_Weapon(ref Weapon[0], new Vector3(TargetPos.x - My_Position.x,
-                         TargetPos.y - My_Position.y, 0), Quaternion.identity, 9, My_Position);
+                         TargetPos.y - My_Position.y, 0), Quaternion.identity, 12, My_Position);
             yield return null;
         }
     }
@@ -86,9 +86,9 @@ public class Interrupt : Enemy_Info
 
     public void When_Fever_End() // 모든 코루틴 중지 후 다시 이동
     {
+        Stop_Move();
         Stop_Coroutine();
         Init_Start();
-        Stop_Move();
         Start_Move();
     }
 
@@ -171,7 +171,7 @@ public class Interrupt : Enemy_Info
     }
 
 
-    void OnTriggerEnter2D(Collider2D collision) // This method for chasing a player
+    private new void OnTriggerEnter2D(Collider2D collision) // This method for chasing a player
     {
         if (collision.gameObject.CompareTag("Player") && followPlayer) // If the collision has occured between the player and the object
         {
@@ -203,10 +203,6 @@ public class Interrupt : Enemy_Info
         {
             Gizmos.DrawWireSphere(transform.position, circleColliderObject.radius);
         }
-    }
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
     }
 
     // Update is called once per frame

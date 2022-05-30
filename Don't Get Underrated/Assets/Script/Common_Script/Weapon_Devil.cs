@@ -11,34 +11,32 @@ public class Weapon_Devil : Weapon
     // Start is called before the first frame update
     public override void Weak_Weapon()
     {
-        Debug.Log(Explosion);
-        if (Explosion != null)
-        {
-            Instantiate(Explosion, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
+        base.Weak_Weapon();
     }
-    private void OnCollisionEnter2D(Collision2D collision) // 콜리전
+    protected virtual void OnCollisionEnter2D(Collision2D collision) // 콜리전
     {
         if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info PI))
         {
             if (!PI.Unbeatable)
+            {
+                PI.TakeDamage(1);
                 Weak_Weapon();
-            PI.TakeDamage(1);
+            }
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision) // 트리거(콜라이더)
+    protected virtual new void OnTriggerEnter2D(Collider2D collision) // 트리거(콜라이더)
     {
-        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info PI))
+        base.OnTriggerEnter2D(collision);
+
+        if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out HimaController HC))
+            HC.TakeDamage(1);
+        else if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info PI))
         {
             if (!PI.Unbeatable)
+            {
+                PI.TakeDamage(1);
                 Weak_Weapon();
-            PI.TakeDamage(1);
-        }
-        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student S))
-        {
-            if (S.get_Color() == new Color(0, 0, 1, 1))
-                Destroy(gameObject);
+            }
         }
     }
 }

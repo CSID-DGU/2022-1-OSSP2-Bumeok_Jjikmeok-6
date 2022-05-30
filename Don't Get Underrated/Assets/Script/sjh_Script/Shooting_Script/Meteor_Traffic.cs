@@ -66,6 +66,5 @@ public class Meteor_Traffic : MonoBehaviour
     {
         StopAllCoroutines();
     }
-
 }
 

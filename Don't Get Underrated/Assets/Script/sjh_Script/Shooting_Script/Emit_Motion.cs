@@ -13,6 +13,8 @@ public class Emit_Motion : MonoBehaviour
 
     PlayerCtrl_Tengai playerCtrl_Tengai;
 
+    IEnumerator Actions;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -27,6 +29,7 @@ public class Emit_Motion : MonoBehaviour
 
     public IEnumerator Emit_Change_Size()
     {
+        transform.localScale = Vector3.zero;
         Vector3 temp_scale;
         while (true)
         {
@@ -45,6 +48,23 @@ public class Emit_Motion : MonoBehaviour
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + Time.deltaTime * 7);
             yield return null;
         }
+    }
+    public IEnumerator Expand()
+    {
+        Stop_Action();
+        Actions = Emit_Expand_Circle();
+        yield return Actions;
+    }
+    public void Ready_To_Expand()
+    {
+        Stop_Action();
+        Actions = Emit_Change_Size();
+        StartCoroutine(Actions);
+    }
+    public void Stop_Action()
+    {
+        if (Actions != null)
+            StopCoroutine(Actions);
     }
     public IEnumerator Emit_Expand_Circle()
     {

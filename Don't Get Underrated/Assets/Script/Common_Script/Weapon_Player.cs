@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Weapon_Player : Weapon
 {
+
+    [SerializeField]
+    float Boss_Damage = 3f;
     protected virtual new void Awake()
     {
         base.Awake();
@@ -11,31 +14,20 @@ public class Weapon_Player : Weapon
     // Start is called before the first frame updat
     public override void Weak_Weapon()
     {
-        if (Explosion != null)
-            Instantiate(Explosion, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        base.Weak_Weapon();
     }
-    public void Create_Explode()
+    protected virtual new void OnTriggerEnter2D(Collider2D collision) // 트리거(콜라이더)
     {
-        Instantiate(Explosion, Vector3.zero, Quaternion.identity);
-    }
-    private void OnTriggerEnter2D(Collider2D collision) // 트리거(콜라이더)
-    {
-        if (collision.gameObject != null && collision.CompareTag("Student") && collision.gameObject.TryGetComponent(out Student S))
+        base.OnTriggerEnter2D(collision);
+        if (collision.gameObject != null && collision.CompareTag("Enemy") && collision.TryGetComponent(out F1_Homming_Enemy E))
         {
-            if (S.get_Color() == new Color(0, 0, 1, 1))
-                Destroy(gameObject);
+            E.OnDie();
+            Weak_Weapon();
         }
-        if (collision.gameObject != null && collision.CompareTag("Enemy") && collision.TryGetComponent(out F1_Homming_Enemy F1_H))
+        if (collision.CompareTag("Boss") && collision.gameObject.TryGetComponent(out Boss_Info B))
         {
-            F1_H.OnDie();
-            Destroy(gameObject);
-        }
-        if (collision.CompareTag("Boss") && collision.gameObject.TryGetComponent(out Asura A))
-        {
-            if (!A.Unbeatable)
-                A.TakeDamage(3f);
-            Destroy(gameObject);
+            B.TakeDamage(Boss_Damage);
+            Weak_Weapon();
         }
     }
 }

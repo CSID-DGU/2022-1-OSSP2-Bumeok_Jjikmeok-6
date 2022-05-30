@@ -22,7 +22,15 @@ public class Student_Gaze_Info : Slider_Viewer
 
     GameObject YeonTa_Copy;
 
+    ImageColor imageColor;
+
+    [SerializeField]
+    GameObject Square;
+
     int StudentLayerMask;  // Player 레이어만 충돌 체크함
+
+    [SerializeField]
+    GameObject Angel;
 
     void Init_Start()
     {
@@ -35,6 +43,8 @@ public class Student_Gaze_Info : Slider_Viewer
             playerCtrl_Sarang = PC_S;
         Interrupt_NonActive = new List<Interrupt>();
         Interrupt_Active = new List<Interrupt>();
+        if (GameObject.Find("Flash_Interrupt") && GameObject.Find("Flash_Interrupt").TryGetComponent(out ImageColor IC))
+            imageColor = IC;
     }
     private new void Awake()
     {
@@ -65,7 +75,12 @@ public class Student_Gaze_Info : Slider_Viewer
             return 0;
         }
         if (slider.value >= 1 && Interrupt_NonActive.Count == 0 && Interrupt_Active.Count == 0)
+        {
+            GameObject square = Instantiate(Square, TempPosition, Quaternion.identity);
+            GameObject w = Instantiate(Angel, square.transform.position, Quaternion.identity);
+            w.transform.SetParent(square.transform);
             return 1;
+        }
          if (slider.value >= 0.35f && Interrupt_Active.Count == 0)
             return 3;
         return 2;
@@ -96,10 +111,10 @@ public class Student_Gaze_Info : Slider_Viewer
     public IEnumerator Competition(GameObject student, float student_power)
     {
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
-        if (GameObject.Find("Flash_Interrupt") && GameObject.Find("Flash_Interrupt").TryGetComponent(out ImageColor Im_C))
+        if (imageColor != null)
         {
-            Im_C.StopAllCoroutines();
-            Im_C.StartCoroutine(Im_C.Flash(new Color(1, 1, 1, 1), 0.3f, 3));
+            imageColor.StopAllCoroutines();
+            imageColor.StartCoroutine(imageColor.Flash(new Color(1, 1, 1, 1), 0.3f, 3));
         }
         
         Change_Pink_Slider();
@@ -136,7 +151,13 @@ public class Student_Gaze_Info : Slider_Viewer
                 {
                     foreach (var e in Interrupt_Active)
                         e.OnDie();
-
+                   
+                    if (student.TryGetComponent(out Student S))
+                    {
+                        GameObject square = Instantiate(Square, S.transform.position, Quaternion.identity);
+                        GameObject w = Instantiate(Angel, square.transform.position, Quaternion.identity);
+                        w.transform.SetParent(square.transform);
+                    }
                     heart_Gaze_Viewer.When_Interrupt_Defeat();
                     if (!playerCtrl_Sarang.Is_Fever)
                     {
@@ -172,7 +193,6 @@ public class Student_Gaze_Info : Slider_Viewer
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(slider.value);
         if (slider.value > 0)
             CheckInterrupt();
     } // 학생이 레이저 빔을 과제, 시험같은 방해 오브젝트 및 플레이어에게 맞았을 때 처리한 코드

@@ -20,6 +20,8 @@ public class Student : MonoBehaviour
 
     IEnumerator wander_routine;
 
+    Animator animator;
+
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
     Vector3 endPosition;
@@ -30,8 +32,17 @@ public class Student : MonoBehaviour
     void Init_Start()
     {
         currentSpeed = wanderSpeed;
-        rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (TryGetComponent (out Rigidbody2D RB) && TryGetComponent (out SpriteRenderer SR))
+        {
+            rb = RB;
+            spriteRenderer = SR;
+        }
+        if (TryGetComponent(out Animator A))
+            animator = A;
+    }
+    public Color Get_Color()
+    {
+        return spriteRenderer.color;
     }
 
     private void Awake()
@@ -55,7 +66,7 @@ public class Student : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawLine(rb.position, endPosition, Color.red); // Showing the direction and distance of an object
+        //Debug.DrawLine(rb.position, endPosition, Color.red); // Showing the direction and distance of an object
         rb.velocity = Vector3.zero;
     }
 
@@ -82,25 +93,28 @@ public class Student : MonoBehaviour
     }
     public void Start_Move()
     {
-        NotBe_Attacked();
+        spriteRenderer.color = Color.white;
         wander_routine = WanderRoutine();
         StartCoroutine(wander_routine);
+        animator.SetBool("Electric", false);
     }
     public void Stop_Move()
     {
-        Be_Attacked();
+        spriteRenderer.color = new Color(1, 1, 1, 0.95f);
         if (move != null)
             StopCoroutine(move);
         if (wander_routine != null)
             StopCoroutine(wander_routine);
+        animator.SetBool("Electric", true);
     }
     public void When_Fever_End()
     {
+        Stop_Move();
         StopAllCoroutines();
         Init_Start();
-        Stop_Move();
         Start_Move();
     }
+
     Vector3 Vector3FromAngle(int inputAngleDegrees) // Changing the degree into the radian
     {
         float inputAngleRadians = inputAngleDegrees * Mathf.Deg2Rad;
@@ -109,17 +123,9 @@ public class Student : MonoBehaviour
 
         return new Vector3(randNum * Mathf.Cos(inputAngleRadians) + transform.position.x, transform.position.y, 0);
     }
-    public void Be_Attacked()
-    {
-        spriteRenderer.color = Color.blue;
-    }
     public Color get_Color()
     {
         return spriteRenderer.color;
-    }
-    public void NotBe_Attacked()
-    {
-        spriteRenderer.color = Color.white;
     }
     public void Stop_Coroutine()
     {
@@ -129,12 +135,17 @@ public class Student : MonoBehaviour
     IEnumerator Move(Rigidbody2D rigidBodyToMove, float speed) // Acutual movement of an object according to the value of an endPosition
     {
         float remainingDistance = (transform.position - endPosition).sqrMagnitude;
-
+        int key;
         while (remainingDistance > float.Epsilon)
         {
             if (rigidBodyToMove != null) // Checking whether an object has rigidbody2D
             {
-                //animator.SetBool("isWalking", true);
+                
+                if (endPosition.x - rigidBodyToMove.position.x > 0)
+                    key = -1;
+                else
+                    key = 1;
+                transform.localScale = new Vector3(-key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
 
                 Vector3 newPosition = Vector3.MoveTowards(rigidBodyToMove.position, endPosition, speed * Time.deltaTime);
 

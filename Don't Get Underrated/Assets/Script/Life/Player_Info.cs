@@ -44,6 +44,8 @@ public class Player_Info : Life
     }
     public override void TakeDamage(int damage)
     {
+        if (Unbeatable)
+            return;
         LifeTime -= damage;
         if (LifeTime <= 0)
             OnDie();
@@ -53,7 +55,4 @@ public class Player_Info : Life
     {
         base.OnDie();
     }
-
-    
-
 }

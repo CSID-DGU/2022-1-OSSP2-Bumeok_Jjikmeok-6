@@ -11,7 +11,8 @@ public class TrailCollisions : MonoBehaviour
 
     void Awake()
     {
-        myTrail = GetComponent<TrailRenderer>();
+        if (TryGetComponent(out TrailRenderer TR))
+            myTrail = TR;
     }
     public void Draw_Collision_Line()
     {

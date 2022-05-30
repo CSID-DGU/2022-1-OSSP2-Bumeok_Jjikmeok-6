@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using DG.Tweening;
 public class Talk_Panel : MonoBehaviour
 {
-    Dictionary<int, string[]> Dic_Context;
+    private Dictionary<int, string[]> Dic_Context;
 
-    List<int> Already_Read;
+    private List<int> Already_Read;
 
     [SerializeField]
     AudioClip Mouse_Sound;

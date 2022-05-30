@@ -8,39 +8,42 @@ public class SolGryn : Boss_Info
     // <a href='https://kr.freepik.com/vectors/light'>Light 벡터는 upklyak - kr.freepik.com가 제작함</a>
 
     [SerializeField]
-    GameObject SolGryn_HP;
+    private GameObject SolGryn_HP;
 
     [SerializeField]
-    GameObject PalJeongDo_Thunder;
+    private GameObject PalJeongDo_Thunder;
 
     [SerializeField]
-    GameObject Straw;
+    private GameObject Straw;
 
-    HimaController himaController;
+    private HimaController himaController;
 
-    ImageColor PalJeongDo;
+    private ImageColor PalJeongDo;
 
-    TrailRenderer trailRenderer;
+    private TrailRenderer trailRenderer;
 
-    GameObject Straw_Copy;
+    private GameObject Straw_Copy;
 
-    SpriteColor spriteColor;
+    private SpriteColor spriteColor;
 
-    List<GameObject> SolG_Copy;
+    private List<GameObject> SolG_Copy;
 
-    IEnumerator pattern, change_color, rotate_bullet;
+    private IEnumerator pattern, change_color, rotate_bullet;
 
-    int[,] bangmeon = new int[2, 4] { { 1, -1, -1, 1 }, { 1, 1, -1, -1 } };
+    private int[,] bangmeon = new int[2, 4] { { 1, -1, -1, 1 }, { 1, 1, -1, -1 } };
 
     private bool is_Next_Pattern = false;
-
+    private new void OnTriggerEnter2D(Collider2D collision) // 얘만
+    {
+        base.OnTriggerEnter2D(collision);
+    }
     public bool Is_Next_Pattern
     {
         get { return is_Next_Pattern; }
         set { is_Next_Pattern = value; }
     }
 
-    float[,] Pattern04_Move =
+    private float[,] Pattern04_Move =
     {
         {4.81f, -0.38f },
         { -6.38f, -1.95f },
@@ -74,12 +77,12 @@ public class SolGryn : Boss_Info
     {
         Run_Life_Act(TeoKisis());
     }
-    
-    void Launch_SoyBean()
+
+    private void Launch_SoyBean()
     {
         Instantiate(Weapon[7], My_Position, Quaternion.identity);
     }
-    IEnumerator Blink_Bullet()
+    private IEnumerator Blink_Bullet()
     {
         My_Scale = new Vector3(0.7f, 0.7f, 0);  // 임시
         for (int i = 0; i < 5; i++)
@@ -89,7 +92,7 @@ public class SolGryn : Boss_Info
         }
         yield return null;
     }
-    IEnumerator TeoKisis()
+    private IEnumerator TeoKisis()
     {
         yield return Move_Straight(new Vector3(0, 7, 0), new Vector3(0, 0, 0), 7f, declineCurve);
 
@@ -138,11 +141,11 @@ public class SolGryn : Boss_Info
         spriteColor.Change_C(new Color(1, 1, 1, 0), 1);
         yield return Boss_Pattern();
     }
-    void Continue_Camera_Shake()
+    private void Continue_Camera_Shake()
     {
         Camera_Shake(0.002f, 1, false, true);
     }
-    IEnumerator Boss_Pattern()
+    private IEnumerator Boss_Pattern()
     {
         himaController.IsMove = true;
         himaController.Unbeatable = false;
@@ -159,31 +162,31 @@ public class SolGryn : Boss_Info
 
         yield return Move_Curve(My_Position, new Vector3(-4, 4, 0),
             Get_Center_Vector(My_Position, new Vector3(-4, 4, 0), Vector3.Distance(My_Position, new Vector3(-4, 4, 0)) * 0.85f, "anti_clock"), 4, OriginCurve);
-        yield return Pattern01();
-        yield return Pattern02();
-        yield return Pattern03();
-        yield return Pattern04();
+       // yield return Pattern01();
+       // yield return Pattern02();
+       // yield return Pattern03();
+       // yield return Pattern04();
         yield return Pattern05();
         yield return Pattern06();
-        while (true)
-        {
-            yield return Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.33f, 0, DisAppear_Effect_1);
-            int Pattern_Num = Random.Range(0, 5);
-            switch (Pattern_Num)
-            {
-                case 0: pattern = Pattern01(); break;
-                case 1: pattern = Pattern02(); break;
-                case 2: pattern = Pattern03(); break;
-                case 3: pattern = Pattern04(); break;
-                case 4: pattern = Pattern05(); break;
-            }
-            My_Color = Color.white;
-            My_Position = new Vector3(7, 4, 0);
-            yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, inclineCurve);
-            yield return pattern;
-        }
+        //while (true)
+        //{
+        //    yield return Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.33f, 0, DisAppear_Effect_1);
+        //    int Pattern_Num = Random.Range(0, 5);
+        //    switch (Pattern_Num)
+        //    {
+        //        case 0: pattern = Pattern01(); break;
+        //        case 1: pattern = Pattern02(); break;
+        //        case 2: pattern = Pattern03(); break;
+        //        case 3: pattern = Pattern04(); break;
+        //        case 4: pattern = Pattern05(); break;
+        //    }
+        //    My_Color = Color.white;
+        //    My_Position = new Vector3(7, 4, 0);
+        //    yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, inclineCurve);
+        //    yield return pattern;
+        //}
     }
-    IEnumerator Pattern01() // 완료
+    private IEnumerator Pattern01() // 완료
     {
         float[,] u1 = new float[3, 2] { { -4f, -0.4f }, { 4f, -0.4f }, { 4f, -6f } };
         float[,] u2 = new float[3, 2] { { 0, 2 }, { 0, -3.35f }, { -4, -3.35f } };
@@ -227,7 +230,7 @@ public class SolGryn : Boss_Info
             Destroy(GameObject.Find("TrailCollider"));
            
     }
-    IEnumerator Nachi_Color_Change(Color Origin_C, Color Change_C, float time_persist, bool Is_Continue)
+    private IEnumerator Nachi_Color_Change(Color Origin_C, Color Change_C, float time_persist, bool Is_Continue)
     {
         float percent;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
@@ -253,7 +256,7 @@ public class SolGryn : Boss_Info
             }
         }
     }
-    IEnumerator Pattern02()
+    private IEnumerator Pattern02()
     {
         My_Position = new Vector3(-7, 2.5f, 0);
         yield return Change_My_Color(My_Color, new Color(1, 1, 1, 1), 0.33f, 0, DisAppear_Effect_1);
@@ -309,7 +312,7 @@ public class SolGryn : Boss_Info
         yield return null;
     }
 
-    IEnumerator Straw_Launch(Vector3 SolGryn_Pos, Quaternion SolGryn_Lot, Vector3 Straw_Create_Pos, Quaternion Straw_Lot, Vector3 Peanut_Create_Pos, 
+    private IEnumerator Straw_Launch(Vector3 SolGryn_Pos, Quaternion SolGryn_Lot, Vector3 Straw_Create_Pos, Quaternion Straw_Lot, Vector3 Peanut_Create_Pos, 
         Quaternion Peanut_Lot, Vector3 Peanut_Dir, float Straw_Lot_time_persist, int Peanut_Launch_Num, float Peanut_Launch_Interval)
     {
         transform.SetPositionAndRotation(SolGryn_Pos, SolGryn_Lot);
@@ -342,7 +345,7 @@ public class SolGryn : Boss_Info
         yield return null;
     }
 
-    IEnumerator Pattern03()
+    private IEnumerator Pattern03()
     {
         transform.SetPositionAndRotation(new Vector3(6, 0, 0), Quaternion.identity);
 
@@ -373,7 +376,7 @@ public class SolGryn : Boss_Info
 
         yield return Move_Straight(My_Position, new Vector3(My_Position.x, My_Position.y - 11, 0), 1, declineCurve);
     }
-    IEnumerator Pattern04()
+    private IEnumerator Pattern04()
     {
         for (int i = 0; i < 5; i++)
         {
@@ -393,7 +396,7 @@ public class SolGryn : Boss_Info
         yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1, declineCurve);
     }
 
-    IEnumerator Pattern05()
+    private IEnumerator Pattern05()
     {
         for (int i = 11; i < 14; i++)
         {
@@ -425,10 +428,10 @@ public class SolGryn : Boss_Info
             yield return null;
 
         Is_Next_Pattern = false;
-        yield return StartCoroutine(Move_Straight(new Vector3(7, 8, 0), new Vector3(7, 0, 0), 5, declineCurve));
+        yield return Move_Straight(new Vector3(7, 8, 0), new Vector3(7, 0, 0), 5, declineCurve);
     }
 
-    IEnumerator Pattern06()
+    private IEnumerator Pattern06()
     {
         Is_Next_Pattern = false;
 
@@ -439,6 +442,19 @@ public class SolGryn : Boss_Info
                 M1.Start_F(new Vector3(bangmeon[0, i] * 7, bangmeon[1, i] * 4, 0), Vector3.zero);
             yield return YieldInstructionCache.WaitForSeconds(1.5f);
         }
+        yield return YieldInstructionCache.WaitForSeconds(1f);
+        for (int j = 0; j < 2; j++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                GameObject UnderTail = Instantiate(Weapon[10], Vector3.zero, Quaternion.identity);
+                if (UnderTail.TryGetComponent(out Monster M1))
+                    M1.Start_F(new Vector3(bangmeon[0, i] * 7, bangmeon[1, i] * 4, 0), Vector3.zero);
+            }
+            yield return YieldInstructionCache.WaitForSeconds(1.3f);
+        }
+
+      
 
         while (!Is_Next_Pattern)
             yield return null;
@@ -447,7 +463,7 @@ public class SolGryn : Boss_Info
         yield return null;
     }
 
-    IEnumerator HP_Decrease()
+    private IEnumerator HP_Decrease()
     {
         while(true)
         {
@@ -466,12 +482,12 @@ public class SolGryn : Boss_Info
         Killed_All_Mine();
         StartCoroutine(I_OnDie());
     }
-    IEnumerator I_OnDie()
+    private IEnumerator I_OnDie()
     {
         yield return Move_Straight(new Vector3(7, 5, 0), new Vector3(7, 0, 0), 3, OriginCurve);
         yield return null;
     }
-    void Boss_W1(float start_angle, int count, float range_angle, float speed, bool is_Blink)
+    private void Boss_W1(float start_angle, int count, float range_angle, float speed, bool is_Blink)
     {
         float count_per_radian = range_angle / count;
         float intervalAngle = start_angle;

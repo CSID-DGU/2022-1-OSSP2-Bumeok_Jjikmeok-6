@@ -7,14 +7,11 @@ public class Final_1_W2_Boom : Weapon_Player
     [SerializeField]
     AnimationCurve curve;
 
-    Animator animator;
-
     SpriteRenderer spriteRenderer;
 
     private new void Awake()
     {
         base.Awake();
-        animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
     void Start()
@@ -51,15 +48,15 @@ public class Final_1_W2_Boom : Weapon_Player
         }
         foreach (var e in devil_weapon)
         {
-            if (e.TryGetComponent(out Weapon_Devil f1))
-                f1.Weak_Weapon();
+            if (e.TryGetComponent(out Weapon_Devil WD))
+                WD.Weak_Weapon();
         }
         if (boss != null)
         {
-            if (boss.TryGetComponent(out Asura f1))
-                f1.TakeDamage(30.0f);
+            if (boss.TryGetComponent(out Boss_Info B))
+                B.TakeDamage(30.0f);
         }
-        Create_Explode();
+        Instantiate(Explosion, Vector3.zero, Quaternion.identity);
         spriteRenderer.color = new Color(1, 1, 1, 0);
         yield return Start_Camera_Shake_For_Wait(0.02f, 2f, true, false);
         Destroy(gameObject);

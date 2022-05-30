@@ -56,14 +56,13 @@ public class Life : MonoBehaviour, Life_Of_Basic
         get { return unbeatable; }
         set { unbeatable = value; }    
     }
-
     protected virtual void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         Unbeatable = false;
         if (TryGetComponent(out CameraShake CS))
             cameraShake = CS;
-        if (cameraShake != null && cameraShake.mainCamera == null && GameObject.Find("Main Camera").TryGetComponent(out Camera camera))
+        if (cameraShake != null && GameObject.Find("Main Camera").TryGetComponent(out Camera camera))
             cameraShake.mainCamera = camera;
     }
     public Color My_Color
@@ -198,7 +197,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
         yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
     }
 
-    public IEnumerator Move_Straight(Vector3 start_location, Vector3 last_location, float time_persist, AnimationCurve curve)
+    protected IEnumerator Move_Straight(Vector3 start_location, Vector3 last_location, float time_persist, AnimationCurve curve)
     {
         float percent = 0;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
@@ -345,28 +344,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
         else
             yield return null;
     } // 되도록이면 사용 자제
-    protected void Change_Origin_BG(Color Change, float time_persist)
-    {
-        if (backGroundColor != null)
-        {
-            if (back_ground_color_i != null)
-                backGroundColor.StopCoroutine(back_ground_color_i);
-            back_ground_color_i = backGroundColor.Change_Origin_BG(Change, time_persist);
-            backGroundColor.StartCoroutine(back_ground_color_i);
-        }
-    }
-    protected IEnumerator Change_Origin_BG_And_Wait(Color Change, float time_persist)
-    {
-        if (backGroundColor != null)
-        {
-            if (back_ground_color_i != null)
-                backGroundColor.StopCoroutine(back_ground_color_i);
-            back_ground_color_i = backGroundColor.Change_Origin_BG(Change, time_persist);
-            yield return backGroundColor.StartCoroutine(back_ground_color_i);
-        }
-        else
-            yield return null;
-    }
     protected void Stop_Life_Act(ref IEnumerator Recv)
     {
         if (Recv != null)
@@ -383,7 +360,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         StartCoroutine(Send);
     }
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         StopAllCoroutines();
     }

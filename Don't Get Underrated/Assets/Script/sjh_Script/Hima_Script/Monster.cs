@@ -5,9 +5,26 @@ using DG.Tweening;
 
 public class Monster : Enemy_Info
 {
-    Animator animator;
+    private Animator animator;
 
-    Vector3 Monster_Pos, Target_Pos;
+    private Vector3 Monster_Pos, Target_Pos;
+
+    private new void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info HC))
+        {
+            if (!HC.Unbeatable)
+                HC.TakeDamage(1);
+        }
+    }
+    private new void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info HC))
+        {
+            if (!HC.Unbeatable)
+                HC.TakeDamage(1);
+        }
+    }
     private new void Awake()
     {
         base.Awake();
@@ -22,12 +39,12 @@ public class Monster : Enemy_Info
             animator.SetTrigger("hehe");
         });
     }
-    public void OnLazor()
+    public void OnLazor() // 애니메이션 진행 도중 해당 함수 호출 (즉, 지우면 안됨)
     {
         Run_Life_Act(Monster_Only_Lazor(Monster_Pos, Target_Pos, 1));
     }
 
-    IEnumerator Monster_Only_Lazor(Vector3 Origin, Vector3 Target, float time_persist)
+    private IEnumerator Monster_Only_Lazor(Vector3 Origin, Vector3 Target, float time_persist)
     {
         float percent = 0;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);

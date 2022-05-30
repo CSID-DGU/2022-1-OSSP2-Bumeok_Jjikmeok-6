@@ -54,10 +54,7 @@ public class F1_Homming_Enemy : Enemy_Info
 
             rb.velocity = transform.up * speed;
 
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
         }
     }
-
-    // Update is called once per frame
-
 }

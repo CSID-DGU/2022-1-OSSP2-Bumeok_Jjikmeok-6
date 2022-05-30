@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class HimaController : Player_Info {
@@ -12,37 +11,37 @@ public class HimaController : Player_Info {
 	public bool jump = false;
 
 	[SerializeField]
-	Text Death_Count;
+	private Text Death_Count;
 
 	[SerializeField]
-	float maxSpeed = 7f;
+	private float maxSpeed = 7f;
 
 	[SerializeField]
-	float jumpSpeed = 10f;
+	private float jumpSpeed = 10f;
 
 	[SerializeField]
-	int maxAirJumps = 2;
+	private int maxAirJumps = 2;
 
 	[SerializeField]
-	float distanceToGround = 0;
+	private float distanceToGround = 0;
 
-	Animator anim;
+	private Animator anim;
 
-	Rigidbody2D rb2d;
+	private Rigidbody2D rb2d;
 
-	bool isMove = false;
+	private bool isMove = false;
 
-	bool isJump = false;
+	private bool isJump = false;
 
 	float h = 0;
 
-	bool grounded = false;
+	private bool grounded = false;
 
-	int jumpCount;
+	private int jumpCount;
 
-	int groundLayerMask;
+	private int groundLayerMask;
 
-	IEnumerator color_unbeatable;
+	private IEnumerator color_unbeatable;
 
 	public bool IsMove
     {
@@ -66,22 +65,21 @@ public class HimaController : Player_Info {
 		Death_Count.text = "Death Count : " + LifeTime;
 	}
 
-	void Start() 
+	private void Start() 
 	{
-		Run_Life_Act(Load());
+		Load();
 	}
 
-	IEnumerator Load()
+	private void Load()
     {
 		Unbeatable = true;
 		IsMove = true;
 		IsJump = true;
         GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().WelCome();
-		yield return null;
 	}
 
-    // Update is called once per frame
-    void Update() 
+	// Update is called once per frame
+	private void Update() 
 	{
 		if (Input.GetButtonDown("Jump") && jumpCount < maxAirJumps) 
 		{
@@ -90,10 +88,10 @@ public class HimaController : Player_Info {
 		}
 	}
 
-	bool isGrounded() {
-//		return rb2d.IsTouchingLayers(groundLayer);
+	private bool isGrounded() {
+		//		return rb2d.IsTouchingLayers(groundLayer);
 
-		Vector2 position = transform.position;
+		Vector2 position = My_Position;
 		Vector2 direction = Vector2.down;
 
 		RaycastHit2D hit = Physics2D.Raycast(position, direction, distanceToGround, groundLayerMask);
@@ -115,9 +113,8 @@ public class HimaController : Player_Info {
 
 			Run_Life_Act(Whilee());
 		}
-
     }
-	IEnumerator Whilee()
+	private IEnumerator Whilee()
     {
 		Run_Life_Act_And_Continue(ref color_unbeatable, My_Color_When_UnBeatable());
 
@@ -134,13 +131,13 @@ public class HimaController : Player_Info {
 		yield return null;
     }
 
-    void FixedUpdate() {
+	private void FixedUpdate() {
 		
 		if (isMove)
         {
-			Debug.Log("야");
 			h = Input.GetAxisRaw("Horizontal");
 			float vh = Mathf.Sign(h);
+
 
 			if (h == 0)
 			{
@@ -194,16 +191,16 @@ public class HimaController : Player_Info {
 		}		
     }
 
-	bool IsInsideGround() {
+	private bool IsInsideGround() {
 		return Physics2D.OverlapPoint(transform.position, groundLayerMask);
 	}
 
-	void Flip() {
+	private void Flip() {
 		facingRight = !facingRight;
 		transform.localRotation = Quaternion.Euler(0f, facingRight ? 0f : 180f, 0f);
 	}
 
-	void OnTriggerEnter2D(Collider2D col) {
+	private void OnTriggerEnter2D(Collider2D col) {
 		Debug.Log(LayerMask.LayerToName(col.gameObject.layer));
 	}
     public override void OnDie()

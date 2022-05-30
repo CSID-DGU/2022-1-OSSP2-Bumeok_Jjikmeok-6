@@ -43,7 +43,7 @@ public class SoyBean : Weapon_Devil
         rb.AddForce(dir * speed);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private new void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info PI))
             PI.TakeDamage(1);
@@ -53,6 +53,7 @@ public class SoyBean : Weapon_Devil
             Count++;
             if (Count >= 4)
                 OnDie();
+
         }
     }
 

@@ -14,6 +14,7 @@ public class SolGryn_Copy : Enemy_Info
         Run_Life_Act(Move_Straight(transform.position, late_vector, 0.15f, OriginCurve));        
     }
 
+
     public void Move_Slerp_Distance(Vector3 Target, string dir)
     {
        Run_Life_Act(Move_Curve(transform.position, Target,

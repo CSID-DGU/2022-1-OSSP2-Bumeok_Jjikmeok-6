@@ -6,15 +6,15 @@ public class PrefabOutOfCamera : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    Camera selectedCamera;
+    private Camera selectedCamera;
 
 
-    void Start()
+    private void Start()
     {
         selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         Vector3 screenPoint = selectedCamera.WorldToViewportPoint(transform.position);
         bool OnScreen = screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;

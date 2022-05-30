@@ -5,23 +5,22 @@ using DG.Tweening;
 
 public class Quantum_Bit : Enemy_Info
 {
-    SolGryn solGryn;
+    private SolGryn solGryn;
 
-    List<Weapon_Devil> Particle;
+    private List<GameObject> Part;
 
-    int[,] Rand = new int[2, 8] { { -1, 0, 1, 0, 1, 1, -1, -1 }, { 0, 1, 0, -1, 1, -1, 1, -1 } };
+    private int[,] Rand = new int[2, 8] { { -1, 0, 1, 0, 1, 1, -1, -1 }, { 0, 1, 0, -1, 1, -1, 1, -1 } };
 
     private new void Awake()
     {
         base.Awake();
         backGroundColor = GameObject.Find("Flash").GetComponent<ImageColor>();
-        Particle = new List<Weapon_Devil>();
-
+        Part = new List<GameObject>();
         if (GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
             solGryn = SG;
     }
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         float Solve = Mathf.Sign(transform.position.x);
 
@@ -37,7 +36,7 @@ public class Quantum_Bit : Enemy_Info
                 spriteRenderer.color = new Color(1, 1, 1, 0);
         });
     }
-    IEnumerator Tr_Co()
+    private IEnumerator Tr_Co()
     {
         spriteRenderer.color = new Color(1, 1, 1, 0);
         Flash(Color.black, 0.5f, 1f);
@@ -46,22 +45,28 @@ public class Quantum_Bit : Enemy_Info
             for (int j = -9; j <= 9; j++)
             {
                 GameObject e = Instantiate(Weapon[0], new Vector3(i, j, 0), Quaternion.identity);
+                
                 if (e.TryGetComponent(out Weapon_Devil WD))
                 {
                     WD.W_MoveSpeed(2);
                     WD.W_MoveTo(Vector3.zero);
-                    Particle.Add(WD);
+                    Part.Add(e);
                 }
             }
         }
         yield return Camera_Shake_And_Wait(0.02f, 2f, true, false);
-        foreach (var e in Particle)
+        foreach (var e in Part)
         {
-            int Ran1 = Random.Range(0, 8);
-            if (e.gameObject != null)
-                e.W_MoveTo(new Vector3(Rand[0, Ran1], Rand[1, Ran1], 0));
+            Debug.Log(e);
+            if (e != null)
+            {
+                int Ran1 = Random.Range(0, 8);
+                if (e.TryGetComponent(out Weapon_Devil WD))
+                    WD.W_MoveTo(new Vector3(Rand[0, Ran1], Rand[1, Ran1], 0));
+            }
+           
         }
-        Particle.Clear();
+        Part.Clear();
         solGryn.Is_Next_Pattern = true;
         yield return null;
     }

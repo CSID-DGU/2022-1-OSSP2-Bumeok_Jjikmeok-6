@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    public Camera mainCamera;
+    public Camera mainCamera = null;
 
     private Vector3 originPosition;
     private Quaternion originRotation;
 
 
-    public void Init_Camera()
+    private void Init_Camera()
     {
         mainCamera.transform.position = new Vector3(0, 0, -10);
         mainCamera.transform.rotation = Quaternion.identity;

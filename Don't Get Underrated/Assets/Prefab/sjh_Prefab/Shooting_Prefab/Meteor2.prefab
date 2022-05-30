@@ -4818,6 +4818,7 @@ GameObject:
   - component: {fileID: 7616542132427189043}
   - component: {fileID: 7616542132427189042}
   - component: {fileID: 2004507184893045473}
+  - component: {fileID: 336715812032268877}
   m_Layer: 0
   m_Name: Meteor2
   m_TagString: Weapon_Devil
@@ -4965,3 +4966,16 @@ MonoBehaviour:
   Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
   Meteor_Line: {fileID: 7825423239845067279, guid: 276fea8bb09c9f94095d1999f3ca0d28, type: 3}
   Meteor_Traffic: {fileID: 3074925144767600519, guid: 2c22f4bdb8e91da4d9e5d3b918cceef7, type: 3}
+--- !u!114 &336715812032268877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7616542132427189038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}

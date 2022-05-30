@@ -11,23 +11,31 @@ public class ImageColor : MonoBehaviour
     
     private void Awake()
     {
-        image = GetComponent<Image>();
+        if (TryGetComponent(out Image I))
+            image = I;
     }
     public void Init()
     {
-        image.color = new Color(1, 1, 1, 0);
+        if (image != null)
+            image.color = new Color(1, 1, 1, 0);
     }
     public Color Get_BGColor()
     {
-        return image.color;
+        if (image != null)
+            return image.color;
+        else
+            return Color.white;
     }
     public void Set_BGColor(Color new_c)
     {
-        image.color = new_c;
+        if (image != null)
+            image.color = new_c;
     }
 
     public IEnumerator Change_BG(Color Change, float time_persist)
     {
+        if (image == null)
+            yield break;
         Color const_Color = Get_BGColor();
         float percent = 0;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
@@ -41,6 +49,8 @@ public class ImageColor : MonoBehaviour
 
     public IEnumerator Flash(Color flashColor, float Wait_Second, float time_persist)
     {
+        if (image == null)
+            yield break;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
 
         image.color = flashColor;
@@ -56,6 +66,8 @@ public class ImageColor : MonoBehaviour
     }
     public IEnumerator Change_Origin_BG(Color Change, float time_persist)
     {
+        if (image == null)
+            yield break;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         Color const_Color = Get_BGColor();
         float percent = 0;

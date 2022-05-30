@@ -42,7 +42,6 @@ public class Limit_Time : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log(wow_Time);
             if (wow_Time <= 10)
             {
                 if (flash_on != null)

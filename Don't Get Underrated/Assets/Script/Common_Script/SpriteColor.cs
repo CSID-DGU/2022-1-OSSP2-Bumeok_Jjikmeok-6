@@ -6,9 +6,9 @@ public class SpriteColor : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer;
 
-    IEnumerator param;
+    private IEnumerator param;
 
     private void Awake()
     {

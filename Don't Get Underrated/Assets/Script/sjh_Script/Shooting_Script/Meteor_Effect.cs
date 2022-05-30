@@ -97,8 +97,4 @@ public class Meteor_Effect : Weapon_Devil
         if (transform.position.x <= -10 || transform.position.y <= -5.7f)
             Destroy(gameObject);
     }
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
-    }
 }

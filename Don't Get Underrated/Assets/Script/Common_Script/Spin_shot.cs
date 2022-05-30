@@ -31,5 +31,4 @@ public class Spin_shot : MonoBehaviour {
         //->해당 오브젝트가 오브젝트가 360도 회전하고 있으므로, Rotation이 방향이 됨.
         temp.transform.rotation = transform.rotation;
     }
-
 }

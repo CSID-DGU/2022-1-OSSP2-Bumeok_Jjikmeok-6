@@ -29,8 +29,6 @@ public class PlayerCtrl_Tengai : Player_Info
     [SerializeField]
     GameObject Explode;
 
-    Emit_Motion emit_Motion;
-
     [SerializeField]
     int BoomCount = 3;
 
@@ -49,6 +47,12 @@ public class PlayerCtrl_Tengai : Player_Info
     [SerializeField]
     GameObject naum_ani;
 
+    [SerializeField]
+    public GameObject Power_Slider;
+
+    [SerializeField]
+    public GameObject Speed_Slider;
+
     Animator animator; // 애니메이터는 여러개 추가될 수 있어서 상속 생략
 
     GameObject Emit_Obj_Copy; // 고유
@@ -57,11 +61,13 @@ public class PlayerCtrl_Tengai : Player_Info
 
     bool is_Update = false;
 
-    bool is_Power_Up = false;
+    public bool is_Power_Up = false;
+
+    public bool is_Speed_Up = false;
 
     bool boss_intend;
 
-    IEnumerator emit_expand_circle, emit_change_size, i_start_emit, i_start_firing, color_when_unbeatable;
+    IEnumerator i_start_firing, color_when_unbeatable, i_start_emit;
 
     private new void Awake()
     {
@@ -78,7 +84,8 @@ public class PlayerCtrl_Tengai : Player_Info
         boss_intend = false;
         is_Power_Up = false;
         Final_Score = 0;
-        emit_Motion = null;
+        Power_Slider.SetActive(false);
+        Speed_Slider.SetActive(false);
 
         PlayerScore.text = "점수 : " + Final_Score;
         PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
@@ -115,7 +122,8 @@ public class PlayerCtrl_Tengai : Player_Info
 
         if (!boss_intend)
         {
-            GameObject.Find("EnemyAndBoss").GetComponent<FinalStage_1_Total>().Boss_First_Appear();
+            if (GameObject.Find("EnemyAndBoss").TryGetComponent(out FinalStage_1_Total FS1_T))
+               FS1_T.Boss_First_Appear();
             boss_intend = true;
         }
         else
@@ -140,6 +148,7 @@ public class PlayerCtrl_Tengai : Player_Info
     {
         if (Unbeatable)
             return;
+            
         Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         LifeTime -= damage;
         animator.SetBool("Dead", true);
@@ -152,9 +161,9 @@ public class PlayerCtrl_Tengai : Player_Info
 
         LifeTime_Text.text = "Life x  : " + LifeTime;
 
-        if (Emit_Obj_Copy != null && emit_Motion != null && i_start_emit != null)
+        if (Emit_Obj_Copy != null)
         {
-            StopCoroutine(i_start_emit);
+            Stop_Life_Act(ref i_start_emit);
             Destroy(Emit_Obj_Copy);
         }
 
@@ -175,65 +184,55 @@ public class PlayerCtrl_Tengai : Player_Info
             Get_Center_Vector(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"));
 
         yield return Move_Curve(My_Position, My_Position + 2.5f * Vector3.left, 
-            Get_Center_Vector(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.3f, OriginCurve);
+            Get_Center_Vector(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.2f, OriginCurve);
 
         float kuku = ((1.215f * My_Position.x) - My_Position.y - 7) / 1.215f;
 
         float B = Vector3.Distance(My_Position, new Vector3(kuku, -7, 0));
-        yield return Move_Straight(My_Position, new Vector3(kuku, -7, 0), B/A * 0.3f, OriginCurve);
+        yield return Move_Straight(My_Position, new Vector3(kuku, -7, 0), B/A * 0.2f, OriginCurve);
        
     }
     public void Start_Emit()
     {
-        Unbeatable = true;
         Run_Life_Act_And_Continue(ref i_start_emit, I_Start_Emit());
     }
     IEnumerator I_Start_Emit()
     {
-        yield return null;
         Emit_Obj_Copy = Instantiate(Emit_Obj, My_Position, Quaternion.identity);
-
-        emit_Motion = null;
 
         if (Emit_Obj_Copy.TryGetComponent(out Emit_Motion EM))
         {
-            emit_Motion = EM;
-            emit_expand_circle = emit_Motion.Emit_Expand_Circle();
-            emit_change_size = emit_Motion.Emit_Change_Size();
+            EM.Ready_To_Expand();
+
+            yield return YieldInstructionCache.WaitForSeconds(5f);
+
+            Unbeatable = true;
+
+            Change_BG(Color.white, 2);
+
+            yield return EM.Expand();
+
+            Destroy(Emit_Obj_Copy);
+
+            Flash(new Color(1, 1, 1, 1), 0.1f, 2);
+
+            GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+            GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
+            GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
+            foreach (var e in enemy)
+                Destroy(e);
+            foreach (var e in meteor)
+                Destroy(e);
+            foreach (var e in weapon_devil)
+                Destroy(e);
+
+            GameObject.FindGameObjectWithTag("Boss").GetComponent<Asura>().Stop_Meteor();
+
+            Instantiate(Explode, Vector3.zero, Quaternion.identity);
+            Instantiate(naum_ani, Vector3.zero, Quaternion.identity);
+            Camera_Shake(0.025f, 2, true, false);
         }
-        else
-            yield break;
-
-        emit_Motion.StartCoroutine(emit_change_size);
-
-        yield return YieldInstructionCache.WaitForSeconds(5f);
-
-        Unbeatable = true;
-
-        emit_Motion.StopCoroutine(emit_change_size);
-
-        Change_BG(Color.white, 2);
-        yield return emit_expand_circle;
-
-        Destroy(Emit_Obj_Copy);
-
-        Flash(new Color(1, 1, 1, 1), 0.1f, 2);
-
-        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
-        GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
-        GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
-        foreach (var e in enemy)
-            Destroy(e);
-        foreach (var e in meteor)
-            Destroy(e);
-        foreach (var e in weapon_devil)
-            Destroy(e);
-
-        GameObject.FindGameObjectWithTag("Boss").GetComponent<Asura>().Stop_Meteor();
-
-        Instantiate(Explode, Vector3.zero, Quaternion.identity);
-        Instantiate(naum_ani, Vector3.zero, Quaternion.identity);
-        Camera_Shake(0.025f, 2, true, false);
+        yield return null;
     }
     public override void OnDie()
     {
@@ -244,18 +243,24 @@ public class PlayerCtrl_Tengai : Player_Info
     // Update is called once per frame
     void Update()
     {
+        PlayerScore.text = "점수 : " + Final_Score;
+
         if (is_Update)
         {
             float x = Input.GetAxisRaw("Horizontal");
             float y = Input.GetAxisRaw("Vertical");
-            movement2D.MoveTo(new Vector3(x, y, 0));
+            if (is_Speed_Up)
+                movement2D.MoveTo(new Vector3(x * 1.5f, y * 1.5f, 0));
+            else
+                movement2D.MoveTo(new Vector3(x, y, 0));
         }
-        PlayerScore.text = "점수 : " + Final_Score;
+       
         if (Input.GetKeyDown(keyCodeAttack) && weapon_able)
         {
             animator.SetBool("Launch", true);
             StartFiring();
         }
+
         else if (Input.GetKeyUp(keyCodeAttack) || !weapon_able)
         {
             animator.SetBool("Launch", false);
@@ -263,7 +268,7 @@ public class PlayerCtrl_Tengai : Player_Info
         }
         if (Input.GetKeyDown(keyCodeBoom))
             StartBoom();
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             GameObject e = Instantiate(Boom_Up_Text, Vector3.zero, Quaternion.identity);
             e.transform.SetParent(transform);
@@ -273,14 +278,35 @@ public class PlayerCtrl_Tengai : Player_Info
             BoomCount++;
             BoomCountText.text = "폭탄 : " + BoomCount;
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            GameObject e = Instantiate(Power_Up_Text, Vector3.zero, Quaternion.identity);
-            e.transform.SetParent(transform);
-            GameObject f = Instantiate(Power_Effect, transform.position, Quaternion.Euler(-90, 0, 0));
-            f.transform.SetParent(transform);
-            f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
-            is_Power_Up = true;
+            if (Power_Slider.TryGetComponent(out PowerSliderViewer PSV))
+            {
+                Power_Slider.SetActive(true);
+                GameObject e = Instantiate(Power_Up_Text, Vector3.zero, Quaternion.identity);
+                e.transform.SetParent(transform);
+                GameObject f = Instantiate(Power_Effect, transform.position, Quaternion.Euler(-90, 0, 0));
+                f.transform.SetParent(transform);
+                f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+                is_Power_Up = true;
+                PSV.Stop_To_Decrease();
+                PSV.Start_To_Decrease(5);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            if (Speed_Slider.TryGetComponent(out SpeedSliderViewer SSV))
+            {
+                Speed_Slider.SetActive(true);
+                GameObject e = Instantiate(Power_Up_Text, Vector3.zero, Quaternion.identity);
+                e.transform.SetParent(transform);
+                GameObject f = Instantiate(Power_Effect, transform.position, Quaternion.Euler(-90, 0, 0));
+                f.transform.SetParent(transform);
+                f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+                is_Speed_Up = true;
+                SSV.Stop_To_Decrease();
+                SSV.Start_To_Decrease(5);
+            }
         }
     }
     void StartFiring()

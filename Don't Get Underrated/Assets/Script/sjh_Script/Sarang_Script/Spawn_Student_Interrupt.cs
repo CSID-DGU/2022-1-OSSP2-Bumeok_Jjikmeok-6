@@ -7,7 +7,7 @@ public class Spawn_Student_Interrupt : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField]
-    GameObject Student;
+    GameObject[] Student;
 
     [SerializeField]
     GameObject Interrupt;
@@ -26,25 +26,25 @@ public class Spawn_Student_Interrupt : MonoBehaviour
     // 카메라의 크기는 18
     void Start()
     {
-        StartCoroutine(Spawn_Student_And_Interrupt());
+        Spawn_Student_And_Interrupt();
     }
-    IEnumerator Spawn_Student_And_Interrupt()
+    private void Spawn_Student_And_Interrupt()
     {
-        for (int j = 0; j < 4; j++)
+        int Max_Student = Student.Length;
+        for (int Floor = 0; Floor < 4; Floor++)
         {
-            for (int i = 0; i < 18; i++)
+            for (int Floor_Axis = 0; Floor_Axis < 18; Floor_Axis++)
             {
+                int Student_Rand = Random.Range(0, Max_Student);
                 int eee = Random.Range(0, 2);
                 float SpawnRange = Random.Range(-3, 3);
-                Instantiate(Interrupt, new Vector3(Standard_Interrupt_X + (26 * i + SpawnRange), Standard_Interrupt_Y + (40 * j), 1), Quaternion.identity);
+                Instantiate(Interrupt, new Vector3(Standard_Interrupt_X + (26 * Floor_Axis + SpawnRange), Standard_Interrupt_Y + (40 * Floor), 1), Quaternion.identity);
                 if (eee == 0)
-                    Instantiate(Student, new Vector3(Standard_Student_X + (18 * i + SpawnRange), -4 + (40 * j), 1), Quaternion.identity);
+                    Instantiate(Student[Student_Rand], new Vector3(Standard_Student_X + (18 * Floor_Axis + SpawnRange), -2.4f + (40 * Floor), 1), Quaternion.identity);
                 else
-                    Instantiate(Student, new Vector3(Standard_Student_X + (18 * i + SpawnRange), -1 + (40 * j), 1), Quaternion.identity);
-                yield return null;
+                    Instantiate(Student[Student_Rand], new Vector3(Standard_Student_X + (18 * Floor_Axis + SpawnRange), -3.5f + (40 * Floor), 1), Quaternion.identity);
             }
         }
-        yield break;
     }
     // Update is called once per frame
 }

@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Move_Gaze_Info : MonoBehaviour // 플레이어 달릴 때의 게이지바
+public class Move_Gaze_Info : Slider_Viewer // 플레이어 달릴 때의 게이지바
 {
-    Slider slider;
-    // Start is called before the first frame update
-    private void Awake()
+    private new void Awake()
     {
-        slider = GetComponent<Slider>();
-        slider.value = 0;
+        base.Awake();
     }
     public void HP_Down()
     {

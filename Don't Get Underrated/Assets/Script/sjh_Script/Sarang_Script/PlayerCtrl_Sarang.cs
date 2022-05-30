@@ -8,13 +8,11 @@ public class PlayerCtrl_Sarang : Player_Info
 
     //GameObject Fever_Particle_Clone;
 
-    GameObject sliderClone;
+    private GameObject sliderClone;
 
-    GameObject Student_Clone;
+    private GameObject Student_Clone;
 
-    GameObject Fever_Particle_Copy;
-
-    public Animator animator;
+    private GameObject Fever_Particle_Copy;
 
     private bool IsOneClick = false;
 
@@ -28,54 +26,58 @@ public class PlayerCtrl_Sarang : Player_Info
 
     private bool FixedTarget = false;
 
-    public bool is_Domain = false; // 계단 올라갈 때만 적용
-
     private bool is_Button = false;
-
-    public bool Is_Fever = false;
 
     private IEnumerator first_phase, lazor_in_second_phase;
 
     private int Floor_Player_Place;
 
-    Camera_Trace camera_Trace;
+    public Animator animator;
 
-    Limit_Time limit_Time;
+    public bool Is_Fever = false;
+
+    public bool is_Domain = false; // 계단 올라갈 때만 적용
+
+
+
+    private Camera_Trace camera_Trace;
+
+    private Limit_Time limit_Time;
 
     private int StudentLayerMask;  // Player 레이어만 충돌 체크함
 
     [SerializeField]
-    GameObject Move_Slider;
+    private GameObject Move_Slider;
 
     [SerializeField]
-    Transform canvasTransform;
+    private Transform canvasTransform;
 
     [SerializeField]
-    GameObject Student_Gaze;
+    private GameObject Student_Gaze;
 
     [SerializeField]
-    GameObject Targetting_Object;
+    private GameObject Targetting_Object;
 
     [SerializeField]
-    GameObject Heart_Slider;
+    private GameObject Heart_Slider;
 
     [SerializeField]
-    TextMeshProUGUI Main3_Score_Text;
+    private TextMeshProUGUI Main3_Score_Text;
 
     [SerializeField]
-    GameObject Fever_Particle;
+    private GameObject Fever_Particle;
 
     [SerializeField]
-    GameObject Down_Floor;
+    private GameObject Down_Floor;
 
     [SerializeField]
-    GameObject Up_Floor;
+    private GameObject Up_Floor;
 
     [SerializeField]
-    float IsDoubleClick = 0.25f;
+    private float IsDoubleClick = 0.25f;
 
     [SerializeField]
-    float PlayerWalkSpeed = 0.03f;
+    private float PlayerWalkSpeed = 0.03f;
 
     [SerializeField]
     public int Student_Power = 1;
@@ -92,8 +94,10 @@ public class PlayerCtrl_Sarang : Player_Info
     {
         base.Awake();
 
-        backGroundColor = GameObject.Find("Flash_Interrupt").GetComponent<ImageColor>();
-        animator = GetComponent<Animator>();
+        if (GameObject.Find("Flash_Interrupt") && GameObject.Find("Flash_Interrupt").TryGetComponent(out ImageColor IC))
+            backGroundColor = IC;
+        if (TryGetComponent(out Animator A))
+            animator = A;
 
         IsOneClick = false;
         Timer = 0;
@@ -142,16 +146,17 @@ public class PlayerCtrl_Sarang : Player_Info
 
             if (hit.collider != null && hit.transform.gameObject.CompareTag("Student"))
             {
-                if (!FixedTarget)
+                if (!FixedTarget) // 불안정한 Raycast이므로 타겟팅을 정확히 할 수 있도록
                 {
                     FixedTarget = true;
                     Targetting_Object.SetActive(true);
                     if (Targetting_Object.TryGetComponent(out Targetting_Effect TE))
                         TE.Change_Scale_And_Color(hit.transform.gameObject);
-                   
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
+                    Targetting_Object.SetActive(false);
+                    FixedTarget = false;
                     Run_Life_Act(Second_Phase());
                     yield break;
                 }
@@ -168,6 +173,7 @@ public class PlayerCtrl_Sarang : Player_Info
     IEnumerator Second_Phase()
     {
         All_Stop();
+
         if (!Student_Gaze.activeSelf)
             Student_Gaze.SetActive(true);
 
@@ -185,9 +191,7 @@ public class PlayerCtrl_Sarang : Player_Info
                 if (Input.GetMouseButton(0))
                 {
                     float dir_Change = My_Position.x - Student_Clone.transform.position.x;
-                    My_Scale = new Vector3((dir_Change / Mathf.Abs(dir_Change)) * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-                    Targetting_Object.SetActive(false);
-                    FixedTarget = false;
+                    My_Scale = new Vector3((dir_Change / Mathf.Abs(dir_Change)) * Mathf.Abs(My_Scale.x), My_Scale.y, My_Scale.z);
 
                     if (!FixedSlider)
                     {
@@ -226,6 +230,7 @@ public class PlayerCtrl_Sarang : Player_Info
                             animator.SetBool("Heart_Gain", false);
                             My_Scale = new Vector3(4.9f, 4.9f, 0);
                             All_Start();
+                            yield break;
                         }
                         else
                             Main_3_Score += 100 * 2;
@@ -271,7 +276,7 @@ public class PlayerCtrl_Sarang : Player_Info
 
     private void Lazor_In_Second_Phase(GameObject weapon, Vector3 target, Vector3 self)
     {
-        Launch_Weapon(ref weapon, target - self, Quaternion.identity, 8, My_Position);
+        Launch_Weapon(ref weapon, target - self, Quaternion.identity, 12, My_Position);
     }
 
     IEnumerator Third_Phase(GameObject targetStudent_t)
@@ -500,7 +505,7 @@ public class PlayerCtrl_Sarang : Player_Info
         {
             stageData.LimitMax = stageData.LimitMax + new Vector2(0, 40);
             stageData.LimitMin = stageData.LimitMin + new Vector2(0, 40);
-            yield return Move_Straight(My_Position, My_Position + new Vector3(6, 2, 0), 2, OriginCurve);
+            yield return Move_Straight(My_Position, My_Position + new Vector3(6, 3, 0), 2, OriginCurve);
         }
         else if (CHK == "down")
         {
@@ -603,6 +608,6 @@ public class PlayerCtrl_Sarang : Player_Info
                 Down_Floor.SetActive(false);
         }
         if (Fever_Particle_Copy != null)
-            Fever_Particle_Copy.transform.position = new Vector3(My_Position.x, Fever_Particle_Copy.transform.position.y, Fever_Particle_Copy.transform.position.z);
+            Fever_Particle_Copy.transform.position = new Vector3(My_Position.x, -4.8f + 40 * (Floor_Player_Place - 1), Fever_Particle_Copy.transform.position.z);
     }
 }

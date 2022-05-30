@@ -7,9 +7,9 @@ public class PrefabOutOfArea : MonoBehaviour
     // Start is called before the first frame update
 
     [SerializeField]
-    StageData stageData;
+    private StageData stageData;
 
-    float destroyWeight = 2.0f;
+    private float destroyWeight = 2.0f;
     private void LateUpdate()
     {
         if ((transform.position.y < stageData.LimitMin.y - destroyWeight) ||

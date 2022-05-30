@@ -15,6 +15,11 @@ public class Asura : Boss_Info
 
     // Snow Particle - by https://notyu.tistory.com/60
 
+    private new void OnTriggerEnter2D(Collider2D collision) // ¾ê¸¸
+    {
+        base.OnTriggerEnter2D(collision);
+    }
+
     [SerializeField]
     List<For_Continuous_Slerp_Move> DoPhan_Appearance = new List<For_Continuous_Slerp_Move>() 
     {  new For_Continuous_Slerp_Move(new Vector3(-6.61f, 2.21f, 0), "anti_clock"),  new For_Continuous_Slerp_Move(new Vector3(-5f, 3.66f, 0), "anti_clock"), 
@@ -93,7 +98,7 @@ public class Asura : Boss_Info
     }
     IEnumerator Hit()
     {
-        Camera_Shake(0.02f, 0.05f, true, false);
+        Camera_Shake(0.005f, 0.05f, true, false);
 
         spriteRenderer.color = new Color(1, 1, 1, 0.25f);
         yield return new WaitForSeconds(0.07f);
@@ -153,6 +158,7 @@ public class Asura : Boss_Info
 
         //moveBackGround_1.Increase_Speed_F(8, 10);
         //yield return moveBackGround_2.Increase_Speed_W(8, 10);
+        playerCtrl_Tengai.Unbeatable = false;
 
         My_Position = new Vector3(7, 0, 0);
         My_Scale = new Vector3(0.6f, 0.6f, 0);
@@ -172,10 +178,10 @@ public class Asura : Boss_Info
 
         Instantiate(Blink, My_Position, Quaternion.identity);
 
-        yield return Change_Origin_BG_And_Wait(new Color(1, 1, 1, 1), 0.8f);
+        yield return Change_BG_And_Wait(Color.white, 0.8f);
+        yield return Change_BG_And_Wait(new Color(1, 1, 1, 0), 0.8f);
 
         Unbeatable = false;
-        //playerCtrl_Tengai.Unbeatable = false;
 
         foreach (var e in DoPhan_Ready_To_Pattern_Move)
             yield return Move_Straight(My_Position, My_Position + e, 0.125f, OriginCurve);
@@ -192,7 +198,7 @@ public class Asura : Boss_Info
        // yield return Ready_To_Pattern();
         //yield return Pattern06();
         //yield return Ready_To_Pattern();
-        yield return Pattern04();
+        yield return Pattern06();
         //while (true)
         //{
         //    Total_Pattern_Num = Random.Range(0, 6);
@@ -530,16 +536,11 @@ public class Asura : Boss_Info
 
             yield return Change_My_Color(Alpha_0, Alpha_1, 0.1f, Random_Time, DisAppear_Effect_2);
         }
-        yield return YieldInstructionCache.WaitForSeconds(1f);
         yield return Move_Curve(My_Position, new Vector3(7, 0, 0), Vector3.zero, 2, declineCurve);
     }
     IEnumerator Boss_Move()
     {
         foreach (var e in DoPhan_Pattern01_Move)
             yield return Move_Straight(My_Position, e, .25f, declineCurve);
-    }
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
     }
 }
