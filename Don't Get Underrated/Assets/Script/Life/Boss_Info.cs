@@ -19,6 +19,8 @@ public class Boss_Info : Life
     [SerializeField]
     protected TextMeshProUGUI WarningText; // 상위
 
+    protected TrailRenderer trailRenderer;
+
     public float speed = 15; // 둘다
     public float rotateSpeed = 200f; // 상위
 
@@ -29,10 +31,27 @@ public class Boss_Info : Life
         get { return currentHP; }
     }
     public float MaxHP => maxHP;
+
+    public Color Trail_Start_Color
+    {
+        get{ return trailRenderer.startColor; }
+        set {trailRenderer.startColor = value;}
+    }
+    public Color Trail_End_Color
+    {
+        get { return trailRenderer.startColor; }
+        set { trailRenderer.startColor = value; }
+    }
     protected virtual new void Awake()
     {
         base.Awake();
         CurrentHP = MaxHP;
+        if (TryGetComponent(out TrailRenderer t1))
+        {
+            trailRenderer = t1;
+            trailRenderer.enabled = false;
+        }
+           
     }
     public override void TakeDamage(float damage)
     {
@@ -54,6 +73,8 @@ public class Boss_Info : Life
 
     protected virtual void Killed_All_Mine()
     {
+        if (trailRenderer != null)
+            trailRenderer.enabled = false;
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
         GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
@@ -70,9 +91,15 @@ public class Boss_Info : Life
 
         foreach (var e in item)
             Destroy(e);
+        Stop_Camera_Shake();
+        Stop_Image_Color_Change();
+        My_Color = Color.white;
+        transform.localRotation = Quaternion.identity;
+        StopAllCoroutines();
     }
-    protected IEnumerator Warning(string warning_message, float time_persist)
+    protected IEnumerator Warning(Color Text_Color, string warning_message, float time_persist)
     {
+        WarningText.color = Text_Color;
         WarningText.text = warning_message;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (WarningText.color.a < 1.0f)
@@ -139,6 +166,44 @@ public class Boss_Info : Life
                 yield return null;
                 yield break;
             }
+        }
+    }
+    protected IEnumerator Trail_Color_Change_And_Back(Color Origin_C, Color Change_C, float time_persist, int Count)
+    {
+        float percent;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+        for (int i = 0; i < Count; i++)
+        {
+            percent = 0;
+            while (percent < 1)
+            {
+                percent += Time.deltaTime * inverse_time_persist;
+
+                trailRenderer.endColor = Color.Lerp(Origin_C, Change_C, percent);
+                trailRenderer.startColor = Color.Lerp(Origin_C, Change_C, percent);
+                yield return null;
+            }
+            percent = 0;
+            while (percent < 1)
+            {
+                percent += Time.deltaTime * inverse_time_persist;
+                trailRenderer.endColor = Color.Lerp(Change_C, Origin_C, percent);
+                trailRenderer.startColor = Color.Lerp(Change_C, Origin_C, percent);
+                yield return null;
+            }
+        }
+    }
+    protected IEnumerator Trail_Color_Change(Color Origin_C, Color Change_C, float time_persist)
+    {
+        float percent;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+        percent = 0;
+        while (percent < 1)
+        {
+            percent += Time.deltaTime * inverse_time_persist;
+            trailRenderer.endColor = Color.Lerp(Origin_C, Change_C, percent);
+            trailRenderer.startColor = Color.Lerp(Origin_C, Change_C, percent);
+            yield return null;
         }
     }
 }

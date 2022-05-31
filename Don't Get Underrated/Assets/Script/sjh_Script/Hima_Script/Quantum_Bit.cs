@@ -9,12 +9,12 @@ public class Quantum_Bit : Enemy_Info
 
     private List<GameObject> Part;
 
-    private int[,] Rand = new int[2, 8] { { -1, 0, 1, 0, 1, 1, -1, -1 }, { 0, 1, 0, -1, 1, -1, 1, -1 } };
+    public int[,] Rand = new int[2, 8] { { -1, 0, 1, 0, 1, 1, -1, -1 }, { 0, 1, 0, -1, 1, -1, 1, -1 } };
 
     private new void Awake()
     {
         base.Awake();
-        backGroundColor = GameObject.Find("Flash").GetComponent<ImageColor>();
+        imageColor = GameObject.Find("Flash").GetComponent<ImageColor>();
         Part = new List<GameObject>();
         if (GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
             solGryn = SG;
@@ -33,18 +33,21 @@ public class Quantum_Bit : Enemy_Info
             if (Solve >= 0)
                 Run_Life_Act(Tr_Co());
             else
-                spriteRenderer.color = new Color(1, 1, 1, 0);
+                My_Color = Color.clear;
         });
     }
     private IEnumerator Tr_Co()
     {
-        spriteRenderer.color = new Color(1, 1, 1, 0);
+        My_Color = Color.clear;
         Flash(Color.black, 0.5f, 1f);
-        for (int i = -9; i <= 9; i++)
+        for (int i = -8; i <= 8; i++)
         {
-            for (int j = -9; j <= 9; j++)
+            for (int j = -8; j <= 8; j++)
             {
-                GameObject e = Instantiate(Weapon[0], new Vector3(i, j, 0), Quaternion.identity);
+                if ((i >= -2 && i <= 2) && (j <= 0 && j >= -2))
+                    continue;
+
+                GameObject e = Instantiate(Weapon[0], new Vector3(1.3f * i, 1.3f * j, 0), Quaternion.identity);
                 
                 if (e.TryGetComponent(out Weapon_Devil WD))
                 {
@@ -57,7 +60,6 @@ public class Quantum_Bit : Enemy_Info
         yield return Camera_Shake_And_Wait(0.02f, 2f, true, false);
         foreach (var e in Part)
         {
-            Debug.Log(e);
             if (e != null)
             {
                 int Ran1 = Random.Range(0, 8);

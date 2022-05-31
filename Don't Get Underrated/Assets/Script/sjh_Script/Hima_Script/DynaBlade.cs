@@ -9,7 +9,7 @@ public class DynaBlade : Enemy_Info
 
     private Dictionary<int, Vector3> Plus_Start, Minus_Start;
 
-    private float[,] bangmeon = new float[6, 2] { { 6.8f, 4.46f }, { -5.67f, 2.44f }, { -5.67f, 1 }, { 5.81f, -1.29f }, { 5.81f, -3 }, { -13.77f, 3.77f } };
+    public float[,] bangmeon = new float[6, 2] { { 6.8f, 4.46f }, { -5.67f, 2.44f }, { -5.67f, 1 }, { 5.81f, -1.29f }, { 5.81f, -3 }, { -13.77f, 3.77f } };
 
     private IEnumerator size;
 

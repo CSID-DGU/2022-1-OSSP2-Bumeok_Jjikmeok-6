@@ -56,7 +56,7 @@ public class Meteor_Effect : Weapon_Devil
     {
         base.Awake();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = new Color(1, 1, 1, 0);
+        spriteRenderer.color = Color.clear;
         W_MoveTo(Vector3.zero);
     }
     public IEnumerator Pattern02_Meteor(Meteor_Traffic_Info MT_I, Vector3 Target)
@@ -73,7 +73,7 @@ public class Meteor_Effect : Weapon_Devil
         Destroy(copy_Meteor_Traffic);
         Destroy(copy_Meteor_Line);
 
-        spriteRenderer.color = new Color(1, 1, 1, 1);
+        spriteRenderer.color = Color.white;
         W_MoveTo(Target);
 
         yield return null;

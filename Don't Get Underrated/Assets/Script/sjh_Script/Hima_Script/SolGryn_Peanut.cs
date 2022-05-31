@@ -21,11 +21,10 @@ public class SolGryn_Peanut : Weapon_Devil
 	{
 		base.Awake();
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
-		Debug.Log(groundLayerMask);
 	}
     private void Start()
     {
-		Start_Camera_Shake(0.015f, 0.1f, false, false);
+		Start_Camera_Shake(0.009f, 0.1f, false, false);
 	}
     bool IsGrounded()
 	{
@@ -42,7 +41,6 @@ public class SolGryn_Peanut : Weapon_Devil
 
 		if (nextGrounded)
 		{
-			Debug.Log("¿Ö");
 			Count++;
 		}
 		if (Count == 1)
@@ -50,7 +48,7 @@ public class SolGryn_Peanut : Weapon_Devil
 	}
 	public void Die()
 	{
-		Start_Camera_Shake(0.0001f, 0.05f, false, false);
+		Start_Camera_Shake(0.00001f, 0.05f, false, false);
 		Instantiate(deathParticle, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 	}

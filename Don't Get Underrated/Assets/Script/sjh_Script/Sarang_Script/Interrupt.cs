@@ -74,7 +74,7 @@ public class Interrupt : Enemy_Info
     }
     public void Disappear()
     {
-        Run_Life_Act(Change_My_Color(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null));
+        Run_Life_Act(Change_My_Color(Color.white, Color.clear, 1.5f, 0.1f, null));
     }
 
     public void Stop_Coroutine()

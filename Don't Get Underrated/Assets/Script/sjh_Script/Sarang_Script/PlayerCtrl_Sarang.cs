@@ -95,7 +95,7 @@ public class PlayerCtrl_Sarang : Player_Info
         base.Awake();
 
         if (GameObject.Find("Flash_Interrupt") && GameObject.Find("Flash_Interrupt").TryGetComponent(out ImageColor IC))
-            backGroundColor = IC;
+            imageColor = IC;
         if (TryGetComponent(out Animator A))
             animator = A;
 
@@ -226,7 +226,7 @@ public class PlayerCtrl_Sarang : Player_Info
                             Main_3_Score += 100;
                             animator.SetBool("Heart_Gain", true);
                             My_Scale = new Vector3(1.1f, 1.1f, 0);
-                            yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
+                            yield return YieldInstructionCache.WaitForSeconds(0.5f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
                             animator.SetBool("Heart_Gain", false);
                             My_Scale = new Vector3(4.9f, 4.9f, 0);
                             All_Start();
@@ -303,7 +303,7 @@ public class PlayerCtrl_Sarang : Player_Info
         else
         {
             Main_3_Score += 100;
-            yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
+            yield return YieldInstructionCache.WaitForSeconds(0.5f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
             My_Scale = new Vector3(4.9f, 4.9f, 0);
             animator.SetBool("IsDead", false);
             animator.SetBool("Heart_Gain", false);
@@ -499,18 +499,18 @@ public class PlayerCtrl_Sarang : Player_Info
         camera_Trace.DoNot_Trace_Player();
         limit_Time.Stop_Time_Persist();
 
-        Change_BG(new Color(0, 0, 0, 1), 2);
+        Change_BG(Color.black, 2);
 
         if (CHK == "up")
         {
-            stageData.LimitMax = stageData.LimitMax + new Vector2(0, 40);
-            stageData.LimitMin = stageData.LimitMin + new Vector2(0, 40);
+            stageData.LimitMax += new Vector2(0, 40);
+            stageData.LimitMin += new Vector2(0, 40);
             yield return Move_Straight(My_Position, My_Position + new Vector3(6, 3, 0), 2, OriginCurve);
         }
         else if (CHK == "down")
         {
-            stageData.LimitMax = stageData.LimitMax + new Vector2(0, -40);
-            stageData.LimitMin = stageData.LimitMin + new Vector2(0, -40);
+            stageData.LimitMax += new Vector2(0, -40);
+            stageData.LimitMin += new Vector2(0, -40);
             yield return Move_Straight(My_Position, My_Position + new Vector3(-6, -2, 0), 2, OriginCurve);
         }
 
@@ -518,7 +518,7 @@ public class PlayerCtrl_Sarang : Player_Info
         camera_Trace.Final_Walk_Floor(Floor_Player_Place);
         limit_Time.Final_Walk_Floor();
         yield return Change_BG_And_Wait(new Color(1, 1, 1, 0.5f), 0.5f);
-        yield return Change_BG_And_Wait(new Color(1, 1, 1, 0), 0.2f);
+        yield return Change_BG_And_Wait(Color.clear, 0.2f);
 
         animator.SetBool("IsWalk", false);
 

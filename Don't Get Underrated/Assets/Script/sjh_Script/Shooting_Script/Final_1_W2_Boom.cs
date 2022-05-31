@@ -57,7 +57,7 @@ public class Final_1_W2_Boom : Weapon_Player
                 B.TakeDamage(30.0f);
         }
         Instantiate(Explosion, Vector3.zero, Quaternion.identity);
-        spriteRenderer.color = new Color(1, 1, 1, 0);
+        spriteRenderer.color = Color.clear;
         yield return Start_Camera_Shake_For_Wait(0.02f, 2f, true, false);
         Destroy(gameObject);
     }

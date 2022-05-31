@@ -29,6 +29,8 @@ public class HimaController : Player_Info {
 
 	private Rigidbody2D rb2d;
 
+	private SolGryn solGryn;
+
 	private bool isMove = false;
 
 	private bool isJump = false;
@@ -58,8 +60,12 @@ public class HimaController : Player_Info {
 	private new void Awake() 
 	{
 		base.Awake();
-		anim = GetComponent<Animator>();
-		rb2d = GetComponent<Rigidbody2D>();
+		if (TryGetComponent(out Animator A))
+			anim = A;
+		if (TryGetComponent(out Rigidbody2D RB))
+			rb2d = RB;
+		if (GameObject.FindGameObjectWithTag("Boss") && GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
+			solGryn = SG;
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
 		LifeTime = 0;
 		Death_Count.text = "Death Count : " + LifeTime;
@@ -75,7 +81,7 @@ public class HimaController : Player_Info {
 		Unbeatable = true;
 		IsMove = true;
 		IsJump = true;
-        GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().WelCome();
+		solGryn.WelCome();
 	}
 
 	// Update is called once per frame
@@ -86,6 +92,8 @@ public class HimaController : Player_Info {
 			jump = true;
 			jumpCount += 1;
 		}
+		if (Input.GetKeyDown(KeyCode.Semicolon))
+			solGryn.OnDie();
 	}
 
 	private bool isGrounded() {
@@ -102,6 +110,7 @@ public class HimaController : Player_Info {
     {
         if (!Unbeatable)
         {
+			Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
 			LifeTime++;
 			Death_Count.text = "Death Count : " + LifeTime;
 			Unbeatable = true;
@@ -109,7 +118,7 @@ public class HimaController : Player_Info {
 			float velo_x = rb2d.velocity.x;
 			rb2d.velocity = Vector2.zero;
 			Vector2 dir = new Vector2(-Mathf.Sign(velo_x) * 1, 1).normalized;
-			rb2d.AddForce(dir * 14, ForceMode2D.Impulse);
+			rb2d.AddForce(dir * 10, ForceMode2D.Impulse);
 
 			Run_Life_Act(Whilee());
 		}
@@ -125,8 +134,9 @@ public class HimaController : Player_Info {
 			yield return null;
         } // 정확한 시간 계산을 위해 식을 좀 복잡하게 썼음
 		isMove = true;
-		yield return YieldInstructionCache.WaitForSeconds(2f);
+		yield return YieldInstructionCache.WaitForSeconds(1.5f);
 		Stop_Life_Act(ref color_unbeatable);
+		Return_To_My_Origin_Color();
 		Unbeatable = false;
 		yield return null;
     }

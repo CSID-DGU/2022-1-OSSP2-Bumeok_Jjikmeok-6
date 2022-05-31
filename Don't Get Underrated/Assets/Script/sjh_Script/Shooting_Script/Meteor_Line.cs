@@ -11,7 +11,7 @@ public class Meteor_Line : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = new Color(1, 1, 1, 1);
+        spriteRenderer.color = Color.white;
     }
     public IEnumerator Change_Color(Color Change, int Count, float time_persist)
     {

@@ -60,7 +60,7 @@ public class Student : MonoBehaviour
     //                          
     public void Disappear()
     {
-        StartCoroutine(Change_Color_Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), 1.5f, 0.1f, null));
+        StartCoroutine(Change_Color_Lerp(Color.white, Color.clear, 1.5f, 0.1f, null));
     }
 
     // Update is called once per frame

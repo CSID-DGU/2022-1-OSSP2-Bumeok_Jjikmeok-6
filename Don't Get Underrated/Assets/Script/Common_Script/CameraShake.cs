@@ -20,7 +20,7 @@ public class CameraShake : MonoBehaviour
     {
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         Init_Camera();
-        yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
+        yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime * 3);
         originPosition = mainCamera.transform.position;
         originRotation = mainCamera.transform.rotation;
         float use_shake_intensity = shake_intensity;

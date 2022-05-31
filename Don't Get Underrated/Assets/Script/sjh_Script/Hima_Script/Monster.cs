@@ -7,7 +7,11 @@ public class Monster : Enemy_Info
 {
     private Animator animator;
 
-    private Vector3 Monster_Pos, Target_Pos;
+    private Vector3 Monster_Pos;
+
+    private int CHK_Flag;
+
+    private HimaController himaController;
 
     private new void OnTriggerEnter2D(Collider2D collision)
     {
@@ -29,25 +33,33 @@ public class Monster : Enemy_Info
     {
         base.Awake();
         animator = GetComponent<Animator>();
+        CHK_Flag = 0;
+        if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out HimaController HC))
+            himaController = HC;
     }
-    public void Start_F(Vector3 Monster_Pos, Vector3 Target_Pos)
+    public void Start_F(Vector3 Monster_Pos, int Flag)
     {
         this.Monster_Pos = Monster_Pos;
-        this.Target_Pos = Target_Pos;
+        CHK_Flag = Flag;
         transform.DOMove(Monster_Pos, 0.5f).SetEase(Ease.OutBounce).OnComplete(() =>
         {
             animator.SetTrigger("hehe");
         });
     }
-    public void OnLazor() // 애니메이션 진행 도중 해당 함수 호출 (즉, 지우면 안됨)
+    public void OnLazor() // 애니메이션 진행 도중 해당 함수 호출 (즉, 참조가 0개여도 지우면 안됨)
     {
-        Run_Life_Act(Monster_Only_Lazor(Monster_Pos, Target_Pos, 1));
+        Run_Life_Act(Monster_Only_Lazor(Monster_Pos, 1));
     }
 
-    private IEnumerator Monster_Only_Lazor(Vector3 Origin, Vector3 Target, float time_persist)
+    private IEnumerator Monster_Only_Lazor(Vector3 Origin, float time_persist)
     {
         float percent = 0;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+        Vector3 Target;
+        if (CHK_Flag == 0)
+            Target = Vector3.zero;
+        else
+            Target = himaController.transform.position;
         while (percent < 1)
         {
             percent += Time.deltaTime * inverse_time_persist;

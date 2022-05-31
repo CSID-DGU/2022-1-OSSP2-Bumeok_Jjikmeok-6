@@ -42,6 +42,7 @@ public class Limit_Time : MonoBehaviour
     {
         while (true)
         {
+            Debug.Log(wow_Time);
             if (wow_Time <= 10)
             {
                 if (flash_on != null)
@@ -59,6 +60,7 @@ public class Limit_Time : MonoBehaviour
                     yield break;
 
                 playerCtrl_Sarang.StopAllCoroutines();
+                Debug.Log("야 제한시간");
                 playerCtrl_Sarang.Destroy_sliderClone();
 
                 GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
@@ -101,6 +103,7 @@ public class Limit_Time : MonoBehaviour
     }
     public void Stop_Time_Persist()
     {
+        wow_Time += 1;
         if (descent_time != null)
             StopCoroutine(descent_time);
     }

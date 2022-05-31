@@ -1298,7 +1298,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  When_Dead_Effect: {fileID: 0}
+  When_Dead_Effect: {fileID: 5533317195471082818, guid: ceb8d5a6b71b86e4cabb598ab66ca98c, type: 3}
   stageData: {fileID: 0}
   LifeTime: 10
   Item: []
@@ -1464,7 +1464,6 @@ GameObject:
   - component: {fileID: 1436607220}
   - component: {fileID: 1436607219}
   - component: {fileID: 1436607223}
-  - component: {fileID: 1436607222}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1537,26 +1536,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1436607222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1436607218}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91a61272b015f1e4490bb177f7cf1dfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CamTransform: {fileID: 1436607221}
-  CameraSpeedMultiplier: 0.2
-  Color: {r: 0.75686276, g: 0.6901961, b: 0.6901961, a: 1}
-  Size: 1
-  HorizontalSpeed: 0.35
-  VerticalSpeed: 0
-  Density: 0.78
-  Shader: {fileID: 4800000, guid: 9c40c0bfc34be7845aa07b1b368b5d30, type: 3}
 --- !u!114 &1436607223
 MonoBehaviour:
   m_ObjectHideFlags: 0

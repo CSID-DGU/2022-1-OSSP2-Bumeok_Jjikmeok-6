@@ -21,5 +21,4 @@ public class Move_Gaze_Info : Slider_Viewer // 플레이어 달릴 때의 게이지바
     {
         return slider.value;
     }
-    // Update is called once per frame
 }

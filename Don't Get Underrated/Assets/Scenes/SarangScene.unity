@@ -1011,7 +1011,6 @@ GameObject:
   - component: {fileID: 231711486}
   - component: {fileID: 231711489}
   - component: {fileID: 231711488}
-  - component: {fileID: 231711487}
   m_Layer: 5
   m_Name: ScoreText
   m_TagString: Untagged
@@ -1038,20 +1037,6 @@ RectTransform:
   m_AnchoredPosition: {x: -630, y: 451.2}
   m_SizeDelta: {x: 401.73, y: 117.42}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &231711487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 231711485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd7af9fe1a343314e90b533ba3a93c1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Time_Over_Text: {fileID: 4111520768447639455, guid: 66f8ab1ee4b5ccb4f9f41565df52e3b9, type: 3}
-  Option_Limit_Time: 60
 --- !u!114 &231711488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5021,12 +5006,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654b5c4ad8b95134fbcab03c25f2b735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Interrupt:
+  - {fileID: 1831762975154709860, guid: 1a603e64ef3dee34b8f10422695b5d52, type: 3}
+  - {fileID: 5254857107998304, guid: c38708086f17e4941b8df3ff52356610, type: 3}
   Student:
   - {fileID: 1496213395269981960, guid: 85c2edcd2efe1d441b0e839c577de525, type: 3}
   - {fileID: 5433133399878042309, guid: 7fb5082ee3bfb9a46804eefa138acbab, type: 3}
   - {fileID: 2838008836911369533, guid: cf665943dcdc91540858b3e918e5c42c, type: 3}
   - {fileID: 856063725320296332, guid: 45f528b4c28caa943a5923b88a1f6af2, type: 3}
-  Interrupt: {fileID: 5254857107998304, guid: c38708086f17e4941b8df3ff52356610, type: 3}
   Standard_Interrupt_X: 0
   Standard_Interrupt_Y: 3
   Standard_Student_X: 0

@@ -114,7 +114,7 @@ public class Student_Gaze_Info : Slider_Viewer
         if (imageColor != null)
         {
             imageColor.StopAllCoroutines();
-            imageColor.StartCoroutine(imageColor.Flash(new Color(1, 1, 1, 1), 0.3f, 3));
+            imageColor.StartCoroutine(imageColor.Flash(Color.white, 0.3f, 3));
         }
         
         Change_Pink_Slider();

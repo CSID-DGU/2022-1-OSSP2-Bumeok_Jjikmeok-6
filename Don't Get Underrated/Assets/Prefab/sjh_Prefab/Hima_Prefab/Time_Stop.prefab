@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2146745982477135054}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 12.424855, y: 0.3, z: 1}
+  m_LocalScale: {x: 10, y: 0.3, z: 1}
   m_Children: []
   m_Father: {fileID: 2783880025655272458}
   m_RootOrder: 0
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 142364807918002312}
   m_Layer: 0
   m_Name: Time_Stop
-  m_TagString: Enemy
+  m_TagString: Weapon_Devil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,7 +164,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8166809296276297146}
   serializedVersion: 7
-  lengthInSec: 10
+  lengthInSec: 2
   simulationSpeed: 10
   stopAction: 2
   cullingMode: 0
@@ -870,7 +870,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 6
+      value: 5
       mode: 0
       spread: 0
       speed:
@@ -989,7 +989,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 50
       minScalar: 10
       maxCurve:
         serializedVersion: 2

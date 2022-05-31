@@ -15,37 +15,25 @@ public class PlayerCtrl_Tengai : Player_Info
     KeyCode keyCodeBoom = KeyCode.Z;
 
     [SerializeField]
-    TextMeshProUGUI PlayerScore;
+    TextMeshProUGUI PlayerScore_Text;
 
     [SerializeField]
     TextMeshProUGUI LifeTime_Text;
 
     [SerializeField]
-    TextMeshProUGUI BoomCountText;
+    TextMeshProUGUI BoomCount_Text;
 
     [SerializeField]
     GameObject Emit_Obj;
 
     [SerializeField]
-    GameObject Explode;
+    GameObject Explode_When_Emit;
 
     [SerializeField]
     int BoomCount = 3;
 
     [SerializeField]
-    GameObject Boom_Effect;
-
-    [SerializeField]
-    GameObject Boom_Up_Text;
-
-    [SerializeField]
-    GameObject Power_Effect;
-
-    [SerializeField]
-    GameObject Power_Up_Text;
-
-    [SerializeField]
-    GameObject naum_ani;
+    GameObject Naum_Ami;
 
     [SerializeField]
     public GameObject Power_Slider;
@@ -57,15 +45,15 @@ public class PlayerCtrl_Tengai : Player_Info
 
     GameObject Emit_Obj_Copy; // °íÀ¯
 
-    bool is_LateUpdate = false;
+    private bool is_LateUpdate = false;
 
-    bool is_Update = false;
+    private bool is_Update = false;
 
     public bool is_Power_Up = false;
 
     public bool is_Speed_Up = false;
 
-    bool boss_intend;
+    private bool is_boss_first_appear;
 
     IEnumerator i_start_firing, color_when_unbeatable, i_start_emit;
 
@@ -74,27 +62,27 @@ public class PlayerCtrl_Tengai : Player_Info
         base.Awake();
         movement2D = GetComponent<Movement2D>();
         animator = GetComponent<Animator>();
-        backGroundColor = GameObject.FindGameObjectWithTag("Flash").GetComponent<ImageColor>();
+        imageColor = GameObject.FindGameObjectWithTag("Flash").GetComponent<ImageColor>();
 
         is_Update = false;
         is_LateUpdate = false;
         weapon_able = false;
         movement2D.enabled = false;
         Unbeatable = true;
-        boss_intend = false;
+        is_boss_first_appear = false;
         is_Power_Up = false;
         Final_Score = 0;
         Power_Slider.SetActive(false);
         Speed_Slider.SetActive(false);
 
-        PlayerScore.text = "Á¡¼ö : " + Final_Score;
-        PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, 0);
+        PlayerScore_Text.text = "Á¡¼ö : " + Final_Score;
+        PlayerScore_Text.color = new Color(PlayerScore_Text.color.r, PlayerScore_Text.color.g, PlayerScore_Text.color.b, 0);
 
         LifeTime_Text.text = "Life x  : " + LifeTime;
         LifeTime_Text.color = new Color(LifeTime_Text.color.r, LifeTime_Text.color.g, LifeTime_Text.color.b, 0);
 
-        BoomCountText.text = "ÆøÅº : " + BoomCount;
-        BoomCountText.color = new Color(BoomCountText.color.r, BoomCountText.color.g, BoomCountText.color.b, 0);
+        BoomCount_Text.text = "ÆøÅº : " + BoomCount;
+        BoomCount_Text.color = new Color(BoomCount_Text.color.r, BoomCount_Text.color.g, BoomCount_Text.color.b, 0);
     }
     void Start()
     {
@@ -108,7 +96,7 @@ public class PlayerCtrl_Tengai : Player_Info
 
         My_Position = new Vector3(-9, 0, 0);
        
-        yield return Move_Straight(My_Position, new Vector3(-4.6f, My_Position.y, My_Position.z), 2.5f, OriginCurve);
+        yield return Move_Straight(My_Position, new Vector3(-4.6f, My_Position.y, My_Position.z), 1.8f, OriginCurve);
            
         weapon_able = true;
         is_LateUpdate = true;
@@ -120,27 +108,27 @@ public class PlayerCtrl_Tengai : Player_Info
         Run_Life_Act(FadeText());
         yield return new WaitForSeconds(2f);
 
-        if (!boss_intend)
+        if (!is_boss_first_appear)
         {
             if (GameObject.Find("EnemyAndBoss").TryGetComponent(out FinalStage_1_Total FS1_T))
                FS1_T.Boss_First_Appear();
-            boss_intend = true;
+            is_boss_first_appear = true;
         }
         else
             Unbeatable = false;
 
         Stop_Life_Act(ref color_when_unbeatable);
-        spriteRenderer.color = new Color(1, 1, 1, 1);
+        My_Color = Color.white;
     }
     IEnumerator FadeText()
     {
-        if (PlayerScore.color.a >= 1f)
+        if (PlayerScore_Text.color.a >= 1f)
             yield break;
-        while (PlayerScore.color.a < 1.0f)
+        while (PlayerScore_Text.color.a < 1.0f)
         {
             LifeTime_Text.color = new Color(LifeTime_Text.color.r, LifeTime_Text.color.g, LifeTime_Text.color.b, LifeTime_Text.color.a + Time.deltaTime / 2);
-            PlayerScore.color = new Color(PlayerScore.color.r, PlayerScore.color.g, PlayerScore.color.b, PlayerScore.color.a + Time.deltaTime / 2);
-            BoomCountText.color = new Color(BoomCountText.color.r, BoomCountText.color.g, BoomCountText.color.b, BoomCountText.color.a + (Time.deltaTime / 2.0f));
+            PlayerScore_Text.color = new Color(PlayerScore_Text.color.r, PlayerScore_Text.color.g, PlayerScore_Text.color.b, PlayerScore_Text.color.a + Time.deltaTime / 2);
+            BoomCount_Text.color = new Color(BoomCount_Text.color.r, BoomCount_Text.color.g, BoomCount_Text.color.b, BoomCount_Text.color.a + (Time.deltaTime / 2.0f));
             yield return null;
         }
     }
@@ -198,13 +186,14 @@ public class PlayerCtrl_Tengai : Player_Info
     }
     IEnumerator I_Start_Emit()
     {
+        Unbeatable = true; // Á¦¹ß ³ªÁß¿¡ ¼öÁ¤ Á» ÇØ
         Emit_Obj_Copy = Instantiate(Emit_Obj, My_Position, Quaternion.identity);
 
         if (Emit_Obj_Copy.TryGetComponent(out Emit_Motion EM))
         {
             EM.Ready_To_Expand();
 
-            yield return YieldInstructionCache.WaitForSeconds(5f);
+            yield return YieldInstructionCache.WaitForSeconds(7f);
 
             Unbeatable = true;
 
@@ -214,7 +203,7 @@ public class PlayerCtrl_Tengai : Player_Info
 
             Destroy(Emit_Obj_Copy);
 
-            Flash(new Color(1, 1, 1, 1), 0.1f, 2);
+            Flash(Color.white, 0.1f, 2);
 
             GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
             GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
@@ -228,8 +217,8 @@ public class PlayerCtrl_Tengai : Player_Info
 
             GameObject.FindGameObjectWithTag("Boss").GetComponent<Asura>().Stop_Meteor();
 
-            Instantiate(Explode, Vector3.zero, Quaternion.identity);
-            Instantiate(naum_ani, Vector3.zero, Quaternion.identity);
+            Instantiate(Explode_When_Emit, Vector3.zero, Quaternion.identity);
+            Instantiate(Naum_Ami, Vector3.zero, Quaternion.identity);
             Camera_Shake(0.025f, 2, true, false);
         }
         yield return null;
@@ -243,7 +232,7 @@ public class PlayerCtrl_Tengai : Player_Info
     // Update is called once per frame
     void Update()
     {
-        PlayerScore.text = "Á¡¼ö : " + Final_Score;
+        PlayerScore_Text.text = "Á¡¼ö : " + Final_Score;
 
         if (is_Update)
         {
@@ -268,24 +257,14 @@ public class PlayerCtrl_Tengai : Player_Info
         }
         if (Input.GetKeyDown(keyCodeBoom))
             StartBoom();
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            GameObject e = Instantiate(Boom_Up_Text, Vector3.zero, Quaternion.identity);
-            e.transform.SetParent(transform);
-            GameObject f = Instantiate(Boom_Effect, transform.position, Quaternion.Euler(-90, 0, 0));
-            f.transform.SetParent(transform);
-            f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
-            BoomCount++;
-            BoomCountText.text = "ÆøÅº : " + BoomCount;
-        }
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (Power_Slider.TryGetComponent(out PowerSliderViewer PSV))
             {
                 Power_Slider.SetActive(true);
-                GameObject e = Instantiate(Power_Up_Text, Vector3.zero, Quaternion.identity);
+                GameObject e = Instantiate(Item[0], Vector3.zero, Quaternion.identity);
                 e.transform.SetParent(transform);
-                GameObject f = Instantiate(Power_Effect, transform.position, Quaternion.Euler(-90, 0, 0));
+                GameObject f = Instantiate(Item[1], transform.position, Quaternion.Euler(-90, 0, 0));
                 f.transform.SetParent(transform);
                 f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
                 is_Power_Up = true;
@@ -298,9 +277,9 @@ public class PlayerCtrl_Tengai : Player_Info
             if (Speed_Slider.TryGetComponent(out SpeedSliderViewer SSV))
             {
                 Speed_Slider.SetActive(true);
-                GameObject e = Instantiate(Power_Up_Text, Vector3.zero, Quaternion.identity);
+                GameObject e = Instantiate(Item[2], Vector3.zero, Quaternion.identity);
                 e.transform.SetParent(transform);
-                GameObject f = Instantiate(Power_Effect, transform.position, Quaternion.Euler(-90, 0, 0));
+                GameObject f = Instantiate(Item[3], transform.position, Quaternion.Euler(-90, 0, 0));
                 f.transform.SetParent(transform);
                 f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
                 is_Speed_Up = true;
@@ -308,22 +287,30 @@ public class PlayerCtrl_Tengai : Player_Info
                 SSV.Start_To_Decrease(5);
             }
         }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            GameObject e = Instantiate(Item[4], Vector3.zero, Quaternion.identity);
+            e.transform.SetParent(transform);
+            GameObject f = Instantiate(Item[5], transform.position, Quaternion.Euler(-90, 0, 0));
+            f.transform.SetParent(transform);
+            f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+            BoomCount++;
+            BoomCount_Text.text = "ÆøÅº : " + BoomCount;
+        }
     }
     void StartFiring()
     {
-        i_start_firing = I_Start_Firing();
-        StartCoroutine(i_start_firing);
+        Run_Life_Act_And_Continue(ref i_start_firing, I_Start_Firing());
     }
     void StopFiring()
     {
-        if (i_start_firing != null)
-            StopCoroutine(i_start_firing);
+        Stop_Life_Act(ref i_start_firing);
     }
     IEnumerator I_Start_Firing()
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return YieldInstructionCache.WaitForSeconds(0.08f);
             if (is_Power_Up)
             {
                 Launch_Weapon(ref Weapon[0], new Vector3(1, -0.1f, 0), Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
@@ -339,7 +326,7 @@ public class PlayerCtrl_Tengai : Player_Info
         if (BoomCount > 0)
         {
             BoomCount--;
-            BoomCountText.text = "ÆøÅº : " + BoomCount;
+            BoomCount_Text.text = "ÆøÅº : " + BoomCount;
             Instantiate(Weapon[1], new Vector3(0, 7.7f, 0), Quaternion.identity);
         }
     }

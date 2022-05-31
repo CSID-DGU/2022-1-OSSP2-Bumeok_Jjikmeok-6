@@ -17,7 +17,7 @@ public class ImageColor : MonoBehaviour
     public void Init()
     {
         if (image != null)
-            image.color = new Color(1, 1, 1, 0);
+            image.color = Color.clear;
     }
     public Color Get_BGColor()
     {
@@ -45,6 +45,7 @@ public class ImageColor : MonoBehaviour
             image.color = Color.Lerp(const_Color, Change, percent);
             yield return null;
         }
+        yield return null;
     }
 
     public IEnumerator Flash(Color flashColor, float Wait_Second, float time_persist)
@@ -60,9 +61,10 @@ public class ImageColor : MonoBehaviour
         while(percent < 1)
         {
             percent += Time.deltaTime * inverse_time_persist;
-            image.color = Color.Lerp(image.color, Color.clear, percent);
+            image.color = Color.Lerp(flashColor, Color.clear, percent);
             yield return null;
         }
+        yield return null;
     }
     public IEnumerator Change_Origin_BG(Color Change, float time_persist)
     {
@@ -84,6 +86,7 @@ public class ImageColor : MonoBehaviour
             image.color = Color.Lerp(Change, const_Color, percent);
             yield return null;
         }
+        yield return null;
     }
     public void Stop_Coroutine()
     {

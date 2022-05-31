@@ -42,17 +42,20 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     // Update is called once per frame
     void LateUpdate()
     {
-        if (playerCtrl_Sarang != null)
+        if (playerCtrl_Sarang != null && playerCtrl_Sarang.is_Domain)
         {
-            if (playerCtrl_Sarang.Is_Fever && playerCtrl_Sarang.is_Domain)
+            if (playerCtrl_Sarang.Is_Fever)
             {
                 slider.value -= Time.deltaTime * fever_decrease;
                 if (slider.value <= 0.1)
+                {
+                    playerCtrl_Sarang.Is_Fever = false;
                     playerCtrl_Sarang.Out_Fever();
+                }
             }
             else
             {
-                if (slider.value >= 0.4)
+                if (slider.value >= 0.4 && !playerCtrl_Sarang.Is_Fever)
                 {
                     slider.value = 0.38f;
                     playerCtrl_Sarang.Is_Fever = true;

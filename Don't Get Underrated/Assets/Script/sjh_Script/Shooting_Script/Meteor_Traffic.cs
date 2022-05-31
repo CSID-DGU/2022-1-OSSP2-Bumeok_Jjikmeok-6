@@ -15,12 +15,12 @@ public class Meteor_Traffic : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = new Color(1, 1, 1, 1);
+        spriteRenderer.color = Color.white;
     }
     public IEnumerator Change_Color(int Count, float time_persist)
     {
         Color Change_A_1 = Color.white;
-        Color Change_A_0 = new Color(1, 1, 1, 0);
+        Color Change_A_0 = Color.clear;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         for (int j = 0; j < Count; j++)
         {

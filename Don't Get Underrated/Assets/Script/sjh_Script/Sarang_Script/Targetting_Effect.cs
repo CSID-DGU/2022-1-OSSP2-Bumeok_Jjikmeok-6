@@ -24,7 +24,7 @@ public class Targetting_Effect : MonoBehaviour
     IEnumerator Change_Color_And_Scale(GameObject e)
     {
         transform.localScale = new Vector3(.5f, .5f, 0);
-        spriteRenderer.color = new Color(0, 0, 0, 1);
+        spriteRenderer.color = Color.black;
         float percent = 0;
         while(true)
         {

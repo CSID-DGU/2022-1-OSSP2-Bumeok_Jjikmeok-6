@@ -37,11 +37,11 @@ public class Life : MonoBehaviour, Life_Of_Basic
     [SerializeField]
     protected StageData stageData;
 
-    protected SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer;
 
     protected Movement2D movement2D;
 
-    protected ImageColor backGroundColor;
+    protected ImageColor imageColor;
 
     private CameraShake cameraShake;
 
@@ -79,6 +79,11 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         get { return transform.position; }
         set { transform.position = value; }
+    }
+
+    protected void Return_To_My_Origin_Color()
+    {
+        My_Color = Color.white;
     }
 
     public virtual void TakeDamage(float damage) 
@@ -181,12 +186,12 @@ public class Life : MonoBehaviour, Life_Of_Basic
             ee = !ee;
         }
     }
-    protected IEnumerator Change_My_Color(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
+    protected IEnumerator Change_My_Color(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect_When_Change_My_Color)
     {
         float percent;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
-        if (Effect != null)
-            Instantiate(Effect, transform.position, Effect.transform.localRotation);
+        if (Effect_When_Change_My_Color != null)
+            Instantiate(Effect_When_Change_My_Color, transform.position, Effect_When_Change_My_Color.transform.localRotation);
         percent = 0;
         while (percent < 1)
         {
@@ -276,6 +281,17 @@ public class Life : MonoBehaviour, Life_Of_Basic
             yield return null;
         }
     }
+
+    protected void Stop_Image_Color_Change()
+    {
+        if (imageColor != null)
+            imageColor.StopAllCoroutines();
+    }
+    protected void Stop_Camera_Shake()
+    {
+        if (cameraShake != null)
+            cameraShake.StopAllCoroutines();
+    }
     protected void Camera_Shake(float shake_intensity, float time_persist, bool is_Decline_Camera_Shake, bool is_Continue)
     {
         if (cameraShake != null)
@@ -285,7 +301,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
             camera_shake_i = cameraShake.Shake_Act(shake_intensity, time_persist, is_Decline_Camera_Shake, is_Continue);
             cameraShake.StartCoroutine(camera_shake_i);
         }
-      
     }
     protected IEnumerator Camera_Shake_And_Wait(float shake_intensity, float time_persist, bool is_Decline_Camera_Shake, bool is_Continue)
     {
@@ -302,44 +317,44 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
     protected void Flash(Color FlashColor, float wait_second, float time_persist)
     {
-        if (backGroundColor != null)
+        if (imageColor != null)
         {
             if (back_ground_color_i != null)
-                backGroundColor.StopCoroutine(back_ground_color_i);
-            back_ground_color_i = backGroundColor.Flash(FlashColor, wait_second, time_persist);
-            backGroundColor.StartCoroutine(back_ground_color_i);
+                imageColor.StopCoroutine(back_ground_color_i);
+            back_ground_color_i = imageColor.Flash(FlashColor, wait_second, time_persist);
+            imageColor.StartCoroutine(back_ground_color_i);
         }
     }
     protected IEnumerator Flash_And_Wait(Color FlashColor, float wait_second, float time_persist)
     {
-        if (backGroundColor != null)
+        if (imageColor != null)
         {
             if (back_ground_color_i != null)
-                backGroundColor.StopCoroutine(back_ground_color_i);
-            back_ground_color_i = backGroundColor.Flash(FlashColor, wait_second, time_persist);
-            yield return backGroundColor.StartCoroutine(back_ground_color_i);
+                imageColor.StopCoroutine(back_ground_color_i);
+            back_ground_color_i = imageColor.Flash(FlashColor, wait_second, time_persist);
+            yield return imageColor.StartCoroutine(back_ground_color_i);
         }
         else
             yield return null;
     } // 되도록이면 사용 자제
     protected void Change_BG(Color Change, float time_persist)
     {
-        if (backGroundColor != null)
+        if (imageColor != null)
         {
             if (back_ground_color_i != null)
-                backGroundColor.StopCoroutine(back_ground_color_i);
-            back_ground_color_i = backGroundColor.Change_BG(Change, time_persist);
-            backGroundColor.StartCoroutine(back_ground_color_i);
+                imageColor.StopCoroutine(back_ground_color_i);
+            back_ground_color_i = imageColor.Change_BG(Change, time_persist);
+            imageColor.StartCoroutine(back_ground_color_i);
         }
     }
-    protected IEnumerator Change_BG_And_Wait(Color Change, float ratio)
+    protected IEnumerator Change_BG_And_Wait(Color Change, float time_persist)
     {
-        if (backGroundColor != null)
+        if (imageColor != null)
         {
             if (back_ground_color_i != null)
-                backGroundColor.StopCoroutine(back_ground_color_i);
-            back_ground_color_i = backGroundColor.Change_BG(Change, ratio);
-            yield return backGroundColor.StartCoroutine(back_ground_color_i);
+                imageColor.StopCoroutine(back_ground_color_i);
+            back_ground_color_i = imageColor.Change_BG(Change, time_persist);
+            yield return imageColor.StartCoroutine(back_ground_color_i);
         }
         else
             yield return null;
@@ -354,7 +369,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
         Stop_Life_Act(ref Recv);
         Recv = Send;
         StartCoroutine(Recv);
-
     }
     protected void Run_Life_Act(IEnumerator Send)
     {
