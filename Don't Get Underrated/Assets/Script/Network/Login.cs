@@ -102,7 +102,7 @@ public class Login : MonoBehaviour
             infoText_2.color = Color.red;
             infoText_2.text = www.error + '\n' + www.downloadHandler.text;
             Popup_X.SetActive(true);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
+            yield return null;
 
             yield break;
         }
@@ -113,11 +113,11 @@ public class Login : MonoBehaviour
 
             infoText_2.text = data.success_message;
             Popup_X.SetActive(true);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
-            PlayerPrefs.SetInt("keycode", data.user_info.keycode);
-            PlayerPrefs.SetString("id", data.user_info.id);
-            PlayerPrefs.Save();
-            LoadingProgress.LoadScene("IWannaScene");
+            yield return null;
+            //PlayerPrefs.SetInt("keycode", data.user_info.keycode);
+            //PlayerPrefs.SetString("id", data.user_info.id);
+            //PlayerPrefs.Save();
+            //LoadingProgress.LoadScene("IWannaScene");
         }
     }
 

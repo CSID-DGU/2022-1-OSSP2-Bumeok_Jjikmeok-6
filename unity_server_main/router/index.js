@@ -54,6 +54,21 @@ router.route('/sign_up')
 router.route('/Get_Rank')
 .get(router_func.isLoggedIn, router_func.Get_Rank)
 
+router.route('/Get_Rank_For_Main_1')
+.get(router_func.isLoggedIn, router_func.Get_Rank_For_Main_1)
+
+router.route('/Get_Rank_For_Main_2')
+.get(router_func.isLoggedIn, router_func.Get_Rank_For_Main_2)
+
+router.route('/Get_Rank_For_Main_3')
+.get(router_func.isLoggedIn, router_func.Get_Rank_For_Main_3)
+
+router.route('/Get_Rank_For_Final_4')
+.get(router_func.isLoggedIn, router_func.Get_Rank_For_Final_1)
+
+router.route('/Get_Rank_For_Final_5')
+.get(router_func.isLoggedIn, router_func.Get_Rank_For_Final_2)
+
 router.route('/log_fail')
 .get(router_func.log_fail)
 

@@ -5,6 +5,19 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
 
+//1.JOIN문->select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id;
+//2.랭킹은 SignUp.cs에 기술
+//3. 랭킹 삽입 insert into Ranking (Auth_id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2) values(1, 16, 60, 18, 19, 20);
+
+
+//insert into Ranking (Auth_id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2) values(2, 999, 999, 999, 999, 999);
+
+
+//*메인 스테이지 1의 랭킹 순서를 보고 싶을 때 - ASC는 오름차순 정렬, DESC는 내림차순 정렬
+//select id, final_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_1 ASC;
+
+//SELECT* FROM 테이블 ORDER BY 컬럼1 ASC;
+
 public class SignUp : MonoBehaviour
 {
     [SerializeField]
@@ -32,18 +45,80 @@ public class SignUp : MonoBehaviour
     }
 
     [System.Serializable]
-    class Item
+    class Item_Total
     {
         public string id;
-        public int score1;
-        public int score2;
-        public int score3;
+        public int main_score_1;
+        public int main_score_2;
+        public int main_score_3;
+        public int final_score_1;
+        public int final_score_2;
+    }
+    [System.Serializable]
+    class Item_Main_1
+    {
+        public string id;
+        public int main_score_1;
+    }
+    [System.Serializable]
+    class Item_Main_2
+    {
+        public string id;
+        public int main_score_2;
+    }
+    [System.Serializable]
+    class Item_Main_3
+    {
+        public string id;
+        public int main_score_3;
+    }
+    [System.Serializable]
+    class Item_Final_1
+    {
+        public string id;
+        public int final_score_1;
+    }
+    [System.Serializable]
+    class Item_Final_2
+    {
+        public string id;
+        public int final_score_2;
     }
 
     [System.Serializable]
-    class Data
+    class Data_Total
     {
-        public Item[] item;
+        public Item_Total[] item_total;
+    }
+
+    [System.Serializable]
+    class Data_Main_1
+    {
+        public Item_Main_1[] item_main_1;
+    }
+
+    [System.Serializable]
+    class Data_Main_2
+    {
+        public Item_Main_2[] item_main_2;
+    }
+
+    [System.Serializable]
+    class Data_Main_3
+    {
+        public Item_Main_3[] item_main_3;
+    }
+
+    [System.Serializable]
+    class Data_Final_1
+    {
+        public Item_Final_1[] item_final_1;
+    }
+
+    [System.Serializable]
+    class Data_Final_2
+    {
+        public Item_Final_2[] item_final_2;
     }
 
     public void buttonClick()
@@ -56,17 +131,12 @@ public class SignUp : MonoBehaviour
     }
     IEnumerator Show_Ranking_I()
     {
-
         Popup.SetActive(true);
         IEnumerator wait_load = Wait_Load();
         StartCoroutine(wait_load);
-        
 
-
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost:3000/Get_Rank");
+        UnityWebRequest www = UnityWebRequest.Get("http://localhost:3000/Get_Rank_For_Main_1");
         yield return www.SendWebRequest();
-
-        
 
         StopCoroutine(wait_load);
 
@@ -77,24 +147,21 @@ public class SignUp : MonoBehaviour
             infoText.text = www.error + '\n' + www.downloadHandler.text;
             infoText.color = Color.red;
             Popup_X.SetActive(true);
-            yield return null;
+
         }
         else
         {
-            Data d = JsonUtility.FromJson<Data>(www.downloadHandler.text);
+            Data_Main_1 d = JsonUtility.FromJson<Data_Main_1>(www.downloadHandler.text);
             infoText.text = "";
-            foreach (var u in d.item)
+            foreach (var u in d.item_main_1)
             {
-                infoText.text += u.id + ", " + u.score1 + ", " + u.score2 + ", " + u.score3 + '\n';
+                infoText.text += u.id + ", " + u.main_score_1 + ", " + '\n';
             }
 
             infoText.color = Color.blue;
             Popup_X.SetActive(true);
-            yield return YieldInstructionCache.WaitForEndOfFrame;
-
         }
-
-        yield break;
+        yield return null;
     }
  
     IEnumerator SignUp_Enum()

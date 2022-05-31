@@ -55,14 +55,98 @@ exports.sign_up = async(req, res) => {
 exports.Get_Rank = async(req, res) => {
     try {
         const connection = await pool_k.getConnection(async conn => conn)
-        const [DB1] = await connection.query(`select id, score1, score2, score3 from auth left join ranking on auth.keycode = ranking.Auth_id`)
-        //const [DB1] = await connection.query(`select id, score1, score2, score3 from auth left join ranking`) // 이건 본인 랭킹 검색
+        const [DB1] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id`)
         if (DB1.length === 0)
             throw new Error("랭킹이 비었습니다.")
         
         console.log(DB1)
 
-        return res.status(200).send({item: DB1})
+        return res.status(200).send({item_total: DB1})
+
+    } catch(err){
+        return res.status(400).send(err.message)
+    }
+}
+
+exports.Get_Rank_For_Main_1 = async(req, res) => {
+    try {
+        const connection = await pool_k.getConnection(async conn => conn)
+        const [DB1] = await connection.query(`select id, main_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by main_score_1 DESC`)
+
+        if (DB1.length === 0)
+            throw new Error("메인 스테이지 1 뿐만 아니라 전체 랭킹이 비었습니다!")
+        
+        console.log(DB1)
+
+        return res.status(200).send({item_main_1: DB1})
+
+    } catch(err){
+        return res.status(400).send(err.message)
+    }
+}
+
+exports.Get_Rank_For_Main_2 = async(req, res) => {
+    try {
+        const connection = await pool_k.getConnection(async conn => conn)
+        const [DB1] = await connection.query(`select id, main_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id order by main_score_2 ASC`)
+        //const [DB1] = await connection.query(`select id, score1, score2, score3 from auth left join ranking`) // 이건 본인 랭킹 검색
+        if (DB1.length === 0)
+            throw new Error("메인 스테이지 2 뿐만 아니라 전체 랭킹이 비었습니다!")
+        
+        console.log(DB1)
+
+        return res.status(200).send({item_main_2: DB1})
+
+    } catch(err){
+        return res.status(400).send(err.message)
+    }
+}
+
+exports.Get_Rank_For_Main_3 = async(req, res) => {
+    try {
+        const connection = await pool_k.getConnection(async conn => conn)
+        const [DB1] = await connection.query(`select id, main_score_3 from auth left join ranking on auth.keycode = ranking.Auth_id order by main_score_3 ASC`)
+        //const [DB1] = await connection.query(`select id, score1, score2, score3 from auth left join ranking`) // 이건 본인 랭킹 검색
+        if (DB1.length === 0)
+            throw new Error("메인 스테이지 3 뿐만 아니라 전체 랭킹이 비었습니다!")
+        
+        console.log(DB1)
+
+        return res.status(200).send({item_main_3: DB1})
+
+    } catch(err){
+        return res.status(400).send(err.message)
+    }
+}
+
+exports.Get_Rank_For_Final_1 = async(req, res) => {
+    try {
+        const connection = await pool_k.getConnection(async conn => conn)
+        const [DB1] = await connection.query(`select id, final_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_1 ASC`)
+        //const [DB1] = await connection.query(`select id, score1, score2, score3 from auth left join ranking`) // 이건 본인 랭킹 검색
+        if (DB1.length === 0)
+            throw new Error("최종 스테이지 (1) 뿐만 아니라 전체 랭킹이 비었습니다!")
+        
+        console.log(DB1)
+
+        return res.status(200).send({item_final_1: DB1})
+
+    } catch(err){
+        return res.status(400).send(err.message)
+    }
+}
+
+exports.Get_Rank_For_Final_2 = async(req, res) => {
+    try {
+        const connection = await pool_k.getConnection(async conn => conn)
+        const [DB1] = await connection.query(`select id, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
+        //const [DB1] = await connection.query(`select id, score1, score2, score3 from auth left join ranking`) // 이건 본인 랭킹 검색
+        if (DB1.length === 0)
+            throw new Error("최종 스테이지 (2) 뿐만 아니라 전체 랭킹이 비었습니다!")
+        
+        console.log(DB1)
+
+        return res.status(200).send({item_final_2: DB1})
 
     } catch(err){
         return res.status(400).send(err.message)
