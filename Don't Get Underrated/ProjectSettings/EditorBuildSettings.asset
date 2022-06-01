@@ -6,19 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/LoginScene.unity
+    path: Assets/Scenes/Option_Scene/LoginScene.unity
     guid: 6add0bbd670100e4f88b630f1546ee05
   - enabled: 0
-    path: Assets/Scenes/LoadingScene.unity
+    path: Assets/Scenes/Option_Scene/LoadingScene.unity
     guid: aea668730c8778f4e96fd9a2d9e27d2a
   - enabled: 1
-    path: Assets/Scenes/TengaiScene.unity
+    path: Assets/Scenes/Game_Scene/Final1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
-    path: Assets/Scenes/SarangScene.unity
+    path: Assets/Scenes/Game_Scene/Stage3.unity
     guid: 5bec91663a8a82941a2ee70a4f73b4ea
   - enabled: 0
-    path: Assets/Scenes/IWannaScene.unity
+    path: Assets/Scenes/Game_Scene/Final2.unity
     guid: f4188aaea66e32243b9fb640d3410e20
   - enabled: 0
     path: Assets/Scenes/PracticeScene.unity

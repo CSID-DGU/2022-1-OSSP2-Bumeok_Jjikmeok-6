@@ -28,7 +28,7 @@ public class Weapon_Devil : Weapon
     {
         base.OnTriggerEnter2D(collision);
 
-        if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out HimaController HC))
+        if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Final2 HC))
             HC.TakeDamage(1);
         else if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info PI))
         {
