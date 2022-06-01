@@ -66,7 +66,7 @@ public class Asura : Boss_Info
 
     MoveBackGround moveBackGround_1, moveBackGround_2;
 
-    IEnumerator enemy_spawn, meteor_launch, change_boss_color, repeat_phase, pattern06_weapon, pattern;
+    IEnumerator enemy_spawn, meteor_launch, change_boss_color, repeat_phase, pattern06_weapon, pattern, shake_act;
 
     private new void Awake()
     {
@@ -192,17 +192,17 @@ public class Asura : Boss_Info
     IEnumerator Repeat_Phase()
     {
         //yield return Pattern01();
-        //pattern = Pattern02();
-        //yield return pattern;
-        //// yield return Pattern02();
-        //yield return Pattern03();
-        ////yield return Pattern05();
-        //// yield return Ready_To_Pattern();
         //yield return Pattern06();
-        ////yield return Ready_To_Pattern();
-        //pattern = Pattern05();
-        //yield return pattern;
-        Debug.Log("흠");
+        yield return Pattern04();
+        // yield return Pattern01();
+        //pattern = Pattern02();
+        // yield return pattern;
+        //yield return Pattern02();
+        yield return Pattern03();
+        yield return Pattern05();
+        yield return Pattern06();
+        pattern = Pattern05();
+        yield return pattern;
         pattern = Pattern04();
         yield return pattern;
         //while (true)
@@ -257,7 +257,7 @@ public class Asura : Boss_Info
 
         Run_Life_Act_And_Continue(ref change_boss_color, Change_My_Color_And_Back(Color.white, Color.black, 0.25f, true));
 
-        Camera_Shake(0.03f, 1.5f, true, false);
+        Camera_Shake(0.028f, 1.5f, true, false);
 
         Launch_Weapon(ref Weapon[1], Vector3.zero, Quaternion.Euler(new Vector3(0, 0, -9)), 0, new Vector3(0, 4, 0));
         Launch_Weapon(ref Weapon[1], Vector3.zero, Quaternion.Euler(new Vector3(0, 0, -9)), 0, new Vector3(0, -4.5f, 0));
@@ -358,13 +358,12 @@ public class Asura : Boss_Info
 
         yield return Move_Straight(Vector3.zero, new Vector3(0, 3, 0), 1, declineCurve);
 
-        yield return Move_Circle(270, -1, 0, 7, 3, 0, 0, 2);
+        yield return Move_Circle(270, -1, 0, 7, 3, 0, 0, 1);
     }
     IEnumerator Pattern04() // + 플레이어가 시련을 겪다가 방출하는 것도 추가해야한다. 하나라도 데미지 맞으면 정화 취소.
     {
         Unbeatable = true;
         yield return Move_Straight(My_Position, new Vector3(12, My_Position.y, 0), 1, declineCurve);
-
         playerCtrl_Tengai.Start_Emit();
 
         Run_Life_Act_And_Continue(ref enemy_spawn, Enemy_Spawn());
@@ -403,29 +402,32 @@ public class Asura : Boss_Info
     }
     public void Stop_Meteor()
     {
+        Killed_All_Mine();
         Run_Life_Act(I_Stop_Meteor());
     }
     IEnumerator I_Stop_Meteor()
     {
-        Stop_Life_Act(ref meteor_launch);
-        Stop_Life_Act(ref enemy_spawn);
-        Stop_Life_Act(ref pattern);
-        Stop_Life_Act(ref repeat_phase);
-
         yield return YieldInstructionCache.WaitForSeconds(2f);
 
         Unbeatable = false;
-        Run_Life_Act(Shake_Act(0.3f, 0, 2, false));
-        yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 2, declineCurve);
-
+        Run_Life_Act_And_Continue(ref shake_act, Shake_Act(0.3f, 0, 20, false));
+        yield return Move_Straight(My_Position, new Vector3(6, 0, 0), 2, declineCurve);
         Debug.Log(My_Position);
-
         for (int i = 0; i < 3; i++)
-            yield return Warning(Color.blue, "CHANCE!!!", 1f);
-        yield return YieldInstructionCache.WaitForSeconds(2f); // 플레이어에게 무차별 폭격 받는 곳
-        //Run_Life_Act_And_Continue(ref repeat_phase, Repeat_Phase());
-        // 제발 이 부분도 수정 좀
-        //yield return null;
+            yield return Warning(Color.blue, "CHANCE!!!", 1.5f);
+
+        Stop_Life_Act(ref shake_act);
+        transform.localRotation = Quaternion.identity;
+
+        Unbeatable = true;
+        for (int i = 0; i < 2; i++)
+        {
+            yield return Change_BG_And_Wait(new Color(1, 0, 0, 0.7f), 0.3f);
+            yield return Change_BG_And_Wait(Color.clear, 0.3f);
+        }
+        Unbeatable = false;
+        Run_Life_Act_And_Continue(ref repeat_phase, Repeat_Phase());
+        yield return null;
     }
     IEnumerator Enemy_Spawn()
     {
@@ -485,8 +487,8 @@ public class Asura : Boss_Info
 
     IEnumerator Pattern06()
     {
-        moveBackGround_1.Increase_Speed_F(8, 16);
-        yield return moveBackGround_2.Increase_Speed_W(8, 16);
+        //moveBackGround_1.Increase_Speed_F(8, 16);
+       // yield return moveBackGround_2.Increase_Speed_W(8, 16);
 
         yield return Change_My_Color_And_Back(Color.white, Color.black, 0.8f, false);
 
@@ -501,7 +503,10 @@ public class Asura : Boss_Info
         }
 
         Stop_Life_Act(ref pattern06_weapon);
-        yield return YieldInstructionCache.WaitForSeconds(1f);
+
+        Run_Life_Act(Change_My_Color_And_Back(Color.white, Color.black, 1f, false));
+        yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, declineCurve);
+
         int flag = 1;
         for (int i = 0; i < 8; i++)
         {

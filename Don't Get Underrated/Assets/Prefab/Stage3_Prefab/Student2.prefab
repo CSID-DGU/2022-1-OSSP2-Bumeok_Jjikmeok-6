@@ -119,11 +119,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf74c40343f6ad74d8c26e72147b09d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Weapon: []
+  declineCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  OriginCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  inclineCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  De_In_Curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  When_Dead_Effect: {fileID: 0}
+  stageData: {fileID: 11400000, guid: 9d4629ff25d5e484baf7b8ecfee93903, type: 2}
+  Stage3_Min_Limit: {x: -3, y: -8}
+  Stage3_Max_Limit: {x: 161, y: 999}
   pursuitSpeed: 3
   wanderSpeed: 3
   directionChangeInterval: 0.5
   followPlayer: 0
-  Angel: {fileID: 3257776761533506000, guid: 95e4b9e3b75397a4e9f55ba7df60d9dc, type: 3}
 --- !u!95 &8478323013636837871
 Animator:
   serializedVersion: 3

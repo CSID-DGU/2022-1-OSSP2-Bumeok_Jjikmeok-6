@@ -38,7 +38,7 @@ public class Player_Stage3 : Player_Info
 
     public bool is_Domain = false; // 계단 올라갈 때만 적용
 
-
+    public float Floor_Interval = 40;
 
     private Camera_Trace camera_Trace;
 
@@ -77,13 +77,15 @@ public class Player_Stage3 : Player_Info
     private float IsDoubleClick = 0.25f;
 
     [SerializeField]
-    private float PlayerWalkSpeed = 0.03f;
+    private int PlayerWalkSpeed = 10;
 
     [SerializeField]
     public int Student_Power = 1;
 
     [SerializeField]
     public int Fever_Power = 2;
+
+    private int Real_Walk_Speed;
 
     public void Destroy_sliderClone()
     {
@@ -112,6 +114,7 @@ public class Player_Stage3 : Player_Info
         first_phase = null;
         Fever_Particle_Copy = null;
         Floor_Player_Place = 1;
+        Real_Walk_Speed = PlayerWalkSpeed;
         StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
 
         Targetting_Object.SetActive(false);
@@ -125,8 +128,6 @@ public class Player_Stage3 : Player_Info
             limit_Time = LT;
 
         My_Position = new Vector3(0, -2.5f, 0);
-        stageData.LimitMin = new Vector2(-3, -6);
-        stageData.LimitMax = new Vector2(40, 8);
     }
 
     // 플레이어의 코루틴 순서 : First_Phase --> Second_Phase --> Third_Phase
@@ -135,6 +136,18 @@ public class Player_Stage3 : Player_Info
     void Start()
     {
         All_Start();
+    }
+    void Init_Animation()
+    {
+        animator.SetBool("BulSang", false);
+        animator.SetBool("IsWalk", false);
+        animator.SetBool("IsRun", false);
+        animator.SetBool("IsDead", false); // 애니메이션 초기화
+    }
+    public void Stop_Walk()
+    {
+        Init_Animation();
+        Real_Walk_Speed = 0;
     }
     IEnumerator First_Phase()
     {
@@ -200,8 +213,6 @@ public class Player_Stage3 : Player_Info
                         Student_Clone.GetComponent<Student>().Stop_Move(); // 공격 받는 중 + 움직임 정지
                     }
 
-                    Heart_Slider.GetComponent<Heart_Gaze_Viewer>().Decrease_HP(Time.deltaTime / (15 * Student_Power));
-
                     Lazor_In_Second_Phase(Weapon[0], Student_Clone.transform.position, My_Position);
 
                     int temp = Student_Gaze.GetComponent<Student_Gaze_Info>().Check_Student_HP(Student_Clone.transform.position);
@@ -213,6 +224,7 @@ public class Player_Stage3 : Player_Info
                     }
                     else if (temp == 1)
                     {
+                        yield return YieldInstructionCache.WaitForEndOfFrame;
                         Heart_Slider.GetComponent<Heart_Gaze_Viewer>().Ordinary_Case();
                         Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
                         Student_Gaze.SetActive(false);
@@ -221,14 +233,10 @@ public class Player_Stage3 : Player_Info
                         if (Student_Clone != null)
                             Destroy(Student_Clone);
 
+
                         if (!Is_Fever)
                         {
                             Main_3_Score += 100;
-                            animator.SetBool("Heart_Gain", true);
-                            My_Scale = new Vector3(1.1f, 1.1f, 0);
-                            yield return YieldInstructionCache.WaitForSeconds(0.5f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
-                            animator.SetBool("Heart_Gain", false);
-                            My_Scale = new Vector3(4.9f, 4.9f, 0);
                             All_Start();
                             yield break;
                         }
@@ -247,7 +255,6 @@ public class Player_Stage3 : Player_Info
                 else if (Input.GetMouseButtonUp(0))
                 {
                     Init_Student();
-                    //Student_Clone = null;
                     if (Is_Fever)
                         Enter_Fever();
                     else
@@ -260,7 +267,6 @@ public class Player_Stage3 : Player_Info
             else
             {
                 Init_Student();
-                //Student_Clone = null;
                 if (Is_Fever)
                     Enter_Fever();
                 else
@@ -270,7 +276,6 @@ public class Player_Stage3 : Player_Info
                 yield break;
             }
             yield return null;
-
         }
     }
 
@@ -295,6 +300,8 @@ public class Player_Stage3 : Player_Info
         if (targetStudent_t != null)
             Destroy(targetStudent_t);
 
+        yield return YieldInstructionCache.WaitForEndOfFrame;
+
         if (Is_Fever)
         {
             Main_3_Score += 100 * 2;
@@ -304,9 +311,7 @@ public class Player_Stage3 : Player_Info
         {
             Main_3_Score += 100;
             yield return YieldInstructionCache.WaitForSeconds(0.5f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
-            My_Scale = new Vector3(4.9f, 4.9f, 0);
             animator.SetBool("IsDead", false);
-            animator.SetBool("Heart_Gain", false);
             All_Start();
         }
         yield break;
@@ -338,7 +343,7 @@ public class Player_Stage3 : Player_Info
         All_Stop();
         All_Start();
         Dash_Able = false;
-        PlayerWalkSpeed = 0.06f;
+        Real_Walk_Speed = PlayerWalkSpeed * 2;
     }
     public void Out_Fever()
     {
@@ -351,12 +356,7 @@ public class Player_Stage3 : Player_Info
             }
         }
         Is_Fever = false;
-        My_Scale = new Vector3(4.9f, 4.9f, 1);
-        animator.SetBool("BulSang", false);
-        animator.SetBool("Heart_Gain", false);
-        animator.SetBool("IsWalk", false);
-        animator.SetBool("IsRun", false);
-        animator.SetBool("IsDead", false); // 애니메이션 초기화
+        Init_Animation();
         GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] f = GameObject.FindGameObjectsWithTag("Student");
 
@@ -388,10 +388,10 @@ public class Player_Stage3 : Player_Info
         sliderClone.transform.localScale = Vector3.one;
 
         Move_Gaze_Info move_Gaze_Info = sliderClone.GetComponent<Move_Gaze_Info>();
-
+        
         All_Stop();
         Move_Able = true;
-        PlayerWalkSpeed = 0.06f;
+        Real_Walk_Speed = PlayerWalkSpeed * 2;
         animator.SetBool("IsRun", true);
 
         while (true)
@@ -413,7 +413,7 @@ public class Player_Stage3 : Player_Info
         All_Stop();
         Destroy(sliderClone);
         animator.SetTrigger("Tired");
-        yield return new WaitForSeconds(2.5f);
+        yield return YieldInstructionCache.WaitForSeconds(2.5f);
 
         animator.SetBool("IsWalk", false);
         animator.SetBool("IsRun", false);
@@ -448,13 +448,13 @@ public class Player_Stage3 : Player_Info
         {
             animator.SetBool("IsWalk", true);
             key = 1;
-            My_Position = new Vector3(My_Position.x + PlayerWalkSpeed * key, My_Position.y, My_Position.z);
+            My_Position = new Vector3(My_Position.x + Real_Walk_Speed * Time.deltaTime * key, My_Position.y, My_Position.z);
         }
         if (Input.GetKey(KeyCode.A))
         {
             animator.SetBool("IsWalk", true);
             key = -1;
-            My_Position = new Vector3(My_Position.x + PlayerWalkSpeed * key, My_Position.y, My_Position.z);
+            My_Position = new Vector3(My_Position.x + Real_Walk_Speed * Time.deltaTime * key, My_Position.y, My_Position.z);
         }
 
         if (key != 0)
@@ -469,7 +469,7 @@ public class Player_Stage3 : Player_Info
         if (param == 0) // 아래 층 이동
         {
             Floor_Player_Place--;
-            Run_Life_Act(I_Move_Floor(38, "down"));
+            Run_Life_Act(I_Move_Floor(stageData.LimitMax.x - 2, "down"));
         }
         else if (param == 1) // 위 층 이동
         {
@@ -477,7 +477,7 @@ public class Player_Stage3 : Player_Info
             Run_Life_Act(I_Move_Floor(0, "up"));
         }
     }
-    IEnumerator I_Move_Floor(int Change_X, string CHK)
+    IEnumerator I_Move_Floor(float Change_X, string CHK)
     {
         All_Stop();
         is_Domain = false;
@@ -503,18 +503,22 @@ public class Player_Stage3 : Player_Info
 
         if (CHK == "up")
         {
-            stageData.LimitMax += new Vector2(0, 40);
-            stageData.LimitMin += new Vector2(0, 40);
+            if (My_Scale.x < 0)
+                My_Scale = new Vector3(-My_Scale.x, My_Scale.y, My_Scale.z);
+            stageData.LimitMax += new Vector2(0, Floor_Interval);
+            stageData.LimitMin += new Vector2(0, Floor_Interval);
             yield return Move_Straight(My_Position, My_Position + new Vector3(6, 3, 0), 2, OriginCurve);
         }
         else if (CHK == "down")
         {
-            stageData.LimitMax += new Vector2(0, -40);
-            stageData.LimitMin += new Vector2(0, -40);
+            if (My_Scale.x > 0)
+                My_Scale = new Vector3(-My_Scale.x, My_Scale.y, My_Scale.z);
+            stageData.LimitMax += new Vector2(0, -Floor_Interval);
+            stageData.LimitMin += new Vector2(0, -Floor_Interval);
             yield return Move_Straight(My_Position, My_Position + new Vector3(-6, -2, 0), 2, OriginCurve);
         }
 
-        My_Position = new Vector3(Change_X, -2.5f + 40 * (Floor_Player_Place - 1), 0);
+        My_Position = new Vector3(Change_X, -2.5f + Floor_Interval * (Floor_Player_Place - 1), 0);
         camera_Trace.Final_Walk_Floor(Floor_Player_Place);
         limit_Time.Final_Walk_Floor();
         yield return Change_BG_And_Wait(new Color(1, 1, 1, 0.5f), 0.5f);
@@ -542,7 +546,7 @@ public class Player_Stage3 : Player_Info
         FixedTarget = false;
         Student_Clone = null;
 
-        PlayerWalkSpeed = 0;
+        Real_Walk_Speed = 0;
     }
     void All_Start()
     {
@@ -552,7 +556,7 @@ public class Player_Stage3 : Player_Info
         FixedSlider = false;
         FixedTarget = false;
         Student_Clone = null;
-        PlayerWalkSpeed = 0.03f;
+        Real_Walk_Speed = PlayerWalkSpeed;
 
         Run_Life_Act_And_Continue(ref first_phase, First_Phase());
     }
@@ -573,12 +577,12 @@ public class Player_Stage3 : Player_Info
         }
         if (is_Button)
         {
-            if (My_Position.x <= -3)
+            if (My_Position.x <= stageData.LimitMin.x)
             {
                 if (Floor_Player_Place != 1)
                 {
                     Down_Floor.SetActive(true);
-                    Down_Floor.GetComponent<Floor_Button>().Start_Down_Or_UP(true, 40 * (Floor_Player_Place - 1));
+                    Down_Floor.GetComponent<Floor_Button>().Start_Down_Or_UP(true, stageData.LimitMin.x, Floor_Interval * (Floor_Player_Place - 1));
                 }
             }
             else
@@ -586,12 +590,13 @@ public class Player_Stage3 : Player_Info
                 if (Down_Floor.activeSelf)
                     Down_Floor.SetActive(false);
             }
-            if (My_Position.x >= 40)
+            if (My_Position.x >= stageData.LimitMax.x)
             {
                 if (Floor_Player_Place != 4)
                 {
+                    Debug.Log("야");
                     Up_Floor.SetActive(true);
-                    Up_Floor.GetComponent<Floor_Button>().Start_Down_Or_UP(false, 40 * (Floor_Player_Place - 1));
+                    Up_Floor.GetComponent<Floor_Button>().Start_Down_Or_UP(false, stageData.LimitMax.x, Floor_Interval * (Floor_Player_Place - 1));
                 }
             }
             else
@@ -608,6 +613,6 @@ public class Player_Stage3 : Player_Info
                 Down_Floor.SetActive(false);
         }
         if (Fever_Particle_Copy != null)
-            Fever_Particle_Copy.transform.position = new Vector3(My_Position.x, -4.8f + 40 * (Floor_Player_Place - 1), Fever_Particle_Copy.transform.position.z);
+            Fever_Particle_Copy.transform.position = new Vector3(My_Position.x, -4.8f + Floor_Interval * (Floor_Player_Place - 1), Fever_Particle_Copy.transform.position.z);
     }
 }

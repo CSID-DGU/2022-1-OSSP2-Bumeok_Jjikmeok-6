@@ -26,7 +26,7 @@ public class Limit_Time : MonoBehaviour
     private void Awake()
     {
         Limit_Time_Text = GetComponent<TextMeshProUGUI>();
-        wow_Time = 100;
+        wow_Time = Option_Limit_Time;
         Limit_Time_Text.text = "제한시간 : " + wow_Time;
         image = GameObject.Find("Flash_TimeOut").GetComponent<Image>();
         flashOn = image.GetComponent<ImageColor>();
@@ -42,7 +42,6 @@ public class Limit_Time : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log(wow_Time);
             if (wow_Time <= 10)
             {
                 if (flash_on != null)
@@ -58,9 +57,8 @@ public class Limit_Time : MonoBehaviour
                     playerCtrl_Sarang = PC_S;
                 else
                     yield break;
-
+                playerCtrl_Sarang.Stop_Walk();
                 playerCtrl_Sarang.StopAllCoroutines();
-                Debug.Log("야 제한시간");
                 playerCtrl_Sarang.Destroy_sliderClone();
 
                 GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
@@ -68,8 +66,11 @@ public class Limit_Time : MonoBehaviour
                 GameObject ww = GameObject.Find("Student_Gaze");
                 GameObject rr = GameObject.Find("Targetting_Object");
 
-                if (ww != null)
+                if (ww != null && ww.TryGetComponent(out Student_Gaze_Info SGI))
+                {
+                    SGI.Change_Red_Slider();
                     Destroy(ww);
+                }
 
                 if (rr != null)
                     Destroy(rr);
@@ -103,7 +104,6 @@ public class Limit_Time : MonoBehaviour
     }
     public void Stop_Time_Persist()
     {
-        wow_Time += 1;
         if (descent_time != null)
             StopCoroutine(descent_time);
     }

@@ -7,22 +7,18 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     // Start is called before the first frame update
 
     Player_Stage3 playerCtrl_Sarang;
+
+    [SerializeField]
     float fever_decrease;
 
-
+    
     private new void Awake()
     {
         base.Awake();
         if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Stage3 PC_S))
             playerCtrl_Sarang = PC_S;
-        slider.value = 0.5f;
-        fever_decrease = StaticFunc.Reverse_Time(40);
-    }
-
-    public void Decrease_HP(float ratio)
-    {
-        if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
-            slider.value -= ratio;
+        slider.value = 0;
+        fever_decrease = StaticFunc.Reverse_Time(fever_decrease);
     }
     public void When_Player_Defeat()
     {
@@ -32,12 +28,12 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     public void Ordinary_Case()
     {
         if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
-            slider.value += 0.05f;
+            slider.value += 0.5f;
     }
-    public void When_Interrupt_Defeat()
+    public void When_Interrupt_Defeat(int Ratio)
     { 
         if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
-            slider.value += 0.1f;
+            slider.value += 0.5f * Ratio;
     }
     // Update is called once per frame
     void LateUpdate()
@@ -47,7 +43,7 @@ public class Heart_Gaze_Viewer : Slider_Viewer
             if (playerCtrl_Sarang.Is_Fever)
             {
                 slider.value -= Time.deltaTime * fever_decrease;
-                if (slider.value <= 0.1)
+                if (slider.value <= 0)
                 {
                     playerCtrl_Sarang.Is_Fever = false;
                     playerCtrl_Sarang.Out_Fever();
@@ -55,11 +51,10 @@ public class Heart_Gaze_Viewer : Slider_Viewer
             }
             else
             {
-                if (slider.value >= 0.4 && !playerCtrl_Sarang.Is_Fever)
+                if (slider.value >= 1 && !playerCtrl_Sarang.Is_Fever)
                 {
-                    slider.value = 0.38f;
+                    slider.value = 0.98f;
                     playerCtrl_Sarang.Is_Fever = true;
-                    playerCtrl_Sarang.transform.localScale = new Vector3(2, 2, 1);
                     playerCtrl_Sarang.animator.SetBool("BulSang", true);
                     playerCtrl_Sarang.Enter_Fever();
                 }

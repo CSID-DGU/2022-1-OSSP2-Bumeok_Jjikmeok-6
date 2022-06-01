@@ -60,9 +60,9 @@ public class Student_Gaze_Info : Slider_Viewer
     public int Check_Student_HP(Vector3 TempPosition)
     {
         if (playerCtrl_Sarang.Is_Fever)
-            slider.value += Time.deltaTime * 0.5f * playerCtrl_Sarang.Student_Power * playerCtrl_Sarang.Fever_Power;
+            slider.value += Time.deltaTime * 0.7f * playerCtrl_Sarang.Student_Power * playerCtrl_Sarang.Fever_Power;
         else
-            slider.value += Time.deltaTime * 0.5f * playerCtrl_Sarang.Student_Power;
+            slider.value += Time.deltaTime * 0.7f * playerCtrl_Sarang.Student_Power;
 
         if (slider.value >= 0.5f && Interrupt_NonActive.Count >= 1 && Interrupt_Active.Count == 0)
         {
@@ -110,21 +110,20 @@ public class Student_Gaze_Info : Slider_Viewer
     }
     public IEnumerator Competition(GameObject student, float student_power)
     {
+        slider.value = 0.5f;
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
         if (imageColor != null)
         {
             imageColor.StopAllCoroutines();
-            imageColor.StartCoroutine(imageColor.Flash(Color.white, 0.3f, 3));
+            imageColor.StartCoroutine(imageColor.Flash(Color.white, 0.3f, 1));
         }
         
         Change_Pink_Slider();
 
-        float ratio_per_Interrupt_Active = StaticFunc.Reverse_Time(4 - Interrupt_Active.Count);
-        
         while (true)
         {
             if (!playerCtrl_Sarang.Is_Fever)
-                slider.value -= Time.deltaTime * ratio_per_Interrupt_Active;
+                slider.value -= Time.deltaTime * (0.4f + 0.1f * Interrupt_Active.Count);
 
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -158,12 +157,7 @@ public class Student_Gaze_Info : Slider_Viewer
                         GameObject w = Instantiate(Angel, square.transform.position, Quaternion.identity);
                         w.transform.SetParent(square.transform);
                     }
-                    heart_Gaze_Viewer.When_Interrupt_Defeat();
-                    if (!playerCtrl_Sarang.Is_Fever)
-                    {
-                        playerCtrl_Sarang.animator.SetBool("Heart_Gain", true);
-                        playerCtrl_Sarang.My_Scale = new Vector3(1.1f, 1.1f, 0);
-                    }
+                    heart_Gaze_Viewer.When_Interrupt_Defeat(Interrupt_Active.Count);
                 }
                 Empty_HP();
                 Change_Red_Slider();
