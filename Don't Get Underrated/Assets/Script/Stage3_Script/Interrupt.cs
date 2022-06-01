@@ -209,6 +209,8 @@ public class Interrupt : Enemy_Info
     void Update()
     {
         Debug.DrawLine(rb.position, endPosition, Color.red); // Showing the direction and distance of an object
+        My_Position = new Vector3(Mathf.Clamp(My_Position.x, stageData.LimitMin.x, stageData.LimitMax.x),
+         Mathf.Clamp(My_Position.y, stageData.LimitMin.y, stageData.LimitMax.y));
     }
 }
 

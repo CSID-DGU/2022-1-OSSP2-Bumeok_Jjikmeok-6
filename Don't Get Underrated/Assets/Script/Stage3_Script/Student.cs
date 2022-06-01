@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Student : MonoBehaviour
+public class Student : Life
 {
     [SerializeField]
     float pursuitSpeed;
@@ -23,20 +23,22 @@ public class Student : MonoBehaviour
     Animator animator;
 
     Rigidbody2D rb;
-    SpriteRenderer spriteRenderer;
     Vector3 endPosition;
     int randomAngle = 0;
     float currentSpeed;
     // Start is called before the first frame update
 
+    private new void Awake()
+    {
+        base.Awake();
+        Init_Start();
+    }
+
     void Init_Start()
     {
         currentSpeed = wanderSpeed;
-        if (TryGetComponent (out Rigidbody2D RB) && TryGetComponent (out SpriteRenderer SR))
-        {
+        if (TryGetComponent (out Rigidbody2D RB))
             rb = RB;
-            spriteRenderer = SR;
-        }
         if (TryGetComponent(out Animator A))
             animator = A;
     }
@@ -44,30 +46,20 @@ public class Student : MonoBehaviour
     {
         return spriteRenderer.color;
     }
-
-    private void Awake()
-    {
-        Init_Start();
-    }
     void Start()
     {
-        //animator = GetComponent<Animator>(); // TBD
-        wander_routine = WanderRoutine();
-        StartCoroutine(wander_routine);
-    }
-    // Student의 코루틴 순서 : WanderRoutine -> Move
-    //                         Change_Lerp_Color (안 중요함)
-    //                          
+        Run_Life_Act_And_Continue(ref wander_routine, WanderRoutine());
+    }                
     public void Disappear()
     {
-        StartCoroutine(Change_Color_Lerp(Color.white, Color.clear, 1.5f, 0.1f, null));
+        Run_Life_Act(Change_My_Color(Color.white, Color.clear, 1.5f, 0.1f, null));
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //Debug.DrawLine(rb.position, endPosition, Color.red); // Showing the direction and distance of an object
         rb.velocity = Vector3.zero;
+        My_Position = new Vector3(Mathf.Clamp(My_Position.x, stageData.LimitMin.x, stageData.LimitMax.x),
+           Mathf.Clamp(My_Position.y, stageData.LimitMin.y, stageData.LimitMax.y));
     }
 
     IEnumerator WanderRoutine()
@@ -76,12 +68,8 @@ public class Student : MonoBehaviour
         {
             ChooseNewEndpoint();
 
-            if (move != null)
-                StopCoroutine(move);
+            Run_Life_Act_And_Continue(ref move, Move(rb, currentSpeed));
 
-            move = Move(rb, currentSpeed);
-
-            StartCoroutine(move);
             yield return YieldInstructionCache.WaitForSeconds(directionChangeInterval); // 이 코드 뭐지
         }
     }
@@ -94,17 +82,14 @@ public class Student : MonoBehaviour
     public void Start_Move()
     {
         spriteRenderer.color = Color.white;
-        wander_routine = WanderRoutine();
-        StartCoroutine(wander_routine);
+        Run_Life_Act_And_Continue(ref move, Move(rb, currentSpeed));
         animator.SetBool("Electric", false);
     }
     public void Stop_Move()
     {
         spriteRenderer.color = new Color(1, 1, 1, 0.95f);
-        if (move != null)
-            StopCoroutine(move);
-        if (wander_routine != null)
-            StopCoroutine(wander_routine);
+        Stop_Life_Act(ref move);
+        Stop_Life_Act(ref wander_routine);
         animator.SetBool("Electric", true);
     }
     public void When_Fever_End()
@@ -123,10 +108,6 @@ public class Student : MonoBehaviour
 
         return new Vector3(randNum * Mathf.Cos(inputAngleRadians) + transform.position.x, transform.position.y, 0);
     }
-    public Color get_Color()
-    {
-        return spriteRenderer.color;
-    }
     public void Stop_Coroutine()
     {
         StopAllCoroutines();
@@ -134,43 +115,25 @@ public class Student : MonoBehaviour
 
     IEnumerator Move(Rigidbody2D rigidBodyToMove, float speed) // Acutual movement of an object according to the value of an endPosition
     {
-        float remainingDistance = (transform.position - endPosition).sqrMagnitude;
+        float remainingDistance = (My_Position - endPosition).sqrMagnitude;
         int key;
         while (remainingDistance > float.Epsilon)
         {
             if (rigidBodyToMove != null) // Checking whether an object has rigidbody2D
             {
-                
                 if (endPosition.x - rigidBodyToMove.position.x > 0)
                     key = -1;
                 else
                     key = 1;
-                transform.localScale = new Vector3(-key * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                My_Scale = new Vector3(-key * Mathf.Abs(My_Scale.x), My_Scale.y, My_Scale.z);
 
                 Vector3 newPosition = Vector3.MoveTowards(rigidBodyToMove.position, endPosition, speed * Time.deltaTime);
 
                 rb.MovePosition(newPosition);
 
-                remainingDistance = (transform.position - endPosition).sqrMagnitude;
+                remainingDistance = (My_Position - endPosition).sqrMagnitude;
             }
-
-            yield return YieldInstructionCache.WaitForEndOfFrame;
-        }
-
-        //animator.SetBool("isWalking",false);
-    }
-    public IEnumerator Change_Color_Lerp(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect)
-    {
-        if (Effect != null)
-            Instantiate(Effect, transform.position, Quaternion.identity);
-        float percent = 0;
-        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
-        while (percent < 1)
-        {
-            percent += Time.deltaTime * inverse_time_persist;
-            spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
             yield return null;
         }
-        yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
     }
 }

@@ -447,6 +447,7 @@ public class SolGryn : Boss_Info
         SolGryn_HP.SetActive(false);
 
         Killed_All_Mine();
+        Init_Back_And_Camera();
 
         StartCoroutine(I_OnDie());
     }

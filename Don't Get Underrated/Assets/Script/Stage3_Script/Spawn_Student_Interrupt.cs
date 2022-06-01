@@ -23,6 +23,8 @@ public class Spawn_Student_Interrupt : MonoBehaviour
 
     [SerializeField]
     float Standard_Student_Y = -2;
+
+    public float Floor_Interval = 40;
     // 카메라의 크기는 18
     void Start()
     {
@@ -32,19 +34,32 @@ public class Spawn_Student_Interrupt : MonoBehaviour
     {
         int Max_Student = Student.Length;
         int Max_Interrupt = Interrupt.Length;
+        float SpawnRange;
         for (int Floor = 0; Floor < 4; Floor++)
         {
-            for (int Floor_Axis = 0; Floor_Axis < 18; Floor_Axis++)
+            for (int Floor_Axis = 0; Floor_Axis < 10; Floor_Axis++)
             {
                 int Student_Rand = Random.Range(0, Max_Student);
                 int Interrupt_Rand = Random.Range(0, Max_Interrupt);
                 int eee = Random.Range(0, 2);
-                float SpawnRange = Random.Range(-3, 3);
-                Instantiate(Interrupt[Interrupt_Rand], new Vector3(Standard_Interrupt_X + (26 * Floor_Axis + SpawnRange), Standard_Interrupt_Y + (40 * Floor), 1), Quaternion.identity);
+                SpawnRange = Random.Range(-3, 3);
+                Instantiate(Interrupt[Interrupt_Rand], new Vector3(Standard_Interrupt_X + (15 * Floor_Axis + SpawnRange), Standard_Interrupt_Y + (Floor_Interval * Floor), 1), Quaternion.identity);
+ 
                 if (eee == 0)
-                    Instantiate(Student[Student_Rand], new Vector3(Standard_Student_X + (18 * Floor_Axis + SpawnRange), -2.4f + (40 * Floor), 1), Quaternion.identity);
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        SpawnRange = Random.Range(-3, 3);
+                        Instantiate(Student[Student_Rand], new Vector3(Standard_Student_X + (18 * Floor_Axis + SpawnRange), -2.4f + (Floor_Interval * Floor), 1), Quaternion.identity);
+                    }     
+                }
                 else
-                    Instantiate(Student[Student_Rand], new Vector3(Standard_Student_X + (18 * Floor_Axis + SpawnRange), -3.5f + (40 * Floor), 1), Quaternion.identity);
+                {
+                    SpawnRange = Random.Range(-3, 3);
+                    Instantiate(Student[Student_Rand], new Vector3(Standard_Student_X + (18 * Floor_Axis + SpawnRange), -3.5f + (Floor_Interval * Floor), 1), Quaternion.identity);
+                    SpawnRange = Random.Range(-3, 3);
+                    Instantiate(Interrupt[Interrupt_Rand], new Vector3(Standard_Interrupt_X + (15 * Floor_Axis + SpawnRange), Standard_Interrupt_Y + (Floor_Interval * Floor), 1), Quaternion.identity);
+                }
             }
         }
     }

@@ -78,7 +78,6 @@ public class Boss_Info : Life
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
         GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
-        GameObject[] item = GameObject.FindGameObjectsWithTag("Item");
 
         foreach (var e in meteor)
             Destroy(e);
@@ -88,14 +87,14 @@ public class Boss_Info : Life
 
         foreach (var e in weapon_devil)
             Destroy(e);
-
-        foreach (var e in item)
-            Destroy(e);
-        Stop_Camera_Shake();
-        Stop_Image_Color_Change();
         My_Color = Color.white;
         transform.localRotation = Quaternion.identity;
         StopAllCoroutines();
+    }
+    protected virtual void Init_Back_And_Camera()
+    {
+        Stop_Camera_Shake();
+        Stop_Image_Color_Change();
     }
     protected IEnumerator Warning(Color Text_Color, string warning_message, float time_persist)
     {
@@ -136,12 +135,8 @@ public class Boss_Info : Life
     }
     public IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
     {
-        Vector3 originPosition;
         Quaternion originRotation;
-        Vector3 originScale;
-        originPosition = transform.position;
         originRotation = transform.rotation;
-        originScale = transform.localScale;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (true)
         {
@@ -149,20 +144,16 @@ public class Boss_Info : Life
             while (percent < 1)
             {
                 percent += Time.deltaTime * inverse_time_persist;
-                transform.position = originPosition + Random.insideUnitSphere * shake_intensity;
                 transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * scale_ratio, transform.localScale.y + Time.deltaTime * scale_ratio, 0);
                 transform.transform.rotation = new Quaternion(
                                     originRotation.x + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                     originRotation.y + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                     originRotation.z + Random.Range(-shake_intensity, shake_intensity) * 0.2f,
                                     originRotation.w + Random.Range(-shake_intensity, shake_intensity) * 0.2f);
-                yield return YieldInstructionCache.WaitForEndOfFrame;
+                yield return null;
             }
             if (!is_Continue)
             {
-                transform.position = originPosition;
-                transform.rotation = originRotation;
-                transform.localScale = originScale;
                 yield return null;
                 yield break;
             }

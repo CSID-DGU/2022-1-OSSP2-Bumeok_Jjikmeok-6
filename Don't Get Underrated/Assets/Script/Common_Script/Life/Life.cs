@@ -37,6 +37,12 @@ public class Life : MonoBehaviour, Life_Of_Basic
     [SerializeField]
     protected StageData stageData;
 
+    [SerializeField]
+    Vector2 Stage3_Min_Limit;
+
+    [SerializeField]
+    Vector2 Stage3_Max_Limit;
+
     protected SpriteRenderer spriteRenderer;
 
     protected Movement2D movement2D;
@@ -65,6 +71,12 @@ public class Life : MonoBehaviour, Life_Of_Basic
             cameraShake = CS;
         if (cameraShake != null && GameObject.Find("Main Camera").TryGetComponent(out Camera camera))
             cameraShake.mainCamera = camera;
+
+        if (stageData != null)
+        {
+            stageData.LimitMin = Stage3_Min_Limit;
+            stageData.LimitMax = Stage3_Max_Limit;
+        }
     }
     public Color My_Color
     {
