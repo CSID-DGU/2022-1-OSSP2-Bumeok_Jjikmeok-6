@@ -77,6 +77,7 @@ public class SignUp : MonoBehaviour
     {
         public string id;
         public int final_score_1;
+
     }
     [System.Serializable]
     class Item_Final_2

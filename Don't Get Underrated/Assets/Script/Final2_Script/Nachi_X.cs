@@ -54,8 +54,6 @@ public class Nachi_X : Enemy_Info
     public IEnumerator Move(int flag)
     {
         trailRenderer.enabled = true;
-        if (TryGetComponent(out TrailCollisions TC))
-            TC.Draw_Collision_Line();
         yield return Move_Circle(90, flag * 4, 0, 0.3f, 0.3f, My_Position.x, My_Position.y, 0.3f);
 
         Run_Life_Act(My_Rotate_Dec(Quaternion.identity, Quaternion.Euler(new Vector3(0, 0, 120 * -flag)), 0.8f, declineCurve));

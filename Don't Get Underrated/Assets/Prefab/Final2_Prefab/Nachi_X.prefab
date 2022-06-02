@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4417154464444090207}
   - component: {fileID: 5915873954208322338}
   - component: {fileID: 2516368607765559774}
-  - component: {fileID: 5335585762128728611}
   m_Layer: 0
   m_Name: Nachi_X
   m_TagString: Enemy
@@ -127,7 +126,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 60
+  m_Time: 7
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -182,7 +181,7 @@ TrailRenderer:
     shadowBias: 0.5
     generateLightingData: 0
   m_MinVertexDistance: 0
-  m_Autodestruct: 0
+  m_Autodestruct: 1
   m_Emitting: 1
 --- !u!114 &5915873954208322338
 MonoBehaviour:
@@ -295,6 +294,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 0}
   stageData: {fileID: 0}
+  Stage3_Min_Limit: {x: 0, y: 0}
+  Stage3_Max_Limit: {x: 0, y: 0}
 --- !u!114 &2516368607765559774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,15 +309,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
---- !u!114 &5335585762128728611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4417154464444090204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c485d9c29427c8041ab91ab5bea15e40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
