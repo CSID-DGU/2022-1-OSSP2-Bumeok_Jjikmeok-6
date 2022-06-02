@@ -160,8 +160,8 @@ public class SolGryn : Boss_Info
 
         yield return Move_Curve(My_Position, new Vector3(-4, 4, 0),
             Get_Center_Vector(My_Position, new Vector3(-4, 4, 0), Vector3.Distance(My_Position, new Vector3(-4, 4, 0)) * 0.85f, "anti_clock"), 4, OriginCurve);
-        yield return Pattern01();
-        yield return Pattern02();
+        //yield return Pattern01();
+        //yield return Pattern02();
         yield return Pattern03();
         yield return Pattern04();
         yield return Pattern05();
@@ -230,16 +230,12 @@ public class SolGryn : Boss_Info
     private IEnumerator Pattern02()
     {
         My_Position = new Vector3(-7, 2.5f, 0);
-        yield return Change_My_Color(My_Color, Color.white, 0.33f, 0, DisAppear_Effect_1);
 
         yield return Straw_Launch(new Vector3(-7, -2.5f, 0), Quaternion.Euler(0, 0, -90), new Vector3(-4.5f, -2.5f, 0), Quaternion.Euler(0, 0, -90),
-          new Vector3(-3.1f, -2.5f, 0), Quaternion.identity, Vector3.right, 0.3f, 10, 0.2f);
+          new Vector3(-3.1f, -2.5f, 0), Quaternion.identity, Vector3.right, 0.3f, 11, 0.3f);
 
         yield return Straw_Launch(new Vector3(7, -2.5f, 0), Quaternion.Euler(0, 0, 90), new Vector3(4.6f, -2.5f, 0), Quaternion.Euler(0, 0, 90),
-          new Vector3(3.2f, -2.5f, 0), Quaternion.identity, Vector3.left, 0.3f, 10, 0.2f);
-
-        yield return Straw_Launch(new Vector3(-3.11f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(-3.11f, 1.92f, 0), Quaternion.identity,
-          new Vector3(-3.11f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
+          new Vector3(3.2f, -2.5f, 0), Quaternion.identity, Vector3.left, 0.3f, 11, 0.3f);
 
         yield return Straw_Launch(new Vector3(0, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(0, 1.92f, 0), Quaternion.identity,
           new Vector3(0, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
@@ -247,11 +243,14 @@ public class SolGryn : Boss_Info
         yield return Straw_Launch(new Vector3(3.11f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(3.11f, 1.92f, 0), Quaternion.identity,
           new Vector3(3.11f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
 
-        yield return Straw_Launch(new Vector3(-1.5f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(-1.5f, 1.92f, 0), Quaternion.identity,
-          new Vector3(-1.5f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
+        yield return Straw_Launch(new Vector3(-3.11f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(-3.11f, 1.92f, 0), Quaternion.identity,
+          new Vector3(-3.11f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
 
         yield return Straw_Launch(new Vector3(1.5f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(1.5f, 1.92f, 0), Quaternion.identity,
           new Vector3(1.5f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
+
+        yield return Straw_Launch(new Vector3(-1.5f, 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(-1.5f, 1.92f, 0), Quaternion.identity,
+          new Vector3(-1.5f, 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 7, 0.1f);
 
         transform.SetPositionAndRotation(new Vector3(0, 1.35f, 0), Quaternion.identity);
         yield return Change_My_Color(My_Color, Color.white, 1f, 0, DisAppear_Effect_1);
@@ -287,12 +286,11 @@ public class SolGryn : Boss_Info
     {
         transform.SetPositionAndRotation(SolGryn_Pos, SolGryn_Lot);
 
-        Run_Life_Act_And_Continue(ref change_color, Change_My_Color(Color.white, Color.clear, Peanut_Launch_Num * Peanut_Launch_Interval + Straw_Lot_time_persist, 0, DisAppear_Effect_1));
-
         Straw_Copy = Instantiate(Straw, Straw_Create_Pos, Quaternion.Euler(0, 0, 0));
 
         if (Straw_Lot_time_persist != 0)
         {
+            yield return Change_My_Color(My_Color, Color.white, 0.33f, 0, DisAppear_Effect_1);
             float percent = 0;
             while (percent < 1)
             {
@@ -300,9 +298,12 @@ public class SolGryn : Boss_Info
                 Straw_Copy.transform.rotation = Quaternion.Lerp(Quaternion.Euler(0, 0, 0), Straw_Lot, inclineCurve.Evaluate(percent));
                 yield return null;
             }
+            yield return Flash_And_Wait(Color.white, 0.1f, 0.8f);
         }
+        else
+            Flash(Color.white, 0.1f, 0.5f);
 
-        Flash(Color.white, 0.3f, 0.2f);
+        Run_Life_Act_And_Continue(ref change_color, Change_My_Color(Color.white, Color.clear, Peanut_Launch_Num * Peanut_Launch_Interval + Straw_Lot_time_persist, 0, DisAppear_Effect_1));
 
         for (int i = 0; i < Peanut_Launch_Num; i++)
         {
