@@ -1300,6 +1300,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 5533317195471082818, guid: ceb8d5a6b71b86e4cabb598ab66ca98c, type: 3}
   stageData: {fileID: 0}
+  Stage3_Min_Limit: {x: 0, y: 0}
+  Stage3_Max_Limit: {x: 0, y: 0}
   LifeTime: 10
   Item: []
   facingRight: 1
@@ -3224,6 +3226,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
   stageData: {fileID: 0}
+  Stage3_Min_Limit: {x: 0, y: 0}
+  Stage3_Max_Limit: {x: 0, y: 0}
   maxHP: 1000
   DisAppear_Effect_1: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
   DisAppear_Effect_2: {fileID: 6192724089161036641, guid: e17d9a3f04750764c8c0a7a0461e4c3b, type: 3}
@@ -3233,6 +3237,19 @@ MonoBehaviour:
   SolGryn_HP: {fileID: 736350206}
   PalJeongDo_Thunder: {fileID: 41213705268586981, guid: 34347b66b327a4743aaae32970a4a577, type: 3}
   Straw: {fileID: 2913166130661082141, guid: 918012be6f9b163449db45503a4f29f1, type: 3}
+  Pattern06_Monster_Move:
+  - {x: 7, y: 4, z: 0}
+  - {x: 3, y: 4, z: 0}
+  - {x: 0, y: 4, z: 0}
+  - {x: -3, y: 4, z: 0}
+  - {x: -7, y: 4, z: 0}
+  - {x: -7, y: 0, z: 0}
+  - {x: -7, y: -4, z: 0}
+  - {x: -3, y: -4, z: 0}
+  - {x: 0, y: -4, z: 0}
+  - {x: 3, y: -4, z: 0}
+  - {x: 7, y: -4, z: 0}
+  - {x: 7, y: 0, z: 0}
 --- !u!114 &1770839857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3303,7 +3320,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 60
+  m_Time: 12
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -3358,7 +3375,7 @@ TrailRenderer:
     shadowBias: 0
     generateLightingData: 0
   m_MinVertexDistance: 0
-  m_Autodestruct: 0
+  m_Autodestruct: 1
   m_Emitting: 1
 --- !u!114 &1770839861
 MonoBehaviour:

@@ -209,10 +209,6 @@ public class Player_Final2 : Player_Info {
 		facingRight = !facingRight;
 		transform.localRotation = Quaternion.Euler(0f, facingRight ? 0f : 180f, 0f);
 	}
-
-	private void OnTriggerEnter2D(Collider2D col) {
-		Debug.Log(LayerMask.LayerToName(col.gameObject.layer));
-	}
     public override void OnDie()
     {
 		TakeDamage(1);

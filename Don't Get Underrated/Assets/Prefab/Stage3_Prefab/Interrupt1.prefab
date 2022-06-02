@@ -131,7 +131,7 @@ MonoBehaviour:
   wanderSpeed: 5
   directionChangeInterval: 0.1
   Exclamation: {fileID: 8891852670242638114, guid: 1de93755268dd7046a284a167d576ed3, type: 3}
-  followPlayer: 1
+  followPlayer: 0
 --- !u!50 &1831762975154709854
 Rigidbody2D:
   serializedVersion: 4

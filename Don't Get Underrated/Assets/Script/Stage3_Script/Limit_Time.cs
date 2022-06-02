@@ -61,32 +61,32 @@ public class Limit_Time : MonoBehaviour
                 playerCtrl_Sarang.StopAllCoroutines();
                 playerCtrl_Sarang.Destroy_sliderClone();
 
-                GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
-                GameObject[] q = GameObject.FindGameObjectsWithTag("Student");
-                GameObject ww = GameObject.Find("Student_Gaze");
-                GameObject rr = GameObject.Find("Targetting_Object");
+                GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+                GameObject[] student = GameObject.FindGameObjectsWithTag("Student");
+                GameObject student_gaze = GameObject.Find("Student_Gaze");
+                GameObject targetting_object = GameObject.Find("Targetting_Object");
 
-                if (ww != null && ww.TryGetComponent(out Student_Gaze_Info SGI))
+                if (student_gaze != null && student_gaze.TryGetComponent(out Student_Gaze_Info SGI))
                 {
                     SGI.Change_Red_Slider();
-                    Destroy(ww);
+                    Destroy(student_gaze);
                 }
 
-                if (rr != null)
-                    Destroy(rr);
+                if (targetting_object != null)
+                    Destroy(targetting_object);
                     
-                foreach (var u in e)
+                foreach (var e in enemy)
                 {
-                    if (u.TryGetComponent(out Interrupt I1))
+                    if (e.TryGetComponent(out Interrupt I1))
                     {
                         I1.Stop_Coroutine();
                         I1.Disappear();
                     }
                 }
                 
-                foreach (var u in q)
+                foreach (var e in student)
                 {
-                    if (u.TryGetComponent(out Student S1))
+                    if (e.TryGetComponent(out Student S1))
                     {
                         S1.Stop_Coroutine();
                         S1.Disappear();
