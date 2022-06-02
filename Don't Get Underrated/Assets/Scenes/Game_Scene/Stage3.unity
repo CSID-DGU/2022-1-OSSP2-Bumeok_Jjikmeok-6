@@ -3372,7 +3372,6 @@ MonoBehaviour:
   Standard_Interrupt_X: 0
   Standard_Interrupt_Y: 3
   Standard_Student_X: 0
-  Standard_Student_Y: -2
   Floor_Interval: 40
 --- !u!4 &1024500202
 Transform:
@@ -3946,7 +3945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Time_Over_Text: {fileID: 4111520768447639455, guid: 66f8ab1ee4b5ccb4f9f41565df52e3b9, type: 3}
-  Option_Limit_Time: 40
+  Option_Limit_Time: 100
 --- !u!1 &1209422756
 GameObject:
   m_ObjectHideFlags: 0

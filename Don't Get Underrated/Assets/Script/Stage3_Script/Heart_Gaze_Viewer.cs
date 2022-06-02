@@ -28,12 +28,12 @@ public class Heart_Gaze_Viewer : Slider_Viewer
     public void Ordinary_Case()
     {
         if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
-            slider.value += 0.5f;
+            slider.value += 0.05f;
     }
     public void When_Interrupt_Defeat(int Ratio)
     { 
         if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
-            slider.value += 0.5f * Ratio;
+            slider.value += 0.1f * Ratio;
     }
     // Update is called once per frame
     void LateUpdate()

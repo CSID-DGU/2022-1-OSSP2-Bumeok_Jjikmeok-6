@@ -91,16 +91,11 @@ public class Interrupt : Enemy_Info
         Init_Start();
         Start_Move();
     }
-
-    // Start is called before the first frame update
     void Start()
     {
-        //animator = GetComponent<Animator>();
         Run_Life_Act_And_Continue(ref wander_routine, WanderRoutine());
     }
 
-    // Interrupt의 코루틴 순서 : WanderRoutine -> Move
-    //                           (외부 호출)Trigger
 
     public IEnumerator WanderRoutine()
     {
@@ -148,7 +143,6 @@ public class Interrupt : Enemy_Info
         {
             if (targetTransform != null) // If chaisng a player
             {
-                Debug.Log("Caught!!");
                 endPosition = new Vector3(targetTransform.position.x, My_Position.y, 0); // an object moves towards to taregeted player
             }
 
@@ -166,8 +160,6 @@ public class Interrupt : Enemy_Info
 
             yield return new WaitForFixedUpdate();
         }
-
-        //animator.SetBool("isWalking",false);
     }
 
 

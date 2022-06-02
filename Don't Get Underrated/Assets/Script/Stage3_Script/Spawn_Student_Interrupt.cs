@@ -21,9 +21,6 @@ public class Spawn_Student_Interrupt : MonoBehaviour
     [SerializeField]
     float Standard_Student_X = 0;
 
-    [SerializeField]
-    float Standard_Student_Y = -2;
-
     public float Floor_Interval = 40;
     // 카메라의 크기는 18
     void Start()

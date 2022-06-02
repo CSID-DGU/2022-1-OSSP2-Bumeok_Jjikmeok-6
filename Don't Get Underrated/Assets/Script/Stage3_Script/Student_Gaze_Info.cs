@@ -105,7 +105,7 @@ public class Student_Gaze_Info : Slider_Viewer
         if (GameObject.FindGameObjectWithTag("StudentSlider") && GameObject.FindGameObjectWithTag("StudentSlider").TryGetComponent(out Image Im))
             Im.color = Color.red;
         transform.localScale = new Vector3(1, 1, 1);
-        // 슬라이더를 분홍색으로 바꾸면서 변경된 위치를 여기서 재정의 할 필요가 없는 이유는 
+        // Change_Pink_Slider()와는 달리, 슬라이더를 분홍색으로 바꾸면서 변경된 위치를 여기서 재정의 할 필요가 없는 이유는 
         // 플레이어 쪽에서 학생의 게이지의 위치를 알아서 설정해주기 때문이다.
     }
     public IEnumerator Competition(GameObject student, float student_power)
@@ -131,6 +131,7 @@ public class Student_Gaze_Info : Slider_Viewer
 
             if (Input.GetMouseButtonDown(0) && hit.collider != null && hit.transform.gameObject.CompareTag("Student"))
                 slider.value += 0.15f * student_power;
+
 
             if (slider.value <= 0 || slider.value >= 1)
             {

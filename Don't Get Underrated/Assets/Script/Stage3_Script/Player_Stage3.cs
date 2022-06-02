@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Player_Stage3 : Player_Info
 {
-    // 게임의 전체적인 요소는 1. 플레이어 2. 적 3. 학생 4. 학생 게이지 
-
-    //GameObject Fever_Particle_Clone;
-
     private GameObject sliderClone;
 
     private GameObject Student_Clone;
@@ -91,6 +87,8 @@ public class Player_Stage3 : Player_Info
     {
         if (sliderClone != null)
             Destroy(sliderClone);
+        if (Fever_Particle_Copy != null)
+            Destroy(Fever_Particle_Copy);
     }
     private new void Awake()
     {
@@ -101,6 +99,7 @@ public class Player_Stage3 : Player_Info
         if (TryGetComponent(out Animator A))
             animator = A;
 
+        Unbeatable = true;
         IsOneClick = false;
         Timer = 0;
         Dash_Able = true;
@@ -129,10 +128,6 @@ public class Player_Stage3 : Player_Info
 
         My_Position = new Vector3(0, -2.5f, 0);
     }
-
-    // 플레이어의 코루틴 순서 : First_Phase --> Second_Phase --> Third_Phase
-
-    // Start is called before the first frame update
     void Start()
     {
         All_Start();
@@ -147,6 +142,7 @@ public class Player_Stage3 : Player_Info
     public void Stop_Walk()
     {
         Init_Animation();
+        Is_Fever = false;
         Real_Walk_Speed = 0;
     }
     IEnumerator First_Phase()
@@ -210,12 +206,16 @@ public class Player_Stage3 : Player_Info
                     {
                         FixedSlider = true;
                         Student_Gaze.transform.position = Student_Clone.transform.position + new Vector3(0, 2, 0);
-                        Student_Clone.GetComponent<Student>().Stop_Move(); // 공격 받는 중 + 움직임 정지
+                        if (Student_Clone.TryGetComponent(out Student S))
+                            S.Stop_Move();
                     }
 
                     Lazor_In_Second_Phase(Weapon[0], Student_Clone.transform.position, My_Position);
 
-                    int temp = Student_Gaze.GetComponent<Student_Gaze_Info>().Check_Student_HP(Student_Clone.transform.position);
+                    int temp = 2;
+
+                    if (Student_Gaze.TryGetComponent(out Student_Gaze_Info SGI))
+                        temp = SGI.Check_Student_HP(Student_Clone.transform.position);
 
                     if (temp == 0)
                     {
@@ -233,15 +233,14 @@ public class Player_Stage3 : Player_Info
                         if (Student_Clone != null)
                             Destroy(Student_Clone);
 
-
                         if (!Is_Fever)
                         {
-                            Main_3_Score += 100;
+                            Main_3_Score += 150;
                             All_Start();
                             yield break;
                         }
                         else
-                            Main_3_Score += 100 * 2;
+                            Main_3_Score += 150 * 2;
 
                     }
                     else if (temp == 3)
@@ -302,28 +301,37 @@ public class Player_Stage3 : Player_Info
 
         yield return YieldInstructionCache.WaitForEndOfFrame;
 
-        if (Is_Fever)
+        if (animator.GetBool("IsDead"))
         {
-            Main_3_Score += 100 * 2;
-            Enter_Fever();
-        }
-        else
-        {
-            Main_3_Score += 100;
-            yield return YieldInstructionCache.WaitForSeconds(0.5f); // 플레이어가 하트 게이지를 얻거나, 쓰러지는 시간임. 피버 타임일 때는 무시
+            yield return YieldInstructionCache.WaitForSeconds(1f);
             animator.SetBool("IsDead", false);
             All_Start();
         }
+        else
+        {
+            if (Is_Fever)
+            {
+                Main_3_Score += 300 * 2;
+                Enter_Fever();
+            }
+            else
+            {
+                Main_3_Score += 300;
+                All_Start();
+            }
+        }
         yield break;
+
     }
     public void Init_Student()
     {
-        Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
+        if (Student_Gaze.TryGetComponent(out Student_Gaze_Info SGI))
+            SGI.Empty_HP();
         Student_Gaze.SetActive(false);
         FixedSlider = false;
 
-        if (Student_Clone != null)
-            Student_Clone.GetComponent<Student>().Start_Move();
+        if (Student_Clone != null && Student_Clone.TryGetComponent(out Student S))
+            S.Start_Move();
         Student_Clone = null;
     }
     IEnumerator Lazor_In_Second_Phase(GameObject targetStudent_t)
@@ -357,21 +365,23 @@ public class Player_Stage3 : Player_Info
         }
         Is_Fever = false;
         Init_Animation();
-        GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
-        GameObject[] f = GameObject.FindGameObjectsWithTag("Student");
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] student = GameObject.FindGameObjectsWithTag("Student");
 
-        foreach (var u in e)
+        foreach (var e in enemy)
         {
-            if (u.TryGetComponent(out Interrupt I))
+            if (e.TryGetComponent(out Interrupt I))
                 I.When_Fever_End();
         }
-        foreach (var u in f)
+        foreach (var e in student)
         {
-            if (u.TryGetComponent(out Student S))
+            if (e.TryGetComponent(out Student S))
                 S.When_Fever_End();
         }
 
-        Student_Gaze.GetComponent<Student_Gaze_Info>().When_Fever_End();
+        if (Student_Gaze.TryGetComponent(out Student_Gaze_Info SGI))
+            SGI.When_Fever_End();
+
         Student_Gaze.SetActive(false);
      
         StopAllCoroutines();
@@ -387,8 +397,12 @@ public class Player_Stage3 : Player_Info
         sliderClone.transform.position = transform.position + new Vector3(0, 2, 0);
         sliderClone.transform.localScale = Vector3.one;
 
-        Move_Gaze_Info move_Gaze_Info = sliderClone.GetComponent<Move_Gaze_Info>();
-        
+        Move_Gaze_Info move_Gaze_Info = null;
+        if (sliderClone.TryGetComponent(out Move_Gaze_Info MGI))
+            move_Gaze_Info = MGI;
+        if (move_Gaze_Info == null)
+            yield break;
+
         All_Stop();
         Move_Able = true;
         Real_Walk_Speed = PlayerWalkSpeed * 2;
@@ -503,7 +517,7 @@ public class Player_Stage3 : Player_Info
 
         if (CHK == "up")
         {
-            if (My_Scale.x < 0)
+            if (My_Scale.x > 0)
                 My_Scale = new Vector3(-My_Scale.x, My_Scale.y, My_Scale.z);
             stageData.LimitMax += new Vector2(0, Floor_Interval);
             stageData.LimitMin += new Vector2(0, Floor_Interval);
@@ -511,7 +525,7 @@ public class Player_Stage3 : Player_Info
         }
         else if (CHK == "down")
         {
-            if (My_Scale.x > 0)
+            if (My_Scale.x < 0)
                 My_Scale = new Vector3(-My_Scale.x, My_Scale.y, My_Scale.z);
             stageData.LimitMax += new Vector2(0, -Floor_Interval);
             stageData.LimitMin += new Vector2(0, -Floor_Interval);
@@ -582,7 +596,8 @@ public class Player_Stage3 : Player_Info
                 if (Floor_Player_Place != 1)
                 {
                     Down_Floor.SetActive(true);
-                    Down_Floor.GetComponent<Floor_Button>().Start_Down_Or_UP(true, stageData.LimitMin.x, Floor_Interval * (Floor_Player_Place - 1));
+                    if (Down_Floor.TryGetComponent(out Floor_Button FB))
+                        FB.Start_Down_Or_UP(true, stageData.LimitMin.x, Floor_Interval * (Floor_Player_Place - 1));
                 }
             }
             else
@@ -594,9 +609,9 @@ public class Player_Stage3 : Player_Info
             {
                 if (Floor_Player_Place != 4)
                 {
-                    Debug.Log("야");
                     Up_Floor.SetActive(true);
-                    Up_Floor.GetComponent<Floor_Button>().Start_Down_Or_UP(false, stageData.LimitMax.x, Floor_Interval * (Floor_Player_Place - 1));
+                    if (Up_Floor.TryGetComponent(out Floor_Button FB))
+                        FB.Start_Down_Or_UP(false, stageData.LimitMax.x, Floor_Interval * (Floor_Player_Place - 1));
                 }
             }
             else
