@@ -161,7 +161,7 @@ public class SolGryn : Boss_Info
         yield return Move_Curve(My_Position, new Vector3(-4, 4, 0),
             Get_Center_Vector(My_Position, new Vector3(-4, 4, 0), Vector3.Distance(My_Position, new Vector3(-4, 4, 0)) * 0.85f, "anti_clock"), 4, OriginCurve);
         //yield return Pattern01();
-        //yield return Pattern02();
+        yield return Pattern02();
         yield return Pattern03();
         yield return Pattern04();
         yield return Pattern05();
