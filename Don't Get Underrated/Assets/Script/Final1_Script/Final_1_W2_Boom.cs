@@ -54,7 +54,7 @@ public class Final_1_W2_Boom : Weapon_Player
         if (boss != null)
         {
             if (boss.TryGetComponent(out Boss_Info B))
-                B.TakeDamage(30.0f);
+                B.TakeDamage(60.0f);
         }
         Instantiate(Explosion, Vector3.zero, Quaternion.identity);
         spriteRenderer.color = Color.clear;

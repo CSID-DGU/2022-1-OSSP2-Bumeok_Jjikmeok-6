@@ -137,6 +137,7 @@ public class Boss_Info : Life
     {
         Quaternion originRotation;
         originRotation = transform.rotation;
+        Vector3 originScale = My_Scale;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         while (true)
         {
@@ -154,6 +155,8 @@ public class Boss_Info : Life
             }
             if (!is_Continue)
             {
+                transform.rotation = originRotation;
+                My_Scale = originScale;
                 yield return null;
                 yield break;
             }

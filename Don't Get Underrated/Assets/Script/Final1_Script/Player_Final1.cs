@@ -186,7 +186,6 @@ public class Player_Final1 : Player_Info
     }
     IEnumerator I_Start_Emit()
     {
-        Unbeatable = true; // 제발 나중에 수정 좀 해
         Emit_Obj_Copy = Instantiate(Emit_Obj, My_Position, Quaternion.identity);
 
         if (Emit_Obj_Copy.TryGetComponent(out Emit_Motion EM))
@@ -197,7 +196,7 @@ public class Player_Final1 : Player_Info
 
             Unbeatable = true;
 
-            Change_BG(Color.white, 2);
+            Change_BG(Color.white, 1.5f);
 
             yield return EM.Expand();
 
@@ -205,21 +204,12 @@ public class Player_Final1 : Player_Info
 
             Flash(Color.white, 0.1f, 2);
 
-            GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
-            GameObject[] meteor = GameObject.FindGameObjectsWithTag("Meteor");
-            GameObject[] weapon_devil = GameObject.FindGameObjectsWithTag("Weapon_Devil");
-            foreach (var e in enemy)
-                Destroy(e);
-            foreach (var e in meteor)
-                Destroy(e);
-            foreach (var e in weapon_devil)
-                Destroy(e);
-
             GameObject.FindGameObjectWithTag("Boss").GetComponent<Asura>().Stop_Meteor();
 
             Instantiate(Explode_When_Emit, Vector3.zero, Quaternion.identity);
             Instantiate(Naum_Ami, Vector3.zero, Quaternion.identity);
             Camera_Shake(0.025f, 2, true, false);
+            Unbeatable = false;
         }
         yield return null;
     }
@@ -227,6 +217,46 @@ public class Player_Final1 : Player_Info
     {
         Destroy(gameObject); // 게임오버 씬 + 에니메이션 추가해야한다.
         return;
+    }
+    public void Power_Up()
+    {
+        if (Power_Slider.TryGetComponent(out PowerSliderViewer PSV))
+        {
+            Power_Slider.SetActive(true);
+            GameObject e = Instantiate(Item[0], Vector3.zero, Quaternion.identity);
+            e.transform.SetParent(transform);
+            GameObject f = Instantiate(Item[1], transform.position, Quaternion.Euler(-90, 0, 0));
+            f.transform.SetParent(transform);
+            f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+            is_Power_Up = true;
+            PSV.Stop_To_Decrease();
+            PSV.Start_To_Decrease(3);
+        }
+    }
+    public void Speed_Up()
+    {
+        if (Speed_Slider.TryGetComponent(out SpeedSliderViewer SSV))
+        {
+            Speed_Slider.SetActive(true);
+            GameObject e = Instantiate(Item[2], Vector3.zero, Quaternion.identity);
+            e.transform.SetParent(transform);
+            GameObject f = Instantiate(Item[3], transform.position, Quaternion.Euler(-90, 0, 0));
+            f.transform.SetParent(transform);
+            f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+            is_Speed_Up = true;
+            SSV.Stop_To_Decrease();
+            SSV.Start_To_Decrease(3);
+        }
+    }
+    public void Boom_Up()
+    {
+        GameObject e = Instantiate(Item[4], Vector3.zero, Quaternion.identity);
+        e.transform.SetParent(transform);
+        GameObject f = Instantiate(Item[5], transform.position, Quaternion.Euler(-90, 0, 0));
+        f.transform.SetParent(transform);
+        f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+        BoomCount++;
+        BoomCount_Text.text = "폭탄 : " + BoomCount;
     }
 
     // Update is called once per frame
@@ -255,48 +285,8 @@ public class Player_Final1 : Player_Info
             animator.SetBool("Launch", false);
             StopFiring();
         }
-        if (Input.GetKeyDown(keyCodeBoom))
+        if (Input.GetKeyDown(keyCodeBoom) && weapon_able)
             StartBoom();
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            if (Power_Slider.TryGetComponent(out PowerSliderViewer PSV))
-            {
-                Power_Slider.SetActive(true);
-                GameObject e = Instantiate(Item[0], Vector3.zero, Quaternion.identity);
-                e.transform.SetParent(transform);
-                GameObject f = Instantiate(Item[1], transform.position, Quaternion.Euler(-90, 0, 0));
-                f.transform.SetParent(transform);
-                f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
-                is_Power_Up = true;
-                PSV.Stop_To_Decrease();
-                PSV.Start_To_Decrease(5);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            if (Speed_Slider.TryGetComponent(out SpeedSliderViewer SSV))
-            {
-                Speed_Slider.SetActive(true);
-                GameObject e = Instantiate(Item[2], Vector3.zero, Quaternion.identity);
-                e.transform.SetParent(transform);
-                GameObject f = Instantiate(Item[3], transform.position, Quaternion.Euler(-90, 0, 0));
-                f.transform.SetParent(transform);
-                f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
-                is_Speed_Up = true;
-                SSV.Stop_To_Decrease();
-                SSV.Start_To_Decrease(5);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            GameObject e = Instantiate(Item[4], Vector3.zero, Quaternion.identity);
-            e.transform.SetParent(transform);
-            GameObject f = Instantiate(Item[5], transform.position, Quaternion.Euler(-90, 0, 0));
-            f.transform.SetParent(transform);
-            f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
-            BoomCount++;
-            BoomCount_Text.text = "폭탄 : " + BoomCount;
-        }
     }
     void StartFiring()
     {

@@ -5,8 +5,6 @@ using UnityEngine;
 // 보통 자연스럽게 보이는 카메라 흔들림 효과의 세기는 0.02입니다.
 public class Asura : Boss_Info
 {
-    float[] Meteor_Move = new float[9] { 4, 3, 2, 1, 0, -1, -2, -3, -4 };  // 본인
-
     private int Total_Pattern_Num = 0; // 본인
 
     private int Pattern2_Meteor_Random_Num;
@@ -19,6 +17,15 @@ public class Asura : Boss_Info
     {
         base.OnTriggerEnter2D(collision);
     }
+
+    [SerializeField]
+    float[] Pattern04_Meteor_Move = new float[9] { 5.3f, 4, 2.7f, 1.4f, 0.1f, -1.2f, -2.5f, -3.8f, -5.1f };  // 본인
+
+    [SerializeField]
+    float[,] Pattern02_Meteor_Move = new float[3, 4] { { 5, 6, 7, 8 }, { 3, 4, 7, 8 }, { 3, 4, 5, 6 } };
+
+    [SerializeField]
+    float backGround_Speed = 16;
 
     [SerializeField]
     List<For_Continuous_Slerp_Move> DoPhan_Appearance = new List<For_Continuous_Slerp_Move>() 
@@ -85,9 +92,16 @@ public class Asura : Boss_Info
 
     public override void TakeDamage(float damage) // 얘만 (불상은 데미지를 입지 않음)
     {
+        float Rand = Random.Range(0.0f, 1.0f);
         if (!Unbeatable)
         {
             CurrentHP -= damage;
+            if (Rand <= 0.01f)
+                playerCtrl_Tengai.Speed_Up();
+            if (Rand > 0.01f && Rand <= 0.02f)
+                playerCtrl_Tengai.Power_Up();
+            if (Rand > 0.02f && Rand <= 0.025f)
+                playerCtrl_Tengai.Boom_Up();
             Run_Life_Act(Hit());
             if (CurrentHP <= 0)
             {
@@ -98,16 +112,17 @@ public class Asura : Boss_Info
     }
     IEnumerator Hit()
     {
-        Camera_Shake(0.005f, 0.05f, true, false);
+        Camera_Shake(0.008f, 0.05f, true, false);
 
         My_Color = new Color(1, 1, 1, 0.25f);
-        yield return new WaitForSeconds(0.07f);
+        yield return YieldInstructionCache.WaitForSeconds(0.07f);
         My_Color = Color.white;
         yield return null;
     }
     public override void OnDie()
     {
         My_Position = new Vector3(7, 0, 0);
+        My_Scale = new Vector3(0.6f, 0.6f, 0);
         My_Color = Color.white;
         imageColor.Set_BGColor(Color.clear);
 
@@ -136,26 +151,26 @@ public class Asura : Boss_Info
 
     IEnumerator Boss_Apprearance()
     {
-        //Run_Life_Act(Change_My_Size(My_Scale, My_Scale * 0.5f, 5, OriginCurve));
+        Run_Life_Act(Change_My_Size(My_Scale, My_Scale * 0.5f, 5, OriginCurve));
 
-        //My_Position = new Vector3(0, -8, 0);
+        My_Position = new Vector3(0, -8, 0);
 
-        //float standard_distance = -1;
-        //int i = 0;
+        float standard_distance = -1;
+        int i = 0;
 
-        //foreach (var e in DoPhan_Appearance)
-        //{
-        //    float first_distance = Get_Curve_Distance(My_Position, e.Next_Position, Get_Center_Vector(My_Position, e.Next_Position,
-        //        Vector3.Distance(My_Position, e.Next_Position) * 0.85f, e.Dir));
-        //    if (standard_distance == -1)
-        //        standard_distance = first_distance;
-        //    yield return Move_Curve(My_Position, e.Next_Position,
-        //        Get_Center_Vector(My_Position, e.Next_Position, Vector3.Distance(My_Position, e.Next_Position) * 0.85f, e.Dir),
-        //        (0.4f + 0.2f * i++) * (first_distance / standard_distance), OriginCurve);
-        //}
+        foreach (var e in DoPhan_Appearance)
+        {
+            float first_distance = Get_Curve_Distance(My_Position, e.Next_Position, Get_Center_Vector(My_Position, e.Next_Position,
+                Vector3.Distance(My_Position, e.Next_Position) * 0.85f, e.Dir));
+            if (standard_distance == -1)
+                standard_distance = first_distance;
+            yield return Move_Curve(My_Position, e.Next_Position,
+                Get_Center_Vector(My_Position, e.Next_Position, Vector3.Distance(My_Position, e.Next_Position) * 0.85f, e.Dir),
+                (0.4f + 0.2f * i++) * (first_distance / standard_distance), OriginCurve);
+        }
 
-        //moveBackGround_1.Increase_Speed_F(8, 10);
-        //yield return moveBackGround_2.Increase_Speed_W(8, 10);
+        moveBackGround_1.Increase_Speed_F(8, backGround_Speed);
+        yield return moveBackGround_2.Increase_Speed_W(8, backGround_Speed);
         playerCtrl_Tengai.Unbeatable = false;
 
         My_Position = new Vector3(7, 0, 0);
@@ -179,9 +194,7 @@ public class Asura : Boss_Info
         yield return Change_BG_And_Wait(Color.white, 0.8f);
         yield return Change_BG_And_Wait(Color.clear, 0.8f);
 
-        //Unbeatable = false;
-        // 이 부분도 제발 나중에 수정 좀 해
-
+        Unbeatable = false;
 
         foreach (var e in DoPhan_Ready_To_Pattern_Move)
             yield return Move_Straight(My_Position, My_Position + e, 0.125f, OriginCurve);
@@ -191,69 +204,48 @@ public class Asura : Boss_Info
    
     IEnumerator Repeat_Phase()
     {
-        //yield return Pattern01();
-        //yield return Pattern06();
-        yield return Pattern04();
-        // yield return Pattern01();
-        //pattern = Pattern02();
-        // yield return pattern;
-        //yield return Pattern02();
-        yield return Pattern03();
-        yield return Pattern05();
-        yield return Pattern06();
-        pattern = Pattern05();
-        yield return pattern;
-        pattern = Pattern04();
-        yield return pattern;
-        //while (true)
-        //{
-        //    Total_Pattern_Num = Random.Range(0, 6);
-        //    switch (Total_Pattern_Num)
-        //    {
-        //        case 0:
-        //            pattern = Pattern01();
-        //            break;
-        //        case 1:
-        //            pattern = Pattern02();
-        //            break;
-        //        case 2:
-        //            pattern = Pattern03();
-        //            break;
-        //        case 3:
-        //            pattern = Pattern04();
-        //            break;
-        //        case 4:
-        //            pattern = Pattern05();
-        //            break;
-        //        case 5:
-        //            pattern = Pattern06();
-        //            break;
-        //    }
-        //    if (Total_Pattern_Num == 5 || Total_Pattern_Num == 4)
-        //        yield return Ready_To_Pattern();
-        //    yield return pattern;
-        //}
+        yield return Pattern01();
+        while (true)
+        {
+            Total_Pattern_Num = Random.Range(0, 6);
+            switch (Total_Pattern_Num)
+            {
+                case 0: pattern = Pattern01(); break;
+                case 1: pattern = Pattern02(); break;
+                case 2: pattern = Pattern03(); break;
+                case 3: pattern = Pattern04(); break;
+                case 4: pattern = Pattern05(); break;
+                case 5: pattern = Pattern06(); break;
+            }
+            if (Total_Pattern_Num == 3 || Total_Pattern_Num == 5)
+                yield return Ready_To_Pattern();
+            yield return pattern;
+        }
     }
     IEnumerator Pattern01()
     {
-        yield return Move_Straight(My_Position, DoPhan_Pattern01_Move[0], 0.5f, declineCurve);
-        trailRenderer.enabled = true;
-        yield return Boss_Move();
-
         Unbeatable = true;
 
-        yield return Trail_Color_Change_And_Back(Color.white, Color.green, 0.5f, 2);
+        yield return Change_My_Size(My_Scale, 1.5f * My_Scale, 0.2f, OriginCurve);
+        yield return Move_Straight(My_Position, DoPhan_Pattern01_Move[0], 0.5f, declineCurve);
+
+        trailRenderer.enabled = true;
+        yield return Boss_Move();
+        for (int i = 0; i < 2; i++)
+            yield return Flash_And_Wait(Color.black, 0, 0.8f);
 
         trailRenderer.enabled = false;
 
-        yield return Move_Straight(My_Position, Vector3.zero, 2, declineCurve);
+
+        yield return Change_My_Size(My_Scale, My_Scale / 1.5f, 0.2f, OriginCurve);
+        yield return Move_Straight(My_Position, Vector3.zero, 0.3f, declineCurve);
 
         Launch_Weapon(ref Weapon[0], new Vector3(1, 0.5714f, 0), Quaternion.identity, 8, My_Position);
         Launch_Weapon(ref Weapon[0], new Vector3(1, -0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, -60)), 8, My_Position);
         Launch_Weapon(ref Weapon[0], new Vector3(-1, 0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, -60)), 8, My_Position);
         Launch_Weapon(ref Weapon[0], new Vector3(-1, -0.5714f, 0), Quaternion.identity, 8, My_Position);
 
-        yield return YieldInstructionCache.WaitForSeconds(1f);
+        yield return YieldInstructionCache.WaitForSeconds(0.5f);
 
         Run_Life_Act_And_Continue(ref change_boss_color, Change_My_Color_And_Back(Color.white, Color.black, 0.25f, true));
 
@@ -279,7 +271,7 @@ public class Asura : Boss_Info
         if (Light_To_Death.TryGetComponent(out ParticleSystem PS))
         {
             Unbeatable = true;
-            yield return Warning(Color.red, "어디 한 번 지혜를 발휘해봐라", 1f);
+            yield return Warning(Color.red, "어디 한 번 지혜를 발휘해봐라", 1.6f);
 
             if (PS.IsAlive())
                 Destroy(PS.gameObject);
@@ -292,15 +284,9 @@ public class Asura : Boss_Info
             Pattern2_Meteor_Random_Num = Random.Range(1, 4);
             switch(Pattern2_Meteor_Random_Num)
             {
-                case 1:
-                    yield return Pattern02_When_Player_Avoid(0);
-                    break;
-                case 2:
-                    yield return Pattern02_When_Player_Avoid(1);
-                    break;
-                case 3:
-                    yield return Pattern02_When_Player_Avoid(2);
-                    break;
+                case 1: yield return Pattern02_When_Player_Avoid(0); break;
+                case 2: yield return Pattern02_When_Player_Avoid(1); break;
+                case 3: yield return Pattern02_When_Player_Avoid(2); break;
             }
         }
         else
@@ -313,10 +299,10 @@ public class Asura : Boss_Info
                     Launch_Weapon(ref Weapon[3], new Vector3(-1, param, 0), Quaternion.identity, 80, My_Position);
                     param -= 0.1904f;
                 }
-                yield return YieldInstructionCache.WaitForSeconds(.1f);
+                yield return YieldInstructionCache.WaitForSeconds(0.1f);
             }
         }
-        yield return YieldInstructionCache.WaitForSeconds(2f);
+        yield return YieldInstructionCache.WaitForSeconds(1);
         yield break;
     }
     IEnumerator Pattern02_When_Player_Avoid(int kuku)
@@ -331,22 +317,22 @@ public class Asura : Boss_Info
                 Launch_Weapon(ref Weapon[Pattern2_Beam_Spawn[kuku, j]], new Vector3(-1, param, 0), Quaternion.identity, 80, My_Position);
                 param -= 0.1904f;
             }
-            yield return YieldInstructionCache.WaitForSeconds(.1f);
+            yield return YieldInstructionCache.WaitForSeconds(0.1f);
         }
         yield return null;
     }
     IEnumerator Pattern02_Meteor_Down(int kuku)
     { 
-        yield return YieldInstructionCache.WaitForSeconds(0.5f);
-        for (int i = 0; i < 7; i++)
+        yield return YieldInstructionCache.WaitForSeconds(0.4f);
+        for (int i = 0; i < 8; i++)
         {
-            int Rand = Random.Range(4, 9);
-            GameObject e = Instantiate(Meteor1, new Vector3(Rand, 5.6f, 0), Quaternion.identity);
+            int Rand = Random.Range(0, 4);
+            GameObject e = Instantiate(Meteor1, new Vector3(Pattern02_Meteor_Move[kuku, Rand], 5.6f, 0), Quaternion.identity);
             if (e.TryGetComponent(out Meteor_Effect ME))
-                ME.Pattern02_Meteor_Launch(Rand);
+                ME.Pattern02_Meteor_Launch(Pattern02_Meteor_Move[kuku, Rand]);
             else
                 Destroy(e);
-            yield return YieldInstructionCache.WaitForSeconds(0.2f);
+            yield return YieldInstructionCache.WaitForSeconds(0.1f);
         }
         yield return null;
     }
@@ -365,6 +351,7 @@ public class Asura : Boss_Info
         Unbeatable = true;
         yield return Move_Straight(My_Position, new Vector3(12, My_Position.y, 0), 1, declineCurve);
         playerCtrl_Tengai.Start_Emit();
+
 
         Run_Life_Act_And_Continue(ref enemy_spawn, Enemy_Spawn());
 
@@ -411,7 +398,7 @@ public class Asura : Boss_Info
 
         Unbeatable = false;
         Run_Life_Act_And_Continue(ref shake_act, Shake_Act(0.3f, 0, 20, false));
-        yield return Move_Straight(My_Position, new Vector3(6, 0, 0), 2, declineCurve);
+        yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 2, declineCurve);
         Debug.Log(My_Position);
         for (int i = 0; i < 3; i++)
             yield return Warning(Color.blue, "CHANCE!!!", 1.5f);
@@ -434,21 +421,21 @@ public class Asura : Boss_Info
         while(true)
         {
             Instantiate(Homming_Enemy, new Vector3(4, 0, 0), Quaternion.identity);
-            yield return YieldInstructionCache.WaitForSeconds(3f);
+            yield return YieldInstructionCache.WaitForSeconds(2f);
         }
     }
     IEnumerator Meteor_Launch(int Meteor_Num, int Launch_Count)
     {
         float R1 = Random.Range(.15f, 1); float R2 = Random.Range(.15f, 1); float R3 = Random.Range(.15f, 1);
-        Meteor_Move = StaticFunc.ShuffleList(Meteor_Move);
+        Pattern04_Meteor_Move = StaticFunc.ShuffleList(Pattern04_Meteor_Move);
         switch (Launch_Count)
         {   
             case 1:
                 for (int i = 0; i < Meteor_Num; i++)
                 {
-                    GameObject e = Instantiate(Meteor2, new Vector3(10, Meteor_Move[i], 0), Quaternion.identity);
+                    GameObject e = Instantiate(Meteor2, new Vector3(10, Pattern04_Meteor_Move[i], 0), Quaternion.identity);
                     if (e.TryGetComponent(out Meteor_Effect ME1))
-                        ME1.Pattern04_Meteor_Launch(Meteor_Move[i], R1, R2, R3);
+                        ME1.Pattern04_Meteor_Launch(Pattern04_Meteor_Move[i], R1, R2, R3);
                     else
                         Destroy(e);
                     yield return YieldInstructionCache.WaitForSeconds(0.2f);
@@ -461,9 +448,9 @@ public class Asura : Boss_Info
                     R1 = Random.Range(.15f, 1); R2 = Random.Range(.15f, 1);  R3 = Random.Range(.15f, 1);
                     for (int j = 3 * i; j < 3 * (i + 1); j++)
                     {
-                        GameObject e = Instantiate(Meteor2, new Vector3(10, Meteor_Move[j], 0), Quaternion.identity);
+                        GameObject e = Instantiate(Meteor2, new Vector3(10, Pattern04_Meteor_Move[j], 0), Quaternion.identity);
                         if (e.TryGetComponent(out Meteor_Effect ME3))
-                            ME3.Pattern04_Meteor_Launch(Meteor_Move[j], R1, R2, R3);
+                            ME3.Pattern04_Meteor_Launch(Pattern04_Meteor_Move[j], R1, R2, R3);
                         else
                             Destroy(e);
                     }
@@ -474,9 +461,9 @@ public class Asura : Boss_Info
             case 8:
                 for (int i = 0; i < 8; i++)
                 {
-                    GameObject e = Instantiate(Meteor2, new Vector3(10, Meteor_Move[i], 0), Quaternion.identity);
+                    GameObject e = Instantiate(Meteor2, new Vector3(10, Pattern04_Meteor_Move[i], 0), Quaternion.identity);
                     if (e.TryGetComponent(out Meteor_Effect ME8))
-                        ME8.Pattern04_Meteor_Launch(Meteor_Move[i], R1, R2, R3);
+                        ME8.Pattern04_Meteor_Launch(Pattern04_Meteor_Move[i], R1, R2, R3);
                     else
                         Destroy(e);
                 }
@@ -487,19 +474,22 @@ public class Asura : Boss_Info
 
     IEnumerator Pattern06()
     {
-        //moveBackGround_1.Increase_Speed_F(8, 16);
-       // yield return moveBackGround_2.Increase_Speed_W(8, 16);
+        Unbeatable = true;
+
+        moveBackGround_1.Increase_Speed_F(8, backGround_Speed * 2);
+        yield return moveBackGround_2.Increase_Speed_W(8, backGround_Speed * 2);
 
         yield return Change_My_Color_And_Back(Color.white, Color.black, 0.8f, false);
+        Unbeatable = false;
 
         My_Position = new Vector3(7, 0, 0);
         Run_Life_Act_And_Continue(ref pattern06_weapon, Pattern06_Weapon());
 
-        yield return Move_Straight(new Vector3(7, 0, 0), new Vector3(7, 3, 0), 1.5f, De_In_Curve);
-        for (int i = 0; i < 4; i++)
+        yield return Move_Straight(new Vector3(7, 0, 0), new Vector3(7, 3, 0), 1.2f, De_In_Curve);
+        for (int i = 0; i < 8; i++)
         {
-            yield return Move_Straight(new Vector3(7, 3, 0), new Vector3(7, -3, 0), 1.5f, De_In_Curve);
-            yield return Move_Straight(new Vector3(7, -3, 0), new Vector3(7, 3, 0), 1.5f, De_In_Curve);
+            yield return Move_Straight(new Vector3(7, 3, 0), new Vector3(7, -3, 0), 1.2f, De_In_Curve);
+            yield return Move_Straight(new Vector3(7, -3, 0), new Vector3(7, 3, 0), 1.2f, De_In_Curve);
         }
 
         Stop_Life_Act(ref pattern06_weapon);
@@ -515,8 +505,8 @@ public class Asura : Boss_Info
             flag = -flag;
             yield return YieldInstructionCache.WaitForSeconds(1f);
         }
-        moveBackGround_1.Decrease_Speed_F(4, 12);
-        yield return moveBackGround_2.Decrease_Speed_W(4, 12);
+        moveBackGround_1.Decrease_Speed_F(4, backGround_Speed);
+        yield return moveBackGround_2.Decrease_Speed_W(4, backGround_Speed);
     }
 
     IEnumerator Pattern06_Weapon()
@@ -527,8 +517,8 @@ public class Asura : Boss_Info
             float ee = My_Position.y - Randomly;
             Vector3 normal_dir = new Vector3(-1, ee, 0).normalized;
 
-            Launch_Weapon(ref Weapon[6], normal_dir, Quaternion.identity, 10, My_Position + new Vector3(-0.5f, 2.5f, 0));
-            Launch_Weapon(ref Weapon[6], normal_dir, Quaternion.identity, 10, My_Position + new Vector3(-0.5f, -2.5f, 0));
+            Launch_Weapon(ref Weapon[6], normal_dir, Quaternion.identity, 13, My_Position + new Vector3(-0.5f, 2.5f, 0));
+            Launch_Weapon(ref Weapon[6], normal_dir, Quaternion.identity, 13, My_Position + new Vector3(-0.5f, -2.5f, 0));
 
             Randomly = My_Position.y;
             yield return YieldInstructionCache.WaitForSeconds(0.05f);

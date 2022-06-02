@@ -85,7 +85,7 @@ public class Meteor_Effect : Weapon_Devil
             new Vector3(8, temp, 0), 0.25f, 2, 0.6f, 1);
         StartCoroutine(Pattern02_Meteor(MT, Vector3.left));
     }
-    public void Pattern02_Meteor_Launch(int Rand)
+    public void Pattern02_Meteor_Launch(float Rand)
     {
         Meteor_Traffic_Info MT = new Meteor_Traffic_Info(
             new Meteor_Line_Info(new Vector3(Rand, 0, 0), Color.white, Quaternion.Euler(0, 0, 90)), 
