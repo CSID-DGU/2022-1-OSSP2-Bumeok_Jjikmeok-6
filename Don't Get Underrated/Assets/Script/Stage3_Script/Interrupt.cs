@@ -60,7 +60,7 @@ public class Interrupt : Enemy_Info
         while (true)
         {
             Launch_Weapon(ref Weapon[0], new Vector3(TargetPos.x - My_Position.x,
-                         TargetPos.y - My_Position.y, 0), Quaternion.identity, 12, My_Position);
+                         TargetPos.y - My_Position.y, 0), Quaternion.identity, 90, My_Position);
             yield return null;
         }
     }

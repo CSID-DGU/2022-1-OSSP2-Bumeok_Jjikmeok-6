@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class Player_Final1 : Player_Info
 {
@@ -15,13 +14,10 @@ public class Player_Final1 : Player_Info
     KeyCode keyCodeBoom = KeyCode.Z;
 
     [SerializeField]
-    TextMeshProUGUI PlayerScore_Text;
+    Text DeathCount_Text;
 
     [SerializeField]
-    TextMeshProUGUI LifeTime_Text;
-
-    [SerializeField]
-    TextMeshProUGUI BoomCount_Text;
+    Text BoomCount_Text;
 
     [SerializeField]
     GameObject Emit_Obj;
@@ -71,17 +67,14 @@ public class Player_Final1 : Player_Info
         Unbeatable = true;
         is_boss_first_appear = false;
         is_Power_Up = false;
-        Final_Score = 0;
+        Final_Stage_1_Score = 0;
         Power_Slider.SetActive(false);
         Speed_Slider.SetActive(false);
 
-        PlayerScore_Text.text = "Á¡¼ö : " + Final_Score;
-        PlayerScore_Text.color = new Color(PlayerScore_Text.color.r, PlayerScore_Text.color.g, PlayerScore_Text.color.b, 0);
+        DeathCount_Text.text = "Death Count : " + DeathCount;
+        DeathCount_Text.color = new Color(DeathCount_Text.color.r, DeathCount_Text.color.g, DeathCount_Text.color.b, 0);
 
-        LifeTime_Text.text = "Life x  : " + LifeTime;
-        LifeTime_Text.color = new Color(LifeTime_Text.color.r, LifeTime_Text.color.g, LifeTime_Text.color.b, 0);
-
-        BoomCount_Text.text = "ÆøÅº : " + BoomCount;
+        BoomCount_Text.text ="Boom : " + BoomCount;
         BoomCount_Text.color = new Color(BoomCount_Text.color.r, BoomCount_Text.color.g, BoomCount_Text.color.b, 0);
     }
     void Start()
@@ -122,12 +115,11 @@ public class Player_Final1 : Player_Info
     }
     IEnumerator FadeText()
     {
-        if (PlayerScore_Text.color.a >= 1f)
+        if (DeathCount_Text.color.a >= 1f)
             yield break;
-        while (PlayerScore_Text.color.a < 1.0f)
+        while (DeathCount_Text.color.a < 1.0f)
         {
-            LifeTime_Text.color = new Color(LifeTime_Text.color.r, LifeTime_Text.color.g, LifeTime_Text.color.b, LifeTime_Text.color.a + Time.deltaTime / 2);
-            PlayerScore_Text.color = new Color(PlayerScore_Text.color.r, PlayerScore_Text.color.g, PlayerScore_Text.color.b, PlayerScore_Text.color.a + Time.deltaTime / 2);
+            DeathCount_Text.color = new Color(DeathCount_Text.color.r, DeathCount_Text.color.g, DeathCount_Text.color.b, DeathCount_Text.color.a + Time.deltaTime / 2);
             BoomCount_Text.color = new Color(BoomCount_Text.color.r, BoomCount_Text.color.g, BoomCount_Text.color.b, BoomCount_Text.color.a + (Time.deltaTime / 2.0f));
             yield return null;
         }
@@ -138,7 +130,7 @@ public class Player_Final1 : Player_Info
             return;
             
         Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-        LifeTime -= damage;
+        DeathCount += damage;
         animator.SetBool("Dead", true);
        
         Unbeatable = true;
@@ -147,16 +139,13 @@ public class Player_Final1 : Player_Info
         movement2D.enabled = false;
         is_Update = false;
 
-        LifeTime_Text.text = "Life x  : " + LifeTime;
+        DeathCount_Text.text = "Death Count : " + DeathCount;
 
         if (Emit_Obj_Copy != null)
         {
             Stop_Life_Act(ref i_start_emit);
             Destroy(Emit_Obj_Copy);
         }
-
-        if (LifeTime <= 0)
-            OnDie();
 
         Run_Life_Act(Damage_After());
     }
@@ -192,7 +181,7 @@ public class Player_Final1 : Player_Info
         {
             EM.Ready_To_Expand();
 
-            yield return YieldInstructionCache.WaitForSeconds(5f);
+            yield return YieldInstructionCache.WaitForSeconds(8f);
 
             Unbeatable = true;
 
@@ -212,11 +201,6 @@ public class Player_Final1 : Player_Info
             Unbeatable = false;
         }
         yield return null;
-    }
-    public override void OnDie()
-    {
-        Destroy(gameObject); // °ÔÀÓ¿À¹ö ¾À + ¿¡´Ï¸ÞÀÌ¼Ç Ãß°¡ÇØ¾ßÇÑ´Ù.
-        return;
     }
     public void Power_Up()
     {
@@ -256,14 +240,12 @@ public class Player_Final1 : Player_Info
         f.transform.SetParent(transform);
         f.transform.localRotation = Quaternion.Euler(-90, 0, 0);
         BoomCount++;
-        BoomCount_Text.text = "ÆøÅº : " + BoomCount;
+        BoomCount_Text.text = "Boom : " + BoomCount;
     }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerScore_Text.text = "Á¡¼ö : " + Final_Score;
-
         if (is_Update)
         {
             float x = Input.GetAxisRaw("Horizontal");
@@ -316,7 +298,7 @@ public class Player_Final1 : Player_Info
         if (BoomCount > 0)
         {
             BoomCount--;
-            BoomCount_Text.text = "ÆøÅº : " + BoomCount;
+            BoomCount_Text.text = "Boom : " + BoomCount;
             Instantiate(Weapon[1], new Vector3(0, 7.7f, 0), Quaternion.identity);
         }
     }

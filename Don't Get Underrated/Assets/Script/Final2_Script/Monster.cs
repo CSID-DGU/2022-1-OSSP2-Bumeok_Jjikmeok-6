@@ -66,7 +66,7 @@ public class Monster : Enemy_Info
         while (percent < 1)
         {
             percent += Time.deltaTime * inverse_time_persist;
-            Launch_Weapon(ref Weapon[0], Target - Origin, Quaternion.identity, 14, Origin);
+            Launch_Weapon(ref Weapon[0], Target - Origin, Quaternion.identity, 110, Origin);
             yield return null;
         }
         animator.SetTrigger("die");

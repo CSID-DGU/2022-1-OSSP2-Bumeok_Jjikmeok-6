@@ -153,11 +153,16 @@ public class SignUp : MonoBehaviour
         else
         {
             Data_Main_1 d = JsonUtility.FromJson<Data_Main_1>(www.downloadHandler.text);
+            // Data_Main_2, Data_Main_3, Data_Final_1, Data_Final_2도 있으니 잘 보셈
             infoText.text = "";
+            List<int> Rank_Ordered = new List<int>();
+
             foreach (var u in d.item_main_1)
             {
+                Rank_Ordered.Add(u.main_score_1);
                 infoText.text += u.id + ", " + u.main_score_1 + ", " + '\n';
             }
+            Rank_Ordered.Sort(); // 오름차순 정렬. 내림차순으로 출력하고 싶으면 for문을 반대로
 
             infoText.color = Color.blue;
             Popup_X.SetActive(true);

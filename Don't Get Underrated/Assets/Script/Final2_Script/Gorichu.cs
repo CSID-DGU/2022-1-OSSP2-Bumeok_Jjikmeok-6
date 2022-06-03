@@ -36,7 +36,7 @@ public class Gorichu : Enemy_Info
     }
     private void Start()
     {
-        My_Scale = new Vector3(0.6f, 0.6f, 0);
+        My_Scale = new Vector3(1.5f, 1.5f, 0);
         D.Add(0, My_Position);
         D.Add(1, new Vector3(My_Position.x, 3, 0));
         D.Add(2, new Vector3(My_Position.x, My_Position.y - 4, My_Position.z));

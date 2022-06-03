@@ -143,7 +143,7 @@ public class Student_Gaze_Info : Slider_Viewer
                     foreach (var e in Interrupt_Active)
                         e.Start_Move();
 
-                    heart_Gaze_Viewer.When_Player_Defeat();
+                    heart_Gaze_Viewer.When_Player_Defeat(Interrupt_Active.Count);
                     playerCtrl_Sarang.animator.SetBool("IsDead", true);
 
                 }

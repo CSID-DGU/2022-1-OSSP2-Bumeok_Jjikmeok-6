@@ -37,7 +37,7 @@ public class F1_Homming_Enemy : Enemy_Info
     }
     public override void OnDie()
     {
-        player_tengai.Final_Score += ScorePerEnemy;
+        player_tengai.Final_Stage_1_Score += ScorePerEnemy;
         Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

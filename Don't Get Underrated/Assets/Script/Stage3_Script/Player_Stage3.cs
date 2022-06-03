@@ -235,20 +235,20 @@ public class Player_Stage3 : Player_Info
 
                         if (!Is_Fever)
                         {
-                            Main_3_Score += 150;
+                            Main_Stage_3_Score += 150;
                             All_Start();
                             yield break;
                         }
                         else
-                            Main_3_Score += 150 * 2;
+                            Main_Stage_3_Score += 150 * 2;
 
                     }
                     else if (temp == 3)
                     {
                         if (Is_Fever)
-                            Main_3_Score += Student_Power * Fever_Power;
+                            Main_Stage_3_Score += Student_Power * Fever_Power;
                         else
-                            Main_3_Score += Student_Power;
+                            Main_Stage_3_Score += Student_Power;
                     }
                 }
                 else if (Input.GetMouseButtonUp(0))
@@ -280,7 +280,7 @@ public class Player_Stage3 : Player_Info
 
     private void Lazor_In_Second_Phase(GameObject weapon, Vector3 target, Vector3 self)
     {
-        Launch_Weapon(ref weapon, target - self, Quaternion.identity, 12, My_Position);
+        Launch_Weapon(ref weapon, target - self, Quaternion.identity, 90, My_Position);
     }
 
     IEnumerator Third_Phase(GameObject targetStudent_t)
@@ -311,12 +311,12 @@ public class Player_Stage3 : Player_Info
         {
             if (Is_Fever)
             {
-                Main_3_Score += 300 * 2;
+                Main_Stage_3_Score += 300 * 2;
                 Enter_Fever();
             }
             else
             {
-                Main_3_Score += 300;
+                Main_Stage_3_Score += 300;
                 All_Start();
             }
         }
@@ -580,7 +580,7 @@ public class Player_Stage3 : Player_Info
             Dash();
         if (Move_Able)
             Move();
-        Main3_Score_Text.text = "점수 : " + Main_3_Score;
+        Main3_Score_Text.text = "점수 : " + Main_Stage_3_Score;
     }
     private void LateUpdate()
     {

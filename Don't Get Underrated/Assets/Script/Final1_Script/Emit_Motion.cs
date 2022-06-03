@@ -34,15 +34,15 @@ public class Emit_Motion : MonoBehaviour
         while (true)
         {
             temp_scale = transform.localScale;
-            while (transform.localScale.x - temp_scale.x < .3f)
+            while (transform.localScale.x - temp_scale.x < 0.4f)
             {
-                transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * 3, transform.localScale.y + Time.deltaTime * 3, 0);
+                transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * 4, transform.localScale.y + Time.deltaTime * 4, 0);
                 yield return null;
             }
             temp_scale = transform.localScale;
-            while (temp_scale.x - transform.localScale.x < .25f)
+            while (temp_scale.x - transform.localScale.x < 0.36f)
             {
-                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, 0);
+                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 3, transform.localScale.y - Time.deltaTime * 3, 0);
                 yield return null;
             }
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + Time.deltaTime * 7);

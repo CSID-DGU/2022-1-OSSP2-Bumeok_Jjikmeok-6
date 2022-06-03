@@ -124,7 +124,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 1000012909287652, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
-  stageData: {fileID: 11400000, guid: 9d4629ff25d5e484baf7b8ecfee93903, type: 2}
+  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
   Stage3_Min_Limit: {x: -3, y: -8}
   Stage3_Max_Limit: {x: 161, y: 999}
   pursuitSpeed: 10

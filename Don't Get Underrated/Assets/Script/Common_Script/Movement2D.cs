@@ -23,9 +23,9 @@ public class Movement2D : MonoBehaviour
     public void MoveTo(Vector3 direction)
     {
         moveDirection = direction;
-    } // 흠.....MoveTo에서 위치를 딱 설정해주고
+    } 
 
-    void LateUpdate() // 여기서 위치를 이동시키는 거군
+    void LateUpdate()
     {
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
     }

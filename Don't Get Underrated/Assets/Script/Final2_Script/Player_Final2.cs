@@ -67,8 +67,8 @@ public class Player_Final2 : Player_Info {
 		if (GameObject.FindGameObjectWithTag("Boss") && GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
 			solGryn = SG;
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
-		LifeTime = 0;
-		Death_Count.text = "Death Count : " + LifeTime;
+		DeathCount = 0;
+		Death_Count.text = "Death Count : " + DeathCount;
 	}
 
 	private void Start() 
@@ -108,25 +108,22 @@ public class Player_Final2 : Player_Info {
 
     public override void TakeDamage(int damage)
     {
-        if (!Unbeatable)
-        {
-			Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-			LifeTime++;
-			Death_Count.text = "Death Count : " + LifeTime;
-			Unbeatable = true;
-			isMove = false;
-			float velo_x = rb2d.velocity.x;
-			rb2d.velocity = Vector2.zero;
-			Vector2 dir = new Vector2(-Mathf.Sign(velo_x) * 1, 1).normalized;
-			rb2d.AddForce(dir * 10, ForceMode2D.Impulse);
-
-			Run_Life_Act(Whilee());
-		}
+		if (Unbeatable)
+			return;
+		Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
+		DeathCount++;
+		Death_Count.text = "Death Count : " + DeathCount;
+		Unbeatable = true;
+		isMove = false;
+		float velo_x = rb2d.velocity.x;
+		rb2d.velocity = Vector2.zero;
+		Vector2 dir = new Vector2(-Mathf.Sign(velo_x) * 1, 1).normalized;
+		rb2d.AddForce(dir * 10, ForceMode2D.Impulse);
+		Run_Life_Act(Whilee());
     }
 	private IEnumerator Whilee()
     {
 		Run_Life_Act_And_Continue(ref color_unbeatable, My_Color_When_UnBeatable());
-
 		float percent = 0;
 		while(percent < 0.3f)
         {
@@ -141,7 +138,19 @@ public class Player_Final2 : Player_Info {
 		yield return null;
     }
 
-	private void FixedUpdate() {
+    private void LateUpdate()
+    {
+        if (My_Position.y <= -6)
+        {
+			if (My_Position.x <= -3 || My_Position.x >= 3)
+            {
+				My_Position = Vector3.zero;
+				TakeDamage(1);
+            }				
+        }
+    }
+
+    private void FixedUpdate() {
 		
 		if (isMove)
         {

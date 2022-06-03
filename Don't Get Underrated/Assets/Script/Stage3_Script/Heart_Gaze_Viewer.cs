@@ -20,10 +20,10 @@ public class Heart_Gaze_Viewer : Slider_Viewer
         slider.value = 0;
         fever_decrease = StaticFunc.Reverse_Time(fever_decrease);
     }
-    public void When_Player_Defeat()
+    public void When_Player_Defeat(int Ratio)
     {
         if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
-            slider.value -= 0.1f;
+            slider.value -= 0.1f * Ratio;
     }
     public void Ordinary_Case()
     {

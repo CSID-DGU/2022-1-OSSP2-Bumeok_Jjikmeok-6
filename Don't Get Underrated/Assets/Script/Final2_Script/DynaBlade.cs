@@ -43,7 +43,7 @@ public class DynaBlade : Enemy_Info
     }
     private void Start()
     {
-        My_Scale = new Vector3(0.1f, 0.1f, 0);
+        My_Scale = new Vector3(0.7f, 0.7f, 0);
         if (Mathf.Sign(My_Position.x) < 0)
             Run_Life_Act(Move(Minus_Start));
         else

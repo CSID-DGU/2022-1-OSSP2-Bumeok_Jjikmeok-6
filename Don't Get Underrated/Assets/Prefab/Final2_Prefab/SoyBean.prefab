@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7844619487047264874}
   - component: {fileID: 5503481359193427443}
   - component: {fileID: -5737214228189673314}
+  - component: {fileID: -5948290251910938604}
   m_Layer: 11
   m_Name: SoyBean
   m_TagString: Weapon_Devil
@@ -156,8 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 856cf7f4a01b896429d0f69f10cf77b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Explosion: {fileID: 0}
   speed: 1000
-  distanceToGround: 0.2
   Disappear_Effect: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
 --- !u!114 &-5737214228189673314
 MonoBehaviour:
@@ -172,3 +173,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
+--- !u!114 &-5948290251910938604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2487260719207055476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1bb6da1af5abfd40a72b89011be5962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Destroy_Time: 4

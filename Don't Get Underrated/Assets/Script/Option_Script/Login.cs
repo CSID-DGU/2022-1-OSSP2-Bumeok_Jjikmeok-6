@@ -7,12 +7,6 @@ using TMPro;
 
 public class Login : MonoBehaviour
 {
-    void Start()
-    {
-        Debug.Log(PlayerPrefs.GetInt("keycode"));
-    }
-
-
     [SerializeField]
     TMP_InputField ID_In;
 
@@ -27,9 +21,12 @@ public class Login : MonoBehaviour
 
     [SerializeField]
     GameObject Popup_X;
+
+    IEnumerator wait_load;
     private void Awake()
     {
         Popup.SetActive(false);
+        wait_load = null;
     }
     [System.Serializable]
     public class UserInfo
@@ -55,18 +52,19 @@ public class Login : MonoBehaviour
     IEnumerator ServerLogout()
     {
         Popup.SetActive(true);
-        StartCoroutine("Wait_Load");
+        wait_load = Wait_Load();
+        StartCoroutine(wait_load);
 
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost:3000/log_out");
-        yield return www.SendWebRequest();
+        singleTone.request = UnityWebRequest.Get("http://localhost:3000/log_out");
+        yield return singleTone.request.SendWebRequest();
 
-        StopCoroutine("Wait_Load");
+        StopCoroutine(wait_load);
 
-        if ((www.result == UnityWebRequest.Result.ConnectionError) ||
-          (www.result == UnityWebRequest.Result.ProtocolError) ||
-          (www.result == UnityWebRequest.Result.DataProcessingError))
+        if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
+          (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
+          (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            infoText_2.text = www.error + '\n' + www.downloadHandler.text;
+            infoText_2.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
             Popup_X.SetActive(true);
             yield return null;
 
@@ -74,7 +72,7 @@ public class Login : MonoBehaviour
         }
         else
         {
-            infoText_2.text = www.downloadHandler.text;
+            infoText_2.text = singleTone.request.downloadHandler.text;
             Popup_X.SetActive(true);
             yield return null;
         }
@@ -83,24 +81,25 @@ public class Login : MonoBehaviour
     IEnumerator ServerLogin()
     {
         Popup.SetActive(true);
-        StartCoroutine("Wait_Load");
+        wait_load = Wait_Load();
+        StartCoroutine(wait_load);
 
         WWWForm form = new WWWForm();
 
         form.AddField("id", ID_In.text);
         form.AddField("pwd", PWD_IN.text);
 
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost:3000/log_in", form);
-        yield return www.SendWebRequest();
+        singleTone.request = UnityWebRequest.Post("http://localhost:3000/log_in", form);
+        yield return singleTone.request.SendWebRequest();
 
-        StopCoroutine("Wait_Load");
+        StopCoroutine(wait_load);
 
-        if ((www.result == UnityWebRequest.Result.ConnectionError) ||
-           (www.result == UnityWebRequest.Result.ProtocolError) ||
-           (www.result == UnityWebRequest.Result.DataProcessingError))
+        if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
+           (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
+           (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
             infoText_2.color = Color.red;
-            infoText_2.text = www.error + '\n' + www.downloadHandler.text;
+            infoText_2.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
             Popup_X.SetActive(true);
             yield return null;
 
@@ -109,15 +108,12 @@ public class Login : MonoBehaviour
         else
         {
             infoText_2.color = Color.black;
-            Login_Success data = JsonUtility.FromJson<Login_Success>(www.downloadHandler.text);
+            Login_Success data = JsonUtility.FromJson<Login_Success>(singleTone.request.downloadHandler.text);
 
             infoText_2.text = data.success_message;
             Popup_X.SetActive(true);
             yield return null;
-            //PlayerPrefs.SetInt("keycode", data.user_info.keycode);
-            //PlayerPrefs.SetString("id", data.user_info.id);
-            //PlayerPrefs.Save();
-            //LoadingProgress.LoadScene("IWannaScene");
+            LoadingProgress.LoadScene("My_SJH_Scene");
         }
     }
 
@@ -127,13 +123,13 @@ public class Login : MonoBehaviour
         while (true)
         {
             infoText_2.text = "로딩 중....";
-            yield return new WaitForSeconds(0.15f);
+            yield return YieldInstructionCache.WaitForSeconds(0.15f);
 
             infoText_2.text = "로딩 중......";
-            yield return new WaitForSeconds(0.15f);
+            yield return YieldInstructionCache.WaitForSeconds(0.15f);
 
             infoText_2.text = "로딩 중........";
-            yield return new WaitForSeconds(0.15f);
+            yield return YieldInstructionCache.WaitForSeconds(0.15f);
         }
     }
 

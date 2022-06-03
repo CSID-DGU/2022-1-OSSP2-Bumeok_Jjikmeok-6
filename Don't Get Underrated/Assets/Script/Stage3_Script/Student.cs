@@ -23,22 +23,25 @@ public class Student : Life
     Animator animator;
 
     Rigidbody2D rb;
+
     Vector3 endPosition;
+
     int randomAngle = 0;
+
     float currentSpeed;
     // Start is called before the first frame update
 
     private new void Awake()
     {
         base.Awake();
+        if (TryGetComponent(out Rigidbody2D RB))
+            rb = RB;
         Init_Start();
     }
 
     void Init_Start()
     {
         currentSpeed = wanderSpeed;
-        if (TryGetComponent (out Rigidbody2D RB))
-            rb = RB;
         if (TryGetComponent(out Animator A))
             animator = A;
     }
@@ -82,7 +85,7 @@ public class Student : Life
     public void Start_Move()
     {
         spriteRenderer.color = Color.white;
-        Run_Life_Act_And_Continue(ref move, Move(rb, currentSpeed));
+        Run_Life_Act_And_Continue(ref wander_routine, WanderRoutine());
         animator.SetBool("Electric", false);
     }
     public void Stop_Move()
@@ -100,7 +103,7 @@ public class Student : Life
         Start_Move();
     }
 
-    Vector3 Vector3FromAngle(int inputAngleDegrees) // Changing the degree into the radian
+    Vector3 Vector3FromAngle(int inputAngleDegrees) 
     {
         float inputAngleRadians = inputAngleDegrees * Mathf.Deg2Rad;
 
@@ -113,13 +116,13 @@ public class Student : Life
         StopAllCoroutines();
     }
 
-    IEnumerator Move(Rigidbody2D rigidBodyToMove, float speed) // Acutual movement of an object according to the value of an endPosition
+    IEnumerator Move(Rigidbody2D rigidBodyToMove, float speed)
     {
         float remainingDistance = (My_Position - endPosition).sqrMagnitude;
         int key;
         while (remainingDistance > float.Epsilon)
         {
-            if (rigidBodyToMove != null) // Checking whether an object has rigidbody2D
+            if (rigidBodyToMove != null)
             {
                 if (endPosition.x - rigidBodyToMove.position.x > 0)
                     key = -1;

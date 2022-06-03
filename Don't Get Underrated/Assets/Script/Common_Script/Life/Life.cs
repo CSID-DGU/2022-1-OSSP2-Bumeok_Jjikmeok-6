@@ -139,12 +139,12 @@ public class Life : MonoBehaviour, Life_Of_Basic
         GameObject Copy = Instantiate(weapon, Instantiate_Dir, Degree);
         if (Copy.TryGetComponent(out Weapon_Devil WD))
         {
-            WD.W_MoveTo(Direction);
+            WD.W_MoveTo(Direction.normalized);
             WD.W_MoveSpeed(speed);
         }
         else if (Copy.TryGetComponent(out Weapon_Player WP))
         {
-            WP.W_MoveTo(Direction);
+            WP.W_MoveTo(Direction.normalized);
             WP.W_MoveSpeed(speed);
         }
         else
