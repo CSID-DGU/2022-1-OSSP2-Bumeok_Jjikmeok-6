@@ -8,7 +8,6 @@ public class Time_Over_Text : MonoBehaviour
     float delta_ratio;
 
     float percent;
-
     private void Awake()
     {
         transform.localScale = new Vector3(1f, 1f, 0);

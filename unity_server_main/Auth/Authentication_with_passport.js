@@ -14,7 +14,10 @@ passport.use(new LocalStrategy(
     async (id, pwd, done) => {
     const connection = await OSSW_DB_pool.getConnection(async conn => conn)
     try {
-
+        console.log("야")
+        console.log(id)
+        console.log("이")
+        console.log(pwd)
         const hash = crypto.createHash('sha256')
         hash.update(pwd);
         let hash_password = hash.digest('hex') // 비밀번호 단방향 암호화

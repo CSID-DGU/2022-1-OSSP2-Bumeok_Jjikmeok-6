@@ -124,6 +124,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 0}
   stageData: {fileID: 0}
+  BackGroundSource_Collect: []
+  EffectSource_Collect:
+  - {fileID: 8300000, guid: 59022bf9243f79f4cb71bd5bf94d0cda, type: 3}
+  - {fileID: 8300000, guid: db3773c886573cb41a8010af5a72d299, type: 3}
+  Stage3_Min_Limit: {x: 0, y: 0}
+  Stage3_Max_Limit: {x: 0, y: 0}
 --- !u!95 &6433505063697401098
 Animator:
   serializedVersion: 3

@@ -22,6 +22,8 @@ public class SpeedSliderViewer : Slider_Viewer
     }
     IEnumerator Decrease(float time_persist)
     {
+        if (!Check_Valid_Slider())
+            yield break;
         slider.value = 1;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         float percent = 0;

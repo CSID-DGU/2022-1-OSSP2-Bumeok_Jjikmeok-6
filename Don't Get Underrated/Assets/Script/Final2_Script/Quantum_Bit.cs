@@ -18,6 +18,8 @@ public class Quantum_Bit : Enemy_Info
         Part = new List<GameObject>();
         if (GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
             solGryn = SG;
+        if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
+            EffectSource = AS1;
     }
     // Start is called before the first frame update
     private void Start()
@@ -38,6 +40,7 @@ public class Quantum_Bit : Enemy_Info
     }
     private IEnumerator Tr_Co()
     {
+        Effect_Sound_OneShot(0);
         My_Color = Color.clear;
         Flash(Color.black, 0.5f, 1f);
         for (int i = -8; i <= 8; i++)
