@@ -31,9 +31,7 @@ public class Interrupt : Enemy_Info
 
     CircleCollider2D circleColliderObject; // The variable for visualizing gizmos on the screen
 
-    IEnumerator move;
-    IEnumerator wander_routine;
-    IEnumerator trigger_lazor;
+    IEnumerator move, wander_routine, trigger_lazor;
 
     GameObject Exclamation_Copy;
 
@@ -44,19 +42,27 @@ public class Interrupt : Enemy_Info
         targetTransform = null;
         currentSpeed = wanderSpeed;
     }
-
+    public override void OnDie()
+    {
+        Effect_Sound_Stop();
+        base.OnDie();
+    }
     private new void Awake()
     {
         base.Awake();
         Init_Start();
+        if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
+            EffectSource = AS1;
     }
     IEnumerator Trigger_Lazor(Vector3 TargetPos) // 이 쪽은 과제, 시험 등이 플레이어랑 경쟁하기 위해 쏘는 레이저 빔 코드
     {
         Stop_Move();
         Exclamation_Copy = Instantiate(Exclamation, transform.position, Quaternion.identity);
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
+
         Destroy(Exclamation_Copy);
 
+        Effect_Sound_Play(0);
         while (true)
         {
             Launch_Weapon(ref Weapon[0], new Vector3(TargetPos.x - My_Position.x,
@@ -95,8 +101,6 @@ public class Interrupt : Enemy_Info
     {
         Run_Life_Act_And_Continue(ref wander_routine, WanderRoutine());
     }
-
-
     public IEnumerator WanderRoutine()
     {
         while (true)
@@ -105,12 +109,13 @@ public class Interrupt : Enemy_Info
 
             Run_Life_Act_And_Continue(ref move, Move(rb, currentSpeed));
 
-            yield return new WaitForSeconds(directionChangeInterval);
+            yield return YieldInstructionCache.WaitForSeconds(directionChangeInterval);
         }
     }
 
     public void Start_Move()
     {
+        Effect_Sound_Stop();
         Run_Life_Act_And_Continue(ref wander_routine, WanderRoutine());
     }
     public void Stop_Move()
@@ -149,8 +154,6 @@ public class Interrupt : Enemy_Info
 
             if (rigidBodyToMove != null) // Checking whether an object has rigidbody2D
             {
-                //animator.SetBool("isWalking", true);
-
                 Vector3 newPosition = Vector3.MoveTowards(rigidBodyToMove.position, endPosition, speed * Time.deltaTime);
 
                 rb.MovePosition(newPosition);
@@ -179,8 +182,6 @@ public class Interrupt : Enemy_Info
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            //animator.SetBool("isWalking", false);
-
             currentSpeed = wanderSpeed;
 
             Stop_Life_Act(ref move);

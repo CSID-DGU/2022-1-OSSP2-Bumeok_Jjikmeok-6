@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Player_Info : Life
 {
     // Start is called before the first frame update
 
     [SerializeField]
-    protected int DeathCount = 5;
+    protected int deathCount = 5;
+
+    [SerializeField]
+    protected Text My_Name;
+
+    public int DeathCount => deathCount;
 
     [SerializeField]
     protected GameObject[] Item;
@@ -26,7 +31,6 @@ public class Player_Info : Life
         set { main_stage_1_score = value; }
         get { return main_stage_1_score; }
     }
-
     public int Main_Stage_2_Score
     {
         set { main_stage_2_score = value; }
@@ -51,11 +55,10 @@ public class Player_Info : Life
     {
         if (Unbeatable)
             return;
-        DeathCount -= damage;
-        if (DeathCount <= 0)
+        deathCount += damage;
+        if (deathCount <= 0)
             OnDie();
     }
-
     public override void OnDie()
     {
         base.OnDie();

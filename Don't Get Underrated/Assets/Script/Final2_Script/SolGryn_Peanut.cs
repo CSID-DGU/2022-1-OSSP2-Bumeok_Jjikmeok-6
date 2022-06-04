@@ -40,9 +40,8 @@ public class SolGryn_Peanut : Weapon_Devil
 		bool nextGrounded = IsGrounded();
 
 		if (nextGrounded)
-		{
 			Count++;
-		}
+
 		if (Count == 1)
 			Die();
 	}

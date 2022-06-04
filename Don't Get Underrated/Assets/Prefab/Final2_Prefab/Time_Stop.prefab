@@ -123,6 +123,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 0}
+  BackGroundSource_Collect: []
+  EffectSource_Collect: []
 --- !u!1 &8166809296276297146
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +166,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8166809296276297146}
   serializedVersion: 7
-  lengthInSec: 2
+  lengthInSec: 3
   simulationSpeed: 10
   stopAction: 2
   cullingMode: 0

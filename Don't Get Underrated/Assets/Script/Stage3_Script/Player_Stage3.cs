@@ -125,6 +125,10 @@ public class Player_Stage3 : Player_Info
             camera_Trace = CT;
         if (GameObject.FindGameObjectWithTag("LimitTimeText") && GameObject.FindGameObjectWithTag("LimitTimeText").TryGetComponent(out Limit_Time LT))
             limit_Time = LT;
+        if (GameObject.Find("Player_Effect_Sound") && GameObject.Find("Player_Effect_Sound").TryGetComponent(out AudioSource AS1))
+            EffectSource = AS1;
+        if (GameObject.Find("Player_BackGround_Sound") && GameObject.Find("Player_BackGround_Sound").TryGetComponent(out AudioSource AS2))
+            BackGroundSource = AS2;
 
         My_Position = new Vector3(0, -2.5f, 0);
     }
@@ -186,6 +190,11 @@ public class Player_Stage3 : Player_Info
         if (!Student_Gaze.activeSelf)
             Student_Gaze.SetActive(true);
 
+        if (Is_Fever)
+            Effect_Sound_Play(2);
+        else
+            Effect_Sound_Play(0);
+
         while (true)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -237,11 +246,15 @@ public class Player_Stage3 : Player_Info
                         {
                             Main_Stage_3_Score += 150;
                             All_Start();
-                            yield break;
+                            Effect_Sound_OneShot(4);
                         }
                         else
+                        {
                             Main_Stage_3_Score += 150 * 2;
-
+                            Enter_Fever();
+                            Effect_Sound_OneShot(1);
+                        }
+                        yield break;
                     }
                     else if (temp == 3)
                     {
@@ -258,7 +271,6 @@ public class Player_Stage3 : Player_Info
                         Enter_Fever();
                     else
                         All_Start();
-
                     yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
                     yield break;
                 }
@@ -270,7 +282,6 @@ public class Player_Stage3 : Player_Info
                     Enter_Fever();
                 else
                     All_Start();
-
                 yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
                 yield break;
             }
@@ -303,6 +314,8 @@ public class Player_Stage3 : Player_Info
 
         if (animator.GetBool("IsDead"))
         {
+            Effect_Sound_Stop();
+            Effect_Sound_OneShot(5);
             yield return YieldInstructionCache.WaitForSeconds(1f);
             animator.SetBool("IsDead", false);
             All_Start();
@@ -313,15 +326,16 @@ public class Player_Stage3 : Player_Info
             {
                 Main_Stage_3_Score += 300 * 2;
                 Enter_Fever();
+                Effect_Sound_OneShot(1);
             }
             else
             {
                 Main_Stage_3_Score += 300;
                 All_Start();
+                Effect_Sound_OneShot(4);
             }
         }
         yield break;
-
     }
     public void Init_Student()
     {
@@ -348,8 +362,10 @@ public class Player_Stage3 : Player_Info
     {
         if (Fever_Particle_Copy == null)
             Fever_Particle_Copy = Instantiate(Fever_Particle, My_Position + Vector3.down * 2.3f, Quaternion.Euler(-90, 0, 0));
+
         All_Stop();
         All_Start();
+
         Dash_Able = false;
         Real_Walk_Speed = PlayerWalkSpeed * 2;
     }
@@ -515,6 +531,7 @@ public class Player_Stage3 : Player_Info
 
         Change_BG(Color.black, 2);
 
+        Effect_Sound_OneShot(3);
         if (CHK == "up")
         {
             if (My_Scale.x > 0)
@@ -571,6 +588,7 @@ public class Player_Stage3 : Player_Info
         FixedTarget = false;
         Student_Clone = null;
         Real_Walk_Speed = PlayerWalkSpeed;
+        Effect_Sound_Stop();
 
         Run_Life_Act_And_Continue(ref first_phase, First_Phase());
     }

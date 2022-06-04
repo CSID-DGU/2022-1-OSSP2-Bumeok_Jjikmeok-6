@@ -5,7 +5,7 @@ using UnityEngine;
 public class Final_1_W2_Boom : Weapon_Player
 {
     [SerializeField]
-    AnimationCurve curve;
+    AnimationCurve declineCurve;
 
     SpriteRenderer spriteRenderer;
 
@@ -13,6 +13,8 @@ public class Final_1_W2_Boom : Weapon_Player
     {
         base.Awake();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        if (GameObject.Find("Weapon_Effect_Sound") && GameObject.Find("Weapon_Effect_Sound").TryGetComponent(out AudioSource AS))
+            EffectSource = AS;
     }
     void Start()
     {
@@ -25,8 +27,8 @@ public class Final_1_W2_Boom : Weapon_Player
         float percent = 0;
         while (percent < 1)
         {
-            percent += Time.deltaTime * 2;
-            transform.position = Vector3.Lerp(startPosition, endPosition, curve.Evaluate(percent));
+            percent += Time.deltaTime * 1.5f;
+            transform.position = Vector3.Lerp(startPosition, endPosition, declineCurve.Evaluate(percent));
             yield return null;
         }
         StartCoroutine(OnBoom());
@@ -54,10 +56,11 @@ public class Final_1_W2_Boom : Weapon_Player
         if (boss != null)
         {
             if (boss.TryGetComponent(out Boss_Info B))
-                B.TakeDamage(60.0f);
+                B.TakeDamage(100.0f);
         }
         Instantiate(Explosion, Vector3.zero, Quaternion.identity);
         spriteRenderer.color = Color.clear;
+        Effect_Sound_OneShot(0);
         yield return Start_Camera_Shake_For_Wait(0.02f, 2f, true, false);
         Destroy(gameObject);
     }

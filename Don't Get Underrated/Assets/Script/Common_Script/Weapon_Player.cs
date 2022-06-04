@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Weapon_Player : Weapon
 {
-
     [SerializeField]
     float Boss_Damage = 3f;
     protected virtual new void Awake()

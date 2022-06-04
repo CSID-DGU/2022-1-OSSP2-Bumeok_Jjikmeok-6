@@ -58,8 +58,10 @@ public class Meteor_Effect : Weapon_Devil
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = Color.clear;
         W_MoveTo(Vector3.zero);
+        if (GameObject.Find("Weapon_Effect_Sound") && GameObject.Find("Weapon_Effect_Sound").TryGetComponent(out AudioSource AS))
+            EffectSource = AS;
     }
-    public IEnumerator Pattern02_Meteor(Meteor_Traffic_Info MT_I, Vector3 Target)
+    IEnumerator Meteor_Behave(Meteor_Traffic_Info MT_I, Vector3 Target)
     {
         copy_Meteor_Line = Instantiate(Meteor_Line, MT_I.Line_Pos, MT_I.Line_Rotation);
         copy_Meteor_Traffic = Instantiate(Meteor_Traffic, MT_I.Traffic_Pos, Quaternion.identity);
@@ -67,14 +69,23 @@ public class Meteor_Effect : Weapon_Devil
         if (copy_Meteor_Line.TryGetComponent(out Meteor_Line ML) && copy_Meteor_Traffic.TryGetComponent(out Meteor_Traffic MT))
         {
             ML.StartCoroutine(ML.Change_Color(MT_I.Line_Color, MT_I.Bright_Count, MT_I.Bright_Time));
-            yield return MT.Change_Color(MT_I.Bright_Count, MT_I.Bright_Time);
+            for (int i = 0; i < MT_I.Bright_Count; i++)
+            {
+                Effect_Sound_OneShot(0);
+                yield return MT.Change_Color(MT_I.Bright_Time);
+            }
+            ML.Return_Origin_Color(MT_I.Line_Color);
+
+            Effect_Sound_OneShot(1);
             yield return MT.Shake_Act(MT_I.Shake_Time, MT_I.Shake_Intensity);
         }
         Destroy(copy_Meteor_Traffic);
         Destroy(copy_Meteor_Line);
 
+        Effect_Sound_OneShot(2);
         spriteRenderer.color = Color.white;
         W_MoveTo(Target);
+        W_MoveSpeed(20);
 
         yield return null;
     }
@@ -83,14 +94,14 @@ public class Meteor_Effect : Weapon_Devil
         Meteor_Traffic_Info MT = new Meteor_Traffic_Info(
             new Meteor_Line_Info(new Vector3(0, temp, 0), new Color(R1, R2, R3, 1), Quaternion.identity),
             new Vector3(8, temp, 0), 0.25f, 2, 0.6f, 1);
-        StartCoroutine(Pattern02_Meteor(MT, Vector3.left));
+        StartCoroutine(Meteor_Behave(MT, Vector3.left));
     }
     public void Pattern02_Meteor_Launch(float Rand)
     {
         Meteor_Traffic_Info MT = new Meteor_Traffic_Info(
             new Meteor_Line_Info(new Vector3(Rand, 0, 0), Color.white, Quaternion.Euler(0, 0, 90)), 
-            new Vector3(Rand, 3.7f, 0), 0, 0, 0.2f, 3);
-        StartCoroutine(Pattern02_Meteor(MT, Vector3.down));
+            new Vector3(Rand, 3.7f, 0), 0, 0, 0.4f, 3);
+        StartCoroutine(Meteor_Behave(MT, Vector3.down));
     }
     private void LateUpdate()
     {

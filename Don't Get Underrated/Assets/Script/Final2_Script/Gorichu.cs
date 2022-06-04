@@ -17,6 +17,8 @@ public class Gorichu : Enemy_Info
     {
         base.Awake();
         D = new Dictionary<int, Vector3>();
+        if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
+            EffectSource = AS1;
     }
     private new void OnTriggerEnter2D(Collider2D collision)
     {
@@ -36,7 +38,7 @@ public class Gorichu : Enemy_Info
     }
     private void Start()
     {
-        My_Scale = new Vector3(1.5f, 1.5f, 0);
+        My_Scale = new Vector3(1.7f, 1.7f, 0);
         D.Add(0, My_Position);
         D.Add(1, new Vector3(My_Position.x, 3, 0));
         D.Add(2, new Vector3(My_Position.x, My_Position.y - 4, My_Position.z));
@@ -44,8 +46,10 @@ public class Gorichu : Enemy_Info
     }
     private IEnumerator Move() // 루트3 / 2 (0.85)로 끝맺음 짓는게 좋다.
     {
-        yield return StartCoroutine(Move_Straight(D[0], D[1], 1f, inclineCurve));
+        Effect_Sound_OneShot(0);
+        yield return Move_Straight(D[0], D[1], 1f, inclineCurve);
 
+        Effect_Sound_OneShot(1);
         Run_Life_Act_And_Continue(ref size, Change_My_Size_Infinite(3f));
         yield return Move_Straight(D[1], D[2], 1f, declineCurve);
         Stop_Life_Act(ref size);

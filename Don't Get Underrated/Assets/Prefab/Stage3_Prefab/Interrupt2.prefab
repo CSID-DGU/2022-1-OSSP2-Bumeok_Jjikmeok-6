@@ -125,6 +125,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 1000012909287652, guid: abb9f519b142e304d9c45b56afa768bc, type: 3}
   stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+  BackGroundSource_Collect: []
+  EffectSource_Collect:
+  - {fileID: 8300000, guid: 4bd85d999e2511442afab45ae9b26c1b, type: 3}
   Stage3_Min_Limit: {x: -3, y: -8}
   Stage3_Max_Limit: {x: 161, y: 999}
   pursuitSpeed: 10

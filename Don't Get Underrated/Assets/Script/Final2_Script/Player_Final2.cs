@@ -67,8 +67,8 @@ public class Player_Final2 : Player_Info {
 		if (GameObject.FindGameObjectWithTag("Boss") && GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
 			solGryn = SG;
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
-		DeathCount = 0;
-		Death_Count.text = "Death Count : " + DeathCount;
+		deathCount = 0;
+		Death_Count.text = "Death Count : " + deathCount;
 	}
 
 	private void Start() 
@@ -111,8 +111,8 @@ public class Player_Final2 : Player_Info {
 		if (Unbeatable)
 			return;
 		Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-		DeathCount++;
-		Death_Count.text = "Death Count : " + DeathCount;
+		deathCount++;
+		Death_Count.text = "Death Count : " + deathCount;
 		Unbeatable = true;
 		isMove = false;
 		float velo_x = rb2d.velocity.x;

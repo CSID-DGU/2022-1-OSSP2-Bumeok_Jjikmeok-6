@@ -59,6 +59,9 @@ public class Student_Gaze_Info : Slider_Viewer
     }
     public int Check_Student_HP(Vector3 TempPosition)
     {
+        if (!Check_Valid_Slider())
+            return 0;
+
         if (playerCtrl_Sarang.Is_Fever)
             slider.value += Time.deltaTime * 0.7f * playerCtrl_Sarang.Student_Power * playerCtrl_Sarang.Fever_Power;
         else
@@ -88,7 +91,8 @@ public class Student_Gaze_Info : Slider_Viewer
 
     public void Empty_HP()
     {
-        slider.value = 0;
+        if (Check_Valid_Slider())
+            slider.value = 0;
     }
     public void Change_Pink_Slider()
     {
@@ -110,6 +114,9 @@ public class Student_Gaze_Info : Slider_Viewer
     }
     public IEnumerator Competition(GameObject student, float student_power)
     {
+        if (!Check_Valid_Slider())
+            yield break;
+
         slider.value = 0.5f;
         yield return YieldInstructionCache.WaitForSeconds(0.3f);
         if (imageColor != null)
@@ -188,12 +195,12 @@ public class Student_Gaze_Info : Slider_Viewer
     // Update is called once per frame
     void Update()
     {
-        if (slider.value > 0)
+        if (Check_Valid_Slider() && slider.value > 0)
             CheckInterrupt();
     } // 학생이 레이저 빔을 과제, 시험같은 방해 오브젝트 및 플레이어에게 맞았을 때 처리한 코드
     private void LateUpdate()
     {
-        if (YeonTa_Copy != null)
+        if (Check_Valid_Slider() && YeonTa_Copy != null)
             YeonTa_Copy.transform.position = new Vector3(transform.position.x - 1.78f + (slider.value * 3.56f), transform.position.y + 1f, 1);
     }
 }

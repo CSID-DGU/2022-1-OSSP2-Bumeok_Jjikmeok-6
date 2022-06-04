@@ -38,11 +38,14 @@ public class Monster : Enemy_Info
         CHK_Flag = 0;
         if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Final2 HC))
             himaController = HC;
+        if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
+            EffectSource = AS1;
     }
     public void Start_Attack(Vector3 Monster_Pos, int Flag)
     {
         this.Monster_Pos = Monster_Pos;
         CHK_Flag = Flag;
+        Effect_Sound_OneShot(0);
         transform.DOMove(Monster_Pos, 0.5f).SetEase(Ease.OutBounce).OnComplete(() =>
         {
             hima_Pos = himaController.transform.position;
@@ -56,6 +59,7 @@ public class Monster : Enemy_Info
 
     private IEnumerator Monster_Only_Lazor(Vector3 Origin, float time_persist)
     {
+        Effect_Sound_OneShot(1);
         float percent = 0;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         Vector3 Target;

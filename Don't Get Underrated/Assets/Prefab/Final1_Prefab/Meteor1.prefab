@@ -4818,7 +4818,6 @@ GameObject:
   - component: {fileID: 4794457192225570961}
   - component: {fileID: 4794457192225570960}
   - component: {fileID: 3524983112775156035}
-  - component: {fileID: 2234746367468928096}
   m_Layer: 0
   m_Name: Meteor1
   m_TagString: Weapon_Devil
@@ -4918,7 +4917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+  stageData: {fileID: 11400000, guid: d7ff8fbdbdf5a1844822d357bb05211f, type: 2}
 --- !u!60 &4794457192225570960
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -4964,18 +4963,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
+  BackGroundSource_Collect: []
+  EffectSource_Collect:
+  - {fileID: 8300000, guid: bc3e1f3fe76307e499f5c51f13b41999, type: 3}
+  - {fileID: 8300000, guid: 936e6bb952dbb4249ab4610d67ff4168, type: 3}
+  - {fileID: 8300000, guid: a44963452ad64e147a0b291cbe2b504c, type: 3}
   Meteor_Line: {fileID: 7825423239845067279, guid: 276fea8bb09c9f94095d1999f3ca0d28, type: 3}
   Meteor_Traffic: {fileID: 3074925144767600519, guid: 2c22f4bdb8e91da4d9e5d3b918cceef7, type: 3}
---- !u!114 &2234746367468928096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4794457192225570956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}

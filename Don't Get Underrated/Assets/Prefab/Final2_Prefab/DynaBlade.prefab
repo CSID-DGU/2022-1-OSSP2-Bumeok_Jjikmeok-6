@@ -142,6 +142,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 0}
   stageData: {fileID: 0}
+  BackGroundSource_Collect: []
+  EffectSource_Collect:
+  - {fileID: 8300000, guid: 654cb468c030fe840b448dd00367872b, type: 3}
   Stage3_Min_Limit: {x: 0, y: 0}
   Stage3_Max_Limit: {x: 0, y: 0}
 --- !u!60 &6425943803109043895

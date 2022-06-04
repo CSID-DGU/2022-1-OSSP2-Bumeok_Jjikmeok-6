@@ -35,12 +35,15 @@ public class Nachi_X : Enemy_Info
         Camera_Shake_At_Once = My_Position.x;
         if (GameObject.Find("Flash") && GameObject.Find("Flash").TryGetComponent(out ImageColor IC))
             imageColor = IC;
+        if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
+            EffectSource = AS1;
     }
     IEnumerator X_Color_Change(Color Origin_C, Color Change_C, float time_persist, int Count)
     {
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         for (int i = 0; i < Count; i++)
         {
+            Effect_Sound_OneShot(2);
             float percent = 0;
             while (percent < 1)
             {
@@ -54,8 +57,10 @@ public class Nachi_X : Enemy_Info
     public IEnumerator Move(int flag)
     {
         trailRenderer.enabled = true;
+        Effect_Sound_OneShot(0);
         yield return Move_Circle(90, flag * 4, 0, 0.3f, 0.3f, My_Position.x, My_Position.y, 0.3f);
 
+        Effect_Sound_OneShot(1);
         Run_Life_Act(My_Rotate_Dec(Quaternion.identity, Quaternion.Euler(new Vector3(0, 0, 120 * -flag)), 0.8f, declineCurve));
         Run_Life_Act(Change_My_Color(My_Color, Color.red, 0.8f, 0, null));
         Change_BG(new Color(1, 1, 1, 0.7f), 0.8f);

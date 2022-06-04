@@ -57,7 +57,6 @@ public class Student : Life
     {
         Run_Life_Act(Change_My_Color(Color.white, Color.clear, 1.5f, 0.1f, null));
     }
-
     void Update()
     {
         rb.velocity = Vector3.zero;

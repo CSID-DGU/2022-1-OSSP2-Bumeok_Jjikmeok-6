@@ -18,7 +18,7 @@ public class SolGryn_Copy : Enemy_Info
     public void Move_Slerp_Distance(Vector3 Target, string dir)
     {
        Run_Life_Act(Move_Curve(transform.position, Target,
-              Get_Center_Vector(transform.position, Target, Vector3.Distance(transform.position, Target) * 0.85f, dir), 1, declineCurve));
+              Get_Center_Vector_For_Curve_Move(transform.position, Target, Vector3.Distance(transform.position, Target) * 0.85f, dir), 1, declineCurve));
     }
     public void Shake_Act()
     {
@@ -27,7 +27,6 @@ public class SolGryn_Copy : Enemy_Info
 
     public void Launch_SoyBean()
     {
-        //if (GameObject.FindGameObjectWithTag("Player"))
         Instantiate(Weapon[0], transform.position, Quaternion.identity);
     }
     // Update is called once per frame

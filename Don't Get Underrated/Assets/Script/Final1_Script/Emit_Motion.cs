@@ -17,7 +17,8 @@ public class Emit_Motion : MonoBehaviour
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (TryGetComponent(out SpriteRenderer SR))
+            spriteRenderer = SR;
         transform.localScale = Vector3.zero;
         if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Final1 PC_T))
             playerCtrl_Tengai = PC_T;
@@ -25,6 +26,13 @@ public class Emit_Motion : MonoBehaviour
     void Start()
     {
         spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, .3f);
+    }
+
+    public bool Check_Valid_Emit()
+    {
+        if (spriteRenderer != null && playerCtrl_Tengai != null)
+            return true;
+        return false;
     }
 
     public IEnumerator Emit_Change_Size()

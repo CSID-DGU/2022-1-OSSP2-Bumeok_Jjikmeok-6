@@ -10,35 +10,32 @@ public class Heart_Gaze_Viewer : Slider_Viewer
 
     [SerializeField]
     float fever_decrease;
-
-    
     private new void Awake()
     {
         base.Awake();
         if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Stage3 PC_S))
             playerCtrl_Sarang = PC_S;
-        slider.value = 0;
         fever_decrease = StaticFunc.Reverse_Time(fever_decrease);
     }
     public void When_Player_Defeat(int Ratio)
     {
-        if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
+        if (Check_Valid_Slider() && playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
             slider.value -= 0.1f * Ratio;
     }
     public void Ordinary_Case()
     {
-        if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
+        if (Check_Valid_Slider() && playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
             slider.value += 0.05f;
     }
     public void When_Interrupt_Defeat(int Ratio)
     { 
-        if (playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
+        if (Check_Valid_Slider() && playerCtrl_Sarang != null && !playerCtrl_Sarang.Is_Fever)
             slider.value += 0.1f * Ratio;
     }
     // Update is called once per frame
     void LateUpdate()
     {
-        if (playerCtrl_Sarang != null && playerCtrl_Sarang.is_Domain)
+        if (Check_Valid_Slider() && playerCtrl_Sarang != null && playerCtrl_Sarang.is_Domain)
         {
             if (playerCtrl_Sarang.Is_Fever)
             {

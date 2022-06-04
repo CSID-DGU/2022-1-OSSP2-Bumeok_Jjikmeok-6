@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+  stageData: {fileID: 11400000, guid: d7ff8fbdbdf5a1844822d357bb05211f, type: 2}
 --- !u!50 &7409978772565392567
 Rigidbody2D:
   serializedVersion: 4
@@ -164,4 +164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 5533317195471082818, guid: ceb8d5a6b71b86e4cabb598ab66ca98c, type: 3}
+  BackGroundSource_Collect: []
+  EffectSource_Collect: []
   Boss_Damage: 3

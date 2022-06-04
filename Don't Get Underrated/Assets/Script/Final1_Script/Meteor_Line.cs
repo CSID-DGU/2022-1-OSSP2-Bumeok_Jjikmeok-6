@@ -10,11 +10,16 @@ public class Meteor_Line : MonoBehaviour
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = Color.white;
+        if (TryGetComponent(out SpriteRenderer SR))
+        {
+            spriteRenderer = SR;
+            spriteRenderer.color = Color.white;
+        }
     }
     public IEnumerator Change_Color(Color Change, int Count, float time_persist)
     {
+        if (spriteRenderer == null)
+            yield break;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         Color Change_A_1 = Change;
         Color Change_A_0 = new Color(Change.r, Change.g, Change.b, 0);
@@ -36,6 +41,10 @@ public class Meteor_Line : MonoBehaviour
             }
         }
         yield return null;
+    }
+    public void Return_Origin_Color(Color Origin)
+    {
+        spriteRenderer.color = Origin;
     }
     // Update is called once per frame
     private void OnDestroy()

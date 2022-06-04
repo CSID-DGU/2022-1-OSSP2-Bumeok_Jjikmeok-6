@@ -8,7 +8,7 @@ public class MoveBackGround : MonoBehaviour
     [SerializeField]
     GameObject Back_another;
 
-    float move_value = 17.69f;
+    float move_value = 17.778f;
 
     Vector3 moveDirection = Vector3.left;
 
@@ -50,14 +50,14 @@ public class MoveBackGround : MonoBehaviour
             yield return null;
         }
     }
-    public void Increase_Speed_F(float time_persist, float Speed_Limit)
+    public void Increase_Speed_Func(float time_persist, float Speed_Limit)
     {
         if (increase_speed != null)
             StopCoroutine(increase_speed);
         increase_speed = Increase_Speed(time_persist, Speed_Limit);
         StartCoroutine(increase_speed);
     }
-    public void Decrease_Speed_F(float time_persist, float Speed_Limit)
+    public void Decrease_Speed_Func(float time_persist, float Speed_Limit)
     {
         if (decrease_speed != null)
             StopCoroutine(decrease_speed);
@@ -65,14 +65,14 @@ public class MoveBackGround : MonoBehaviour
         StartCoroutine(decrease_speed);
     }
 
-    public IEnumerator Increase_Speed_W(float time_persist, float Speed_Limit)
+    public IEnumerator Increase_Speed_And_Wait(float time_persist, float Speed_Limit)
     {
         if (increase_speed != null)
             StopCoroutine(increase_speed);
         increase_speed = Increase_Speed(time_persist, Speed_Limit);
         yield return StartCoroutine(increase_speed);
     }
-    public IEnumerator Decrease_Speed_W(float time_persist, float Speed_Limit)
+    public IEnumerator Decrease_Speed_And_Wait(float time_persist, float Speed_Limit)
     {
         if (decrease_speed != null)
             StopCoroutine(decrease_speed);
