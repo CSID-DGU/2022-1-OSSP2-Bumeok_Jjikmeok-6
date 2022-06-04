@@ -67,18 +67,15 @@ public class My_SJH_Script : MonoBehaviour
     }
     IEnumerator Update_Rank()
     {
-        yield return StartCoroutine(Wait_Text_IEnum(7));
-        Before_Rank.color = Color.green;
-        After_Rank.color = Color.blue;
-        Wait_text.color = Color.clear;
+        yield return Wait_Text_IEnum(7);
 
         WWWForm form = new WWWForm();
 
-        form.AddField("main_stage_1_score", 100);
-        form.AddField("main_stage_2_score", 200);
-        form.AddField("main_stage_3_score", 300);
-        form.AddField("final_stage_1_score", 400);
-        form.AddField("final_stage_2_score", 500);
+        form.AddField("main_stage_1_score", 1000);
+        form.AddField("main_stage_2_score", 2000);
+        form.AddField("main_stage_3_score", 3000);
+        form.AddField("final_stage_1_score", 4000);
+        form.AddField("final_stage_2_score", 77);
 
         //form.AddField("main_stage_1_score", singleTone.main_stage_1_score);
         //form.AddField("main_stage_2_score", singleTone.main_stage_2_score);
@@ -95,10 +92,16 @@ public class My_SJH_Script : MonoBehaviour
             (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
             (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            Debug.Log(singleTone.request.error + " " + singleTone.request.downloadHandler.text);
+            Before_Rank.color = Color.clear;
+            After_Rank.color = Color.clear;
+            Wait_text.color = Color.red;
+            Wait_text.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
+            Before_Rank.color = Color.green;
+            After_Rank.color = Color.blue;
+            Wait_text.color = Color.clear;
             Json_From_Rank_DB d = JsonUtility.FromJson<Json_From_Rank_DB>(singleTone.request.downloadHandler.text);
             Before_Rank.text = "";
             After_Rank.text = "";

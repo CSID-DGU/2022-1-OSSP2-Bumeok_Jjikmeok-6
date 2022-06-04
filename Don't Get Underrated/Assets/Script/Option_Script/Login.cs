@@ -26,6 +26,7 @@ public class Login : MonoBehaviour
     private void Awake()
     {
         Popup.SetActive(false);
+        singleTone.id = "";
         wait_load = null;
     }
     [System.Serializable]
@@ -80,6 +81,7 @@ public class Login : MonoBehaviour
     }
     IEnumerator ServerLogin()
     {
+        singleTone.id = "";
         Popup.SetActive(true);
         wait_load = Wait_Load();
         StartCoroutine(wait_load);
@@ -110,10 +112,12 @@ public class Login : MonoBehaviour
             infoText_2.color = Color.black;
             Login_Success data = JsonUtility.FromJson<Login_Success>(singleTone.request.downloadHandler.text);
 
+            singleTone.id = data.user_info.id;
             infoText_2.text = data.success_message;
+            Debug.Log(singleTone.id);
             Popup_X.SetActive(true);
             yield return null;
-            LoadingProgress.LoadScene("My_SJH_Scene");
+            LoadingProgress.LoadScene("Final1");
         }
     }
 

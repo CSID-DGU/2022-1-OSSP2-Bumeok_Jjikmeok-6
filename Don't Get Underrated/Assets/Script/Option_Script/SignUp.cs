@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using System.Linq;
 using TMPro;
 
 //1.JOIN문->select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id;
@@ -45,7 +46,13 @@ public class SignUp : MonoBehaviour
     }
 
     [System.Serializable]
-    class Item_Total
+    class Ranking_Total_Up
+    {
+        public Ranking_Total_Down[] rank_mine;
+        public Ranking_Total_Down[] rank_total;
+    }
+    [System.Serializable]
+    class Ranking_Total_Down
     {
         public string id;
         public int main_score_1;
@@ -54,118 +61,528 @@ public class SignUp : MonoBehaviour
         public int final_score_1;
         public int final_score_2;
     }
+
     [System.Serializable]
-    class Item_Main_1
+    class Ranking_Main_1_Up
+    {
+        public Ranking_Main_1_Down[] rank_mine;
+        public Ranking_Main_1_Down[] rank_total;
+    }
+    [System.Serializable]
+    class Ranking_Main_2_Up
+    {
+        public Ranking_Main_2_Down[] rank_mine;
+        public Ranking_Main_2_Down[] rank_total;
+    }
+    [System.Serializable]
+    class Ranking_Main_3_Up
+    {
+        public Ranking_Main_3_Down[] rank_mine;
+        public Ranking_Main_3_Down[] rank_total;
+    }
+    [System.Serializable]
+    class Ranking_Final_1_Up
+    {
+        public Ranking_Final_1_Down[] rank_mine;
+        public Ranking_Final_1_Down[] rank_total;
+    }
+    [System.Serializable]
+    class Ranking_Final_2_Up
+    {
+        public Ranking_Final_2_Down[] rank_mine;
+        public Ranking_Final_2_Down[] rank_total;
+    }
+
+    [System.Serializable]
+    class Ranking_Main_1_Down
     {
         public string id;
         public int main_score_1;
     }
     [System.Serializable]
-    class Item_Main_2
+    class Ranking_Main_2_Down
     {
         public string id;
         public int main_score_2;
     }
     [System.Serializable]
-    class Item_Main_3
+    class Ranking_Main_3_Down
     {
         public string id;
         public int main_score_3;
     }
     [System.Serializable]
-    class Item_Final_1
+    class Ranking_Final_1_Down
     {
         public string id;
         public int final_score_1;
-
     }
     [System.Serializable]
-    class Item_Final_2
+    class Ranking_Final_2_Down
     {
         public string id;
         public int final_score_2;
-    }
-
-    [System.Serializable]
-    class Data_Total
-    {
-        public Item_Total[] item_total;
-    }
-
-    [System.Serializable]
-    class Data_Main_1
-    {
-        public Item_Main_1[] item_main_1;
-    }
-
-    [System.Serializable]
-    class Data_Main_2
-    {
-        public Item_Main_2[] item_main_2;
-    }
-
-    [System.Serializable]
-    class Data_Main_3
-    {
-        public Item_Main_3[] item_main_3;
-    }
-
-    [System.Serializable]
-    class Data_Final_1
-    {
-        public Item_Final_1[] item_final_1;
-    }
-
-    [System.Serializable]
-    class Data_Final_2
-    {
-        public Item_Final_2[] item_final_2;
     }
 
     public void buttonClick()
     {
         StartCoroutine(SignUp_Enum());
     }
-    public void Show_Ranking()
+    public void Show_Ranking(int Params)
     {
-        StartCoroutine(Show_Ranking_I());
+        StartCoroutine(Show_Total_Ranking_For_Login()); // 상세 랭킹 (로그인 O --> 본인 것까지(등수는 없음))
+        StartCoroutine(Show_Total_Ranking_For_Not_Login()); // 전체 랭킹 (로그인 X)
+        StartCoroutine(Show_Detail_Ranking_For_Login(Params)); // 상세 랭킹 (로그인 O --> 본인 것까지)
+        StartCoroutine(Show_Detail_Ranking_For_Not_Login(Params)); // 상세 랭킹 (로그인 X)
     }
-    IEnumerator Show_Ranking_I()
+    public class Number
+    {
+        public int identifier;
+    }
+    IEnumerator Show_Total_Ranking_For_Login()
     {
         Popup.SetActive(true);
         IEnumerator wait_load = Wait_Load();
         StartCoroutine(wait_load);
 
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost:3000/Get_Rank_For_Main_1");
-        yield return www.SendWebRequest();
+        singleTone.request = UnityWebRequest.Get("http://localhost:3000/get_rank_total_login");
+        yield return singleTone.request.SendWebRequest();
 
         StopCoroutine(wait_load);
 
-        if ((www.result == UnityWebRequest.Result.ConnectionError) ||
-            (www.result == UnityWebRequest.Result.ProtocolError) ||
-            (www.result == UnityWebRequest.Result.DataProcessingError))
+        if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
+            (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
+            (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            infoText.text = www.error + '\n' + www.downloadHandler.text;
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
+            infoText.color = Color.red;
+            Popup_X.SetActive(true);
+        }
+        else
+        {
+            Ranking_Total_Up d = JsonUtility.FromJson<Ranking_Total_Up>(singleTone.request.downloadHandler.text);
+
+            int Index = 0;
+            int My_Rand = 0;
+
+            foreach (var e in d.rank_total)
+            {
+                Index++;
+                foreach (var u in d.rank_mine)
+                {
+                    if (e.id == u.id)
+                        My_Rand = Index;
+                }
+            }
+
+            Index = 0;
+
+            Debug.Log("내 랭킹");
+            foreach (var e in d.rank_mine)
+                Debug.Log(My_Rand + " " + e.id + " " + e.main_score_1 + " " + e.main_score_2 + " " + e.main_score_3 + " " + e.final_score_1 + " " + e.final_score_2);
+
+            Debug.Log("전체 랭킹 : ");
+            foreach (var e in d.rank_total)
+            {
+                Index++;
+                Debug.Log(Index + " " + e.id + " " + e.main_score_1 + " " + e.main_score_2 + " " + e.main_score_3 + " " + e.final_score_1 + " " + e.final_score_2);
+            }
+            Popup_X.SetActive(true);
+        }
+        yield return null;
+    }
+    IEnumerator Show_Total_Ranking_For_Not_Login()
+    {
+        Popup.SetActive(true);
+        IEnumerator wait_load = Wait_Load();
+        StartCoroutine(wait_load);
+
+        singleTone.request = UnityWebRequest.Get("http://localhost:3000/get_rank_total_not_login");
+        yield return singleTone.request.SendWebRequest();
+
+        StopCoroutine(wait_load);
+
+        if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
+            (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
+            (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
+        {
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
+            infoText.color = Color.red;
+            Popup_X.SetActive(true);
+        }
+        else
+        {
+            Ranking_Total_Up d = JsonUtility.FromJson<Ranking_Total_Up>(singleTone.request.downloadHandler.text);
+
+            Debug.Log("전체 랭킹 : ");
+            int Index = 0;
+            foreach (var e in d.rank_total)
+            {
+                Index++;
+                Debug.Log(Index + " " + e.id + " " + e.main_score_1 + " " + e.main_score_2 + " " + e.main_score_3 + " " + e.final_score_1 + " " + e.final_score_2);
+            }
+
+            Popup_X.SetActive(true);
+
+        }
+        yield return null;
+    }
+    IEnumerator Show_Detail_Ranking_For_Not_Login(int Params)
+    {
+        Popup.SetActive(true);
+        IEnumerator wait_load = Wait_Load();
+        StartCoroutine(wait_load);
+
+        WWWForm form = new WWWForm();
+        form.AddField("identifier", Params);
+
+        singleTone.request = UnityWebRequest.Post("http://localhost:3000/get_rank_detail_not_login", form);
+        yield return singleTone.request.SendWebRequest();
+
+        StopCoroutine(wait_load);
+
+        if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
+            (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
+            (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
+        {
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
+            infoText.color = Color.red;
+            Popup_X.SetActive(true);
+        }
+        else
+        {
+            infoText.text = "";
+            Dictionary<string, int> dic = new Dictionary<string, int>();
+            int My_Rand = 0;
+            if (Params == 0)
+            {
+                Ranking_Main_1_Up d = JsonUtility.FromJson<Ranking_Main_1_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.main_score_1);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+
+                Popup_X.SetActive(true);
+            }
+            if (Params == 1)
+            {
+                Ranking_Main_2_Up d = JsonUtility.FromJson<Ranking_Main_2_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.main_score_2);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+
+                Popup_X.SetActive(true);
+            }
+            if (Params == 2)
+            {
+                Ranking_Main_3_Up d = JsonUtility.FromJson<Ranking_Main_3_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.main_score_3);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+
+                Popup_X.SetActive(true);
+            }
+            if (Params == 3)
+            {
+                Ranking_Final_1_Up d = JsonUtility.FromJson<Ranking_Final_1_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.final_score_1);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+
+                Popup_X.SetActive(true);
+
+            }
+            if (Params == 4)
+            {
+                Ranking_Final_2_Up d = JsonUtility.FromJson<Ranking_Final_2_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.final_score_2);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+
+                Popup_X.SetActive(true);
+            }
+        }
+        yield return null;
+    }
+    IEnumerator Show_Detail_Ranking_For_Login(int Params)
+    {
+        Popup.SetActive(true);
+        IEnumerator wait_load = Wait_Load();
+        StartCoroutine(wait_load);
+
+
+        WWWForm form = new WWWForm();
+        form.AddField("identifier", Params);
+
+
+        singleTone.request = UnityWebRequest.Post("http://localhost:3000/get_rank_detail_login", form);
+        yield return singleTone.request.SendWebRequest();
+
+        StopCoroutine(wait_load);
+
+        if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
+            (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
+            (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
+        {
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
             infoText.color = Color.red;
             Popup_X.SetActive(true);
 
         }
         else
         {
-            Data_Main_1 d = JsonUtility.FromJson<Data_Main_1>(www.downloadHandler.text);
-            // Data_Main_2, Data_Main_3, Data_Final_1, Data_Final_2도 있으니 잘 보셈
             infoText.text = "";
-            List<int> Rank_Ordered = new List<int>();
-
-            foreach (var u in d.item_main_1)
+            Dictionary<string, int> dic = new Dictionary<string, int>();
+            int My_Rand = 0;
+            if (Params == 0)
             {
-                Rank_Ordered.Add(u.main_score_1);
-                infoText.text += u.id + ", " + u.main_score_1 + ", " + '\n';
-            }
-            Rank_Ordered.Sort(); // 오름차순 정렬. 내림차순으로 출력하고 싶으면 for문을 반대로
+                Ranking_Main_1_Up d = JsonUtility.FromJson<Ranking_Main_1_Up>(singleTone.request.downloadHandler.text);
 
-            infoText.color = Color.blue;
-            Popup_X.SetActive(true);
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.main_score_1);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    foreach (var u in d.rank_mine)
+                    {
+                        if (e.Key == u.id)
+                            My_Rand = Index;
+                    }
+                }
+                Index = 0;
+                foreach (var u in d.rank_mine)
+                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.main_score_1);
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+
+                Popup_X.SetActive(true);
+            }
+            if (Params == 1)
+            {
+                Ranking_Main_2_Up d = JsonUtility.FromJson<Ranking_Main_2_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.main_score_2);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+                int Index = 0;
+
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    foreach (var u in d.rank_mine)
+                    {
+                        if (e.Key == u.id)
+                            My_Rand = Index;
+                    }
+                }
+                foreach (var u in d.rank_mine)
+                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.main_score_2);
+
+                Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+                Popup_X.SetActive(true);
+            }
+            if (Params == 2)
+            {
+                Ranking_Main_3_Up d = JsonUtility.FromJson<Ranking_Main_3_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.main_score_3);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    foreach (var u in d.rank_mine)
+                    {
+                        if (e.Key == u.id)
+                            My_Rand = Index;
+                    }
+                }
+                foreach (var u in d.rank_mine)
+                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.main_score_3);
+
+                Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+                Popup_X.SetActive(true);
+            }
+            if (Params == 3)
+            {
+                Ranking_Final_1_Up d = JsonUtility.FromJson<Ranking_Final_1_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.final_score_1);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    foreach (var u in d.rank_mine)
+                    {
+                        if (e.Key == u.id)
+                            My_Rand = Index;
+                    }
+                }
+                foreach (var u in d.rank_mine)
+                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.final_score_1);
+
+                Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+                Popup_X.SetActive(true);
+
+            }
+            if (Params == 4)
+            {
+                Ranking_Final_2_Up d = JsonUtility.FromJson<Ranking_Final_2_Up>(singleTone.request.downloadHandler.text);
+
+                foreach (var u in d.rank_total)
+                    dic.Add(u.id, u.final_score_2);
+
+                var myList_Ollim = dic.ToList();
+                var myList_Narim = dic.ToList();
+
+                myList_Ollim.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+                int Index = 0;
+
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    foreach (var u in d.rank_mine)
+                    {
+                        if (e.Key == u.id)
+                            My_Rand = Index;
+                    }
+                }
+                foreach (var u in d.rank_mine)
+                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.final_score_2);
+
+                Index = 0;
+
+                Debug.Log("상대방 랭킹 : ");
+                foreach (var e in myList_Ollim)
+                {
+                    Index++;
+                    Debug.Log(Index + " " + e.Key + " " + e.Value);
+                }
+                Popup_X.SetActive(true);
+            }
         }
         yield return null;
     }
