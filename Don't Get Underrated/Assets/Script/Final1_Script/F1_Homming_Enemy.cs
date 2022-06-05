@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class F1_Homming_Enemy : Enemy_Info
-{
-    Player_Final1 player_final1;
-
-    Rigidbody2D rb;
-
+{ 
     [SerializeField]
     float speed = 5;
 
     [SerializeField]
     public float rotateSpeed = 200f;
+
+    Player_Final1 player_final1;
+
+    Rigidbody2D rb;
 
     private new void Awake()
     {
@@ -24,8 +24,8 @@ public class F1_Homming_Enemy : Enemy_Info
     }
     void Start()
     {
-        StartCoroutine(Auto_Dead());
-        StartCoroutine(Homming_Player());
+        Run_Life_Act(Auto_Dead());
+        Run_Life_Act(Homming_Player());
     }
     IEnumerator Auto_Dead()
     {
@@ -35,8 +35,7 @@ public class F1_Homming_Enemy : Enemy_Info
     }
     public override void OnDie()
     {
-        Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        base.OnDie();
     }
     IEnumerator Homming_Player()
     {

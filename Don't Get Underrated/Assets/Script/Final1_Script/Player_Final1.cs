@@ -35,6 +35,9 @@ public class Player_Final1 : Player_Info
     [SerializeField]
     public GameObject Speed_Slider;
 
+    [SerializeField]
+    int deathCount = 0;
+
     Animator animator; // 애니메이터는 여러개 추가될 수 있어서 상속 생략
 
     GameObject Emit_Obj_Copy; // 고유
@@ -50,6 +53,8 @@ public class Player_Final1 : Player_Info
     private bool is_boss_first_appear;
 
     IEnumerator i_start_firing, color_when_unbeatable, i_start_emit;
+
+    public int DeathCount => deathCount;
 
     private new void Awake()
     {
@@ -132,6 +137,13 @@ public class Player_Final1 : Player_Info
     {
         if (Unbeatable)
             return;
+        Unbeatable = true;
+
+        if (Emit_Obj_Copy != null)
+        {
+            Stop_Life_Act(ref i_start_emit);
+            Destroy(Emit_Obj_Copy);
+        }
 
         StopFiring();
         Effect_Sound_OneShot(2);
@@ -140,19 +152,12 @@ public class Player_Final1 : Player_Info
         deathCount += damage;
         animator.SetBool("Dead", true);
        
-        Unbeatable = true;
         weapon_able = false;
-        is_LateUpdate = false;
         movement2D.enabled = false;
         is_Update = false;
+        is_LateUpdate = false;
 
         DeathCount_Text.text = "Death Count : " + deathCount;
-
-        if (Emit_Obj_Copy != null)
-        {
-            Stop_Life_Act(ref i_start_emit);
-            Destroy(Emit_Obj_Copy);
-        }
 
         Run_Life_Act(Damage_After());
     }
@@ -168,13 +173,13 @@ public class Player_Final1 : Player_Info
         float A = Get_Curve_Distance(My_Position, My_Position + 2.5f * Vector3.left, 
             Get_Center_Vector_For_Curve_Move(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"));
 
-        yield return Move_Curve(My_Position, My_Position + 2.5f * Vector3.left, 
-            Get_Center_Vector_For_Curve_Move(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.2f, OriginCurve);
+        yield return Move_Curve(My_Position, My_Position + 2.5f * Vector3.left,
+            Get_Center_Vector_For_Curve_Move(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"), 0.25f, OriginCurve);
 
         float kuku = ((1.215f * My_Position.x) - My_Position.y - 7) / 1.215f;
 
         float B = Vector3.Distance(My_Position, new Vector3(kuku, -7, 0));
-        yield return Move_Straight(My_Position, new Vector3(kuku, -7, 0), B/A * 0.2f, OriginCurve);
+        yield return Move_Straight(My_Position, new Vector3(kuku, -7, 0), B/A * 0.25f, OriginCurve);
        
     }
     public void Start_Emit()
@@ -257,8 +262,6 @@ public class Player_Final1 : Player_Info
         BoomCount++;
         BoomCount_Text.text = "Boom : " + BoomCount;
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (is_Update)

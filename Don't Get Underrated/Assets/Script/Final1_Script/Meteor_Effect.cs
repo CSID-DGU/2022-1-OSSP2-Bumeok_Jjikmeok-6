@@ -41,7 +41,6 @@ public class Meteor_Traffic_Info : Meteor_Line_Info
 // case 2 : 선이 빛나지 않을 때
 public class Meteor_Effect : Weapon_Devil
 {
-    // Start is called before the first frame update
     [SerializeField]
     GameObject Meteor_Line;
 
@@ -50,19 +49,21 @@ public class Meteor_Effect : Weapon_Devil
 
     GameObject copy_Meteor_Line, copy_Meteor_Traffic;
 
-    SpriteRenderer spriteRenderer;
-
     private new void Awake()
     {
         base.Awake();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = Color.clear;
+       
+        if (spriteRenderer != null)
+            spriteRenderer.color = Color.clear;
         W_MoveTo(Vector3.zero);
         if (GameObject.Find("Weapon_Effect_Sound") && GameObject.Find("Weapon_Effect_Sound").TryGetComponent(out AudioSource AS))
             EffectSource = AS;
     }
     IEnumerator Meteor_Behave(Meteor_Traffic_Info MT_I, Vector3 Target)
     {
+        if (spriteRenderer == null)
+            yield break;
+
         copy_Meteor_Line = Instantiate(Meteor_Line, MT_I.Line_Pos, MT_I.Line_Rotation);
         copy_Meteor_Traffic = Instantiate(Meteor_Traffic, MT_I.Traffic_Pos, Quaternion.identity);
 
@@ -79,6 +80,7 @@ public class Meteor_Effect : Weapon_Devil
             Effect_Sound_OneShot(1);
             yield return MT.Shake_Act(MT_I.Shake_Time, MT_I.Shake_Intensity);
         }
+
         Destroy(copy_Meteor_Traffic);
         Destroy(copy_Meteor_Line);
 

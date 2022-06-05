@@ -6,10 +6,7 @@ public class Nachi_X : Enemy_Info
 {
     private TrailRenderer trailRenderer;
 
-    
-
     private float Camera_Shake_At_Once;
-    // Start is called before the first frame update
     private new void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info HC))
@@ -26,7 +23,6 @@ public class Nachi_X : Enemy_Info
                 HC.TakeDamage(1);
         }
     }
-    // ¾¾ÀÌ¹ß ´Ù ¼öÁ¤ÇØ¾ßµÊ
     private new void Awake()
     {
         base.Awake();
@@ -72,9 +68,10 @@ public class Nachi_X : Enemy_Info
         if (Camera_Shake_At_Once < 0)
             Camera_Shake(0.02f, 2f, true, false);
         yield return X_Color_Change(Color.white, Color.clear, 1, 3);
+
         Run_Life_Act(Change_My_Color(My_Color, Color.clear, 2, 0, null));
         yield return Change_BG_And_Wait(Color.clear, 1);
         trailRenderer.enabled = false;
-        Destroy(gameObject);
+        OnDie();
     }
 }

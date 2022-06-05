@@ -38,7 +38,7 @@ public class Gorichu : Enemy_Info
     }
     private void Start()
     {
-        My_Scale = new Vector3(1.7f, 1.7f, 0);
+        My_Scale = new Vector3(2, 2, 0);
         D.Add(0, My_Position);
         D.Add(1, new Vector3(My_Position.x, 3, 0));
         D.Add(2, new Vector3(My_Position.x, My_Position.y - 4, My_Position.z));
@@ -53,8 +53,8 @@ public class Gorichu : Enemy_Info
         Run_Life_Act_And_Continue(ref size, Change_My_Size_Infinite(3f));
         yield return Move_Straight(D[1], D[2], 1f, declineCurve);
         Stop_Life_Act(ref size);
+
         Instantiate(Weapon[0], new Vector3(My_Position.x, 0, 0), Quaternion.identity);
-        Destroy(gameObject);
+        OnDie();
     }
-    // Update is called once per frame
 }

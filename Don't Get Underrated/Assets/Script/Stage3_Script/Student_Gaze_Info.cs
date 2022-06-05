@@ -7,42 +7,44 @@ public class Student_Gaze_Info : Slider_Viewer
 {
     // Start is called before the first frame update
 
+    [SerializeField]
+    GameObject YeonTa;
+
+    [SerializeField]
+    GameObject Square;
+
+    [SerializeField]
+    GameObject Angel;
+
+    List<Interrupt> Interrupt_NonActive; // 맵을 떠도는 인터럽트
+
+    List<Interrupt> Interrupt_Active;
+
     Camera selectedCamera;
 
     Heart_Gaze_Viewer heart_Gaze_Viewer;
 
-    List<Interrupt> Interrupt_NonActive; // 맵을 떠도는 인터럽트
-
-    Player_Stage3 playerCtrl_Sarang;
-
-    List<Interrupt> Interrupt_Active;
-
-    [SerializeField]
-    GameObject YeonTa;
+    Player_Stage3 player_stage3;
 
     GameObject YeonTa_Copy;
 
     ImageColor imageColor;
 
-    [SerializeField]
-    GameObject Square;
-
     int StudentLayerMask;  // Player 레이어만 충돌 체크함
-
-    [SerializeField]
-    GameObject Angel;
 
     void Init_Start()
     {
         Empty_HP();
         StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
+       
+        Interrupt_NonActive = new List<Interrupt>();
+        Interrupt_Active = new List<Interrupt>();
+
         selectedCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
         if (GameObject.FindGameObjectWithTag("HeartSlider").TryGetComponent(out Heart_Gaze_Viewer H_G_V))
             heart_Gaze_Viewer = H_G_V;
         if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Stage3 PC_S))
-            playerCtrl_Sarang = PC_S;
-        Interrupt_NonActive = new List<Interrupt>();
-        Interrupt_Active = new List<Interrupt>();
+            player_stage3 = PC_S;
         if (GameObject.Find("Flash_Interrupt") && GameObject.Find("Flash_Interrupt").TryGetComponent(out ImageColor IC))
             imageColor = IC;
     }
@@ -62,10 +64,10 @@ public class Student_Gaze_Info : Slider_Viewer
         if (!Check_Valid_Slider())
             return 0;
 
-        if (playerCtrl_Sarang.Is_Fever)
-            slider.value += Time.deltaTime * 0.7f * playerCtrl_Sarang.Student_Power * playerCtrl_Sarang.Fever_Power;
+        if (player_stage3.Is_Fever)
+            slider.value += Time.deltaTime * 0.1f * player_stage3.Student_Power * player_stage3.Fever_Power;
         else
-            slider.value += Time.deltaTime * 0.7f * playerCtrl_Sarang.Student_Power;
+            slider.value += Time.deltaTime * 0.1f * player_stage3.Student_Power;
 
         if (slider.value >= 0.5f && Interrupt_NonActive.Count >= 1 && Interrupt_Active.Count == 0)
         {
@@ -85,8 +87,8 @@ public class Student_Gaze_Info : Slider_Viewer
             return 1;
         }
          if (slider.value >= 0.35f && Interrupt_Active.Count == 0)
-            return 3;
-        return 2;
+            return 2;
+        return 3;
     }
 
     public void Empty_HP()
@@ -109,16 +111,14 @@ public class Student_Gaze_Info : Slider_Viewer
         if (GameObject.FindGameObjectWithTag("StudentSlider") && GameObject.FindGameObjectWithTag("StudentSlider").TryGetComponent(out Image Im))
             Im.color = Color.red;
         transform.localScale = new Vector3(1, 1, 1);
-        // Change_Pink_Slider()와는 달리, 슬라이더를 분홍색으로 바꾸면서 변경된 위치를 여기서 재정의 할 필요가 없는 이유는 
-        // 플레이어 쪽에서 학생의 게이지의 위치를 알아서 설정해주기 때문이다.
     }
-    public IEnumerator Competition(GameObject student, float student_power)
+    public IEnumerator Competition(GameObject student)
     {
         if (!Check_Valid_Slider())
             yield break;
 
         slider.value = 0.5f;
-        yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        yield return StaticFunc.WaitForRealSeconds(0.3f);
         if (imageColor != null)
         {
             imageColor.StopAllCoroutines();
@@ -129,7 +129,7 @@ public class Student_Gaze_Info : Slider_Viewer
 
         while (true)
         {
-            if (!playerCtrl_Sarang.Is_Fever)
+            if (!player_stage3.Is_Fever)
                 slider.value -= Time.deltaTime * (0.4f + 0.1f * Interrupt_Active.Count);
 
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -137,7 +137,7 @@ public class Student_Gaze_Info : Slider_Viewer
             RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f, StudentLayerMask);
 
             if (Input.GetMouseButtonDown(0) && hit.collider != null && hit.transform.gameObject.CompareTag("Student"))
-                slider.value += 0.15f * student_power;
+                slider.value += 0.15f;
 
 
             if (slider.value <= 0 || slider.value >= 1)
@@ -151,7 +151,7 @@ public class Student_Gaze_Info : Slider_Viewer
                         e.Start_Move();
 
                     heart_Gaze_Viewer.When_Player_Defeat(Interrupt_Active.Count);
-                    playerCtrl_Sarang.animator.SetBool("IsDead", true);
+                    player_stage3.animator.SetBool("IsDead", true);
 
                 }
                 else if (slider.value >= 1)
@@ -162,9 +162,10 @@ public class Student_Gaze_Info : Slider_Viewer
                     if (student.TryGetComponent(out Student S))
                     {
                         GameObject square = Instantiate(Square, S.transform.position, Quaternion.identity);
-                        GameObject w = Instantiate(Angel, square.transform.position, Quaternion.identity);
-                        w.transform.SetParent(square.transform);
+                        GameObject angel = Instantiate(Angel, square.transform.position, Quaternion.identity);
+                        angel.transform.SetParent(square.transform);
                     }
+                    player_stage3.Detect_Interrupt_Active = Interrupt_Active.Count;
                     heart_Gaze_Viewer.When_Interrupt_Defeat(Interrupt_Active.Count);
                 }
                 Empty_HP();

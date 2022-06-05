@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class DynaBlade : Enemy_Info
 {
-    // Start is called before the first frame update
-
     private Dictionary<int, Vector3> Plus_Start, Minus_Start;
 
-    public float[,] bangmeon = new float[6, 2] { { 6.8f, 4.46f }, { -5.67f, 2.44f }, { -5.67f, 1 }, { 5.81f, -1.29f }, { 5.81f, -3 }, { -13.77f, 3.77f } };
+    public float[,] DynaBlade_Move = new float[6, 2] { { 6.8f, 4.46f }, { -5.67f, 2.44f }, { -5.67f, 1 }, { 5.81f, -1.29f }, { 5.81f, -3 }, { -13.77f, 3.77f } };
 
     private IEnumerator size;
 
@@ -29,7 +27,6 @@ public class DynaBlade : Enemy_Info
                 HC.TakeDamage(1);
         }
     }
-
     private new void Awake()
     {
         base.Awake();
@@ -37,8 +34,8 @@ public class DynaBlade : Enemy_Info
         Minus_Start = new Dictionary<int, Vector3>();
         for (int i = 0; i < 6; i++)
         {
-            Plus_Start.Add(i, new Vector3(bangmeon[i, 0], bangmeon[i, 1], 0));
-            Minus_Start.Add(i, new Vector3(-bangmeon[i, 0], bangmeon[i, 1], 0));
+            Plus_Start.Add(i, new Vector3(DynaBlade_Move[i, 0], DynaBlade_Move[i, 1], 0));
+            Minus_Start.Add(i, new Vector3(-DynaBlade_Move[i, 0], DynaBlade_Move[i, 1], 0));
         }
         if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
             EffectSource = AS1;
@@ -89,6 +86,6 @@ public class DynaBlade : Enemy_Info
         if (GameObject.FindGameObjectWithTag("Boss") && GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
             SG.Is_Next_Pattern = true;
 
-        Destroy(gameObject);
+        OnDie();
     }
 }

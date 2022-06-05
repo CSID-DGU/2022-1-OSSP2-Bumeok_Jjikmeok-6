@@ -10,7 +10,7 @@ public class CameraShake : MonoBehaviour
     private Quaternion originRotation;
 
 
-    private void Init_Camera()
+    public void Init_Camera()
     {
         mainCamera.transform.position = new Vector3(0, 0, -10);
         mainCamera.transform.rotation = Quaternion.identity;

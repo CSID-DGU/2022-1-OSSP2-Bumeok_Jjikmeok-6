@@ -10,6 +10,7 @@ public class PowerSliderViewer : Slider_Viewer
     private new void Awake()
     {
         base.Awake();
+        Act = null;
     }
     public void Start_To_Decrease(float time_persist)
     {
@@ -40,7 +41,6 @@ public class PowerSliderViewer : Slider_Viewer
             PC_T.is_Power_Up = false;
             PC_T.Power_Slider.SetActive(false);
         }
-           
         yield return null;
     }
 }

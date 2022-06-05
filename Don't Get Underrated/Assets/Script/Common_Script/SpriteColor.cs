@@ -18,7 +18,7 @@ public class SpriteColor : MonoBehaviour
     {
         return spriteRenderer.color;
     }
-    public IEnumerator Change_Color(Color change_color, float ratio)
+    public IEnumerator Change_Color_And_Wait(Color change_color, float ratio)
     {
         float percent = 0;
         Color origin_color = Get_BGColor();
@@ -30,11 +30,23 @@ public class SpriteColor : MonoBehaviour
             yield return null;
         }
     }
-    public void Change_C(Color color, float time_persist)
+    public IEnumerator Change_Color_Real_Time(Color change_color, float ratio)
+    {
+        float percent = 0;
+        Color origin_color = Get_BGColor();
+        float inverse_time_persist = StaticFunc.Reverse_Time(ratio);
+        while (percent < 1)
+        {
+            percent += Time.unscaledDeltaTime * inverse_time_persist;
+            spriteRenderer.color = Color.Lerp(origin_color, change_color, percent);
+            yield return null;
+        }
+    }
+    public void Change_Color(Color color, float time_persist)
     {
         if (param != null)
             StopCoroutine(param);
-        param = Change_Color(color, time_persist);
+        param = Change_Color_And_Wait(color, time_persist);
         StartCoroutine(param);
     }
 }

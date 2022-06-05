@@ -11,26 +11,25 @@ public class Emit_Motion : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
-    Player_Final1 playerCtrl_Tengai;
+    Player_Final1 player_final1;
 
     IEnumerator Actions;
-
     private void Awake()
     {
         if (TryGetComponent(out SpriteRenderer SR))
             spriteRenderer = SR;
         transform.localScale = Vector3.zero;
         if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Final1 PC_T))
-            playerCtrl_Tengai = PC_T;
+            player_final1 = PC_T;
     }
     void Start()
     {
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, .3f);
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.3f);
     }
 
     public bool Check_Valid_Emit()
     {
-        if (spriteRenderer != null && playerCtrl_Tengai != null)
+        if (spriteRenderer != null && player_final1 != null)
             return true;
         return false;
     }
@@ -89,8 +88,8 @@ public class Emit_Motion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerCtrl_Tengai != null)
-            transform.position = playerCtrl_Tengai.transform.position;
+        if (player_final1 != null)
+            transform.position = player_final1.transform.position;
     }
     private void OnDestroy()
     {

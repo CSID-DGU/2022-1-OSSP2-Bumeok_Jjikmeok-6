@@ -25,24 +25,25 @@ public class Meteor_Traffic : MonoBehaviour
         if (spriteRenderer == null)
             yield break;
 
-        Color Change_A_1 = Color.white;
-        Color Change_A_0 = Color.clear;
+        Color Alpha_1 = Color.white;
+        Color Alpha_0 = Color.clear;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+
         float percent = 0;
         while (percent < 1)
         {
             percent += Time.deltaTime * inverse_time_persist;
-            spriteRenderer.color = Color.Lerp(Change_A_0, Change_A_1, percent);
+            spriteRenderer.color = Color.Lerp(Alpha_0, Alpha_1, percent);
             yield return null;
         }
         percent = 0;
         while (percent < 1)
         {
             percent += Time.deltaTime * inverse_time_persist;
-            spriteRenderer.color = Color.Lerp(Change_A_1, Change_A_0, percent);
+            spriteRenderer.color = Color.Lerp(Alpha_1, Alpha_0, percent);
             yield return null;
         }
-        spriteRenderer.color = Change_A_1;
+        spriteRenderer.color = Alpha_1;
         yield return null;
     }
     public IEnumerator Shake_Act(float time_persist, float scale_dif)

@@ -127,6 +127,8 @@ MonoBehaviour:
   BackGroundSource_Collect: []
   EffectSource_Collect:
   - {fileID: 8300000, guid: b774aed10868a4f41b06d8d8ce7216c3, type: 3}
+  - {fileID: 8300000, guid: 9fe9cce0bced0d24e9c47928c7540e48, type: 3}
+  - {fileID: 8300000, guid: 83dfcd9410e3e63479797d7c3ffb5baa, type: 3}
   Stage3_Min_Limit: {x: 0, y: 0}
   Stage3_Max_Limit: {x: 0, y: 0}
 --- !u!114 &4048865241392020137

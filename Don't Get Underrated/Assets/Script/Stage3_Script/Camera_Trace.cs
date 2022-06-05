@@ -31,7 +31,7 @@ public class Camera_Trace : MonoBehaviour // 이건 카메라가 플레이어 추적하는 코�
     {
         Floor_On = false;
     }
-    public void Final_Walk_Floor(int Floor_Num)
+    public void Trace_Player(int Floor_Num)
     {
         transform.position = new Vector3(0, 40 * (Floor_Num - 1), -10);
         Floor_On = true;

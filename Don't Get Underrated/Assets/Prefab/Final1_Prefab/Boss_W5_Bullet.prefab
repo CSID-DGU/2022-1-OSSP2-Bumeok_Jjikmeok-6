@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3896236207010289992}
   - component: {fileID: -8726380027380259460}
   - component: {fileID: 4324476858576521594}
+  - component: {fileID: -7894377903359505432}
   m_Layer: 0
   m_Name: Boss_W5_Bullet
   m_TagString: Weapon_Devil
@@ -97,9 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a0f60e2e3448304ba49e7dadd5a0cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Explosion: {fileID: 0}
-  BackGroundSource_Collect: []
-  EffectSource_Collect: []
   speed: 10
 --- !u!58 &-8726380027380259460
 CircleCollider2D:
@@ -130,3 +128,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageData: {fileID: 11400000, guid: d7ff8fbdbdf5a1844822d357bb05211f, type: 2}
+--- !u!114 &-7894377903359505432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2832031252176686515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af15a276a7bb5b4795ca9940d4d4bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
+  BackGroundSource_Collect: []
+  EffectSource_Collect: []

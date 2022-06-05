@@ -5,7 +5,6 @@ using TMPro;
 
 public class Boss_Info : Life
 {
-
     [SerializeField]
     private float maxHP = 100; // 최대 HP는 보스 본인도 변경할 수 없도록 private
 

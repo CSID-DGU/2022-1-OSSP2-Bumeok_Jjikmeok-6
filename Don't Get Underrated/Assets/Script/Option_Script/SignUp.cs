@@ -253,7 +253,6 @@ public class SignUp : MonoBehaviour
         {
             infoText.text = "";
             Dictionary<string, int> dic = new Dictionary<string, int>();
-            int My_Rand = 0;
             if (Params == 0)
             {
                 Ranking_Main_1_Up d = JsonUtility.FromJson<Ranking_Main_1_Up>(singleTone.request.downloadHandler.text);

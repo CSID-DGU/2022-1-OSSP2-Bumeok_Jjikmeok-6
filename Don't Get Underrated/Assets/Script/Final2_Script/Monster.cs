@@ -44,13 +44,16 @@ public class Monster : Enemy_Info
     public void Start_Attack(Vector3 Monster_Pos, int Flag)
     {
         this.Monster_Pos = Monster_Pos;
+
         CHK_Flag = Flag;
         Effect_Sound_OneShot(0);
-        transform.DOMove(Monster_Pos, 0.5f).SetEase(Ease.OutBounce).OnComplete(() =>
-        {
-            hima_Pos = himaController.transform.position;
-            animator.SetTrigger("hehe");
-        });
+        DOTween.Sequence()
+          .Append(transform.DOMove(Monster_Pos, 0.5f).SetEase(Ease.OutBounce))
+          .OnComplete(() =>
+          {
+              hima_Pos = himaController.transform.position;
+              animator.SetTrigger("hehe");
+          });
     }
     public void OnLazor() // 애니메이션 진행 도중 해당 함수 호출 (즉, 참조가 0개여도 지우면 안됨)
     {
@@ -79,7 +82,6 @@ public class Monster : Enemy_Info
 
     public override void OnDie()
     {
-        GameObject.FindGameObjectWithTag("Boss").GetComponent<SolGryn>().Is_Next_Pattern = true;
-        Destroy(gameObject);
+        base.OnDie();
     }
 }

@@ -8,7 +8,7 @@ public class MoveBackGround : MonoBehaviour
     [SerializeField]
     GameObject Back_another;
 
-    float move_value = 17.778f;
+    float move_value = 17.6f;
 
     Vector3 moveDirection = Vector3.left;
 
