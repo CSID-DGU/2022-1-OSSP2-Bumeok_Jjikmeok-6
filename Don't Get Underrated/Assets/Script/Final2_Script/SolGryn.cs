@@ -154,14 +154,14 @@ public class SolGryn : Boss_Info
         yield return YieldInstructionCache.WaitForSeconds(1.5f);  // 검정색 플래시 후 1.5초 정지
 
         spriteColor.Change_C(Color.clear, 1);
-        yield return Boss_Pattern();
+        yield return Start_Pattern();
     }
     private void Continue_Camera_Shake()
     {
         Effect_Sound_Play(5);
         Camera_Shake(0.002f, 1, false, true);
     }
-    private IEnumerator Boss_Pattern()
+    private IEnumerator Start_Pattern()
     {
         himaController.IsMove = true;
         himaController.Unbeatable = false;
@@ -173,6 +173,7 @@ public class SolGryn : Boss_Info
             B1.F_HPFull(this);
 
         Run_Life_Act(HP_Decrease());
+        BackGround_Sound_Play(0);
 
         Continue_Camera_Shake();
 
@@ -522,7 +523,7 @@ public class SolGryn : Boss_Info
     private IEnumerator I_OnDie()
     {
         Effect_Sound_Stop();
-        BackGround_Sound_Stop();
+        Run_Life_Act(Decrease_BackGround_Sound(6, 0));
 
         GameObject.Find("Main Camera").GetComponent<UB.Simple2dWeatherEffects.Standard.D2FogsPE>().enabled = false;
         Flash(Color.white, 1, 2);

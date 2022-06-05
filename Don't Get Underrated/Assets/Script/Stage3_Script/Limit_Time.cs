@@ -57,9 +57,8 @@ public class Limit_Time : MonoBehaviour
                     playerCtrl_Sarang = PC_S;
                 else
                     yield break;
+
                 playerCtrl_Sarang.Stop_Walk();
-                playerCtrl_Sarang.StopAllCoroutines();
-                playerCtrl_Sarang.Destroy_sliderClone();
 
                 GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
                 GameObject[] student = GameObject.FindGameObjectsWithTag("Student");

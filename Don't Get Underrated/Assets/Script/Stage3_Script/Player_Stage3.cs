@@ -134,6 +134,7 @@ public class Player_Stage3 : Player_Info
     }
     void Start()
     {
+        BackGround_Sound_Play(0);
         All_Start();
     }
     void Init_Animation()
@@ -145,9 +146,13 @@ public class Player_Stage3 : Player_Info
     }
     public void Stop_Walk()
     {
-        Init_Animation();
         Is_Fever = false;
-        Real_Walk_Speed = 0;
+        All_Stop();
+        Init_Animation();
+        Destroy_sliderClone();
+        StopAllCoroutines();
+        Effect_Sound_Stop();
+        Run_Life_Act(Decrease_BackGround_Sound(6, 0));
     }
     IEnumerator First_Phase()
     {
@@ -532,6 +537,7 @@ public class Player_Stage3 : Player_Info
         Change_BG(Color.black, 2);
 
         Effect_Sound_OneShot(3);
+
         if (CHK == "up")
         {
             if (My_Scale.x > 0)

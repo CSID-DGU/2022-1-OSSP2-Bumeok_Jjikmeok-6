@@ -45,7 +45,6 @@ public class Network_On : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log("현재진행");
             singleTone.request = UnityWebRequest.Get("http://localhost:3000/continue_connect");
 
             yield return singleTone.request.SendWebRequest();
@@ -66,7 +65,7 @@ public class Network_On : MonoBehaviour
                 {
                     Time.timeScale = 0;
                     Network_Off.SetActive(true);
-                    ErrorMessage.text = "계정 정보가 틀립니다. 게임을 종료합니다.";
+                    ErrorMessage.text = "계정 정보가 틀리거나 서버가 끊겼습니다. 게임을 종료합니다.";
                     yield break;
                 }
                 else

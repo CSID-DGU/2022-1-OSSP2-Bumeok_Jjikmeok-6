@@ -13280,7 +13280,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
   stageData: {fileID: 0}
-  BackGroundSource_Collect: []
+  BackGroundSource_Collect:
+  - {fileID: 8300000, guid: 25d218ce68669ea45af9b0a32c3afa3e, type: 3}
   EffectSource_Collect:
   - {fileID: 8300000, guid: aa92edf49efef374699b9ad0fd0a9221, type: 3}
   - {fileID: 8300000, guid: d7c72cdd576a12644a822f50ece5becf, type: 3}
@@ -14291,7 +14292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1734084789
 Transform:
   m_ObjectHideFlags: 0

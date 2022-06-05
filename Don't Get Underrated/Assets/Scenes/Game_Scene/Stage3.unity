@@ -1687,7 +1687,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 1000010675638318, guid: a3768c8a9d1b90d4bb0eb0e4bdbe730c, type: 3}
   stageData: {fileID: 11400000, guid: 9d4629ff25d5e484baf7b8ecfee93903, type: 2}
-  BackGroundSource_Collect: []
+  BackGroundSource_Collect:
+  - {fileID: 8300000, guid: 07366a3320d21f3458b333e3a60ee934, type: 3}
   EffectSource_Collect:
   - {fileID: 8300000, guid: 8e092431885d6cc498fcc5111377965d, type: 3}
   - {fileID: 8300000, guid: f8508e84db3391548947992e1c479bb9, type: 3}
@@ -1698,6 +1699,7 @@ MonoBehaviour:
   Stage3_Min_Limit: {x: -3, y: -6}
   Stage3_Max_Limit: {x: 161, y: 8}
   deathCount: 5
+  My_Name: {fileID: 0}
   Item: []
   animator: {fileID: 0}
   Is_Fever: 0
@@ -3518,9 +3520,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.665
+  m_Volume: 0.466
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -4497,7 +4499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Time_Over_Text: {fileID: 4111520768447639455, guid: 66f8ab1ee4b5ccb4f9f41565df52e3b9, type: 3}
-  Option_Limit_Time: 100
+  Option_Limit_Time: 5
 --- !u!1 &1209422756
 GameObject:
   m_ObjectHideFlags: 0
@@ -5996,7 +5998,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.71
   m_Pitch: 1
   Loop: 1
   Mute: 0

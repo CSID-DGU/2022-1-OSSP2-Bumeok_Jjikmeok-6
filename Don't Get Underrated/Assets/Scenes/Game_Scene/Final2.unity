@@ -523,7 +523,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1402,6 +1402,7 @@ MonoBehaviour:
   Stage3_Min_Limit: {x: 0, y: 0}
   Stage3_Max_Limit: {x: 0, y: 0}
   deathCount: 5
+  My_Name: {fileID: 0}
   Item: []
   facingRight: 1
   jump: 0
@@ -1596,7 +1597,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4862,7 +4863,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   When_Dead_Effect: {fileID: 1000013462590818, guid: ecdd96beb7f93494880c052dfccf9dc1, type: 3}
   stageData: {fileID: 0}
-  BackGroundSource_Collect: []
+  BackGroundSource_Collect:
+  - {fileID: 8300000, guid: 626894635a278ad4ba30e31542760a7c, type: 3}
   EffectSource_Collect:
   - {fileID: 8300000, guid: 59e41a969d0826746a970ad4561fa562, type: 3}
   - {fileID: 8300000, guid: 58e5ad1f819db174c90a6aa1e6820082, type: 3}

@@ -118,9 +118,9 @@ public class Asura : Boss_Info
 
         My_Color = new Color(1, 1, 1, 0.25f);
         yield return YieldInstructionCache.WaitForSeconds(0.07f);
-        My_Color = Color.white;
         yield return null;
     }
+
     public override void OnDie()
     {
         Effect_Sound_OneShot(16);
@@ -142,6 +142,7 @@ public class Asura : Boss_Info
     IEnumerator Boss_Die_After()
     {
         Flash(Color.white, 0.2f, 5);
+        Run_Life_Act(Decrease_BackGround_Sound(6, 0));
         Run_Life_Act(Shake_Act(0.2f, 0, 10, false));
         moveBackGround_1.Decrease_Speed_Func(8, 0);
         yield return moveBackGround_2.Decrease_Speed_And_Wait(8, 0);
@@ -178,6 +179,7 @@ public class Asura : Boss_Info
 
         //moveBackGround_1.Increase_Speed_Func(8, backGround_Speed);
         //yield return moveBackGround_2.Increase_Speed_And_Wait(8, backGround_Speed);
+        BackGround_Sound_Play(0);
         player_final1.Unbeatable = false;
 
         My_Position = new Vector3(7, 0, 0);

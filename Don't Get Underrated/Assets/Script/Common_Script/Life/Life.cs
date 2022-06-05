@@ -70,7 +70,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
     public bool Unbeatable
     {
         get { return unbeatable; }
-        set { unbeatable = value; }    
+        set { unbeatable = value; }
     }
     protected virtual void Awake()
     {
@@ -161,6 +161,27 @@ public class Life : MonoBehaviour, Life_Of_Basic
     {
         if (BackGroundSource != null)
             BackGroundSource.Pause();
+    }
+
+    protected IEnumerator Decrease_BackGround_Sound(float time_persist, float Volume_To_Decrease)
+    {
+        if (BackGroundSource != null)
+        {
+            if (BackGroundSource.isPlaying)
+            {
+                float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+                while (BackGroundSource.volume > 0)
+                {
+                    BackGroundSource.volume -= Time.deltaTime * inverse_time_persist;
+                    yield return null;
+                }
+                yield return null;
+            }
+            else
+                yield return null;
+        }
+        else
+            yield return null;
     }
 
     public virtual void TakeDamage(float damage) 
