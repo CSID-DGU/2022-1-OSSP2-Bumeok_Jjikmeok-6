@@ -56,9 +56,6 @@ public class Player_Stage1 : Player_Info
     public GameObject Wall;
     public float Prev_pos_y;
 
-    //for debugging
-    public float tp1;
-    public float tp2;
 
     private AudioSource jump_sound;
     private AudioSource wall_collision_sound;
@@ -71,9 +68,6 @@ public class Player_Stage1 : Player_Info
 
         if (GameObject.Find("Jump") && GameObject.Find("Jump").TryGetComponent(out AudioSource AS2))
             jump_sound = AS2;
-        
-        tp1 = My_Position.x;
-        tp2 = My_Position.y;
 
         if (TryGetComponent(out Animator A))
             animator = A;
@@ -141,10 +135,6 @@ public class Player_Stage1 : Player_Info
 
             Ready_to_Jump(x);
         }
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            My_Position = new Vector2(tp1, tp2);
-        }
         Prev_pos_y = rigid2D.transform.position.y;
     }
 
@@ -190,10 +180,7 @@ public class Player_Stage1 : Player_Info
     public void Jump(float y, float x)
     {
         
-        //rigid2D.velocity = new Vector2(x * speed, y*1.5f);
-        //Debug.Log("이걸로 적용되야하는뎅");
         rigid2D.AddForce(Vector2.up * y * 1.25f, ForceMode2D.Impulse);
-        //rigid2D.AddForce(new Vector2(x * speed*1.5f, y * 1.5f), ForceMode2D.Impulse);
         Jump_start_position = gameObject.transform.position.y;
         isJumping = true;
         jump_sound.Play();
