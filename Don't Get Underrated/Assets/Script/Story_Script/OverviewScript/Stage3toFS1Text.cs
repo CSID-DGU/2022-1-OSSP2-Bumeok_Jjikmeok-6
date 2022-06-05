@@ -38,10 +38,10 @@ public class Stage3toFS1Text : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         Index = 0;
         Dic_Context = new Dictionary<int, string[]>();
-        Dic_Context.Add(0, new string[] { "오늘도 서울의 새 아침이 밝았다.", "분명 어제 저녁 먹고 잠깐 한다던 게임이 \n밤을 셀 줄이야", "이런... \n오늘 그러고보니 오전 9시부터 강의구나!" });
-        Dic_Context.Add(1, new string[] { "대충 준비한 채 서둘러 지하철을 타고", "충무로 역이라는 도착안내 \n방송과 함께 지하철에서 내린다." });
-        Dic_Context.Add(2, new string[] { "익숙한 학교 가는 길...", "오늘은 남은 구간을 꼭 깨고 자고 만다!" });
-        Dic_Context.Add(3, new string[] { "다짐을 하며 좋은 날씨와 함께 학교에 \n도착한 뒤,", "강의실로 발걸음을 옮긴다." });
+        Dic_Context.Add(0, new string[] { "부지런히 학생들을 구출한 뒤 명진관 밖으로 나왔다.", "학생들은 고마워하며 다들 축구장으로 향했다.", "나도 그럼 이제 슬슬 축구장으로 이동해볼까?"});
+        Dic_Context.Add(1, new string[] { "바로 그때!", "아수라: 어딜 가려는거냐!!!!", "아수라: 내가 학생들을 번뇌로 빠지게 \n만들어두었는데, 그걸 구출하다니!!!", "이건 나에 대한 도전이렷다!!!" });
+        Dic_Context.Add(2, new string[] { "그와 동시에 몸이 하늘로 띄어진다.", "으아아아 살려주세요ㅠㅠ", "아수라: 내 공격을 모두 이겨내고 \n날 쓰러트린다면", "널 살려주는 걸 생각해보마.", "아수라: 하지만 쉽지 않을걸?" });
+        Dic_Context.Add(3, new string[] { "공중에서 보이는 우리 학교가 시야에 들어온다.", "나는 단지 오늘 게임 속으로 들어왔을뿐이라고ㅠㅠ"});
     }
     void Start()
     {

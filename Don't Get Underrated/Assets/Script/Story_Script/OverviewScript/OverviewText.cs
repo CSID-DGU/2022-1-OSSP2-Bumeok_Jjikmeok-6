@@ -41,9 +41,9 @@ public class OverviewText : MonoBehaviour
         Dic_Context = new Dictionary<int, string[]>();
         Dic_Context.Add(0, new string[] { "오늘도 서울의 새 아침이 밝았다.", "분명 어제 저녁 먹고 잠깐 한다던 게임이 \n밤을 셀 줄이야", "이런... \n오늘 그러고보니 오전 9시부터 강의구나!" });
         Dic_Context.Add(1, new string[] { "대충 준비한 채 서둘러 지하철을 타고", "충무로 역이라는 도착안내 \n방송과 함께 지하철에서 내린다." });
-        Dic_Context.Add(2, new string[] { "익숙한 학교 가는 길...", "오늘은 남은 구간을 꼭 깨고 자고 만다!" });
+        Dic_Context.Add(2, new string[] { "익숙한 학교 가는 길...", "오늘은 남은 구간을 꼭 깬 뒤에 자고 만다!" });
         Dic_Context.Add(3, new string[] { "다짐을 하며 좋은 날씨와 함께 학교에 \n도착한 뒤,", "강의실로 발걸음을 옮긴다." });
-        Dic_Context.Add(4, new string[] { "강의가 시작되고 20분 지날 무렵.", "역시 밤을 세는 건 무리였나...", "무거워진 눈꺼풀이 스르르 감긴다.", "하이고 졸음이.....?" });
+        Dic_Context.Add(4, new string[] { "강의가 시작되고 20분 지날 무렵,", "역시 밤을 세는 건 무리였나...", "무거워진 눈꺼풀이 스르르 감긴다.", "하이고 졸음이.....?" });
     }
     void Start()
     {

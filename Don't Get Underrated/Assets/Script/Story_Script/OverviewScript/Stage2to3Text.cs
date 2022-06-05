@@ -39,11 +39,11 @@ public class Stage2to3Text : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         Index = 0;
         Dic_Context = new Dictionary<int, string[]>();
-        Dic_Context.Add(0, new string[] { "오늘도 서울의 새 아침이 밝았다.", "분명 어제 저녁 먹고 잠깐 한다던 게임이 \n밤을 셀 줄이야", "이런... \n오늘 그러고보니 오전 9시부터 강의구나!" });
-        Dic_Context.Add(1, new string[] { "대충 준비한 채 서둘러 지하철을 타고", "충무로 역이라는 도착안내 \n방송과 함께 지하철에서 내린다." });
-        Dic_Context.Add(2, new string[] { "익숙한 학교 가는 길...", "오늘은 남은 구간을 꼭 깨고 자고 만다!" });
-        Dic_Context.Add(3, new string[] { "다짐을 하며 좋은 날씨와 함께 학교에 \n도착한 뒤,", "강의실로 발걸음을 옮긴다." });
-        Dic_Context.Add(4, new string[] { "강의가 시작되고 20분 지날 무렵.", "역시 밤을 세는 건 무리였나...", "무거워진 눈꺼풀이 스르르 감긴다.", "하이고 졸음이.....?" });
+        Dic_Context.Add(0, new string[] { "으어어어 뭐 이렇게 게임이 다 어려워", "그리고 내 결정으로 학교 건물\n 이름이 결정되는 거... 이거 맞아...?", "이 생각으로 밖을 나서는데 많은 학생들이 \n축구장으로 이동하고 있다." });
+        Dic_Context.Add(1, new string[] { "그렇다! 이 세계에선 오늘이 학교 축제날이었다.", "그래서 그런지 축구장에 사람이 점점 늘어나고 있었다.", "오호, 학교 축제날이라니..." });
+        Dic_Context.Add(2, new string[] { "학교 축제날이 되면 캠퍼스에 즐거운 분위기가 맴돈다.", "그리고 저녁에 신나는 축제 공연도 빠질 수 없다.", "다들 잠시 학업으로부터 벗어나 \n청춘의 열정을 쏟는 기간,", "나도 이건 못 참지. \n바로 축구장으로 달려간다!" });
+        Dic_Context.Add(3, new string[] { "그런데 스치듯이 보이는 명진관 내부 광경.", "학생들이 다들 이상하게 복도를 거닐기만 한다.", "그리고 그 위에 날라다니며 감시하는 듯한 \n과제 뭉치와 레포트 용지들.", "분명 뭔가 이상하다...\n 도움을 구하는 듯한 눈빛인데" });
+        Dic_Context.Add(4, new string[] { "도움을 보고도 지날칠 수는 없지! \n 당장 명진관으로 달려간다!"});
     }
     void Start()
     {

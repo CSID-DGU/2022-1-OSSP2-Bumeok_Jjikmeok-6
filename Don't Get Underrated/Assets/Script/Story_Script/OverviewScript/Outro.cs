@@ -40,12 +40,12 @@ public class Outro : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         Index = 0;
         Dic_Context = new Dictionary<int, string[]>();
-        Dic_Context.Add(0, new string[] { "오늘도 서울의 새 아침이 밝았다.", "분명 어제 저녁 먹고 잠깐 한다던 게임이 \n밤을 셀 줄이야", "이런... \n오늘 그러고보니 오전 9시부터 강의구나!" });
-        Dic_Context.Add(1, new string[] { "대충 준비한 채 서둘러 지하철을 타고", "충무로 역이라는 도착안내 \n방송과 함께 지하철에서 내린다." });
-        Dic_Context.Add(2, new string[] { "익숙한 학교 가는 길...", "오늘은 남은 구간을 꼭 깨고 자고 만다!" });
-        Dic_Context.Add(3, new string[] { "다짐을 하며 좋은 날씨와 함께 학교에 \n도착한 뒤,", "강의실로 발걸음을 옮긴다." });
-        Dic_Context.Add(4, new string[] { "다짐을 하며 좋은 날씨와 함께 학교에 \n도착한 뒤,", "강의실로 발걸음을 옮긴다." });
-        Dic_Context.Add(5, new string[] { "다짐을 하며 좋은 날씨와 함께 학교에 \n도착한 뒤,", "강의실로 발걸음을 옮긴다." });
+        Dic_Context.Add(0, new string[] { "아수라의 약속대로 2분의 번뇌의 \n시간을 버티니 다시 현실로 돌아왔다.", "픽셀 세상이 아닌 내가 살고 있는 세상으로", "어느새 세상은 어두컴컴 밤이 되어있었다." });
+        Dic_Context.Add(1, new string[] { "아 드디어 현실로 돌아왔구나", "너무 힘든 하루였어...", "나도 이제 슬슬 집으로 돌아가야겠다" });
+        Dic_Context.Add(2, new string[] { "그렇게 발걸음을 옮기다가 문득 다시 뒤를 돌아봤다.", "그러고보니 축제를 못 즐겼네... 아쉽다", "안 그래도 이 세상에선 벌써 2년간 축제도 못 즐긴 것 같다." });
+        Dic_Context.Add(3, new string[] { "사실 아수라의 번뇌가 이미 이 세상을 뒤덮은거 아닐까", "서울 도심이 오늘 따라 어두워보인다" });
+        Dic_Context.Add(4, new string[] { "오늘은 일찍 자고 내일은 \n더욱 힘차게 학교 생활을 해야겠다.", "더군다나 오늘 말 그대로 \n게임을 직접 체험을 해봤으니까..." });
+        Dic_Context.Add(5, new string[] { "다시 즐거운 내일의 학교 생활을 기대하며 충무로역 지하철에 몸을 실었다.", "==THE END==" });
     }
     void Start()
     {

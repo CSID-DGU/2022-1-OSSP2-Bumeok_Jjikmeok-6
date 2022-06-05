@@ -39,11 +39,11 @@ public class StageFS1toFS2Text : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         Index = 0;
         Dic_Context = new Dictionary<int, string[]>();
-        Dic_Context.Add(0, new string[] { "오늘도 서울의 새 아침이 밝았다.", "분명 어제 저녁 먹고 잠깐 한다던 게임이 \n밤을 셀 줄이야", "이런... \n오늘 그러고보니 오전 9시부터 강의구나!" });
-        Dic_Context.Add(1, new string[] { "대충 준비한 채 서둘러 지하철을 타고", "충무로 역이라는 도착안내 \n방송과 함께 지하철에서 내린다." });
-        Dic_Context.Add(2, new string[] { "익숙한 학교 가는 길...", "오늘은 남은 구간을 꼭 깨고 자고 만다!" });
-        Dic_Context.Add(3, new string[] { "다짐을 하며 좋은 날씨와 함께 학교에 \n도착한 뒤,", "강의실로 발걸음을 옮긴다." });
-        Dic_Context.Add(4, new string[] { "다짐을 하며 좋은 날씨와 함께 학교에 \n도착한 뒤,", "강의실로 발걸음을 옮긴다." });
+        Dic_Context.Add(0, new string[] { "해...해냈다! 해치웠나?", "아수라: 네 이놈!!!", "아수라: 널 용서치않겠다!!!" });
+        Dic_Context.Add(1, new string[] { "그와 동시에 몸이 점점 작아진다", "아수라: 너의 그 육신에 대한 제한을 두어야겠다!", "아수라: 중력도 생겨 너는 \n자유롭게 피하지도 못할게다!" });
+        Dic_Context.Add(2, new string[] { "그렇게 중력의 영향으로 학교로 돌아와 땅을 밟았지만,", "이제 다시 시작이라고?" });
+        Dic_Context.Add(3, new string[] { "아니 제가 뭘 그렇게 잘못했다고 이러세요ㅠㅠ", "아수라: 너는 학생들을 번뇌로 \n빠지게 하려는 내 계획을 방해했다.", "아수라: 이렇게 된 이상 이 세상 \n전부 번뇌에 빠지게 만들겠다!!!" });
+        Dic_Context.Add(4, new string[] { "그 순간 아수라의 힘이 이 세상을 감싸기 시작했다.", "하... 집에 가고 싶다ㅠㅠ"});
     }
     void Start()
     {
