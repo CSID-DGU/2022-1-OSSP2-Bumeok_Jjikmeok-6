@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu]
 public class StageData : ScriptableObject
 {
-    // Start is called before the first frame update
     [SerializeField]
     Vector2 limitMin;
 

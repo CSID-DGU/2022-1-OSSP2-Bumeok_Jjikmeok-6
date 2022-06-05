@@ -4,15 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Player_Info : Life
 {
-    // Start is called before the first frame update
-
-    [SerializeField]
-    protected int deathCount = 5;
-
     [SerializeField]
     protected Text My_Name;
-
-    public int DeathCount => deathCount;
 
     [SerializeField]
     protected GameObject[] Item;
@@ -55,9 +48,7 @@ public class Player_Info : Life
     {
         if (Unbeatable)
             return;
-        deathCount += damage;
-        if (deathCount <= 0)
-            OnDie();
+        OnDie();
     }
     public override void OnDie()
     {

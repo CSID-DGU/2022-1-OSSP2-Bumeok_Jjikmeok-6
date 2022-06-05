@@ -1698,13 +1698,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0c6a2c1947241c641b1cdbebf76b541e, type: 3}
   Stage3_Min_Limit: {x: -3, y: -6}
   Stage3_Max_Limit: {x: 161, y: 8}
-  deathCount: 5
   My_Name: {fileID: 0}
   Item: []
-  animator: {fileID: 0}
-  Is_Fever: 0
-  is_Domain: 0
-  Floor_Interval: 40
   Move_Slider: {fileID: 9202798864372973980, guid: ff7f74ae2a92a9f4bb68cbae2cad3fce, type: 3}
   canvasTransform: {fileID: 470250061}
   Student_Gaze: {fileID: 328023424}
@@ -1716,8 +1711,13 @@ MonoBehaviour:
   Up_Floor: {fileID: 2019020976}
   IsDoubleClick: 0.25
   PlayerWalkSpeed: 10
-  Student_Power: 1
+  Student_Power: 7
   Fever_Power: 2
+  animator: {fileID: 0}
+  Is_Fever: 0
+  is_Domain: 0
+  Floor_Interval: 40
+  Detect_Interrupt_Active: 1
 --- !u!50 &365745729
 Rigidbody2D:
   serializedVersion: 4
@@ -3926,7 +3926,12 @@ MonoBehaviour:
   Standard_Interrupt_X: 0
   Standard_Interrupt_Y: 3
   Standard_Student_X: 0
+  Standard_Student_Y:
+  - -2.4
+  - -3.5
   Floor_Interval: 40
+  Interrupt_Interval: 15
+  Student_Interval: 18
 --- !u!4 &1024500202
 Transform:
   m_ObjectHideFlags: 0
@@ -4499,7 +4504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Time_Over_Text: {fileID: 4111520768447639455, guid: 66f8ab1ee4b5ccb4f9f41565df52e3b9, type: 3}
-  Option_Limit_Time: 5
+  Option_Limit_Time: 120
 --- !u!1 &1209422756
 GameObject:
   m_ObjectHideFlags: 0

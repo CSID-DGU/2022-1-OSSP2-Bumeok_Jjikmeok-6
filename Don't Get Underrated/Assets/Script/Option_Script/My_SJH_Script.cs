@@ -99,6 +99,14 @@ public class My_SJH_Script : MonoBehaviour
         }
         else
         {
+            if (singleTone.EasterEgg)
+            {
+                Before_Rank.color = Color.clear;
+                After_Rank.color = Color.clear;
+                Wait_text.color = Color.red;
+                Wait_text.text = "이스터에그를 적용한 사람은 랭킹 반영이 안됩니다. 죄송합니다.";
+                yield break;
+            }
             Before_Rank.color = Color.green;
             After_Rank.color = Color.blue;
             Wait_text.color = Color.clear;

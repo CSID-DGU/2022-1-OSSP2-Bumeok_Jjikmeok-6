@@ -16,9 +16,7 @@ public class Student : Life
     [SerializeField]
     bool followPlayer;
 
-    IEnumerator move;
-
-    IEnumerator wander_routine;
+    IEnumerator move, wander_routine;
 
     Animator animator;
 

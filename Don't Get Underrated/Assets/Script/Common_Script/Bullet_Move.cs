@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet_Move : Weapon_Devil {
+public class Bullet_Move : MonoBehaviour {
 
     [SerializeField]
     private float speed = 10f;
 
-    private new void Awake()
-    {
-        base.Awake();
-    }
     private void Start()
     {
         //생성으로부터 2초 후 삭제

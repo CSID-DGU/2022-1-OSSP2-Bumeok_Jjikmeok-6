@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Heart_Gaze_Viewer : Slider_Viewer
 {
-    // Start is called before the first frame update
-
-    Player_Stage3 player_stage3;
 
     [SerializeField]
-    float fever_decrease;
+    float fever_decrease = 10;
+
+    Player_Stage3 player_stage3;
+   
     private new void Awake()
     {
         base.Awake();

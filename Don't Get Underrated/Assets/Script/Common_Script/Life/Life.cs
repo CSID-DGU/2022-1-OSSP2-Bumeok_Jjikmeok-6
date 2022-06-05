@@ -43,10 +43,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
     [SerializeField]
     AudioClip[] EffectSource_Collect = null;
 
-    protected AudioSource BackGroundSource;
-
-    protected AudioSource EffectSource;
-
     [SerializeField]
     Vector2 Stage3_Min_Limit;
 
@@ -64,6 +60,10 @@ public class Life : MonoBehaviour, Life_Of_Basic
     private IEnumerator camera_shake_i;
 
     private IEnumerator back_ground_color_i;
+
+    protected AudioSource BackGroundSource;
+
+    protected AudioSource EffectSource;
 
     private bool unbeatable;
 
@@ -134,10 +134,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected void Effect_Sound_OneShot(int index)
     {
         if (EffectSource_Collect.Length <= index)
-        {
-            Debug.Log("여긴 아니고");
             return;
-        }
         if (EffectSource != null && EffectSource_Collect[index] != null)
             EffectSource.PlayOneShot(EffectSource_Collect[index]);
     }
@@ -163,7 +160,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
             BackGroundSource.Pause();
     }
 
-    protected IEnumerator Decrease_BackGround_Sound(float time_persist, float Volume_To_Decrease)
+    protected IEnumerator Decrease_BackGround_Sound(float time_persist)
     {
         if (BackGroundSource != null)
         {
@@ -190,7 +187,6 @@ public class Life : MonoBehaviour, Life_Of_Basic
             Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
-
     public virtual void TakeDamage(int damage) 
     {
         if (When_Dead_Effect != null)
@@ -384,12 +380,18 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected void Stop_Image_Color_Change()
     {
         if (imageColor != null)
+        {
+            imageColor.Init();
             imageColor.StopAllCoroutines();
+        }
     }
     protected void Stop_Camera_Shake()
     {
         if (cameraShake != null)
+        {
+            cameraShake.Init_Camera();
             cameraShake.StopAllCoroutines();
+        } 
     }
     protected void Camera_Shake(float shake_intensity, float time_persist, bool is_Decline_Camera_Shake, bool is_Continue)
     {

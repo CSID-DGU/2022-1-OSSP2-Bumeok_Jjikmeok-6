@@ -7,21 +7,23 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     protected GameObject Explosion;
 
-    private Movement2D movement2D;
-
-    private CameraShake cameraShake;
-
-    protected ImageColor backGroundColor;
-
-    private IEnumerator camera_shake;
-
-    private IEnumerator back_ground_color_i;
-
     [SerializeField]
     AudioClip[] BackGroundSource_Collect;
 
     [SerializeField]
     AudioClip[] EffectSource_Collect;
+
+    private Movement2D movement2D;
+
+    private CameraShake cameraShake;
+
+    private IEnumerator camera_shake;
+
+    private IEnumerator back_ground_color_i;
+
+    protected ImageColor backGroundColor;
+
+    protected SpriteRenderer spriteRenderer;
 
     protected AudioSource BackGroundSource;
 
@@ -38,6 +40,8 @@ public class Weapon : MonoBehaviour
             if (GameObject.Find("Main Camera") && GameObject.Find("Main Camera").TryGetComponent(out Camera C))
                  cameraShake.mainCamera = C;
         }
+        if (TryGetComponent(out SpriteRenderer SR))
+            spriteRenderer = SR;
     }
     public void W_MoveTo(Vector3 Origin)
     {
@@ -145,5 +149,4 @@ public class Weapon : MonoBehaviour
         if (BackGroundSource != null)
             BackGroundSource.Pause();
     }
-
 }

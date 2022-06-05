@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class BossHPSliderViewer : Slider_Viewer
 {
-    // Start is called before the first frame update
-
     Boss_Info boss_info;
 
     bool OnUpdate = false;

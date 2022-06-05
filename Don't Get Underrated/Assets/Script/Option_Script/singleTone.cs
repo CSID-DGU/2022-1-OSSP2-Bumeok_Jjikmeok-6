@@ -13,6 +13,8 @@ public class singleTone
 
     public static string id;
 
+    public static bool EasterEgg = false;
+
     public static singleTone Instance
     {
         get

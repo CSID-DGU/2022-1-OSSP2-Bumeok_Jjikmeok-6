@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Enemy_Info : Life
 {
-    // Start is called before the first frame update
-
     protected virtual new void Awake()
     {
         base.Awake();
@@ -32,13 +30,9 @@ public class Enemy_Info : Life
             }
         }
     }
-    private void Weak_Enemy()
+    protected void Weak_Enemy()
     {
-        if (When_Dead_Effect != null)
-        {
-            Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        }
+        OnDie();
     }
     public override void TakeDamage(float damage)
     {

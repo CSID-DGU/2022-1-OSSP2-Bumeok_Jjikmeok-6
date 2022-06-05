@@ -37,8 +37,10 @@ public class Interrupt : Enemy_Info
 
     void Init_Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        circleColliderObject = GetComponent<CircleCollider2D>();
+        if (TryGetComponent(out Rigidbody2D RB2D))
+            rb = RB2D;
+        if (TryGetComponent(out CircleCollider2D CC2D))
+            circleColliderObject = CC2D;
         targetTransform = null;
         currentSpeed = wanderSpeed;
     }
@@ -58,7 +60,7 @@ public class Interrupt : Enemy_Info
     {
         Stop_Move();
         Exclamation_Copy = Instantiate(Exclamation, transform.position, Quaternion.identity);
-        yield return YieldInstructionCache.WaitForSeconds(0.3f);
+        yield return StaticFunc.WaitForRealSeconds(0.3f); // 컴퓨터 사양에 따라 레이저가 나오는 시간이 달라지지 않도록 실제 시간 적용
 
         Destroy(Exclamation_Copy);
 
@@ -82,11 +84,11 @@ public class Interrupt : Enemy_Info
     {
         Run_Life_Act(Change_My_Color(Color.white, Color.clear, 1.5f, 0.1f, null));
     }
-
     public void Stop_Coroutine()
     {
         if (Exclamation_Copy != null)
             Destroy(Exclamation_Copy);
+        Effect_Sound_Stop();
         StopAllCoroutines();
     }
 
@@ -112,7 +114,6 @@ public class Interrupt : Enemy_Info
             yield return YieldInstructionCache.WaitForSeconds(directionChangeInterval);
         }
     }
-
     public void Start_Move()
     {
         Effect_Sound_Stop();
