@@ -87,7 +87,7 @@ public class Meteor_Effect : Weapon_Devil
         Effect_Sound_OneShot(2);
         spriteRenderer.color = Color.white;
         W_MoveTo(Target);
-        W_MoveSpeed(20);
+        W_MoveSpeed(30); // 30의 속도로 운석 이동 (엄청 빠름)
 
         yield return null;
     }

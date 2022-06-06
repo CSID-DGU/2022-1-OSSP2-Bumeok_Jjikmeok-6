@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SolGryn_Copy : Enemy_Info
 {
-    // Start is called before the first frame update
     private new void Awake()
     {
         base.Awake();

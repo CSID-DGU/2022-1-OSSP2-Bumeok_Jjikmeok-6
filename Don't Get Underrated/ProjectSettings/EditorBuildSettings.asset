@@ -5,25 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Option_Scene/LoginScene.unity
     guid: 6add0bbd670100e4f88b630f1546ee05
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Option_Scene/LoadingScene.unity
     guid: aea668730c8778f4e96fd9a2d9e27d2a
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Game_Scene/Final1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Game_Scene/Stage3.unity
     guid: 5bec91663a8a82941a2ee70a4f73b4ea
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Game_Scene/Final2.unity
     guid: f4188aaea66e32243b9fb640d3410e20
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Game_Scene/My_SJH_Scene.unity
     guid: e9ec519e132c4544da1d3865d9256d53
   m_configObjects: {}

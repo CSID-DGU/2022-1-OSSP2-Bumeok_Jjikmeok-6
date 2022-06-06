@@ -83,6 +83,7 @@ public class DynaBlade : Enemy_Info
         yield return Move_Curve(U[4], U[5], Get_Center_Vector_For_Curve_Move(U[4], U[5], Vector3.Distance(U[4], U[5]) * 0.85f, "anti_clock"), W/A * 0.25f, OriginCurve);
 
         Stop_Life_Act(ref size);
+
         if (GameObject.FindGameObjectWithTag("Boss") && GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
             SG.Is_Next_Pattern = true;
 

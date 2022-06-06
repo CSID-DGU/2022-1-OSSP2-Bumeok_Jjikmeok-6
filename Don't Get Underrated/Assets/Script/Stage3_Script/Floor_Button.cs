@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Floor_Button : MonoBehaviour
+public class Floor_Button : MonoBehaviour // 각 층마다 윗층, 아랫층 이동에 대한 버튼의 위치를 재설정해주는 스크립트
 {
     public void Start_Down_Or_UP(bool is_Down, float Change_X, float Change_Y)
     {

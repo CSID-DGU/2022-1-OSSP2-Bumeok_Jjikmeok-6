@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spin_shot : MonoBehaviour {
+public class Spin_shot : MonoBehaviour { // 보스가 회전하면서 총알을 발사하는 것을 보조하는 스크립트
 
     //회전되는 스피드이다.
     public float rot_Speed;

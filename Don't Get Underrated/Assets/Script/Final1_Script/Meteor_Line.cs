@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Meteor_Line : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     SpriteRenderer spriteRenderer;
 
     private void Awake()
@@ -46,7 +44,6 @@ public class Meteor_Line : MonoBehaviour
     {
         spriteRenderer.color = Origin;
     }
-    // Update is called once per frame
     private void OnDestroy()
     {
         StopAllCoroutines();

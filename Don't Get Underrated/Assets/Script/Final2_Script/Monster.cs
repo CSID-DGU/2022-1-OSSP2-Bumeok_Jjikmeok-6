@@ -65,11 +65,13 @@ public class Monster : Enemy_Info
         Effect_Sound_OneShot(1);
         float percent = 0;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+
         Vector3 Target;
         if (CHK_Flag == 0)
             Target = Vector3.zero;
         else
             Target = hima_Pos;
+
         while (percent < 1)
         {
             percent += Time.deltaTime * inverse_time_persist;

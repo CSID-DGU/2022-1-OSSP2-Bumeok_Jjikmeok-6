@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraShake : MonoBehaviour
+public class CameraShake : MonoBehaviour // 카메라를 흔들 수 있도록 하는 스크립트
 {
     public Camera mainCamera = null;
 
@@ -10,7 +10,7 @@ public class CameraShake : MonoBehaviour
     private Quaternion originRotation;
 
 
-    public void Init_Camera()
+    public void Init_Camera() // 카메라 초기화
     {
         mainCamera.transform.position = new Vector3(0, 0, -10);
         mainCamera.transform.rotation = Quaternion.identity;

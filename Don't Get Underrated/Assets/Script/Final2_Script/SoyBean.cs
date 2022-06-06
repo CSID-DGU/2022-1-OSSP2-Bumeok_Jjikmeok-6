@@ -44,7 +44,7 @@ public class SoyBean : Weapon_Devil
             PI.TakeDamage(1);
         if (collision.gameObject != null && collision.gameObject.CompareTag("Ground"))
         {
-            Start_Camera_Shake(0.01f, 0.1f, false, false);
+            Camera_Shake(0.01f, 0.1f, false, false);
             Count++;
             if (Count >= 4)
                 OnDie();

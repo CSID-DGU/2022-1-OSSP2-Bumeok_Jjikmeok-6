@@ -79,6 +79,8 @@ public class Player_Final2 : Player_Info {
 		deathCount = 0;
 		GyoSu.color = Color.clear;
 		Death_Count.text = "Death Count : " + deathCount;
+		My_Name.text = singleTone.id;
+
 	}
 
 	private void Start() 

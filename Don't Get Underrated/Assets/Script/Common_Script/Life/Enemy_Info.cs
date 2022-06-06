@@ -8,7 +8,7 @@ public class Enemy_Info : Life
     {
         base.Awake();
     }
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision) // 플레이어와 부딧혔을 때 플레이어에게 데미지를 1 준 후, 본인을 파괴하도록(Weak_Enemy).
     {
         if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info HC))
         {
@@ -19,7 +19,7 @@ public class Enemy_Info : Life
             }
         }
     }
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision) // 이하 동문
     {
         if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info HC))
         {
@@ -43,6 +43,8 @@ public class Enemy_Info : Life
         base.OnDie();
     }
     protected IEnumerator Shake_Act(float shake_intensity, float scale_ratio, float time_persist, bool is_Continue)
+    // 본인을 떨 수 있도록 하는 함수 (떠는 강도(shake_intensity. 0.3이 일반적인 수치), 떨면서 커지는 크기(scale_ratio. 0.3이 일반적인 수치),
+    // 떠는 지속시간(time_persist), is_Continue를 true로 하면 무한 반복
     {
         Vector3 originPosition;
         Quaternion originRotation;

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Gorichu : Enemy_Info
 {
-    // Start is called before the first frame upda
-
     [SerializeField]
     private Vector3 Spawn_Position;
 
@@ -52,6 +50,7 @@ public class Gorichu : Enemy_Info
         Effect_Sound_OneShot(1);
         Run_Life_Act_And_Continue(ref size, Change_My_Size_Infinite(3f));
         yield return Move_Straight(D[1], D[2], 1f, declineCurve);
+
         Stop_Life_Act(ref size);
 
         Instantiate(Weapon[0], new Vector3(My_Position.x, 0, 0), Quaternion.identity);

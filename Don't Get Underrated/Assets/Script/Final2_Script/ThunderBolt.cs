@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ThunderBolt : Weapon_Devil
 {
-    // Start is called before the first frame update
+    // <a href='https://kr.freepik.com/vectors/light'>Light 벡터는 upklyak - kr.freepik.com가 제작함</a>
 
     private new void Awake()
     {
@@ -33,7 +33,7 @@ public class ThunderBolt : Weapon_Devil
     void Start()
     {
         Effect_Sound_OneShot(0);
-        Start_Camera_Shake(0.006f, 0.3f, false, false);
+        Camera_Shake(0.006f, 0.3f, false, false);
         Flash(Color.white, 0.1f, 0.5f);
     }
 }
