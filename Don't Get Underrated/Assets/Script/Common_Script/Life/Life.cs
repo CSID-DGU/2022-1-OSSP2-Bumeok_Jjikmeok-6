@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class For_Continuous_Slerp_Move
+public class Set_Slerp_Move
 {
     private Vector3 next_Position;
     private string dir;
-    public For_Continuous_Slerp_Move(Vector3 _next_Position, string _dir)
+    public Set_Slerp_Move(Vector3 _next_Position, string _dir)
     {
         next_Position = _next_Position;
         dir = _dir;
@@ -38,6 +38,12 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected StageData stageData;
 
     [SerializeField]
+    AudioClip[] BackGroundSource_Collect = null;
+
+    [SerializeField]
+    AudioClip[] EffectSource_Collect = null;
+
+    [SerializeField]
     Vector2 Stage3_Min_Limit;
 
     [SerializeField]
@@ -55,22 +61,27 @@ public class Life : MonoBehaviour, Life_Of_Basic
 
     private IEnumerator back_ground_color_i;
 
+    protected AudioSource BackGroundSource;
+
+    protected AudioSource EffectSource;
+
     private bool unbeatable;
 
     public bool Unbeatable
     {
         get { return unbeatable; }
-        set { unbeatable = value; }    
+        set { unbeatable = value; }
     }
     protected virtual void Awake()
     {
         if (TryGetComponent(out SpriteRenderer SR))
             spriteRenderer = SR;
-        Unbeatable = false;
         if (TryGetComponent(out CameraShake CS))
             cameraShake = CS;
-        if (cameraShake != null && GameObject.Find("Main Camera").TryGetComponent(out Camera camera))
+        if (cameraShake != null && GameObject.Find("Main Camera") && GameObject.Find("Main Camera").TryGetComponent(out Camera camera))
             cameraShake.mainCamera = camera;
+
+        Unbeatable = false;
 
         if (stageData != null)
         {
@@ -99,13 +110,83 @@ public class Life : MonoBehaviour, Life_Of_Basic
         My_Color = Color.white;
     }
 
+    protected void Effect_Sound_Play(int index)
+    {
+        if (EffectSource_Collect.Length <= index)
+            return;
+        if (EffectSource != null && EffectSource_Collect[index] != null)
+        {
+            EffectSource.Stop();
+            EffectSource.clip = EffectSource_Collect[index];
+            EffectSource.Play();
+        }
+    }
+    protected void Effect_Sound_Stop()
+    {
+        if (EffectSource != null)
+            EffectSource.Stop();
+    }
+    protected void Effect_Sound_Pause()
+    {
+        if (EffectSource != null)
+            EffectSource.Pause();
+    }
+    protected void Effect_Sound_OneShot(int index)
+    {
+        if (EffectSource_Collect.Length <= index)
+            return;
+        if (EffectSource != null && EffectSource_Collect[index] != null)
+            EffectSource.PlayOneShot(EffectSource_Collect[index]);
+    }
+    protected void BackGround_Sound_Play(int index)
+    {
+        if (BackGroundSource_Collect.Length <= index)
+            return;
+        if (BackGroundSource != null && BackGroundSource_Collect[index] != null)
+        {
+            BackGroundSource.Stop();
+            BackGroundSource.clip = BackGroundSource_Collect[index];
+            BackGroundSource.Play();
+        }
+    }
+    protected void BackGround_Sound_Stop()
+    {
+        if (BackGroundSource != null)
+            BackGroundSource.Stop();
+    }
+    protected void BackGround_Sound_Pause()
+    {
+        if (BackGroundSource != null)
+            BackGroundSource.Pause();
+    }
+
+    protected IEnumerator Decrease_BackGround_Sound(float time_persist)
+    {
+        if (BackGroundSource != null)
+        {
+            if (BackGroundSource.isPlaying)
+            {
+                float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+                while (BackGroundSource.volume > 0)
+                {
+                    BackGroundSource.volume -= Time.deltaTime * inverse_time_persist;
+                    yield return null;
+                }
+                yield return null;
+            }
+            else
+                yield return null;
+        }
+        else
+            yield return null;
+    }
+
     public virtual void TakeDamage(float damage) 
     {
         if (When_Dead_Effect != null)
             Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
-
     public virtual void TakeDamage(int damage) 
     {
         if (When_Dead_Effect != null)
@@ -139,12 +220,12 @@ public class Life : MonoBehaviour, Life_Of_Basic
         GameObject Copy = Instantiate(weapon, Instantiate_Dir, Degree);
         if (Copy.TryGetComponent(out Weapon_Devil WD))
         {
-            WD.W_MoveTo(Direction);
+            WD.W_MoveTo(Direction.normalized);
             WD.W_MoveSpeed(speed);
         }
         else if (Copy.TryGetComponent(out Weapon_Player WP))
         {
-            WP.W_MoveTo(Direction);
+            WP.W_MoveTo(Direction.normalized);
             WP.W_MoveSpeed(speed);
         }
         else
@@ -171,14 +252,14 @@ public class Life : MonoBehaviour, Life_Of_Basic
             while (percent < 1)
             {
                 percent += Time.deltaTime * inverse_time_persist;
-                spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
+                My_Color = Color.Lerp(Origin_C, Change_C, percent);
                 yield return null;
             }
             percent = 0;
             while (percent < 1)
             {
                 percent += Time.deltaTime * inverse_time_persist;
-                spriteRenderer.color = Color.Lerp(Change_C, Origin_C, percent);
+                My_Color = Color.Lerp(Change_C, Origin_C, percent);
                 yield return null;
             }
             if (!is_Continue)
@@ -187,29 +268,30 @@ public class Life : MonoBehaviour, Life_Of_Basic
     }
     protected IEnumerator My_Color_When_UnBeatable()
     {
-        bool ee = false;
+        bool flag = false;
 
         while (true)
         {
-            if (!ee)
-                spriteRenderer.color = new Color32(255, 255, 255, 90);
+            if (!flag)
+                My_Color = new Color32(255, 255, 255, 90);
             else
-                spriteRenderer.color = new Color32(255, 255, 255, 180);
+                My_Color = new Color32(255, 255, 255, 180);
             yield return new WaitForSeconds(0.2f);
-            ee = !ee;
+            flag = !flag;
         }
     }
     protected IEnumerator Change_My_Color(Color Origin_C, Color Change_C, float time_persist, float Wait_Second, GameObject Effect_When_Change_My_Color)
     {
-        float percent;
+        float percent = 0;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+
         if (Effect_When_Change_My_Color != null)
             Instantiate(Effect_When_Change_My_Color, transform.position, Effect_When_Change_My_Color.transform.localRotation);
-        percent = 0;
+
         while (percent < 1)
         {
             percent += Time.deltaTime * inverse_time_persist;
-            spriteRenderer.color = Color.Lerp(Origin_C, Change_C, percent);
+            My_Color = Color.Lerp(Origin_C, Change_C, percent);
             yield return null;
         }
         yield return YieldInstructionCache.WaitForSeconds(Wait_Second);
@@ -252,7 +334,7 @@ public class Life : MonoBehaviour, Life_Of_Basic
         float angle = Mathf.Acos(theta) * Mathf.Rad2Deg;
         return (2 * Mathf.PI * Vector3.Distance(Center_to_Start, Vector3.zero) * angle) / 360;
     }
-    protected Vector3 Get_Center_Vector(Vector3 Start, Vector3 End, float Center_To_Real_Center_Distance, string is_Clock)
+    protected Vector3 Get_Center_Vector_For_Curve_Move(Vector3 Start, Vector3 End, float Center_To_Real_Center_Distance, string is_Clock)
     {
         Vector3 Origin_V = Start - End;
         Vector3 Center = (Start + End) * 0.5f;
@@ -298,12 +380,18 @@ public class Life : MonoBehaviour, Life_Of_Basic
     protected void Stop_Image_Color_Change()
     {
         if (imageColor != null)
+        {
+            imageColor.Init();
             imageColor.StopAllCoroutines();
+        }
     }
     protected void Stop_Camera_Shake()
     {
         if (cameraShake != null)
+        {
+            cameraShake.Init_Camera();
             cameraShake.StopAllCoroutines();
+        } 
     }
     protected void Camera_Shake(float shake_intensity, float time_persist, bool is_Decline_Camera_Shake, bool is_Continue)
     {

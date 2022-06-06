@@ -14,36 +14,43 @@ public class Meteor_Traffic : MonoBehaviour
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = Color.white;
-    }
-    public IEnumerator Change_Color(int Count, float time_persist)
-    {
-        Color Change_A_1 = Color.white;
-        Color Change_A_0 = Color.clear;
-        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
-        for (int j = 0; j < Count; j++)
+        if (TryGetComponent(out SpriteRenderer SR))
         {
-            float percent = 0;
-            while (percent < 1)
-            {
-                percent += Time.deltaTime * inverse_time_persist;
-                spriteRenderer.color = Color.Lerp(Change_A_0, Change_A_1, percent);
-                yield return null;
-            }
-            percent = 0;
-            while (percent < 1)
-            {
-                percent += Time.deltaTime * inverse_time_persist;
-                spriteRenderer.color = Color.Lerp(Change_A_1, Change_A_0, percent);
-                yield return null;
-            }
+            spriteRenderer = SR;
+            spriteRenderer.color = Color.white;
         }
-        spriteRenderer.color = Change_A_1;
+    }
+    public IEnumerator Change_Color(float time_persist)
+    {
+        if (spriteRenderer == null)
+            yield break;
+
+        Color Alpha_1 = Color.white;
+        Color Alpha_0 = Color.clear;
+        float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
+
+        float percent = 0;
+        while (percent < 1)
+        {
+            percent += Time.deltaTime * inverse_time_persist;
+            spriteRenderer.color = Color.Lerp(Alpha_0, Alpha_1, percent);
+            yield return null;
+        }
+        percent = 0;
+        while (percent < 1)
+        {
+            percent += Time.deltaTime * inverse_time_persist;
+            spriteRenderer.color = Color.Lerp(Alpha_1, Alpha_0, percent);
+            yield return null;
+        }
+        spriteRenderer.color = Alpha_1;
         yield return null;
     }
     public IEnumerator Shake_Act(float time_persist, float scale_dif)
     {
+        if (spriteRenderer == null)
+            yield break;
+
         originPosition = transform.position;
         originRotation = transform.rotation;
         shake_intensity = coef_shake_intensity;

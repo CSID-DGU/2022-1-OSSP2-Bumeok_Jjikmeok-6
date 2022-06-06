@@ -6,39 +6,40 @@ using UnityEngine.UI;
 
 public class Limit_Time : MonoBehaviour
 {
-    TextMeshProUGUI Limit_Time_Text;
-    Image image;
-
-    ImageColor flashOn;
-
-    IEnumerator flash_on;
-
-    IEnumerator descent_time;
-
     [SerializeField]
     GameObject Time_Over_Text;
 
     [SerializeField]
     int Option_Limit_Time;
 
+    TextMeshProUGUI Limit_Time_Text;
+
+    Image image;
+
+    ImageColor flashOn;
+
+    IEnumerator flash_on, decrease_time;
+
     int wow_Time;
 
     private void Awake()
     {
         Limit_Time_Text = GetComponent<TextMeshProUGUI>();
-        wow_Time = Option_Limit_Time;
-        Limit_Time_Text.text = "제한시간 : " + wow_Time;
         image = GameObject.Find("Flash_TimeOut").GetComponent<Image>();
         flashOn = image.GetComponent<ImageColor>();
+        flash_on = null;
+        decrease_time = null;
+        wow_Time = Option_Limit_Time;
+        Limit_Time_Text.text = "제한시간 : " + wow_Time;
     }
 
     private void Start()
     {
-        descent_time = Descent_Time();
-        StartCoroutine(descent_time);
+        decrease_time = Decrease_Time();
+        StartCoroutine(decrease_time);
     }
 
-    IEnumerator Descent_Time()
+    IEnumerator Decrease_Time()
     {
         while (true)
         {
@@ -46,47 +47,46 @@ public class Limit_Time : MonoBehaviour
             {
                 if (flash_on != null)
                     flashOn.StopCoroutine(flash_on);
-                flash_on = flashOn.Change_Origin_BG(new Color(1, 0, 0, 0.5f), .5f);
+                flash_on = flashOn.Change_Origin_BG(new Color(1, 0, 0, 0.5f), 0.4f);
                 flashOn.StartCoroutine(flash_on);
             }
             if (wow_Time <= 0)
             {
-                Player_Stage3 playerCtrl_Sarang;
+                Player_Stage3 player_stage3;
 
                 if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Stage3 PC_S))
-                    playerCtrl_Sarang = PC_S;
+                    player_stage3 = PC_S;
                 else
                     yield break;
-                playerCtrl_Sarang.Stop_Walk();
-                playerCtrl_Sarang.StopAllCoroutines();
-                playerCtrl_Sarang.Destroy_sliderClone();
 
-                GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
-                GameObject[] q = GameObject.FindGameObjectsWithTag("Student");
-                GameObject ww = GameObject.Find("Student_Gaze");
-                GameObject rr = GameObject.Find("Targetting_Object");
+                player_stage3.Stop_Walk();
 
-                if (ww != null && ww.TryGetComponent(out Student_Gaze_Info SGI))
+                GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+                GameObject[] student = GameObject.FindGameObjectsWithTag("Student");
+                GameObject student_gaze = GameObject.Find("Student_Gaze");
+                GameObject targetting_object = GameObject.Find("Targetting_Object");
+
+                if (student_gaze != null && student_gaze.TryGetComponent(out Student_Gaze_Info SGI))
                 {
                     SGI.Change_Red_Slider();
-                    Destroy(ww);
+                    Destroy(student_gaze);
                 }
 
-                if (rr != null)
-                    Destroy(rr);
+                if (targetting_object != null)
+                    Destroy(targetting_object);
                     
-                foreach (var u in e)
+                foreach (var e in enemy)
                 {
-                    if (u.TryGetComponent(out Interrupt I1))
+                    if (e.TryGetComponent(out Interrupt I1))
                     {
                         I1.Stop_Coroutine();
                         I1.Disappear();
                     }
                 }
                 
-                foreach (var u in q)
+                foreach (var e in student)
                 {
-                    if (u.TryGetComponent(out Student S1))
+                    if (e.TryGetComponent(out Student S1))
                     {
                         S1.Stop_Coroutine();
                         S1.Disappear();
@@ -94,7 +94,9 @@ public class Limit_Time : MonoBehaviour
                 }
 
                 yield return YieldInstructionCache.WaitForSeconds(3f);
-                Instantiate(Time_Over_Text, new Vector3(playerCtrl_Sarang.transform.position.x, playerCtrl_Sarang.transform.position.y + 2, 0), Quaternion.identity);
+                singleTone.main_stage_3_score = player_stage3.Main_Stage_3_Score;
+
+                Instantiate(Time_Over_Text, new Vector3(player_stage3.transform.position.x, player_stage3.transform.position.y + 2, 0), Quaternion.identity);
                 yield break;
                 // 씬 전환 
             }
@@ -102,16 +104,16 @@ public class Limit_Time : MonoBehaviour
             wow_Time -= 1;
         }
     }
-    public void Stop_Time_Persist()
+    public void Stop_Time_Decrease()
     {
-        if (descent_time != null)
-            StopCoroutine(descent_time);
+        if (decrease_time != null)
+            StopCoroutine(decrease_time);
     }
 
-    public void Final_Walk_Floor()
+    public void Start_Time_Decrease()
     {
-        descent_time = Descent_Time();
-        StartCoroutine(descent_time);
+        decrease_time = Decrease_Time();
+        StartCoroutine(decrease_time);
     }
 
     void Update()

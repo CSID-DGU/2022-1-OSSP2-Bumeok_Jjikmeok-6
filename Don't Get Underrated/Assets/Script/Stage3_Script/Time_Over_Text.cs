@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Time_Over_Text : MonoBehaviour
 {
-    // Start is called before the first frame update
     float delta_ratio;
 
     float percent;
-
     private void Awake()
     {
         transform.localScale = new Vector3(1f, 1f, 0);

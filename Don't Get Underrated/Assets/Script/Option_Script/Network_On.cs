@@ -28,95 +28,79 @@ public class Network_On : MonoBehaviour
     }
     private void Start()
     {
+        if (is_network != null)
+            StopCoroutine(is_network);
+        is_network = Network_Check_Infinite();
         StartCoroutine(is_network);
     }
 
-    
+    [System.Serializable]
+    public class Haha
+    {
+        public string user_info;
+        public string message;
+    }
+
     protected IEnumerator Network_Check_Infinite()
     {
         while (true)
         {
-            UnityWebRequest www = UnityWebRequest.Get("http://localhost:3000/continue_connect");
+            singleTone.request = UnityWebRequest.Get("http://localhost:3000/continue_connect");
 
-            yield return www.SendWebRequest();
+            yield return singleTone.request.SendWebRequest();
 
-            if ((www.result == UnityWebRequest.Result.ConnectionError) ||
-                (www.result == UnityWebRequest.Result.ProtocolError) ||
-                (www.result == UnityWebRequest.Result.DataProcessingError))
+            Button1.SetActive(true);
+            Button2.SetActive(false);
+
+            if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
+                (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
+                (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
             {
                 Time.timeScale = 0;
                 Network_Off.SetActive(true);
-                ErrorMessage.text = www.error + " " + www.downloadHandler.text;
+                ErrorMessage.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
                 yield break;
             }
             else
             {
-                Time.timeScale = 1;
-                Network_Off.SetActive(false);
+                Haha d = JsonUtility.FromJson<Haha>(singleTone.request.downloadHandler.text);
+                if (singleTone.id != d.user_info)
+                {
+                    Time.timeScale = 0;
+                    Network_Off.SetActive(true);
+                    ErrorMessage.text = "계정 정보가 틀리거나 서버가 끊겼습니다.";
+                    yield break;
+                }
+                else
+                {
+                    Time.timeScale = 1;
+                    Network_Off.SetActive(false);
+                }
             }
             yield return YieldInstructionCache.WaitForEndOfFrame;
         }
     }
-    public void ReTransmmit()
-    {
-        StartCoroutine(Start_ReTransmmit());
-    }
-    IEnumerator Start_ReTransmmit()
-    {
-        IEnumerator i_retransmmit = I_ReTransmmit();
-
-        StartCoroutine(i_retransmmit);
-        yield return StartCoroutine(Network_Check_Instant());
-
-        StopCoroutine(i_retransmmit);
-        yield return null;
-    }
-    IEnumerator Network_Check_Instant()
+    public void Real_End()
     {
         Button1.SetActive(false);
-        Button2.SetActive(false);
-        yield return YieldInstructionCache.WaitForEndOfFrame;
+        Button2.SetActive(true);
+        ErrorMessage.text = "게임을 종료합니다.";
+    }
 
-        UnityWebRequest www = UnityWebRequest.Get("http://localhost:3000/continue_connect");
+    public void Enter_End()
+    {
+        Debug.Log("흠");
+        StartCoroutine(Fade_Out());
+    }
 
-        yield return www.SendWebRequest();
-
-        if ((www.result == UnityWebRequest.Result.ConnectionError) ||
-            (www.result == UnityWebRequest.Result.ProtocolError) ||
-            (www.result == UnityWebRequest.Result.DataProcessingError))
+    IEnumerator Fade_Out()
+    {
+        if (GameObject.Find("Jebal") && GameObject.Find("Jebal").TryGetComponent(out SpriteColor s1))
         {
-            Time.timeScale = 0;
-            Network_Off.SetActive(true);
-            ErrorMessage.text = www.error + " " + www.downloadHandler.text;
+            yield return s1.StartCoroutine(s1.Change_Color_Real_Time(Color.black, 2));
+            // 씬 이동
         }
         else
-        {
-            Time.timeScale = 1;
-            Network_Off.SetActive(false);
-            is_network = Network_Check_Infinite();
-            StartCoroutine(is_network);
-        }
-        Button1.SetActive(true);
-        Button2.SetActive(true);
-        yield return null;
-     }
-    IEnumerator I_ReTransmmit()
-    {
-        while (true)
-        {
-            Debug.Log(1);
-            ErrorMessage.text = "로딩 중....";
-            yield return StaticFunc.WaitForRealSeconds(.15f);
-            Debug.Log(2);
-            ErrorMessage.text = "로딩 중......";
-            yield return StaticFunc.WaitForRealSeconds(.15f);
-            Debug.Log(3);
-            ErrorMessage.text = "로딩 중........";
-            yield return StaticFunc.WaitForRealSeconds(.15f);
-        }
-    }
-    public void GameExit()
-    {
-        Application.Quit();
+            yield return null;
     }
 }

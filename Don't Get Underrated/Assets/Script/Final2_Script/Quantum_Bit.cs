@@ -14,10 +14,13 @@ public class Quantum_Bit : Enemy_Info
     private new void Awake()
     {
         base.Awake();
-        imageColor = GameObject.Find("Flash").GetComponent<ImageColor>();
+        if (GameObject.Find("Flash") && GameObject.Find("Flash").TryGetComponent(out ImageColor IC))
+            imageColor = IC;
         Part = new List<GameObject>();
         if (GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
             solGryn = SG;
+        if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
+            EffectSource = AS1;
     }
     // Start is called before the first frame update
     private void Start()
@@ -26,20 +29,23 @@ public class Quantum_Bit : Enemy_Info
 
         DOTween.Sequence()
         .Append(transform.DOMove(new Vector3(Solve * 7, 2, 0), 1f).SetEase(Ease.OutBounce))
+        .InsertCallback(0, () => Effect_Sound_OneShot(1))
         .Append(transform.DOMove(new Vector3(0, 2, 0), 1f).SetEase(Ease.InExpo))
         .Join(transform.DOScale(new Vector3(1.3f, 1.3f, 0), 1f).SetEase(Ease.InCirc))
+         .InsertCallback(1.6f, () => Effect_Sound_OneShot(2))
         .OnComplete(() =>
         {
+            My_Color = Color.clear;
             if (Solve >= 0)
                 Run_Life_Act(Tr_Co());
-            else
-                My_Color = Color.clear;
         });
     }
     private IEnumerator Tr_Co()
     {
-        My_Color = Color.clear;
+        Effect_Sound_OneShot(0);
+        
         Flash(Color.black, 0.5f, 1f);
+
         for (int i = -8; i <= 8; i++)
         {
             for (int j = -8; j <= 8; j++)
@@ -57,6 +63,7 @@ public class Quantum_Bit : Enemy_Info
                 }
             }
         }
+
         yield return Camera_Shake_And_Wait(0.02f, 2f, true, false);
         foreach (var e in Part)
         {
@@ -66,10 +73,10 @@ public class Quantum_Bit : Enemy_Info
                 if (e.TryGetComponent(out Weapon_Devil WD))
                     WD.W_MoveTo(new Vector3(Rand[0, Ran1], Rand[1, Ran1], 0));
             }
-           
         }
         Part.Clear();
         solGryn.Is_Next_Pattern = true;
+        OnDie();
         yield return null;
     }
 }

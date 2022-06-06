@@ -98,6 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a0f60e2e3448304ba49e7dadd5a0cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Explosion: {fileID: 0}
+  BackGroundSource_Collect: []
+  EffectSource_Collect: []
   speed: 10
 --- !u!114 &5939349870390238874
 MonoBehaviour:
@@ -111,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb168f22cfdbb5f42970a40d3f16f573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageData: {fileID: 11400000, guid: 5b3513ffbe8eb884496e89dfbe076c2b, type: 2}
+  stageData: {fileID: 11400000, guid: d7ff8fbdbdf5a1844822d357bb05211f, type: 2}
 --- !u!58 &4725996555307400618
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -141,3 +144,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 7056297144178873887, guid: 81ce713f0b35f684081e123dd017fc52, type: 3}
+  BackGroundSource_Collect: []
+  EffectSource_Collect: []

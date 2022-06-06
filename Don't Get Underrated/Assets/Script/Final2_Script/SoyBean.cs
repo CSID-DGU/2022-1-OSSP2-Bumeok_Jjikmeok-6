@@ -7,9 +7,6 @@ public class SoyBean : Weapon_Devil
     [SerializeField]
     [Range(500f, 2000f)] float speed = 1000f;
 
-    [SerializeField]
-    float distanceToGround = 0.2f;
-
     Rigidbody2D rb;
 
     [SerializeField]
@@ -26,7 +23,6 @@ public class SoyBean : Weapon_Devil
         rb = GetComponent<Rigidbody2D>();
         Count = 0;
     }
-
     private void Start()
     {
         if (!GameObject.FindGameObjectWithTag("Player"))
@@ -42,7 +38,6 @@ public class SoyBean : Weapon_Devil
         Vector2 dir = new Vector2(randomX, randomY).normalized;
         rb.AddForce(dir * speed);
     }
-
     private new void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject != null && collision.gameObject.CompareTag("Player") && collision.gameObject.TryGetComponent(out Player_Info PI))
@@ -53,7 +48,6 @@ public class SoyBean : Weapon_Devil
             Count++;
             if (Count >= 4)
                 OnDie();
-
         }
     }
 

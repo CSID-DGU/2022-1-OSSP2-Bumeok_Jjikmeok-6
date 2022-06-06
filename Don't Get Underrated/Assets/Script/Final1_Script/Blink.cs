@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Blink : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     public void Change_D()
     {
         transform.position = transform.position + new Vector3(-0.02f, -0.02f, 0);
@@ -14,5 +12,4 @@ public class Blink : MonoBehaviour
     {
         Destroy(gameObject);
     }
-    // Update is called once per frame
 }

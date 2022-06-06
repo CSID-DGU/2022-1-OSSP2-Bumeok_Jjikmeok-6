@@ -8,6 +8,7 @@ public class SpeedSliderViewer : Slider_Viewer
     private new void Awake()
     {
         base.Awake();
+        Act = null;
     }
     public void Start_To_Decrease(float time_persist)
     {
@@ -22,6 +23,8 @@ public class SpeedSliderViewer : Slider_Viewer
     }
     IEnumerator Decrease(float time_persist)
     {
+        if (!Check_Valid_Slider())
+            yield break;
         slider.value = 1;
         float inverse_time_persist = StaticFunc.Reverse_Time(time_persist);
         float percent = 0;
@@ -36,7 +39,6 @@ public class SpeedSliderViewer : Slider_Viewer
             PC_T.is_Speed_Up = false;
             PC_T.Speed_Slider.SetActive(false);
         }
-          
         yield return null;
     }
 }

@@ -1,56 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Player_Info : Life
 {
-    // Start is called before the first frame update
-
     [SerializeField]
-    protected int LifeTime = 5;
+    protected Text My_Name;
 
     [SerializeField]
     protected GameObject[] Item;
 
     protected bool weapon_able;
 
-    private int main_1_score, main_2_score, main_3_score, final_score;
+    private int main_stage_1_score, main_stage_2_score, main_stage_3_score, final_stage_1_score, final_stage_2_score;
 
     protected virtual new void Awake()
     {
         base.Awake();
     }
 
-    public int Main_1_Score
+    public int Main_Stage_1_Score
     {
-        set { main_1_score = value; }
-        get { return main_1_score; }
+        set { main_stage_1_score = value; }
+        get { return main_stage_1_score; }
     }
-
-    public int Main_2_Score
+    public int Main_Stage_2_Score
     {
-        set { main_2_score = value; }
-        get { return main_2_score; }
+        set { main_stage_2_score = value; }
+        get { return main_stage_2_score; }
     }
-    public int Main_3_Score
+    public int Main_Stage_3_Score
     {
-        set { main_3_score = value; }
-        get { return main_3_score; }
+        set { main_stage_3_score = value; }
+        get { return main_stage_3_score; }
     }
-    public int Final_Score
+    public int Final_Stage_1_Score
     {
-        set { final_score = value; }
-        get { return final_score; }
+        set { final_stage_1_score = value; }
+        get { return final_stage_1_score; }
+    }
+    public int Final_Stage_2_Score
+    {
+        set { final_stage_2_score = value; }
+        get { return final_stage_2_score; }
     }
     public override void TakeDamage(int damage)
     {
         if (Unbeatable)
             return;
-        LifeTime -= damage;
-        if (LifeTime <= 0)
-            OnDie();
+        OnDie();
     }
-
     public override void OnDie()
     {
         base.OnDie();

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Weapon_Player : Weapon
 {
-
     [SerializeField]
     float Boss_Damage = 3f;
     protected virtual new void Awake()
@@ -27,7 +26,10 @@ public class Weapon_Player : Weapon
         if (collision.CompareTag("Boss") && collision.gameObject.TryGetComponent(out Boss_Info B))
         {
             B.TakeDamage(Boss_Damage);
-            Weak_Weapon();
+            if (B.Unbeatable)
+                Destroy(gameObject);
+            else
+                Weak_Weapon();
         }
     }
 }

@@ -48,7 +48,5 @@ public class Targetting_Effect : MonoBehaviour
             }
             yield return null;
         }
-        
     }
-
 }

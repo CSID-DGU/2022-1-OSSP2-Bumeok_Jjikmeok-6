@@ -8,7 +8,16 @@ public class Slider_Viewer : MonoBehaviour
     protected Slider slider;
     protected virtual void Awake()
     {
-        slider = GetComponent<Slider>();
-        slider.value = 0;
+        if (TryGetComponent(out Slider S))
+        {
+            slider = S;
+            slider.value = 0;
+        }
+    }
+    protected bool Check_Valid_Slider()
+    {
+        if (slider != null)
+            return true;
+        return false;
     }
 }

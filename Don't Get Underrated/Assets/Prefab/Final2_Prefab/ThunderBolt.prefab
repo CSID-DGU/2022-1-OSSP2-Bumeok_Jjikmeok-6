@@ -261,6 +261,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 0}
+  BackGroundSource_Collect: []
+  EffectSource_Collect:
+  - {fileID: 8300000, guid: b3cd8d862d6428342a5415ae27a3ad90, type: 3}
 --- !u!114 &-2261537564998828096
 MonoBehaviour:
   m_ObjectHideFlags: 0

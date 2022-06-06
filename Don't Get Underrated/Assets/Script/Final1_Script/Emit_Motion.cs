@@ -11,20 +11,27 @@ public class Emit_Motion : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
-    Player_Final1 playerCtrl_Tengai;
+    Player_Final1 player_final1;
 
     IEnumerator Actions;
-
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (TryGetComponent(out SpriteRenderer SR))
+            spriteRenderer = SR;
         transform.localScale = Vector3.zero;
         if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Final1 PC_T))
-            playerCtrl_Tengai = PC_T;
+            player_final1 = PC_T;
     }
     void Start()
     {
-        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, .3f);
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.3f);
+    }
+
+    public bool Check_Valid_Emit()
+    {
+        if (spriteRenderer != null && player_final1 != null)
+            return true;
+        return false;
     }
 
     public IEnumerator Emit_Change_Size()
@@ -34,15 +41,15 @@ public class Emit_Motion : MonoBehaviour
         while (true)
         {
             temp_scale = transform.localScale;
-            while (transform.localScale.x - temp_scale.x < .3f)
+            while (transform.localScale.x - temp_scale.x < 0.4f)
             {
-                transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * 3, transform.localScale.y + Time.deltaTime * 3, 0);
+                transform.localScale = new Vector3(transform.localScale.x + Time.deltaTime * 4, transform.localScale.y + Time.deltaTime * 4, 0);
                 yield return null;
             }
             temp_scale = transform.localScale;
-            while (temp_scale.x - transform.localScale.x < .25f)
+            while (temp_scale.x - transform.localScale.x < 0.36f)
             {
-                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 2, transform.localScale.y - Time.deltaTime * 2, 0);
+                transform.localScale = new Vector3(transform.localScale.x - Time.deltaTime * 3, transform.localScale.y - Time.deltaTime * 3, 0);
                 yield return null;
             }
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a + Time.deltaTime * 7);
@@ -81,8 +88,8 @@ public class Emit_Motion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerCtrl_Tengai != null)
-            transform.position = playerCtrl_Tengai.transform.position;
+        if (player_final1 != null)
+            transform.position = player_final1.transform.position;
     }
     private void OnDestroy()
     {

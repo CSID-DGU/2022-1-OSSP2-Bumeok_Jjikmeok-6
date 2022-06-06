@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class BossHPSliderViewer : Slider_Viewer
 {
-    // Start is called before the first frame update
-
     Boss_Info boss_info;
 
     bool OnUpdate = false;
@@ -14,7 +12,6 @@ public class BossHPSliderViewer : Slider_Viewer
     private new void Awake()
     {
         base.Awake();
-        slider.value = 0;
     }
     public void F_HPFull(Boss_Info boss_info)
     {
@@ -24,6 +21,8 @@ public class BossHPSliderViewer : Slider_Viewer
     }
     IEnumerator I_HPFull()
     {
+        if (!Check_Valid_Slider())
+            yield break;
         while(slider.value < 1)
         {
             slider.value += Time.deltaTime * 0.5f;
@@ -34,7 +33,7 @@ public class BossHPSliderViewer : Slider_Viewer
     // Update is called once per frame
     void LateUpdate()
     {
-         if (OnUpdate)
+         if (OnUpdate && Check_Valid_Slider())
             slider.value = boss_info.CurrentHP / boss_info.MaxHP;
     }
 }

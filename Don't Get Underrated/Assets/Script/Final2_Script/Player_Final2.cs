@@ -7,6 +7,7 @@ public class Player_Final2 : Player_Info {
 
 	[HideInInspector]
 	public bool facingRight = true;
+
 	[HideInInspector]
 	public bool jump = false;
 
@@ -24,6 +25,12 @@ public class Player_Final2 : Player_Info {
 
 	[SerializeField]
 	private float distanceToGround = 0;
+
+	[SerializeField]
+	int deathCount = 5;
+
+	[SerializeField]
+	Text GyoSu;
 
 	private Animator anim;
 
@@ -43,7 +50,9 @@ public class Player_Final2 : Player_Info {
 
 	private int groundLayerMask;
 
-	private IEnumerator color_unbeatable;
+	private IEnumerator color_unbeatable, whilee;
+
+	public int DeathCount => deathCount;
 
 	public bool IsMove
     {
@@ -67,8 +76,9 @@ public class Player_Final2 : Player_Info {
 		if (GameObject.FindGameObjectWithTag("Boss") && GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out SolGryn SG))
 			solGryn = SG;
 		groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
-		LifeTime = 0;
-		Death_Count.text = "Death Count : " + LifeTime;
+		deathCount = 0;
+		GyoSu.color = Color.clear;
+		Death_Count.text = "Death Count : " + deathCount;
 	}
 
 	private void Start() 
@@ -84,7 +94,6 @@ public class Player_Final2 : Player_Info {
 		solGryn.WelCome();
 	}
 
-	// Update is called once per frame
 	private void Update() 
 	{
 		if (Input.GetButtonDown("Jump") && jumpCount < maxAirJumps) 
@@ -93,12 +102,15 @@ public class Player_Final2 : Player_Info {
 			jumpCount += 1;
 		}
 		if (Input.GetKeyDown(KeyCode.Semicolon))
+        {
+			singleTone.EasterEgg = true;
+			GyoSu.color = Color.blue;
 			solGryn.OnDie();
+		}
 	}
 
-	private bool isGrounded() {
-		//		return rb2d.IsTouchingLayers(groundLayer);
-
+	private bool isGrounded() 
+	{
 		Vector2 position = My_Position;
 		Vector2 direction = Vector2.down;
 
@@ -108,20 +120,21 @@ public class Player_Final2 : Player_Info {
 
     public override void TakeDamage(int damage)
     {
-        if (!Unbeatable)
-        {
-			Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-			LifeTime++;
-			Death_Count.text = "Death Count : " + LifeTime;
-			Unbeatable = true;
-			isMove = false;
-			float velo_x = rb2d.velocity.x;
-			rb2d.velocity = Vector2.zero;
-			Vector2 dir = new Vector2(-Mathf.Sign(velo_x) * 1, 1).normalized;
-			rb2d.AddForce(dir * 10, ForceMode2D.Impulse);
+		if (Unbeatable)
+			return;
+		Unbeatable = true;
 
-			Run_Life_Act(Whilee());
-		}
+		Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
+		deathCount++;
+		Death_Count.text = "Death Count : " + deathCount;
+
+		isMove = false;
+		float velo_x = rb2d.velocity.x;
+		rb2d.velocity = Vector2.zero;
+		Vector2 dir = new Vector2(-Mathf.Sign(velo_x) * 1, 1).normalized;
+		rb2d.AddForce(dir * 10, ForceMode2D.Impulse);
+		
+		Run_Life_Act_And_Continue(ref whilee, Whilee());
     }
 	private IEnumerator Whilee()
     {
@@ -133,21 +146,34 @@ public class Player_Final2 : Player_Info {
 			percent += Time.deltaTime;
 			yield return null;
         } // 정확한 시간 계산을 위해 식을 좀 복잡하게 썼음
+
 		isMove = true;
 		yield return YieldInstructionCache.WaitForSeconds(1.5f);
+		
 		Stop_Life_Act(ref color_unbeatable);
 		Return_To_My_Origin_Color();
 		Unbeatable = false;
 		yield return null;
     }
 
-	private void FixedUpdate() {
+    private void LateUpdate()
+    {
+        if (My_Position.y <= -6)
+        {
+			if (My_Position.x <= -3 || My_Position.x >= 3)
+            {
+				My_Position = Vector3.zero;
+				TakeDamage(1);
+            }
+        }
+    }
+
+    private void FixedUpdate() {
 		
 		if (isMove)
         {
 			h = Input.GetAxisRaw("Horizontal");
 			float vh = Mathf.Sign(h);
-
 
 			if (h == 0)
 			{
@@ -169,7 +195,6 @@ public class Player_Final2 : Player_Info {
 
 			bool nextGrounded = isGrounded();
 
-
 			if (jump)
 			{
 				rb2d.velocity = new Vector2(rb2d.velocity.x, jumpSpeed);
@@ -183,7 +208,6 @@ public class Player_Final2 : Player_Info {
 
 			if (nextGrounded && !grounded)
 			{
-
 				anim.SetTrigger("Land");
 			}
 
@@ -208,10 +232,6 @@ public class Player_Final2 : Player_Info {
 	private void Flip() {
 		facingRight = !facingRight;
 		transform.localRotation = Quaternion.Euler(0f, facingRight ? 0f : 180f, 0f);
-	}
-
-	private void OnTriggerEnter2D(Collider2D col) {
-		Debug.Log(LayerMask.LayerToName(col.gameObject.layer));
 	}
     public override void OnDie()
     {

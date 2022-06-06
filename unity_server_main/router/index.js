@@ -51,29 +51,25 @@ router.route('/log_out')
 router.route('/sign_up')
 .post(router_func.isNotLoggedIn, router_func.sign_up)
 
-router.route('/Get_Rank')
-.get(router_func.isLoggedIn, router_func.Get_Rank)
+router.route('/get_rank_total_login')
+.get(router_func.isLoggedIn, router_func.Get_Rank_Total_Login)
 
-router.route('/Get_Rank_For_Main_1')
-.get(router_func.isLoggedIn, router_func.Get_Rank_For_Main_1)
+router.route('/get_rank_total_not_login')
+.get(router_func.Get_Rank_Total_Not_Login)
 
-router.route('/Get_Rank_For_Main_2')
-.get(router_func.isLoggedIn, router_func.Get_Rank_For_Main_2)
+router.route('/Set_Rank')
+.post(router_func.isLoggedIn, router_func.Set_Rank)
 
-router.route('/Get_Rank_For_Main_3')
-.get(router_func.isLoggedIn, router_func.Get_Rank_For_Main_3)
+router.route('/get_rank_detail_login')
+.post(router_func.isLoggedIn, router_func.Get_Rank_Detail_Login)
 
-router.route('/Get_Rank_For_Final_4')
-.get(router_func.isLoggedIn, router_func.Get_Rank_For_Final_1)
-
-router.route('/Get_Rank_For_Final_5')
-.get(router_func.isLoggedIn, router_func.Get_Rank_For_Final_2)
+router.route('/get_rank_detail_not_login')
+.post(router_func.Get_Rank_Detail_Not_Login)
 
 router.route('/log_fail')
 .get(router_func.log_fail)
 
 router.route('/continue_connect')
-.get(router_func.connect_check)
-
+.get(router_func.isLoggedIn, router_func.connect_check)
 
 module.exports = router

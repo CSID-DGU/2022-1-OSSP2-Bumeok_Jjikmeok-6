@@ -3,31 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class F1_Homming_Enemy : Enemy_Info
-{
-
-    [SerializeField]
-    int ScorePerEnemy = 50;
-
-    Player_Final1 player_tengai;
-
-    Rigidbody2D rb;
-
+{ 
     [SerializeField]
     float speed = 5;
 
     [SerializeField]
     public float rotateSpeed = 200f;
 
+    Player_Final1 player_final1;
+
+    Rigidbody2D rb;
+
     private new void Awake()
     {
         base.Awake();
-        player_tengai = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Final1>();
-        rb = GetComponent<Rigidbody2D>();
+        if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Final1 PF1))
+            player_final1 = PF1;
+        if (TryGetComponent(out Rigidbody2D RB2D))
+            rb = RB2D;
     }
     void Start()
     {
-        StartCoroutine(Auto_Dead());
-        StartCoroutine(Homming_Player());
+        Run_Life_Act(Auto_Dead());
+        Run_Life_Act(Homming_Player());
     }
     IEnumerator Auto_Dead()
     {
@@ -37,24 +35,28 @@ public class F1_Homming_Enemy : Enemy_Info
     }
     public override void OnDie()
     {
-        player_tengai.Final_Score += ScorePerEnemy;
-        Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        base.OnDie();
     }
     IEnumerator Homming_Player()
     {
-        while (true)
+        if (player_final1 != null && rb != null)
         {
-            Vector2 direction = (Vector2)(GameObject.FindGameObjectWithTag("Player").transform.position) - rb.position;
-            direction.Normalize();
+            while (true)
+            {
+                Vector2 direction = (Vector2)(GameObject.FindGameObjectWithTag("Player").transform.position) - rb.position;
 
-            float rotateAmount = Vector3.Cross(direction, transform.up).z;
+                direction.Normalize();
 
-            rb.angularVelocity = -rotateAmount * rotateSpeed;
+                float rotateAmount = Vector3.Cross(direction, transform.up).z;
 
-            rb.velocity = transform.up * speed;
+                rb.angularVelocity = -rotateAmount * rotateSpeed;
 
-            yield return null;
+                rb.velocity = transform.up * speed;
+
+                yield return null;
+            }
         }
+        else
+            yield return null;
     }
 }

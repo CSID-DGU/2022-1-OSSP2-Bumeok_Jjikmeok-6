@@ -88,9 +88,4 @@ public class ImageColor : MonoBehaviour
         }
         yield return null;
     }
-    public void Stop_Coroutine()
-    {
-        Init();
-        StopAllCoroutines();
-    }
 }
