@@ -71,6 +71,7 @@ public class Nachi_X : Enemy_Info
 
         Run_Life_Act(Change_My_Color(My_Color, Color.clear, 2, 0, null));
         yield return Change_BG_And_Wait(Color.clear, 1);
+
         trailRenderer.enabled = false;
         OnDie();
     }

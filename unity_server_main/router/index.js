@@ -34,7 +34,7 @@ router.use(passport.session())
   
 passport.serializeUser((user, done) => {
     console.log('serializeUser : ', user)
-    done(null, user[0].id); // 여기서의 user[0].email은 deserializeUser의 id로 전달된다.
+    done(null, user[0].id); // 여기서의 user[0].id는 deserializeUser의 id로 전달된다.
 })
     
 passport.deserializeUser((id, done) => { // 페이지를 접근할 때마다 호출되는 것
@@ -57,7 +57,7 @@ router.route('/get_rank_total_login')
 router.route('/get_rank_total_not_login')
 .get(router_func.Get_Rank_Total_Not_Login)
 
-router.route('/Set_Rank')
+router.route('/set_rank')
 .post(router_func.isLoggedIn, router_func.Set_Rank)
 
 router.route('/get_rank_detail_login')

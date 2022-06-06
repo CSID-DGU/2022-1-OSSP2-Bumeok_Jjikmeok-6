@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PrefabOutOfCamera : MonoBehaviour
+public class PrefabOutOfCamera : MonoBehaviour // 프리팹이 카메라 영역(selectedCamera)을 벗어났을 때 사라지도록 하는 함수
 {
     // Start is called before the first frame update
 

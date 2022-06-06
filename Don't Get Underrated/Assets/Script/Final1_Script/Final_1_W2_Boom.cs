@@ -59,7 +59,7 @@ public class Final_1_W2_Boom : Weapon_Player
         spriteRenderer.color = Color.clear;
 
         Effect_Sound_OneShot(0);
-        yield return Start_Camera_Shake_For_Wait(0.02f, 2f, true, false);
+        yield return Camera_Shake_And_Wait(0.02f, 2f, true, false);
         Destroy(gameObject);
     }
 }

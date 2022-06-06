@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 
 public class My_SJH_Script : MonoBehaviour
 {
-    private static string nextScene;
     public float currentValue;
     public float speed = 25;
 
@@ -20,50 +19,60 @@ public class My_SJH_Script : MonoBehaviour
     [SerializeField]
     Text After_Rank;
 
+    [SerializeField]
+    GameObject Button1;
+
+    [SerializeField]
+    GameObject Button2;
+
+    SpriteColor spriteColor;
+
     [System.Serializable]
     class Old_Rank
     {
-        public string id;
-        public int main_score_1;
-        public int main_score_2;
-        public int main_score_3;
-        public int final_score_1;
-        public int final_score_2;
+        public string id = "";
+        public int main_score_1 = 0;
+        public int main_score_2 = 0;
+        public int main_score_3 = 0;
+        public int final_score_1 = 0;
+        public int final_score_2 = 0;
     }
 
     [System.Serializable]
     class New_Rank
     {
-        public string id;
-        public int main_score_1;
-        public int main_score_2;
-        public int main_score_3;
-        public int final_score_1;
-        public int final_score_2;
+        public string id = "";
+        public int main_score_1 = 0;
+        public int main_score_2 = 0;
+        public int main_score_3 = 0;
+        public int final_score_1 = 0;
+        public int final_score_2 = 0;
     }
 
     [System.Serializable]
     class Json_From_Rank_DB
     {
-        public Old_Rank[] old_rank;
-        public New_Rank[] new_rank;
-        public string successful_message;
+        public Old_Rank[] old_rank = null;
+        public New_Rank[] new_rank = null;
+        public string successful_message = "";
     }
 
     private void Awake()
     {
         Before_Rank.color = Color.clear;
         After_Rank.color = Color.clear;
+        Button1.SetActive(false);
+        Button2.SetActive(false);
+        if (GameObject.Find("Network_Sprite") && GameObject.Find("Network_Sprite").TryGetComponent(out SpriteColor s1))
+        {
+            spriteColor = s1;
+            spriteColor.Set_BG_Clear();
+        }
     }
 
     void Start()
     {
         StartCoroutine(Update_Rank());
-    }
-    public static void LoadScene(string sceneName)
-    {
-        nextScene = sceneName;
-        SceneManager.LoadScene("LoadingScene");
     }
     IEnumerator Update_Rank()
     {
@@ -71,22 +80,14 @@ public class My_SJH_Script : MonoBehaviour
 
         WWWForm form = new WWWForm();
 
-        form.AddField("main_stage_1_score", 1000);
-        form.AddField("main_stage_2_score", 2000);
-        form.AddField("main_stage_3_score", 3000);
-        form.AddField("final_stage_1_score", 4000);
-        form.AddField("final_stage_2_score", 77);
+        form.AddField("main_stage_1_score", singleTone.main_stage_1_score);
+        form.AddField("main_stage_2_score", singleTone.main_stage_2_score);
+        form.AddField("main_stage_3_score", singleTone.main_stage_3_score);
+        form.AddField("final_stage_1_score", singleTone.final_stage_1_score);
+        form.AddField("final_stage_2_score", singleTone.final_stage_2_score);
 
-        //form.AddField("main_stage_1_score", singleTone.main_stage_1_score);
-        //form.AddField("main_stage_2_score", singleTone.main_stage_2_score);
-        //form.AddField("main_stage_3_score", singleTone.main_stage_3_score);
-        //form.AddField("final_stage_1_score", singleTone.final_stage_1_score);
-        //form.AddField("final_stage_2_score", singleTone.final_stage_2_score);
-
-        singleTone.request = UnityWebRequest.Post("http://localhost:3000/Set_Rank", form);
+        singleTone.request = UnityWebRequest.Post("http://localhost:3000/set_rank", form);
         yield return singleTone.request.SendWebRequest();
-        Debug.Log(singleTone.request.result);
-        Debug.Log(singleTone.request.downloadHandler.text);
 
         if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
             (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
@@ -97,6 +98,7 @@ public class My_SJH_Script : MonoBehaviour
             Wait_text.color = Color.red;
             Wait_text.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
+
         else
         {
             if (singleTone.EasterEgg)
@@ -105,35 +107,78 @@ public class My_SJH_Script : MonoBehaviour
                 After_Rank.color = Color.clear;
                 Wait_text.color = Color.red;
                 Wait_text.text = "이스터에그를 적용한 사람은 랭킹 반영이 안됩니다. 죄송합니다.";
-                yield break;
             }
-            Before_Rank.color = Color.green;
-            After_Rank.color = Color.blue;
-            Wait_text.color = Color.clear;
-            Json_From_Rank_DB d = JsonUtility.FromJson<Json_From_Rank_DB>(singleTone.request.downloadHandler.text);
-            Before_Rank.text = "";
-            After_Rank.text = "";
-            foreach (var e in d.old_rank)
+            else
             {
-                Before_Rank.text += e.id + "의 예전 랭킹\n";
-                Before_Rank.text += "메인 1 : " + e.main_score_1 + '\n';
-                Before_Rank.text += "메인 2 : " + e.main_score_2 + '\n';
-                Before_Rank.text += "메인 3 : " + e.main_score_3 + '\n';
-                Before_Rank.text += "최종 1 : " + e.final_score_1 + '\n';
-                Before_Rank.text += "최종 2 : " + e.final_score_2 + '\n';
-            }
+                Json_From_Rank_DB d = JsonUtility.FromJson<Json_From_Rank_DB>(singleTone.request.downloadHandler.text);
+               
+                foreach (var e in d.old_rank)
+                {
+                    if (singleTone.id != e.id)
+                    {
+                        Before_Rank.color = Color.clear;
+                        After_Rank.color = Color.clear;
+                        Wait_text.color = Color.red;
+                        Wait_text.text = "게임 내에서 로그인을 안 했군요!";
+                        Button1.SetActive(true);
+                        yield break;
+                    }
+                }
 
-            foreach (var e in d.new_rank)
-            {
-                After_Rank.text += e.id + "의 예전 랭킹\n";
-                After_Rank.text += "메인 1 : " + e.main_score_1 + '\n';
-                After_Rank.text += "메인 2 : " + e.main_score_2 + '\n';
-                After_Rank.text += "메인 3 : " + e.main_score_3 + '\n';
-                After_Rank.text += "최종 1 : " + e.final_score_1 + '\n';
-                After_Rank.text += "최종 2 : " + e.final_score_2 + '\n';
+                Before_Rank.color = Color.green;
+                After_Rank.color = Color.blue;
+                Wait_text.color = Color.clear;
+                Before_Rank.text = "";
+                After_Rank.text = "";
+                foreach (var e in d.old_rank)
+                {
+                    Before_Rank.text += e.id + "의 예전 랭킹\n";
+                    Before_Rank.text += "메인 1 : " + e.main_score_1 + " / ";
+                    Before_Rank.text += "메인 2 : " + e.main_score_2 + " / ";
+                    Before_Rank.text += "메인 3 : " + e.main_score_3 + '\n';
+                    Before_Rank.text += "최종 1 : " + e.final_score_1 + " / ";
+                    Before_Rank.text += "최종 2 : " + e.final_score_2 + " / ";
+                }
+
+                foreach (var e in d.new_rank)
+                {
+                    After_Rank.text += e.id + "의 최신 랭킹\n";
+                    After_Rank.text += "메인 1 : " + e.main_score_1 + " / ";
+                    After_Rank.text += "메인 2 : " + e.main_score_2 + " / ";
+                    After_Rank.text += "메인 3 : " + e.main_score_3 + '\n';
+                    After_Rank.text += "최종 1 : " + e.final_score_1 + " / ";
+                    After_Rank.text += "최종 2 : " + e.final_score_2 + " / ";
+                }
             }
         }
-        yield return null;
+        Button1.SetActive(true);
+        yield break;
+    }
+
+    public void Enter_End()
+    {
+        Button1.SetActive(false);
+        Button2.SetActive(true);
+        Before_Rank.color = Color.clear;
+        After_Rank.color = Color.clear;
+        Wait_text.color = Color.white;
+        Wait_text.text = "게임을 종료합니다.";
+    }
+
+    public void Real_End()
+    {
+        StartCoroutine(Fade_Out());
+    }
+
+    IEnumerator Fade_Out()
+    {
+        if (spriteColor != null)
+        {
+            yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
+            SceneManager.LoadScene("LoginScene");
+        }
+        else
+            yield return null;
     }
     IEnumerator Wait_Text_IEnum(int Count)
     {

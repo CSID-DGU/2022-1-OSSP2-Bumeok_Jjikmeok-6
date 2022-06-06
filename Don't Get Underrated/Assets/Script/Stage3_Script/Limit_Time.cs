@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class Limit_Time : MonoBehaviour
+public class Limit_Time : MonoBehaviour // 제한 시간에 대한 스크립트. 게임의 종료를 담당
 {
     [SerializeField]
     GameObject Time_Over_Text;
@@ -22,10 +23,14 @@ public class Limit_Time : MonoBehaviour
 
     int wow_Time;
 
+    SpriteColor spriteColor;
+
     private void Awake()
     {
         Limit_Time_Text = GetComponent<TextMeshProUGUI>();
         image = GameObject.Find("Flash_TimeOut").GetComponent<Image>();
+        if (GameObject.Find("Jebal") && GameObject.Find("Jebal").TryGetComponent(out SpriteColor s1))
+            spriteColor = s1;
         flashOn = image.GetComponent<ImageColor>();
         flash_on = null;
         decrease_time = null;
@@ -36,21 +41,21 @@ public class Limit_Time : MonoBehaviour
     private void Start()
     {
         decrease_time = Decrease_Time();
-        StartCoroutine(decrease_time);
+        StartCoroutine(decrease_time); // 제한 시간 감소 시작
     }
 
     IEnumerator Decrease_Time()
     {
         while (true)
         {
-            if (wow_Time <= 10)
+            if (wow_Time <= 10) // 제한 시간이 10초 남았을 때
             {
                 if (flash_on != null)
                     flashOn.StopCoroutine(flash_on);
-                flash_on = flashOn.Change_Origin_BG(new Color(1, 0, 0, 0.5f), 0.4f);
+                flash_on = flashOn.Change_Origin_BG(new Color(1, 0, 0, 0.5f), 0.4f); // 0.4초 간 빨간색 배경으로 서서히 변환 후 원위치 
                 flashOn.StartCoroutine(flash_on);
             }
-            if (wow_Time <= 0)
+            if (wow_Time <= 0) // 제한시간이 다 됐을 때
             {
                 Player_Stage3 player_stage3;
 
@@ -59,7 +64,7 @@ public class Limit_Time : MonoBehaviour
                 else
                     yield break;
 
-                player_stage3.Stop_Walk();
+                player_stage3.Stop_Walk(); // 플레이어의 행동 중지
 
                 GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
                 GameObject[] student = GameObject.FindGameObjectsWithTag("Student");
@@ -70,7 +75,7 @@ public class Limit_Time : MonoBehaviour
                 {
                     SGI.Change_Red_Slider();
                     Destroy(student_gaze);
-                }
+                } // 학생 게이지 초기화 후 학생 게이지 삭제
 
                 if (targetting_object != null)
                     Destroy(targetting_object);
@@ -79,9 +84,9 @@ public class Limit_Time : MonoBehaviour
                 {
                     if (e.TryGetComponent(out Interrupt I1))
                     {
-                        I1.Stop_Coroutine();
+                        I1.Stop_Lazor();
                         I1.Disappear();
-                    }
+                    } // 인터럽트의 레이저 중지 후 사라짐
                 }
                 
                 foreach (var e in student)
@@ -90,13 +95,18 @@ public class Limit_Time : MonoBehaviour
                     {
                         S1.Stop_Coroutine();
                         S1.Disappear();
-                    }
+                    }  // 돌아다니는 학생의 행동 중지 후 사라짐
                 }
 
                 yield return YieldInstructionCache.WaitForSeconds(3f);
                 singleTone.main_stage_3_score = player_stage3.Main_Stage_3_Score;
 
                 Instantiate(Time_Over_Text, new Vector3(player_stage3.transform.position.x, player_stage3.transform.position.y + 2, 0), Quaternion.identity);
+                yield return YieldInstructionCache.WaitForSeconds(3f);
+
+                if (spriteColor != null)
+                    yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
+                SceneManager.LoadScene("Final1");
                 yield break;
                 // 씬 전환 
             }

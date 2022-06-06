@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SolGryn : Boss_Info
 {
-
-    // <a href='https://kr.freepik.com/vectors/light'>Light 벡터는 upklyak - kr.freepik.com가 제작함</a>
-
     [SerializeField]
     private GameObject SolGryn_HP;
 
@@ -81,7 +79,7 @@ public class SolGryn : Boss_Info
     }
     public void WelCome()
     {
-        Run_Life_Act(TeoKisis());
+        Run_Life_Act(SolGryn_Appear());
     }
 
     private void Launch_SoyBean()
@@ -98,7 +96,7 @@ public class SolGryn : Boss_Info
         }
         yield return null;
     }
-    private IEnumerator TeoKisis()
+    private IEnumerator SolGryn_Appear() // 첫 등장
     {
         Effect_Sound_OneShot(0);
         yield return Move_Straight(new Vector3(0, 7, 0), new Vector3(0, 0, 0), 7f, declineCurve);
@@ -153,13 +151,14 @@ public class SolGryn : Boss_Info
         spriteColor.Change_Color(Color.clear, 1);
         Run_Life_Act(Start_Pattern());
     }
-    private void Continue_Camera_Shake()
+    private void Continue_Camera_Shake() // 스테이지 내내 카메라를 조금씩 흔들도록
     {
         Effect_Sound_Play(5);
         Camera_Shake(0.002f, 1, false, true);
     }
-    private IEnumerator Start_Pattern()
+    private IEnumerator Start_Pattern() // 패턴 시작
     {
+        BackGround_Sound_Play(0);
         player_final2.IsMove = true;
         player_final2.Unbeatable = false;
         My_Position = new Vector3(7, 4, 0);
@@ -170,7 +169,6 @@ public class SolGryn : Boss_Info
             B1.F_HPFull(this);
 
         Run_Life_Act(HP_Decrease());
-        BackGround_Sound_Play(0);
 
         Continue_Camera_Shake();
 
@@ -187,9 +185,9 @@ public class SolGryn : Boss_Info
                 pattern = Pattern_Collect[i];
                 yield return pattern;
             }
-        }
+        } // 최종 (1)과는 달리 패턴 1~6이 순서대로 이어진다.
     }
-    private IEnumerator Pattern01() // 완료
+    private IEnumerator Pattern01() // 패턴 1 - 불교를 상징하는 '만'자를 그리고, 이를 부정하는 칼날이 X를 그린다.
     {
         float[,] u1 = new float[3, 2] { { -4f, -0.4f }, { 4f, -0.4f }, { 4f, -6f } };
         float[,] u2 = new float[3, 2] { { 0, 2 }, { 0, -3.35f }, { -4, -3.35f } };
@@ -219,6 +217,10 @@ public class SolGryn : Boss_Info
         for (int i = 0; i < 3; i++)
             yield return Move_Straight(My_Position, new Vector3(u2[i, 0], u2[i, 1], 0), 0.12f, declineCurve);
 
+        // 만자를 그리는 로직
+
+        // -------------------------------------------------------------------------------------------------------------------------
+
         Run_Life_Act(Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.4f, 0, DisAppear_Effect_1));
         yield return Trail_Color_Change_And_Back(Color.red, Color.green, 0.33f, 3);
 
@@ -241,10 +243,13 @@ public class SolGryn : Boss_Info
         if (GameObject.Find("TrailCollider"))
             Destroy(GameObject.Find("TrailCollider"));
 
+        // 칼날이 X를 그리는 로직
+
+        // -------------------------------------------------------------------------------------------------------------------------
+
         My_Color = Color.white;
         My_Position = new Vector3(7, 4, 0);
         yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, inclineCurve);
-
     }
     private IEnumerator Pattern02()
     {
@@ -256,6 +261,8 @@ public class SolGryn : Boss_Info
         yield return Straw_Launch(new Vector3(7, -2.5f, 0), Quaternion.Euler(0, 0, 90), new Vector3(4.6f, -2.5f, 0), Quaternion.Euler(0, 0, 90),
           new Vector3(3.2f, -2.5f, 0), Quaternion.identity, Vector3.left, 0.3f, 11, 0.3f);
 
+        // 좌, 우 끝에서 플레이어를 향하여 땅콩 발사 (이에 대한 로직은 Straw_Launch에 있음)
+
         float[] Straw_Launch_On_Air_X = new float[8] { 0, 3.11f, -3.11f, 1.5f, -1.5f, 0, 3.11f, -1.5f };
 
         for (int i = 0; i < 8; i++)
@@ -263,6 +270,8 @@ public class SolGryn : Boss_Info
             yield return Straw_Launch(new Vector3(Straw_Launch_On_Air_X[i], 4.3f, 0), Quaternion.Euler(0, 0, 180), new Vector3(Straw_Launch_On_Air_X[i], 1.92f, 0), Quaternion.identity,
             new Vector3(Straw_Launch_On_Air_X[i], 0.61f, 0), Quaternion.Euler(0, 0, 90), Vector3.down, 0, 4, 0.1f);
         }
+
+        // 상단에서 플레이어를 향하여 8번의 땅콩 발사
 
         Effect_Sound_OneShot(11);
         transform.SetPositionAndRotation(new Vector3(0, 1.35f, 0), Quaternion.identity);
@@ -285,20 +294,24 @@ public class SolGryn : Boss_Info
                 Effect_Sound_OneShot(1);
                 SC1.Shake_Act(); SC2.Shake_Act();
                 yield return Shake_Act(0.2f, 0.2f, 0.5f, false);
+                
                 Effect_Sound_OneShot(14);
                 int Rand = Random.Range(0, 3);
-
                 if (Rand == 0)
                     SC1.Launch_SoyBean();
                 else if (Rand == 1)
                     SC2.Launch_SoyBean();
                 else
                     Launch_SoyBean();
+
                 yield return YieldInstructionCache.WaitForSeconds(0.5f);
             }
         }
         Destroy(SolG_Copy[0]);
         Destroy(SolG_Copy[1]);
+
+        // 본인의 분신인 적 2명을 추가 소환한 후, 완두콩을 3명 중 한명이 랜덤으로 발사하는 로직 
+
         My_Color = Color.white;
         My_Position = new Vector3(7, 4, 0);
         yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, inclineCurve);
@@ -335,7 +348,7 @@ public class SolGryn : Boss_Info
                 Effect_Sound_OneShot(10);
             else
                 Effect_Sound_OneShot(9);
-            Launch_Weapon(ref Weapon[1], Peanut_Dir, Peanut_Lot, 15, Peanut_Create_Pos);
+            Launch_Weapon(ref Weapon[1], Peanut_Dir, Peanut_Lot, 18, Peanut_Create_Pos);
             yield return YieldInstructionCache.WaitForSeconds(Peanut_Launch_Interval); // 0.2초는 고정
         }
 
@@ -355,6 +368,8 @@ public class SolGryn : Boss_Info
             yield return YieldInstructionCache.WaitForSeconds(1.4f);
         }
 
+        // 피카츄 3마리 소환
+
         Instantiate(Weapon[3], new Vector3(6.8f, 4.46f, 0), Quaternion.identity);
         yield return YieldInstructionCache.WaitForSeconds(1.5f);
 
@@ -365,7 +380,9 @@ public class SolGryn : Boss_Info
 
         Instantiate(Weapon[3], new Vector3(6.8f, 4.46f, 0), Quaternion.identity);
         Instantiate(Weapon[3], new Vector3(-6.8f, 4.46f, 0), Quaternion.identity);
-        
+
+        // 피죤 4마리 소환 (피죤은 소환되는 X축에 따라 이동이 대칭이 된다.)
+
         while (!Is_Next_Pattern)
             yield return null;
         Is_Next_Pattern = false;
@@ -386,12 +403,16 @@ public class SolGryn : Boss_Info
             Camera_Shake(0.02f, 1.4f, true, false);
             Effect_Sound_OneShot(19);
             yield return Change_My_Color_And_Back(Color.clear, Color.white, 0.7f, false);
+
             Stop_Life_Act(ref rotate_bullet);
         }
+
+        // 회전하는 공격 (랜덤한 위치에서 보스가 보이는 시점동안 총알 발사)
 
         transform.rotation = Quaternion.identity;
         My_Color = Color.white;
         My_Position = new Vector3(7, 4, 0);
+
         yield return Change_My_Color(My_Color, Color.white, 0.5f, 0, DisAppear_Effect_1);
         yield return Move_Straight(My_Position, new Vector3(7, 0, 0), 1f, inclineCurve);
     }
@@ -399,8 +420,8 @@ public class SolGryn : Boss_Info
     {
         yield return Move_Straight(My_Position, new Vector3(My_Position.x, My_Position.y - 3, 0), 0.7f, inclineCurve);
         yield return Move_Straight(My_Position, new Vector3(My_Position.x, 11, 0), 0.7f, declineCurve);
+        
         Effect_Sound_OneShot(13);
-
         for (int i = 11; i < 14; i++)
         {
             GameObject W1 = Instantiate(Weapon[i], Vector3.zero, Quaternion.identity);
@@ -416,20 +437,26 @@ public class SolGryn : Boss_Info
             yield return YieldInstructionCache.WaitForSeconds(0.8f);
             Destroy(W1);
         }
-        Effect_Sound_OneShot(17);
 
+        // 유리가 깨지는 모션
+
+        Effect_Sound_OneShot(17);
         for (int i = 0; i < 3; i++)
         {
             Instantiate(Weapon[8], new Vector3(0, 2.5f - (2.5f * i), 0), Quaternion.Euler(-90, 0, 0));
             yield return YieldInstructionCache.WaitForSeconds(0.4f);
         }
 
+        // 파란 파티클이 추가 공격
+
         Is_Next_Pattern = false;
 
         Instantiate(Weapon[9], new Vector3(-3, 2, 0), Quaternion.identity);
         Instantiate(Weapon[9], new Vector3(3, 2, 0), Quaternion.identity);
 
-        while(!Is_Next_Pattern)
+        // 양자 충돌
+
+        while (!Is_Next_Pattern)
             yield return null;
 
         Is_Next_Pattern = false;
@@ -450,13 +477,13 @@ public class SolGryn : Boss_Info
     {
         int Player_Or_None;
 
-        List<Color> CHK_Player_Target = new List<Color>() { Color.green, Color.blue };
+        List<Color> CHK_Player_Target = new List<Color>() { Color.green, Color.blue }; // 플래시의 색이 초록색 --> 레이저가 중앙을 향함, 플래시의 색이 파랑색 --> 레이저가 플레이어를 향함
         for (int i = 0; i < 4; i++)
         {
             Player_Or_None = Random.Range(0, 2);
             Launch_Monster(CHK_Player_Target[Player_Or_None], new Vector3(quadrant[0, i] * 7, quadrant[1, i] * 4, 0), Player_Or_None);
             yield return YieldInstructionCache.WaitForSeconds(1.2f);
-        }
+        } // 제4분면 (7, 4), (-7, 4), (-7, -4), (7, -4)에서 각각 1.2초 간격으로 플레이어에게 공격
 
         yield return YieldInstructionCache.WaitForSeconds(1);
 
@@ -468,7 +495,7 @@ public class SolGryn : Boss_Info
                 Launch_Monster(CHK_Player_Target[Player_Or_None], new Vector3(quadrant[0, j] * 7, quadrant[1, j] * 4, 0), Player_Or_None);
 
             yield return YieldInstructionCache.WaitForSeconds(1.5f);
-        }
+        } // 제4분면 (7, 4), (-7, 4), (-7, -4), (7, -4)에서 동시에 나와 플레이어에게 공격 (3번 반복, 1.5초 간격)
 
         yield return YieldInstructionCache.WaitForSeconds(1);
         
@@ -485,6 +512,7 @@ public class SolGryn : Boss_Info
             Launch_Monster(CHK_Player_Target[Player_Or_None], Pattern06_Monster_Move[i], Player_Or_None);
             yield return YieldInstructionCache.WaitForSeconds(0.8f);
         }
+        // 위에서 설정한 몬스터의 이동에 따라 0.8초 간격으로 플레이어에게 공격
         yield return YieldInstructionCache.WaitForSeconds(1);
         yield return null;
     }
@@ -513,7 +541,7 @@ public class SolGryn : Boss_Info
         Killed_All_Mine();
         Init_Back_And_Camera();
 
-        StartCoroutine(I_OnDie());
+        Run_Life_Act(I_OnDie());
     }
 
     private IEnumerator I_OnDie()
@@ -525,6 +553,7 @@ public class SolGryn : Boss_Info
         GameObject.Find("Main Camera").GetComponent<UB.Simple2dWeatherEffects.Standard.D2FogsPE>().enabled = false;
         Flash(Color.white, 1, 2);
         yield return Move_Straight(new Vector3(7, 5, 0), new Vector3(7, 0, 0), 7, OriginCurve);
+
         Effect_Sound_Play(15);
         yield return Shake_Act(0.3f, 0.5f, 1, false);
         Effect_Sound_Stop();
@@ -538,7 +567,9 @@ public class SolGryn : Boss_Info
 
         yield return YieldInstructionCache.WaitForSeconds(2f);
 
-        spriteColor.Change_Color(Color.black, 2);
+        if (spriteColor != null)
+            yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
+        SceneManager.LoadScene("My_SJH_Scene");
         yield return null;
     }
     private void Boss_W1(float start_angle, int count, float range_angle, float speed, bool is_Blink)

@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class ImageColor : MonoBehaviour
+public class ImageColor : MonoBehaviour // 배경 색상에 대한 코드
 {
     Image image;
-    // Start is called before the first frame update
     
     private void Awake()
     {

@@ -37,7 +37,7 @@ public class SolGryn_Peanut : Weapon_Devil
 	}
     private void Start()
     {
-		Start_Camera_Shake(0.009f, 0.1f, false, false);
+		Camera_Shake(0.009f, 0.1f, false, false);
 	}
     bool IsGrounded()
 	{
@@ -60,7 +60,7 @@ public class SolGryn_Peanut : Weapon_Devil
 	}
 	public void Die()
 	{
-		Start_Camera_Shake(0.00001f, 0.05f, false, false);
+		Camera_Shake(0.00001f, 0.05f, false, false);
 		Instantiate(deathParticle, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 	}

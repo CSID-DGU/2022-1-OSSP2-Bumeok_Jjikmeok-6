@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(TrailRenderer))]
-public class TrailCollisions : MonoBehaviour
+public class TrailCollisions : MonoBehaviour // 보스가 그리는 트레일 렌더러에 물리적인 요소를 주도록 하는 스크립트
 {
     TrailRenderer myTrail;
     EdgeCollider2D myCollider;

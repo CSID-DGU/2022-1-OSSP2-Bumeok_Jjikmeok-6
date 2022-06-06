@@ -14,18 +14,17 @@ public class Login : MonoBehaviour
     TMP_InputField PWD_IN;
 
     [SerializeField]
-    TextMeshProUGUI infoText_2;
+    TextMeshProUGUI infoText;
 
     [SerializeField]
     GameObject Popup;
 
     [SerializeField]
-    GameObject Popup_X;
+    GameObject X_Button;
 
     IEnumerator wait_load;
     private void Awake()
     {
-        Popup.SetActive(false);
         singleTone.id = "";
         wait_load = null;
     }
@@ -43,14 +42,26 @@ public class Login : MonoBehaviour
         public UserInfo user_info;
         public string success_message;
     }
-    public void buttonClick(int param)
+    [System.Serializable]
+    public class Haha
     {
-        if (param == 0)
-            StartCoroutine(ServerLogin());
-        else if (param == 1)
-            StartCoroutine(ServerLogout());
+        public string user_info;
+        public string message;
     }
-    IEnumerator ServerLogout()
+    public void ButtonClick(int param)
+    {
+        infoText.text = "";
+        if (param == 0)
+            StartCoroutine(Server_Login());
+        else if (param == 1)
+            StartCoroutine(Server_Logout());
+    }
+    public void GameStart()
+    {
+        infoText.text = "";
+        StartCoroutine(GameStart_Behave());
+    }
+    IEnumerator Server_Logout()
     {
         Popup.SetActive(true);
         wait_load = Wait_Load();
@@ -65,24 +76,18 @@ public class Login : MonoBehaviour
           (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
           (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            infoText_2.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
-            Popup_X.SetActive(true);
-            yield return null;
-
-            yield break;
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
-            infoText_2.text = singleTone.request.downloadHandler.text;
-            Popup_X.SetActive(true);
-            yield return null;
+            infoText.text = singleTone.request.downloadHandler.text + '\n' + "로그아웃 성공!";
         }
         yield break;
     }
-    IEnumerator ServerLogin()
+    IEnumerator Server_Login()
     {
-        singleTone.id = "";
         Popup.SetActive(true);
+
         wait_load = Wait_Load();
         StartCoroutine(wait_load);
 
@@ -100,54 +105,67 @@ public class Login : MonoBehaviour
            (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
            (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            infoText_2.color = Color.red;
-            infoText_2.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
-            Popup_X.SetActive(true);
-            yield return null;
-
-            yield break;
+            infoText.color = Color.red;
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
-            infoText_2.color = Color.black;
+            infoText.color = Color.black;
             Login_Success data = JsonUtility.FromJson<Login_Success>(singleTone.request.downloadHandler.text);
-
             singleTone.id = data.user_info.id;
-            infoText_2.text = data.success_message;
-            Debug.Log(singleTone.id);
-            Popup_X.SetActive(true);
-            yield return null;
-            LoadingProgress.LoadScene("Final1");
+            infoText.text = data.success_message;
         }
+        yield break;
+    }
+
+    IEnumerator GameStart_Behave()
+    {
+        Popup.SetActive(true);
+        singleTone.request = UnityWebRequest.Get("http://localhost:3000/continue_connect");
+        yield return singleTone.request.SendWebRequest();
+
+        if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
+            (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
+            (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
+        {
+            infoText.color = Color.red;
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
+        }
+
+        else
+        {
+            Haha d = JsonUtility.FromJson<Haha>(singleTone.request.downloadHandler.text);
+            if (singleTone.id != d.user_info)
+            {
+                infoText.color = Color.red;
+                infoText.text = "계정 정보가 틀리거나 서버가 끊겼습니다.";
+            }
+            else
+            {
+                infoText.color = Color.blue;
+                infoText.text = "게임을 시작합니다!";
+                X_Button.SetActive(false);
+                yield return YieldInstructionCache.WaitForSeconds(1);
+                LoadingProgress.LoadScene("Stage3");
+                yield break;
+            }
+        }
+        yield break;
     }
 
     IEnumerator Wait_Load()
     {
-        infoText_2.color = Color.black;
+        infoText.color = Color.black;
         while (true)
         {
-            infoText_2.text = "로딩 중....";
+            infoText.text = "로딩 중....";
             yield return YieldInstructionCache.WaitForSeconds(0.15f);
 
-            infoText_2.text = "로딩 중......";
+            infoText.text = "로딩 중......";
             yield return YieldInstructionCache.WaitForSeconds(0.15f);
 
-            infoText_2.text = "로딩 중........";
+            infoText.text = "로딩 중........";
             yield return YieldInstructionCache.WaitForSeconds(0.15f);
         }
     }
-
-
-
-
-    // Start is called before the first frame update
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space))
-    //    {
-    //        RadialProgress.LoadScene("Scene2");
-    //    }
-    //}
 }

@@ -53,7 +53,6 @@ public class Player_Final1 : Player_Info
     private bool is_boss_first_appear;
 
     IEnumerator i_start_firing, color_when_unbeatable, i_start_emit;
-
     public int DeathCount => deathCount;
 
     private new void Awake()
@@ -90,7 +89,7 @@ public class Player_Final1 : Player_Info
     }
     void Start()
     {
-        StartCoroutine(Move_First());
+        Run_Life_Act(Move_First());
     }
     IEnumerator Move_First()
     {
@@ -127,7 +126,7 @@ public class Player_Final1 : Player_Info
             yield break;
         while (DeathCount_Text.color.a < 1.0f)
         {
-            My_Name.color = new Color(My_Name.color.r, My_Name.color.g, My_Name.color.b, My_Name.color.a + Time.deltaTime / 2);
+            My_Name.color = new Color(My_Name.color.r, My_Name.color.g, My_Name.color.b, My_Name.color.a + Time.deltaTime * 0.5f);
             DeathCount_Text.color = new Color(DeathCount_Text.color.r, DeathCount_Text.color.g, DeathCount_Text.color.b, DeathCount_Text.color.a + Time.deltaTime * 0.5f);
             BoomCount_Text.color = new Color(BoomCount_Text.color.r, BoomCount_Text.color.g, BoomCount_Text.color.b, BoomCount_Text.color.a + (Time.deltaTime * 0.5f));
             yield return null;
@@ -168,7 +167,7 @@ public class Player_Final1 : Player_Info
 
         Run_Life_Act(Move_First());
     }
-    IEnumerator MovePath() // 여기 수정
+    IEnumerator MovePath() // 플레이어가 데미지를 입을 때 포물선 형태로 이동하도록 설정
     {
         float A = Get_Curve_Distance(My_Position, My_Position + 2.5f * Vector3.left, 
             Get_Center_Vector_For_Curve_Move(My_Position, My_Position + 2.5f * Vector3.left, Vector3.Distance(My_Position, My_Position + 2.5f * Vector3.left) * 0.85f, "clock"));
@@ -186,7 +185,7 @@ public class Player_Final1 : Player_Info
     {
         Run_Life_Act_And_Continue(ref i_start_emit, I_Start_Emit());
     }
-    IEnumerator I_Start_Emit()
+    IEnumerator I_Start_Emit() // 보스 패턴 4에서 플레이어는 필살기를 자동으로 사용할 수 있다
     {
         Emit_Obj_Copy = Instantiate(Emit_Obj, My_Position, Quaternion.identity);
 
@@ -195,9 +194,9 @@ public class Player_Final1 : Player_Info
             if (!EM.Check_Valid_Emit())
                 yield break;
 
-            EM.Ready_To_Expand();
+            EM.Ready_To_Expand(); // 방출할 원리 점점 커지는 로직
 
-            yield return YieldInstructionCache.WaitForSeconds(8f);
+            yield return YieldInstructionCache.WaitForSeconds(8f); // 8초 동안 공격을 피해야함
 
             Unbeatable = true;
 
@@ -205,12 +204,14 @@ public class Player_Final1 : Player_Info
 
             yield return EM.Expand();
 
+            // 피했으면 무적 적용 + 원이 커지면서 배경을 흰색으로 서서히 변경
+
             Destroy(Emit_Obj_Copy);
 
             Flash(Color.white, 0.1f, 2);
 
             if (GameObject.FindGameObjectWithTag("Boss") && GameObject.FindGameObjectWithTag("Boss").TryGetComponent(out Asura A))
-                A.Stop_Meteor();
+                A.Stop_Meteor(); // 보스의 패턴 4 강제 중지
 
             Instantiate(Explode_When_Emit, Vector3.zero, Quaternion.identity);
             Instantiate(Naum_Ami, Vector3.zero, Quaternion.identity);
@@ -219,7 +220,7 @@ public class Player_Final1 : Player_Info
         }
         yield return null;
     }
-    public void Power_Up()
+    public void Power_Up() // 파워 업 아이템
     {
         if (Power_Slider.TryGetComponent(out PowerSliderViewer PSV))
         {
@@ -235,7 +236,7 @@ public class Player_Final1 : Player_Info
             PSV.Start_To_Decrease(3);
         }
     }
-    public void Speed_Up()
+    public void Speed_Up() // 스피드 업 아이템
     {
         if (Speed_Slider.TryGetComponent(out SpeedSliderViewer SSV))
         {
@@ -251,7 +252,7 @@ public class Player_Final1 : Player_Info
             SSV.Start_To_Decrease(3);
         }
     }
-    public void Boom_Up()
+    public void Boom_Up() // 폭탄 증가 아이템
     {
         Effect_Sound_OneShot(1);
         GameObject boom_text = Instantiate(Item[4], Vector3.zero, Quaternion.identity);
@@ -289,12 +290,12 @@ public class Player_Final1 : Player_Info
             StartBoom();
     }
 
-    void StartFiring()
+    void StartFiring() // 물방울 공격 개시
     {
         Effect_Sound_Play(0);
         Run_Life_Act_And_Continue(ref i_start_firing, I_Start_Firing());
     }
-    void StopFiring()
+    void StopFiring() // 물방울 공격 중지 (스페이스 바에서 땠을 때 + 데미지를 입었을 때)
     {
         Effect_Sound_Stop();
         Stop_Life_Act(ref i_start_firing);
@@ -313,7 +314,7 @@ public class Player_Final1 : Player_Info
                 Launch_Weapon(ref Weapon[0], Vector3.right, Quaternion.identity, 18, transform.position + new Vector3(0.77f, -0.3f, 0));
         }
     }
-    void StartBoom()
+    void StartBoom() // 폭탄 공격
     {
         if (BoomCount > 0)
         {

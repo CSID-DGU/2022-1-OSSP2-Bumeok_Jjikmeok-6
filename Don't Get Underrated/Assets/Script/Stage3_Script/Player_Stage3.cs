@@ -43,6 +43,9 @@ public class Player_Stage3 : Player_Info
     [SerializeField]
     public int Fever_Power = 2;
 
+    [SerializeField]
+    TextMeshProUGUI My_Name_TMPro;
+
     private GameObject sliderClone;
 
     private GameObject Student_Clone;
@@ -55,7 +58,7 @@ public class Player_Stage3 : Player_Info
 
     private Limit_Time limit_Time;
 
-    private IEnumerator first_phase, lazor_in_second_phase;
+    private IEnumerator first_phase, lazor_in_third_phase;
 
     private bool IsOneClick = false;
 
@@ -75,17 +78,17 @@ public class Player_Stage3 : Player_Info
 
     public bool Is_Fever = false;
 
-    public bool is_Domain = false; // 계단 올라갈 때만 적용
+    public bool is_Domain = false;
 
     public float Floor_Interval = 40;
 
-    private int StudentLayerMask;  // Player 레이어만 충돌 체크함
+    private int StudentLayerMask;
 
     public int Detect_Interrupt_Active = 1;
 
     private int Real_Walk_Speed;
 
-    public void Destroy_sliderClone()
+    public void Destroy_Slider_Particle()
     {
         if (sliderClone != null)
             Destroy(sliderClone);
@@ -117,6 +120,8 @@ public class Player_Stage3 : Player_Info
         Floor_Player_Place = 1;
         Real_Walk_Speed = PlayerWalkSpeed;
         StudentLayerMask = 1 << LayerMask.NameToLayer("Student");
+        My_Name_TMPro.text = singleTone.id;
+
 
         Targetting_Object.SetActive(false);
         Down_Floor.SetActive(false);
@@ -139,22 +144,22 @@ public class Player_Stage3 : Player_Info
         BackGround_Sound_Play(0);
         All_Start();
     }
-    void Init_Animation()
+    void Init_Animation() // 플레이어의 모든 애니메이션 초기화
     {
         animator.SetBool("BulSang", false);
         animator.SetBool("IsWalk", false);
         animator.SetBool("IsRun", false);
         animator.SetBool("IsDead", false); // 애니메이션 초기화
     }
-    public void Stop_Walk()
+    public void Stop_Walk() // 제한 시간 (Limit_Time.cs, 게임 종료 관장) 부분에서 호출하는 코드
     {
-        Is_Fever = false;
-        All_Stop();
-        Init_Animation();
-        Destroy_sliderClone();
-        StopAllCoroutines();
-        Effect_Sound_Stop();
-        Run_Life_Act(Decrease_BackGround_Sound(6));
+        Is_Fever = false; // 플레이어가 피버 타임이면 이를 해제
+        All_Stop(); // 플레이어의 모든 행동 중지
+        Init_Animation(); // 애니메이션 초기화
+        Destroy_Slider_Particle(); // 피버 타임 때 발생하는 파티클, 본인이 달릴 때 생겨나는 슬라이더 삭제
+        StopAllCoroutines(); // 학생을 향한 레이저 행동 중지
+        Effect_Sound_Stop(); // 레이저 효과음 중지
+        Run_Life_Act(Decrease_BackGround_Sound(6)); // 배경음을 6초간 페이드 아웃
     }
     IEnumerator First_Phase()
     {
@@ -166,18 +171,18 @@ public class Player_Stage3 : Player_Info
 
             if (hit.collider != null && hit.transform.gameObject.CompareTag("Student"))
             {
-                if (!FixedTarget) // 불안정한 Raycast2D이므로(대체제 X) 타겟팅이 중복으로 되지 않도록 flag 설정
+                if (!FixedTarget) // 불안정한 Raycast2D이므로(대체제 X) 타겟팅이 중복으로 되지 않도록 flag (FixedTarget) 설정
                 {
                     FixedTarget = true;
                     Targetting_Object.SetActive(true);
                     if (Targetting_Object.TryGetComponent(out Targetting_Effect TE))
                         TE.Change_Scale_And_Color(hit.transform.gameObject);
-                }
-                if (Input.GetMouseButtonDown(0))
+                } // 학생을 타겟팅
+                if (Input.GetMouseButtonDown(0)) // 학생에게 좌측 마우스를 눌렀을 때
                 {
                     Targetting_Object.SetActive(false);
                     FixedTarget = false;
-                    Run_Life_Act(Second_Phase());
+                    Run_Life_Act(Second_Phase()); // 레이저를 발사하는 행동으로 이동
                     yield break;
                 }
             }
@@ -201,6 +206,7 @@ public class Player_Stage3 : Player_Info
             Effect_Sound_Play(2);
         else
             Effect_Sound_Play(0);
+        // 피버 타임일 때, 아닐 때의 효과음이 다르도록 설정
 
         while (true)
         {
@@ -218,7 +224,7 @@ public class Player_Stage3 : Player_Info
                     float dir_Change = My_Position.x - Student_Clone.transform.position.x;
                     My_Scale = new Vector3((dir_Change / Mathf.Abs(dir_Change)) * Mathf.Abs(My_Scale.x), My_Scale.y, My_Scale.z);
 
-                    if (!FixedSlider)
+                    if (!FixedSlider) // 불안정한 Raycast2D이므로(대체제 X) 학생의 게이지가 움직이지 않고 고정되도록 flag (FixedSlider) 설정
                     {
                         FixedSlider = true;
                         Student_Gaze.transform.position = Student_Clone.transform.position + new Vector3(0, 2, 0);
@@ -226,28 +232,30 @@ public class Player_Stage3 : Player_Info
                             S.Stop_Move();
                     }
 
-                    Lazor_In_Second_Phase(Weapon[0], Student_Clone.transform.position, My_Position);
+                    Lazor_In_Second_Phase(Weapon[0], Student_Clone.transform.position, My_Position); // 레이저 발사
 
                     int temp = 3;
 
                     if (Student_Gaze.TryGetComponent(out Student_Gaze_Info SGI))
                         temp = SGI.Check_Student_HP(Student_Clone.transform.position);
 
-                    if (temp == 0)
+                    if (temp == 0) // 학생의 게이지를 0.5 이상 채웠고, 카메라 안에 인터럽트가 있을 때
                     {
-                        Run_Life_Act(Third_Phase(Student_Clone));
+                        Run_Life_Act(Third_Phase(Student_Clone)); // 인터럽트와 경쟁하기 위한 행동으로 이동
                         yield break;
                     }
-                    else if (temp == 1)
+                    else if (temp == 1) // 카메라 안에 인터럽트가 없었고, 학생의 게이지를 모두 채웠을 때
                     {
                         yield return YieldInstructionCache.WaitForEndOfFrame;
                         Heart_Slider.GetComponent<Heart_Gaze_Viewer>().Ordinary_Case();
                         Student_Gaze.GetComponent<Student_Gaze_Info>().Empty_HP();
                         Student_Gaze.SetActive(false);
                         FixedSlider = false;
+                        // 학생 게이지의 정보 초기화
 
                         if (Student_Clone != null)
                             Destroy(Student_Clone);
+                        // 학생 제거
 
                         if (!Is_Fever)
                         {
@@ -261,34 +269,36 @@ public class Player_Stage3 : Player_Info
                             Enter_Fever();
                             Effect_Sound_OneShot(1);
                         }
+                        // 피버 타임일 때, 아닐 때의 점수 및 효과음이 다르도록 조정 (기본 150점, 피버 타임 시 2배)
                         yield break;
                     }
-                    else if (temp == 2)
+                    else if (temp == 2) // 레이저로 학생의 게이지를 채울 때 얻는 점수 처리
                     {
                         if (Is_Fever)
                             Main_Stage_3_Score += 1 * Fever_Power;
                         else
                             Main_Stage_3_Score += 1;
+                        // 피버 타임에서의 힘(Fever_Power)에 따라 얻는 점수가 다르도록 조정
                     }
                 }
-                else if (Input.GetMouseButtonUp(0))
+                else if (Input.GetMouseButtonUp(0)) // 학생으로부터 마우스르 땠을 때
                 {
-                    Init_Student();
+                    Init_Student(); // 학생의 정보 초기화
                     if (Is_Fever)
-                        Enter_Fever();
+                        Enter_Fever(); // 피버 타임일 때는 피버 타임일 때의 행동 적용
                     else
-                        All_Start();
+                        All_Start(); // 피버 타임이 아닐 때는 본래 행동 재시작
                     yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
                     yield break;
                 }
             }
-            else
+            else // 타겟팅이 학생을 향하지 않고 다른 곳으로 벗어났을 때
             {
-                Init_Student();
+                Init_Student();  // 학생의 정보 초기화
                 if (Is_Fever)
-                    Enter_Fever();
+                    Enter_Fever(); // 피버 타임일 때는 피버 타임일 때의 행동 적용
                 else
-                    All_Start();
+                    All_Start(); // 피버 타임이 아닐 때는 본래 행동 재시작
                 yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime);
                 yield break;
             }
@@ -305,12 +315,12 @@ public class Player_Stage3 : Player_Info
     {
         All_Stop();
 
-        Run_Life_Act_And_Continue(ref lazor_in_second_phase, Lazor_In_Second_Phase(targetStudent_t));
+        Run_Life_Act_And_Continue(ref lazor_in_third_phase, Lazor_In_Third_Phase(targetStudent_t));
 
         if (Student_Gaze.TryGetComponent(out Student_Gaze_Info S_G_I))
             yield return S_G_I.StartCoroutine(S_G_I.Competition(targetStudent_t));
 
-        Stop_Life_Act(ref lazor_in_second_phase);
+        Stop_Life_Act(ref lazor_in_third_phase);
 
         Init_Student();
 
@@ -358,7 +368,7 @@ public class Player_Stage3 : Player_Info
             S.Start_Move();
         Student_Clone = null;
     }
-    IEnumerator Lazor_In_Second_Phase(GameObject targetStudent_t)
+    IEnumerator Lazor_In_Third_Phase(GameObject targetStudent_t)
     {
         while (true)
         {

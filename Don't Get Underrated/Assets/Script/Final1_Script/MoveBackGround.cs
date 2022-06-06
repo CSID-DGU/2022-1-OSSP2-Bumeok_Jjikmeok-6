@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MoveBackGround : MonoBehaviour
 {
-
     [SerializeField]
     GameObject Back_another;
 
@@ -25,7 +24,6 @@ public class MoveBackGround : MonoBehaviour
     {
         inGameSpeed = 0;   
     }
-
     IEnumerator Increase_Speed(float time_persist, float Speed_Limit)
     {
         float temp_Speed = inGameSpeed;

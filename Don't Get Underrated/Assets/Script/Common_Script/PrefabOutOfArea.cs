@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PrefabOutOfArea : MonoBehaviour
+public class PrefabOutOfArea : MonoBehaviour // 프리팹이 영역(stageData)을 벗어났을 때 사라지도록 하는 함수
 {
-    // Start is called before the first frame update
 
     [SerializeField]
     private StageData stageData;

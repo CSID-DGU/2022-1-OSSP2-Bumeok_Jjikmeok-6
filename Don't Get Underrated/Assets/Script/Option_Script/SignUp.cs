@@ -6,19 +6,6 @@ using UnityEngine.Networking;
 using System.Linq;
 using TMPro;
 
-//1.JOIN문->select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id;
-//2.랭킹은 SignUp.cs에 기술
-//3. 랭킹 삽입 insert into Ranking (Auth_id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2) values(1, 16, 60, 18, 19, 20);
-
-
-//insert into Ranking (Auth_id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2) values(2, 999, 999, 999, 999, 999);
-
-
-//*메인 스테이지 1의 랭킹 순서를 보고 싶을 때 - ASC는 오름차순 정렬, DESC는 내림차순 정렬
-//select id, final_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_1 ASC;
-
-//SELECT* FROM 테이블 ORDER BY 컬럼1 ASC;
-
 public class SignUp : MonoBehaviour
 {
     [SerializeField]
@@ -42,106 +29,106 @@ public class SignUp : MonoBehaviour
     private void Awake()
     {
         Popup.SetActive(false);
-        Popup_X.SetActive(false);
     }
 
     [System.Serializable]
     class Ranking_Total_Up
     {
-        public Ranking_Total_Down[] rank_mine;
-        public Ranking_Total_Down[] rank_total;
+        public Ranking_Total_Down[] rank_mine = null;
+        public Ranking_Total_Down[] rank_total = null;
     }
     [System.Serializable]
     class Ranking_Total_Down
     {
-        public string id;
-        public int main_score_1;
-        public int main_score_2;
-        public int main_score_3;
-        public int final_score_1;
-        public int final_score_2;
+        public string id = "";
+        public int main_score_1 = 0;
+        public int main_score_2 = 0;
+        public int main_score_3 = 0;
+        public int final_score_1 = 0;
+        public int final_score_2 = 0;
     }
 
     [System.Serializable]
     class Ranking_Main_1_Up
     {
-        public Ranking_Main_1_Down[] rank_mine;
-        public Ranking_Main_1_Down[] rank_total;
+        public Ranking_Main_1_Down[] rank_mine = null;
+        public Ranking_Main_1_Down[] rank_total = null;
     }
     [System.Serializable]
     class Ranking_Main_2_Up
     {
-        public Ranking_Main_2_Down[] rank_mine;
-        public Ranking_Main_2_Down[] rank_total;
+        public Ranking_Main_2_Down[] rank_mine = null;
+        public Ranking_Main_2_Down[] rank_total = null;
     }
     [System.Serializable]
     class Ranking_Main_3_Up
     {
-        public Ranking_Main_3_Down[] rank_mine;
-        public Ranking_Main_3_Down[] rank_total;
+        public Ranking_Main_3_Down[] rank_mine = null;
+        public Ranking_Main_3_Down[] rank_total = null;
     }
     [System.Serializable]
     class Ranking_Final_1_Up
     {
-        public Ranking_Final_1_Down[] rank_mine;
-        public Ranking_Final_1_Down[] rank_total;
+        public Ranking_Final_1_Down[] rank_mine = null;
+        public Ranking_Final_1_Down[] rank_total = null;
     }
     [System.Serializable]
     class Ranking_Final_2_Up
     {
-        public Ranking_Final_2_Down[] rank_mine;
-        public Ranking_Final_2_Down[] rank_total;
+        public Ranking_Final_2_Down[] rank_mine = null;
+        public Ranking_Final_2_Down[] rank_total = null;
     }
 
     [System.Serializable]
     class Ranking_Main_1_Down
     {
-        public string id;
-        public int main_score_1;
+        public string id = "";
+        public int main_score_1 = 0;
     }
     [System.Serializable]
     class Ranking_Main_2_Down
     {
-        public string id;
-        public int main_score_2;
+        public string id = "";
+        public int main_score_2 = 0;
     }
     [System.Serializable]
     class Ranking_Main_3_Down
     {
-        public string id;
-        public int main_score_3;
+        public string id = "";
+        public int main_score_3 = 0;
     }
     [System.Serializable]
     class Ranking_Final_1_Down
     {
-        public string id;
-        public int final_score_1;
+        public string id = "";
+        public int final_score_1 = 0;
     }
     [System.Serializable]
     class Ranking_Final_2_Down
     {
-        public string id;
-        public int final_score_2;
+        public string id = "";
+        public int final_score_2 = 0;
     }
 
     public void buttonClick()
     {
-        StartCoroutine(SignUp_Enum());
+        StartCoroutine(SignUp_Behave());
     }
     public void Show_Ranking(int Params)
     {
-        StartCoroutine(Show_Total_Ranking_For_Login()); // 상세 랭킹 (로그인 O --> 본인 것까지(등수는 없음))
-        StartCoroutine(Show_Total_Ranking_For_Not_Login()); // 전체 랭킹 (로그인 X)
+        Popup.SetActive(true);
+        // StartCoroutine(Show_Total_Ranking_For_Login()); // 상세 랭킹 (로그인 O --> 본인 것까지(등수는 없음))
+        //StartCoroutine(Show_Total_Ranking_For_Not_Login()); // 전체 랭킹 (로그인 X)
         StartCoroutine(Show_Detail_Ranking_For_Login(Params)); // 상세 랭킹 (로그인 O --> 본인 것까지)
-        StartCoroutine(Show_Detail_Ranking_For_Not_Login(Params)); // 상세 랭킹 (로그인 X)
+        //StartCoroutine(Show_Detail_Ranking_For_Not_Login(Params)); // 상세 랭킹 (로그인 X)
     }
+
     public class Number
     {
         public int identifier;
     }
     IEnumerator Show_Total_Ranking_For_Login()
     {
-        Popup.SetActive(true);
         IEnumerator wait_load = Wait_Load();
         StartCoroutine(wait_load);
 
@@ -154,16 +141,15 @@ public class SignUp : MonoBehaviour
             (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
             (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
             infoText.color = Color.red;
-            Popup_X.SetActive(true);
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
             Ranking_Total_Up d = JsonUtility.FromJson<Ranking_Total_Up>(singleTone.request.downloadHandler.text);
 
             int Index = 0;
-            int My_Rand = 0;
+            int My_Rank = 0;
 
             foreach (var e in d.rank_total)
             {
@@ -171,15 +157,13 @@ public class SignUp : MonoBehaviour
                 foreach (var u in d.rank_mine)
                 {
                     if (e.id == u.id)
-                        My_Rand = Index;
+                        My_Rank = Index;
                 }
             }
 
-            Index = 0;
-
             Debug.Log("내 랭킹");
             foreach (var e in d.rank_mine)
-                Debug.Log(My_Rand + " " + e.id + " " + e.main_score_1 + " " + e.main_score_2 + " " + e.main_score_3 + " " + e.final_score_1 + " " + e.final_score_2);
+                Debug.Log(My_Rank + " " + e.id + " " + e.main_score_1 + " " + e.main_score_2 + " " + e.main_score_3 + " " + e.final_score_1 + " " + e.final_score_2);
 
             Debug.Log("전체 랭킹 : ");
             foreach (var e in d.rank_total)
@@ -187,13 +171,11 @@ public class SignUp : MonoBehaviour
                 Index++;
                 Debug.Log(Index + " " + e.id + " " + e.main_score_1 + " " + e.main_score_2 + " " + e.main_score_3 + " " + e.final_score_1 + " " + e.final_score_2);
             }
-            Popup_X.SetActive(true);
         }
-        yield return null;
+        yield break;
     }
     IEnumerator Show_Total_Ranking_For_Not_Login()
     {
-        Popup.SetActive(true);
         IEnumerator wait_load = Wait_Load();
         StartCoroutine(wait_load);
 
@@ -206,14 +188,13 @@ public class SignUp : MonoBehaviour
             (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
             (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
             infoText.color = Color.red;
-            Popup_X.SetActive(true);
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
             Ranking_Total_Up d = JsonUtility.FromJson<Ranking_Total_Up>(singleTone.request.downloadHandler.text);
-
+            Debug.Log(singleTone.request.downloadHandler.text);
             Debug.Log("전체 랭킹 : ");
             int Index = 0;
             foreach (var e in d.rank_total)
@@ -221,15 +202,11 @@ public class SignUp : MonoBehaviour
                 Index++;
                 Debug.Log(Index + " " + e.id + " " + e.main_score_1 + " " + e.main_score_2 + " " + e.main_score_3 + " " + e.final_score_1 + " " + e.final_score_2);
             }
-
-            Popup_X.SetActive(true);
-
         }
-        yield return null;
+        yield break;
     }
     IEnumerator Show_Detail_Ranking_For_Not_Login(int Params)
     {
-        Popup.SetActive(true);
         IEnumerator wait_load = Wait_Load();
         StartCoroutine(wait_load);
 
@@ -245,9 +222,8 @@ public class SignUp : MonoBehaviour
             (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
             (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
             infoText.color = Color.red;
-            Popup_X.SetActive(true);
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
@@ -267,14 +243,12 @@ public class SignUp : MonoBehaviour
 
                 int Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-
-                Popup_X.SetActive(true);
             }
             if (Params == 1)
             {
@@ -290,14 +264,12 @@ public class SignUp : MonoBehaviour
 
                 int Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-
-                Popup_X.SetActive(true);
             }
             if (Params == 2)
             {
@@ -313,14 +285,12 @@ public class SignUp : MonoBehaviour
 
                 int Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-
-                Popup_X.SetActive(true);
             }
             if (Params == 3)
             {
@@ -336,15 +306,12 @@ public class SignUp : MonoBehaviour
 
                 int Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-
-                Popup_X.SetActive(true);
-
             }
             if (Params == 4)
             {
@@ -360,48 +327,42 @@ public class SignUp : MonoBehaviour
 
                 int Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-
-                Popup_X.SetActive(true);
             }
         }
-        yield return null;
+        yield break;
     }
     IEnumerator Show_Detail_Ranking_For_Login(int Params)
     {
-        Popup.SetActive(true);
-        IEnumerator wait_load = Wait_Load();
-        StartCoroutine(wait_load);
-
+        //IEnumerator wait_load = Wait_Load();
+        ///StartCoroutine(wait_load);
 
         WWWForm form = new WWWForm();
         form.AddField("identifier", Params);
 
-
         singleTone.request = UnityWebRequest.Post("http://localhost:3000/get_rank_detail_login", form);
         yield return singleTone.request.SendWebRequest();
 
-        StopCoroutine(wait_load);
+        //StopCoroutine(wait_load);
+
 
         if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
             (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
             (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
-            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
             infoText.color = Color.red;
-            Popup_X.SetActive(true);
-
+            infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
             infoText.text = "";
             Dictionary<string, int> dic = new Dictionary<string, int>();
-            int My_Rand = 0;
+            int My_Rank = 0;
             if (Params == 0)
             {
                 Ranking_Main_1_Up d = JsonUtility.FromJson<Ranking_Main_1_Up>(singleTone.request.downloadHandler.text);
@@ -422,21 +383,20 @@ public class SignUp : MonoBehaviour
                     foreach (var u in d.rank_mine)
                     {
                         if (e.Key == u.id)
-                            My_Rand = Index;
+                            My_Rank = Index;
                     }
                 }
+
                 Index = 0;
                 foreach (var u in d.rank_mine)
-                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.main_score_1);
+                    Debug.Log("나의 랭킹 : " + My_Rank + " " + u.id + " " + u.main_score_1);
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-
-                Popup_X.SetActive(true);
             }
             if (Params == 1)
             {
@@ -457,21 +417,20 @@ public class SignUp : MonoBehaviour
                     foreach (var u in d.rank_mine)
                     {
                         if (e.Key == u.id)
-                            My_Rand = Index;
+                            My_Rank = Index;
                     }
                 }
                 foreach (var u in d.rank_mine)
-                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.main_score_2);
+                    Debug.Log("나의 랭킹 : " + My_Rank + " " + u.id + " " + u.main_score_2);
 
                 Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-                Popup_X.SetActive(true);
             }
             if (Params == 2)
             {
@@ -493,21 +452,20 @@ public class SignUp : MonoBehaviour
                     foreach (var u in d.rank_mine)
                     {
                         if (e.Key == u.id)
-                            My_Rand = Index;
+                            My_Rank = Index;
                     }
                 }
                 foreach (var u in d.rank_mine)
-                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.main_score_3);
+                    Debug.Log("나의 랭킹 : " + My_Rank + " " + u.id + " " + u.main_score_3);
 
                 Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-                Popup_X.SetActive(true);
             }
             if (Params == 3)
             {
@@ -529,22 +487,20 @@ public class SignUp : MonoBehaviour
                     foreach (var u in d.rank_mine)
                     {
                         if (e.Key == u.id)
-                            My_Rand = Index;
+                            My_Rank = Index;
                     }
                 }
                 foreach (var u in d.rank_mine)
-                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.final_score_1);
+                    Debug.Log("나의 랭킹 : " + My_Rank + " " + u.id + " " + u.final_score_1);
 
                 Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-                Popup_X.SetActive(true);
-
             }
             if (Params == 4)
             {
@@ -566,71 +522,65 @@ public class SignUp : MonoBehaviour
                     foreach (var u in d.rank_mine)
                     {
                         if (e.Key == u.id)
-                            My_Rand = Index;
+                            My_Rank = Index;
                     }
                 }
                 foreach (var u in d.rank_mine)
-                    Debug.Log("나의 랭킹 : " + My_Rand + " " + u.id + " " + u.final_score_2);
+                    Debug.Log("나의 랭킹 : " + My_Rank + " " + u.id + " " + u.final_score_2);
 
                 Index = 0;
 
-                Debug.Log("상대방 랭킹 : ");
+                Debug.Log("전체 랭킹 : ");
                 foreach (var e in myList_Ollim)
                 {
                     Index++;
                     Debug.Log(Index + " " + e.Key + " " + e.Value);
                 }
-                Popup_X.SetActive(true);
             }
         }
-        yield return null;
+        yield break;
     }
+
  
-    IEnumerator SignUp_Enum()
+    IEnumerator SignUp_Behave()
     {
         Popup.SetActive(true);
+
         IEnumerator wait_load = Wait_Load();
         StartCoroutine(wait_load);
-        yield return null;
 
         WWWForm form = new WWWForm();
 
         form.AddField("id", ID_In.text);
         form.AddField("pwd", PWD_IN.text);
         form.AddField("pwd_again", PWD_Again.text);
-        UnityWebRequest www = UnityWebRequest.Post("http://localhost:3000/sign_up", form);
 
+        UnityWebRequest www = UnityWebRequest.Post("http://localhost:3000/sign_up", form);
         yield return www.SendWebRequest();
+
         StopCoroutine(wait_load);
 
         if ((www.result == UnityWebRequest.Result.ConnectionError) ||
             (www.result == UnityWebRequest.Result.ProtocolError) ||
             (www.result == UnityWebRequest.Result.DataProcessingError))
         {
-
-            infoText.text = www.error + '\n' + www.downloadHandler.text;
             infoText.color = Color.red;
-            Popup_X.SetActive(true);
-            yield return null;
+            infoText.text = www.error + '\n' + www.downloadHandler.text;
         }
         else
         {
             if (www.downloadHandler.text == "null")
             {
-                infoText.text = "회원가입 실패...";
                 infoText.color = Color.red;
-                Popup_X.SetActive(true);
-                yield return null;
+                infoText.text = "회원가입 실패";
             }
             else
             {
-                infoText.text = www.downloadHandler.text;
                 infoText.color = Color.blue;
+                infoText.text = www.downloadHandler.text;
                 Popup_X.SetActive(true);
-                yield return null;
             }
         }
-       
         yield break;
     }
     IEnumerator Wait_Load()
@@ -639,18 +589,13 @@ public class SignUp : MonoBehaviour
         while (true)
         {
             infoText.text = "로딩 중....";
-            yield return new WaitForSeconds(0.15f);
+            yield return YieldInstructionCache.WaitForSeconds(0.15f);
 
             infoText.text = "로딩 중......";
-            yield return new WaitForSeconds(0.15f);
+            yield return YieldInstructionCache.WaitForSeconds(0.15f);
 
             infoText.text = "로딩 중........";
-            yield return new WaitForSeconds(0.15f);
+            yield return YieldInstructionCache.WaitForSeconds(0.15f);
         }
-    }
-
-    void Start()
-    {
-        Debug.Log(PlayerPrefs.GetInt("userid"));
     }
 }

@@ -10,7 +10,6 @@ public class Quantum_Bit : Enemy_Info
     private List<GameObject> Part;
 
     public int[,] Rand = new int[2, 8] { { -1, 0, 1, 0, 1, 1, -1, -1 }, { 0, 1, 0, -1, 1, -1, 1, -1 } };
-
     private new void Awake()
     {
         base.Awake();
@@ -22,7 +21,7 @@ public class Quantum_Bit : Enemy_Info
         if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
             EffectSource = AS1;
     }
-    // Start is called before the first frame update
+
     private void Start()
     {
         float Solve = Mathf.Sign(transform.position.x);
@@ -74,8 +73,10 @@ public class Quantum_Bit : Enemy_Info
                     WD.W_MoveTo(new Vector3(Rand[0, Ran1], Rand[1, Ran1], 0));
             }
         }
+
         Part.Clear();
         solGryn.Is_Next_Pattern = true;
+
         OnDie();
         yield return null;
     }
