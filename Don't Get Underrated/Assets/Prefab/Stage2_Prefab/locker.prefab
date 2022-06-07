@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1708815758411410996}
   - component: {fileID: 2536548631748294534}
   - component: {fileID: 3944320201336078526}
+  - component: {fileID: 2248699978488774914}
   m_Layer: 0
   m_Name: locker
   m_TagString: Untagged
@@ -114,3 +115,24 @@ PolygonCollider2D:
       - {x: 0.2701359, y: -0.30027178}
       - {x: 0.31730992, y: -0.27206534}
       - {x: 0.31878, y: 0.31583956}
+--- !u!50 &2248699978488774914
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462940238275659826}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0

@@ -11,9 +11,17 @@
 ### <동국대학교를 게임 내에서 체험해보세요!>
 
 <img src="https://user-images.githubusercontent.com/91325459/172173896-5a615380-3482-4964-82e7-3aa7a36e4418.gif" width="310" height="300" align="left"/>
+<img src="https://user-images.githubusercontent.com/91325459/172451264-f951ab74-cb98-4461-9015-5d4e6a9887a6.gif" width="310" height="300"
+align="left"/>
 <img src="https://user-images.githubusercontent.com/91325459/172175836-8c6cb236-2ee8-48f9-9d73-9d494819176a.gif" width="310" height="300" align="left"/>
 <img src="https://user-images.githubusercontent.com/91325459/172175879-73217b95-1c00-447d-94ad-3e86843997ba.gif" width="310" height="300" align="left"/>
-<img src="https://user-images.githubusercontent.com/91325459/172175910-71a90687-74d7-4539-abed-a04d49a17891.gif" width="310" height="300"/>
+<img src="https://user-images.githubusercontent.com/91325459/172175910-71a90687-74d7-4539-abed-a04d49a17891.gif" width="310" height="300"
+align="left"/>
+<img src="https://user-images.githubusercontent.com/91325459/172451181-718eaa78-85e1-4176-b371-43fd7f907f36.gif" width="310" height="300"
+align="left"/>
+<img src="https://user-images.githubusercontent.com/91325459/172451036-2f0c8b59-70c2-4940-95e5-47bc9850b3a9.gif" width="310" height="300"/>
+
+
 
 <div align="center">[게임 내의 모습]</div>
 <br>

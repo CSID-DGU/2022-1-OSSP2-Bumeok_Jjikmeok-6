@@ -5,7 +5,6 @@ using UnityEngine;
 public class MusicController : MonoBehaviour
 {
     AudioSource bgm;
-    float musicVolume = 1f;
 
     private void Awake()
     {
@@ -14,7 +13,8 @@ public class MusicController : MonoBehaviour
     }
     void Update()
     {
-        bgm.volume = musicVolume;
+        if (singleTone.Music_Decrease)
+            bgm.volume = singleTone.Music_Volume;
     }
 
     public void musicCheck()
@@ -24,6 +24,6 @@ public class MusicController : MonoBehaviour
 
     public void setVolume(float vol)
     {
-        musicVolume = vol;
+        singleTone.Music_Volume = vol;
     }
 }

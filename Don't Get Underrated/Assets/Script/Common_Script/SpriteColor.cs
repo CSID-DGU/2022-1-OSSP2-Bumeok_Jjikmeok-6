@@ -18,6 +18,10 @@ public class SpriteColor : MonoBehaviour // 배경 색상보다 Layer가 더 높은 스프라
     {
         return spriteRenderer.color;
     }
+    public void Set_BGColor(Color Change)
+    {
+        spriteRenderer.color = Change;
+    }
     public void Set_BG_Clear()
     {
         spriteRenderer.color = Color.clear;

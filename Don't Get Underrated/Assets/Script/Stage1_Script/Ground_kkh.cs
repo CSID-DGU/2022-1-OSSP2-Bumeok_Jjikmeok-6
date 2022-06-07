@@ -9,9 +9,10 @@ public class Ground_kkh : MonoBehaviour
     AudioSource Ground_Sound;
 
     private GameObject Player;
-   
+
     // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         if (GameObject.Find("Player"))
             Player = GameObject.Find("Player");

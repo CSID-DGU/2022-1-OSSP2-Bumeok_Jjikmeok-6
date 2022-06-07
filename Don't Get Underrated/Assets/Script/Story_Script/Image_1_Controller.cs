@@ -23,7 +23,7 @@ public class Image_1_Controller : MonoBehaviour
 
         if (this.transform.localPosition.y < 100) // Start y = 4.49, Limitation of y = 179
         {
-            Debug.Log("this.transform.localPosition.y: " + this.transform.localPosition.y);
+            //Debug.Log("this.transform.localPosition.y: " + this.transform.localPosition.y);
             transform.Translate(0, ImageVelocity, 0);
 
             Color convertOpacity = this.GetComponent<Image>().color;
@@ -38,8 +38,6 @@ public class Image_1_Controller : MonoBehaviour
             ControllMovementCoroutine(PerishDelayTime());
             Image_1.SetActive(false);
         }
-
-        Debug.Log("After this.transform.localPosition.y: " + this.transform.localPosition.y);
     }
 
     void ControllMovementCoroutine(IEnumerator NextCoroutine)

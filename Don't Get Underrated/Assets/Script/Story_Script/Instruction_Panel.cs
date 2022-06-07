@@ -51,10 +51,15 @@ public class Instruction_Panel : MonoBehaviour
         Left_Bar.SetActive(false);
         Game_Start.SetActive(false);
         Dic_Context.Add(0, new string[] { "방향키로 좌, 우 이동", "스페이스 바를 적절히 눌러 점프 세기 조절", "발판에서 미끄러지지 말고 무사히 정상까지 오르자!", "굿 럭!" });
-        Dic_Context.Add(1, new string[] { "마우스를 원하는 만큼 끌어 당겨 세기와 방향 조절", "한번 공을 조작해봐!" });
-        Dic_Context.Add(2, new string[] { "W와 D로 플레이어의 좌, 우 이동", "어레인지했어!!" });
-        Dic_Context.Add(3, new string[] { "어서와", "텐가이는 처음이지?" });
-        Dic_Context.Add(4, new string[] { "히마와리는 그렇지...?", "불상과 맞서 싸우는 거" });
+        Dic_Context.Add(1, new string[] { "마우스를 연등을 날릴 방향에 반대 방향으로 끌어 당기자.", "끌어당긴 길이가 곧 세기", "공중에서 여러번 조작은 가능하지만 세기가 감소",
+                                            "중간중간 나오는 탄성을 없애주는 껌 아이템을 먹고 1번을 누르면 10초간 효과 발동", "아이템을 먹었는지 마우스 오른쪽을 눌러 확인", 
+                                            "물체에서 떨어지지 않게 조심하여 꼭대기까지 가보자!", "굿 럭!" });
+        Dic_Context.Add(2, new string[] { "A와 D로 플레이어의 좌, 우 이동", "학생을 클릭하여 게이지를 채우자.", "과제와 레포트의 방해 레이저가 온다면 마우스 클릭을 연타하여 이겨내자.", 
+                                            "학생을 구출하면 점수와 연등 피버게이지 획득", "피버 타임이 되면 공격 및 이동속도 증가", "제한 시간내에 최대한 많은 학생들을 구출하자!",
+                                            "굿 럭!"});
+        Dic_Context.Add(3, new string[] { "방향키를 눌러 플레이어 조작", "스페이스바를 눌러 공격", "Z키를 눌러 큰 데미지를 주는 폭탄 사용", "보스의 공격을 피해 최대한 적은 death count로 보스의 체력을 0으로 만들자!",
+                                            "굿 럭!" });
+        Dic_Context.Add(4, new string[] { "좌, 우 방향키를 눌러 플레이어 이동", "스페이스를 눌러 점프. 스페이스를 연속으로 눌러 이단점프까지 가능", "보스의 공격을 피해 최대한 적은 death count로 2분 동안 버티자!", "굿 럭!" });
     }
     void Start()
     {
@@ -92,8 +97,8 @@ public class Instruction_Panel : MonoBehaviour
 
         if (this.StageNum != StageNum || Index >= Dic_Context[this.StageNum].Length || Index <= -1) // 예외 사항
         {
-            Debug.Log("this.StageNum: " + this.StageNum);
-            Debug.Log("StageNum: " + StageNum);
+            //Debug.Log("this.StageNum: " + this.StageNum);
+            //Debug.Log("StageNum: " + StageNum);
             Context.text = "인덱스 초과";
             return;
         }

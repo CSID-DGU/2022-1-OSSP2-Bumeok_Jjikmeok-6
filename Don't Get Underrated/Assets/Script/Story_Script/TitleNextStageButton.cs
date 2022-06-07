@@ -10,6 +10,7 @@ public class TitleNextStageButton : MonoBehaviour
 
     public void GoingNextScene()
     {
+        singleTone.SceneNumManage = 0;
         StartCoroutine(LoadingNextStage());
     }
 
@@ -17,7 +18,10 @@ public class TitleNextStageButton : MonoBehaviour
     {
         float fadeTime = GameObject.Find("Fading").GetComponent<Fading>().BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
-        sceneNum++;
-        SceneManager.LoadScene(sceneNum);
+        //sceneNum++;
+        //SceneManager.LoadScene(sceneNum);
+        singleTone.SceneNumManage++;
+        //Debug.Log(singleTone.SceneNumManage);
+        SceneManager.LoadScene(singleTone.SceneNumManage);
     }
 }

@@ -22,11 +22,21 @@ public class Login : MonoBehaviour
     [SerializeField]
     GameObject X_Button;
 
-    IEnumerator wait_load;
     private void Awake()
     {
+        singleTone.request = null;
+        singleTone.main_stage_1_score = 0;
+        singleTone.main_stage_2_score = 0;
+        singleTone.main_stage_3_score = 0;
+        singleTone.final_stage_1_score = 0;
+        singleTone.final_stage_2_score = 0;
+
         singleTone.id = "";
-        wait_load = null;
+        singleTone.ESC_On = true;
+        singleTone.EasterEgg = false;
+        singleTone.Music_Volume = 1;
+        singleTone.Music_Decrease = true;
+
     }
     [System.Serializable]
     public class UserInfo
@@ -50,6 +60,7 @@ public class Login : MonoBehaviour
     }
     public void ButtonClick(int param)
     {
+        StopAllCoroutines();
         infoText.text = "";
         if (param == 0)
             StartCoroutine(Server_Login());
@@ -58,13 +69,16 @@ public class Login : MonoBehaviour
     }
     public void GameStart()
     {
+        StopAllCoroutines();
         infoText.text = "";
         StartCoroutine(GameStart_Behave());
     }
     IEnumerator Server_Logout()
     {
         Popup.SetActive(true);
-        wait_load = Wait_Load();
+        X_Button.SetActive(false);
+
+        IEnumerator wait_load = Wait_Load();
         StartCoroutine(wait_load);
 
         singleTone.request = UnityWebRequest.Get("http://localhost:3000/log_out");
@@ -76,10 +90,12 @@ public class Login : MonoBehaviour
           (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
           (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
+            X_Button.SetActive(true);
             infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
+            X_Button.SetActive(true);
             infoText.text = singleTone.request.downloadHandler.text + '\n' + "로그아웃 성공!";
         }
         yield break;
@@ -87,8 +103,9 @@ public class Login : MonoBehaviour
     IEnumerator Server_Login()
     {
         Popup.SetActive(true);
+        X_Button.SetActive(false);
 
-        wait_load = Wait_Load();
+        IEnumerator wait_load = Wait_Load();
         StartCoroutine(wait_load);
 
         WWWForm form = new WWWForm();
@@ -105,11 +122,13 @@ public class Login : MonoBehaviour
            (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
            (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
+            X_Button.SetActive(true);
             infoText.color = Color.red;
             infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
         else
         {
+            X_Button.SetActive(true);
             infoText.color = Color.black;
             Login_Success data = JsonUtility.FromJson<Login_Success>(singleTone.request.downloadHandler.text);
             singleTone.id = data.user_info.id;
@@ -121,13 +140,21 @@ public class Login : MonoBehaviour
     IEnumerator GameStart_Behave()
     {
         Popup.SetActive(true);
+        X_Button.SetActive(false);
+
+        IEnumerator wait_load = Wait_Load();
+        StartCoroutine(wait_load);
+
         singleTone.request = UnityWebRequest.Get("http://localhost:3000/continue_connect");
         yield return singleTone.request.SendWebRequest();
+
+        StopCoroutine(wait_load);
 
         if ((singleTone.request.result == UnityWebRequest.Result.ConnectionError) ||
             (singleTone.request.result == UnityWebRequest.Result.ProtocolError) ||
             (singleTone.request.result == UnityWebRequest.Result.DataProcessingError))
         {
+            X_Button.SetActive(true);
             infoText.color = Color.red;
             infoText.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
         }
@@ -137,18 +164,20 @@ public class Login : MonoBehaviour
             Haha d = JsonUtility.FromJson<Haha>(singleTone.request.downloadHandler.text);
             if (singleTone.id != d.user_info)
             {
+                X_Button.SetActive(true);
                 infoText.color = Color.red;
-                infoText.text = "계정 정보가 틀리거나 서버가 끊겼습니다.";
+                infoText.text = "로그 아웃 후 다시 로그인을 시도해주세요!";
             }
             else
             {
+                X_Button.SetActive(false);
                 infoText.color = Color.blue;
                 infoText.text = "게임을 시작합니다!";
-                X_Button.SetActive(false);
                 yield return YieldInstructionCache.WaitForSeconds(1);
-                LoadingProgress.LoadScene("Stage3");
+                LoadingProgress.LoadScene(3);
                 yield break;
             }
+
         }
         yield break;
     }

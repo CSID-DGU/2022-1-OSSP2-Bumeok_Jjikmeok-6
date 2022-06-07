@@ -56,6 +56,8 @@ public class Player_Stage1 : Player_Info
     public GameObject Wall;
     public float Prev_pos_y;
 
+    SpriteColor spriteColor;
+
 
     private AudioSource jump_sound;
     private AudioSource wall_collision_sound;
@@ -68,11 +70,11 @@ public class Player_Stage1 : Player_Info
 
         if (GameObject.Find("Jump") && GameObject.Find("Jump").TryGetComponent(out AudioSource AS2))
             jump_sound = AS2;
-
         if (TryGetComponent(out Animator A))
             animator = A;
         if (TryGetComponent(out Rigidbody2D RB2D))
             rigid2D = RB2D;
+        My_Name.text = singleTone.id;
     }
     private void Update()
     {
