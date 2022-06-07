@@ -166,6 +166,13 @@ public class Life : MonoBehaviour, Life_Of_Basic // 생명에 관련된 클래스
             BackGroundSource.Pause();
     }
 
+    public virtual void Stop_When_Network_Stop()
+    {
+        StopAllCoroutines(); 
+        Effect_Sound_Stop(); 
+        BackGround_Sound_Stop();
+    }
+
     protected IEnumerator Decrease_BackGround_Sound(float time_persist) // 배경음을 time_persist(초)만큼 감소시키는 함수
     {
         if (BackGroundSource != null)

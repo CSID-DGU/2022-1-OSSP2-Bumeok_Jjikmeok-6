@@ -103,7 +103,7 @@ public class ObjectPooler : MonoBehaviour
 		foreach (var pool in pools)
 		{
 			int count = spawnObjects.FindAll(x => x.name == pool.tag).Count;
-			Debug.Log($"{pool.tag} count : {count}");
+			//Debug.Log($"{pool.tag} count : {count}");
 		}
 	}
 

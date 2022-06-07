@@ -51,9 +51,11 @@ public class Boss_Info : Life
     protected virtual void OnTriggerEnter2D(Collider2D collision) // 플레이어에 직접 부딧혔으면 플레이어에게 1의 데미지를 줌
     {
         if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info PI))
-            PI.TakeDamage(1);
+        {
+            if (!PI.Unbeatable)
+                PI.TakeDamage(1);
+        }
     }
-
     protected virtual void Killed_All_Mine() // 보스가 죽었을 때 본인이 소환하는 모든 것들을 파괴한 후, 본인의 행동을 멈추는 함수
     {
         if (trailRenderer != null)
@@ -195,5 +197,9 @@ public class Boss_Info : Life
             trailRenderer.startColor = Color.Lerp(Origin_C, Change_C, percent);
             yield return null;
         }
+    }
+    public override void Stop_When_Network_Stop()
+    {
+        base.Stop_When_Network_Stop();
     }
 }

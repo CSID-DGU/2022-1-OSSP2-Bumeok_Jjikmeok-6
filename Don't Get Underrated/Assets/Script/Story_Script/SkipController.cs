@@ -24,8 +24,10 @@ public class SkipController : MonoBehaviour
     {
         float fadeTime = GameObject.Find("Fading").GetComponent<Fading>().BeginFade(1);
         yield return new WaitForSeconds(fadeTime);
-        sceneNum++;
-        SceneManager.LoadScene(sceneNum);
+        //sceneNum++;
+        //SceneManager.LoadScene(sceneNum);
+        singleTone.SceneNumManage++;
+        SceneManager.LoadScene(singleTone.SceneNumManage);
         DOTween.KillAll();
     }
 
@@ -34,4 +36,5 @@ public class SkipController : MonoBehaviour
         yield return new WaitForSeconds(SkipTimeInterval);
         this.gameObject.SetActive(false);
     }
+
 }

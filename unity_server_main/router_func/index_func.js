@@ -17,6 +17,7 @@ exports.log_in = async (req, res) => {
 }
 exports.log_out = async (req, res) => {
     req.session.destroy( function ( err ) {
+        res.locals.user = req.user;
         return res.status(200).send({message: 'Successfully logged out' })
     })
 }
@@ -140,9 +141,9 @@ exports.Get_Rank_Total_Login = async(req, res) => {
             if (DB_match_auth[0].keycode <= 0)
                 throw new Error("올바르지 않은 DB 입력입니다")
             
-            const [DB_Mine] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
+            const [DB_Mine] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
             
-            const [DB_Total] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id`)
+            const [DB_Total] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id`)
             
             if (DB_Total.length === 0 || DB_Mine.length === 0)
                 throw new Error("랭킹이 비었습니다.")
@@ -224,28 +225,28 @@ exports.Get_Rank_Detail_Login = async(req, res, next) => {
             let [DB_Total] = []
             if (parseInt(req.body.identifier) === 0)
             {
-                DB_Mine = await connection.query(`select id, main_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
-                DB_Total = await connection.query(`select id, main_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
+                DB_Mine = await connection.query(`select id, main_score_1 from auth inner join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
+                DB_Total = await connection.query(`select id, main_score_1 from auth inner join ranking on auth.keycode = ranking.Auth_id order by main_score_1 ASC`)
             }
             if (parseInt(req.body.identifier) === 1)
             {
-                DB_Mine = await connection.query(`select id, main_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
-                DB_Total = await connection.query(`select id, main_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
+                DB_Mine = await connection.query(`select id, main_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
+                DB_Total = await connection.query(`select id, main_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id order by main_score_2 ASC`)
             }
             if (parseInt(req.body.identifier) === 2)
             {
-                DB_Mine = await connection.query(`select id, main_score_3 from auth left join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
-                DB_Total = await connection.query(`select id, main_score_3 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
+                DB_Mine = await connection.query(`select id, main_score_3 from auth inner join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
+                DB_Total = await connection.query(`select id, main_score_3 from auth inner join ranking on auth.keycode = ranking.Auth_id order by main_score_3 DESC`)
             }
             if (parseInt(req.body.identifier) === 3)
             {
-                DB_Mine = await connection.query(`select id, final_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
-                DB_Total = await connection.query(`select id, final_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
+                DB_Mine = await connection.query(`select id, final_score_1 from auth inner join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
+                DB_Total = await connection.query(`select id, final_score_1 from auth inner join ranking on auth.keycode = ranking.Auth_id order by final_score_1 ASC`)
             }
             if (parseInt(req.body.identifier) === 4)
             {
-                DB_Mine = await connection.query(`select id, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
-                DB_Total = await connection.query(`select id, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
+                DB_Mine = await connection.query(`select id, final_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
+                DB_Total = await connection.query(`select id, final_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
             }
     
             if (DB_Total.length === 0 || DB_Mine.length === 0)
@@ -275,7 +276,7 @@ exports.Get_Rank_Detail_Not_Login = async(req, res, next) => {
             let [DB_Total] = []
             if (parseInt(req.body.identifier) === 0)
             {
-                DB_Total = await connection.query(`select id, main_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
+                DB_Total = await connection.query(`select id, main_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 DESC`)
             }
             if (parseInt(req.body.identifier) === 1)
             {

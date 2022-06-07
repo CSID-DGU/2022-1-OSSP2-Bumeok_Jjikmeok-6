@@ -5,7 +5,8 @@ using UnityEngine;
 public class MoveCamera_kkh : MonoBehaviour
 {
     private Player_Stage1 Player_y_position;
-    void Start()
+
+    private void Awake()
     {
         if (GameObject.Find("Player") && GameObject.Find("Player").TryGetComponent(out Player_Stage1 MK))
             Player_y_position = MK;

@@ -13,7 +13,15 @@ public class singleTone
 
     public static string id;
 
+    public static bool ESC_On = true;
+
     public static bool EasterEgg = false;
+
+    public static int SceneNumManage = 0;
+
+    public static float Music_Volume = 1;
+
+    public static bool Music_Decrease = true;
 
     public static singleTone Instance
     {

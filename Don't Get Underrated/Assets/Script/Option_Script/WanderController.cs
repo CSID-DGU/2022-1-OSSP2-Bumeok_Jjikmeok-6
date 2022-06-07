@@ -52,7 +52,7 @@ public class WanderController : MonoBehaviour
         randomAngle = Random.Range(0, 361);
 
         endPosition = Vector3FromAngle(randomAngle);
-        Debug.Log(endPosition);
+        //Debug.Log(endPosition);
     }
 
     Vector3 Vector3FromAngle(int inputAngleDegrees) // Changing the degree into the radian

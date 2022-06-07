@@ -51,6 +51,11 @@ public class Player_Info : Life
             return;
         OnDie();
     }
+
+    public override void Stop_When_Network_Stop()
+    {
+        base.Stop_When_Network_Stop();
+    }
     public override void OnDie()
     {
         base.OnDie();

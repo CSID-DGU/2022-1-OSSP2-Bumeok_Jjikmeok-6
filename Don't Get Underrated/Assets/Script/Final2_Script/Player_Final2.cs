@@ -80,7 +80,7 @@ public class Player_Final2 : Player_Info {
 		GyoSu.color = Color.clear;
 		Death_Count.text = "Death Count : " + deathCount;
 		My_Name.text = singleTone.id;
-
+		singleTone.EasterEgg = false;
 	}
 
 	private void Start() 
@@ -103,7 +103,7 @@ public class Player_Final2 : Player_Info {
 			jump = true;
 			jumpCount += 1;
 		}
-		if (Input.GetKeyDown(KeyCode.Semicolon))
+		if (Input.GetKeyDown(KeyCode.Semicolon) && !singleTone.EasterEgg)
         {
 			singleTone.EasterEgg = true;
 			GyoSu.color = Color.blue;

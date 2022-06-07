@@ -64,7 +64,7 @@ public class SolGryn : Boss_Info
             PalJeongDo = i2;
         if (GameObject.FindGameObjectWithTag("Player") && GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Final2 i3))
             player_final2 = i3;
-        if (GameObject.Find("Jebal") && GameObject.Find("Jebal").TryGetComponent(out SpriteColor s1))
+        if (GameObject.Find("Total_Sprite") && GameObject.Find("Total_Sprite").TryGetComponent(out SpriteColor s1))
             spriteColor = s1;
         if (GameObject.Find("Boss_Effect_Sound") && GameObject.Find("Boss_Effect_Sound").TryGetComponent(out AudioSource AS1))
             EffectSource = AS1;
@@ -91,7 +91,7 @@ public class SolGryn : Boss_Info
         My_Scale = new Vector3(0.7f, 0.7f, 0);  // 임시
         for (int i = 0; i < 10; i++)
         {
-            Boss_W1(72 + (20 * i), 25, 360, 6, true);
+            Boss_W1(72 + (20 * i), 25, 360, 8, true);
             yield return YieldInstructionCache.WaitForSeconds(0.6f);
         }
         yield return null;
@@ -203,7 +203,7 @@ public class SolGryn : Boss_Info
 
         Effect_Sound_OneShot(7);
         for (int i = 0; i < 3; i++)
-            yield return Move_Straight(My_Position, new Vector3(u1[i, 0], u1[i, 1], 0), 0.12f, declineCurve);
+            yield return Move_Straight(My_Position, new Vector3(u1[i, 0], u1[i, 1], 0), 0.1f, declineCurve);
 
         trailRenderer.enabled = false;
 
@@ -215,14 +215,14 @@ public class SolGryn : Boss_Info
         
         Effect_Sound_OneShot(7);
         for (int i = 0; i < 3; i++)
-            yield return Move_Straight(My_Position, new Vector3(u2[i, 0], u2[i, 1], 0), 0.12f, declineCurve);
+            yield return Move_Straight(My_Position, new Vector3(u2[i, 0], u2[i, 1], 0), 0.1f, declineCurve);
 
         // 만자를 그리는 로직
 
         // -------------------------------------------------------------------------------------------------------------------------
 
         Run_Life_Act(Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.4f, 0, DisAppear_Effect_1));
-        yield return Trail_Color_Change_And_Back(Color.red, Color.green, 0.33f, 3);
+        yield return Trail_Color_Change_And_Back(Color.red, Color.green, 0.33f, 2);
 
         GameObject nachi_x_g_1 = Instantiate(Weapon[6], new Vector3(6.3f, 1.87f, 0), Quaternion.identity);
         GameObject nachi_x_g_2 = Instantiate(Weapon[6], new Vector3(-5.61f, 1.64f, 0), Quaternion.identity);
@@ -482,8 +482,8 @@ public class SolGryn : Boss_Info
         {
             Player_Or_None = Random.Range(0, 2);
             Launch_Monster(CHK_Player_Target[Player_Or_None], new Vector3(quadrant[0, i] * 7, quadrant[1, i] * 4, 0), Player_Or_None);
-            yield return YieldInstructionCache.WaitForSeconds(1.2f);
-        } // 제4분면 (7, 4), (-7, 4), (-7, -4), (7, -4)에서 각각 1.2초 간격으로 플레이어에게 공격
+            yield return YieldInstructionCache.WaitForSeconds(1);
+        } // 제4분면 (7, 4), (-7, 4), (-7, -4), (7, -4)에서 각각 1초 간격으로 플레이어에게 공격
 
         yield return YieldInstructionCache.WaitForSeconds(1);
 
@@ -503,16 +503,16 @@ public class SolGryn : Boss_Info
         {
             Player_Or_None = Random.Range(0, 2);
             Launch_Monster(CHK_Player_Target[Player_Or_None], Pattern06_Monster_Move[i], Player_Or_None);
-            yield return YieldInstructionCache.WaitForSeconds(0.8f);
+            yield return YieldInstructionCache.WaitForSeconds(0.7f);
         }
 
         for (int i = Pattern06_Monster_Move.Count - 2; i >= 0; i--)
         {
             Player_Or_None = Random.Range(0, 2);
             Launch_Monster(CHK_Player_Target[Player_Or_None], Pattern06_Monster_Move[i], Player_Or_None);
-            yield return YieldInstructionCache.WaitForSeconds(0.8f);
+            yield return YieldInstructionCache.WaitForSeconds(0.7f);
         }
-        // 위에서 설정한 몬스터의 이동에 따라 0.8초 간격으로 플레이어에게 공격
+        // 위에서 설정한 몬스터의 이동에 따라 0.7초 간격으로 플레이어에게 공격
         yield return YieldInstructionCache.WaitForSeconds(1);
         yield return null;
     }
@@ -521,7 +521,7 @@ public class SolGryn : Boss_Info
     {
         while(true)
         {
-            CurrentHP -= 4;
+            CurrentHP -= 5;
             if (CurrentHP <= 10)
             {
                 OnDie();
@@ -536,7 +536,7 @@ public class SolGryn : Boss_Info
         SolGryn_HP.SetActive(false);
 
         singleTone.final_stage_2_score = player_final2.DeathCount;
-        Debug.Log(singleTone.final_stage_2_score);
+        //Debug.Log(singleTone.final_stage_2_score);
 
         Killed_All_Mine();
         Init_Back_And_Camera();
@@ -546,6 +546,7 @@ public class SolGryn : Boss_Info
 
     private IEnumerator I_OnDie()
     {
+        singleTone.Music_Decrease = false;
         Effect_Sound_Stop();
         Effect_Sound_OneShot(18);
         Run_Life_Act(Decrease_BackGround_Sound(6));
@@ -569,7 +570,9 @@ public class SolGryn : Boss_Info
 
         if (spriteColor != null)
             yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
-        SceneManager.LoadScene("My_SJH_Scene");
+        singleTone.Music_Decrease = true;
+        singleTone.SceneNumManage++;
+        SceneManager.LoadScene(singleTone.SceneNumManage);
         yield return null;
     }
     private void Boss_W1(float start_angle, int count, float range_angle, float speed, bool is_Blink)

@@ -102,7 +102,7 @@ public class Asura : Boss_Info // 최종 (1)의 보스
                 player_final1.Speed_Up(); // 1퍼센트의 확률로 플레이어에게 스피드 업 아이템 부여
             if (Rand > 0.01f && Rand <= 0.02f)
                 player_final1.Power_Up(); // 1퍼센트의 확률로 플레이어에게 파워 업 아이템 부여
-            if (Rand > 0.02f && Rand <= 0.025f)
+            if (Rand > 0.02f && Rand <= 0.023f)
                 player_final1.Boom_Up(); // 0.5퍼센트의 확률로 플레이어에게 폭탄 증가 아이템 부여
 
             Run_Life_Act(Hit());
@@ -125,6 +125,7 @@ public class Asura : Boss_Info // 최종 (1)의 보스
 
     public override void OnDie()
     {
+        singleTone.Music_Decrease = false;
         Effect_Sound_Stop();
         Effect_Sound_OneShot(16);
         player_final1.Unbeatable = true;
@@ -134,7 +135,7 @@ public class Asura : Boss_Info // 최종 (1)의 보스
         imageColor.Set_BGColor(Color.clear); // 사운드 중지, 플레이어 무적화, 본인의 원래 모습으로 초기화.
 
         singleTone.final_stage_1_score = player_final1.DeathCount;
-        Debug.Log(singleTone.final_stage_1_score); // 플레이어의 데스 카운트를 최종(1)의 스코어로 반영
+        //Debug.Log(singleTone.final_stage_1_score); // 플레이어의 데스 카운트를 최종(1)의 스코어로 반영
 
         Instantiate(When_Dead_Effect, My_Position, Quaternion.identity); // 본인이 죽었을 때의 이펙트 생성
 
@@ -155,7 +156,9 @@ public class Asura : Boss_Info // 최종 (1)의 보스
 
         yield return Change_BG_And_Wait(Color.black, 2);
 
-        SceneManager.LoadScene("Final2");
+        singleTone.Music_Decrease = true;
+        singleTone.SceneNumManage++;
+        SceneManager.LoadScene(singleTone.SceneNumManage);
 
         yield break;
     }

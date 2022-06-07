@@ -96,7 +96,8 @@ public class My_SJH_Script : MonoBehaviour
             Before_Rank.color = Color.clear;
             After_Rank.color = Color.clear;
             Wait_text.color = Color.red;
-            Wait_text.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text;
+            Wait_text.text = singleTone.request.error + '\n' + singleTone.request.downloadHandler.text + '\n';
+            Wait_text.text += "혹은 서버와의 접속이 끊겨 랭킹 반영이 안됐을 수 있습니다." + '\n';
         }
 
         else
@@ -107,6 +108,7 @@ public class My_SJH_Script : MonoBehaviour
                 After_Rank.color = Color.clear;
                 Wait_text.color = Color.red;
                 Wait_text.text = "이스터에그를 적용한 사람은 랭킹 반영이 안됩니다. 죄송합니다.";
+                singleTone.EasterEgg = false;
             }
             else
             {
@@ -175,7 +177,8 @@ public class My_SJH_Script : MonoBehaviour
         if (spriteColor != null)
         {
             yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
-            SceneManager.LoadScene("LoginScene");
+            singleTone.SceneNumManage = 0;
+            SceneManager.LoadScene(singleTone.SceneNumManage);
         }
         else
             yield return null;

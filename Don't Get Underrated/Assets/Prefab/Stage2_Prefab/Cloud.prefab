@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 307463923242195213}
   - component: {fileID: 307463923242195214}
   - component: {fileID: 307463923242195215}
+  - component: {fileID: 3602089447391552863}
   m_Layer: 0
   m_Name: Cloud
   m_TagString: Untagged
@@ -186,3 +187,24 @@ PolygonCollider2D:
       - {x: 1.5383861, y: -0.8809701}
       - {x: 1.8009682, y: -0.86097014}
       - {x: 1.968388, y: -0.78097016}
+--- !u!50 &3602089447391552863
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307463923242195200}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0

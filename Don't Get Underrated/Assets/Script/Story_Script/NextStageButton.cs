@@ -12,8 +12,10 @@ public class NextStageButton : MonoBehaviour
 
     public void LoadingInstructionStage()
     {
-        sceneNum++;
-        SceneManager.LoadScene(sceneNum);
+        //sceneNum++;
+        //SceneManager.LoadScene(sceneNum);
+        singleTone.SceneNumManage++;
+        SceneManager.LoadScene(singleTone.SceneNumManage);
         DOTween.KillAll();
     }
 }

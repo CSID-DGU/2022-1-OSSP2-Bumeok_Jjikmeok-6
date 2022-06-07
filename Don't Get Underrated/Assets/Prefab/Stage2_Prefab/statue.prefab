@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7127233078710584835}
   - component: {fileID: 7127233078710584834}
   - component: {fileID: 7127233078710584861}
+  - component: {fileID: -5737790532926377359}
   m_Layer: 0
   m_Name: statue
   m_TagString: Untagged
@@ -160,3 +161,24 @@ PolygonCollider2D:
       - {x: 0.4794616, y: -0.84563696}
       - {x: 0.48764858, y: -0.7352972}
       - {x: 0.5692637, y: -0.66711086}
+--- !u!50 &-5737790532926377359
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7127233078710584860}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0

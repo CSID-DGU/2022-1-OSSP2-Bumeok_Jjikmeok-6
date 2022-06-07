@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Networking;
 
 public class LoadingProgress : MonoBehaviour
 {
-    private static string nextScene;
+    private static int nextScene;
     public float currentValue;
     public float speed = 25;
 
@@ -25,8 +24,9 @@ public class LoadingProgress : MonoBehaviour
     {
         StartCoroutine(LoadScene());
     }
-    public static void LoadScene(string sceneName)
+    public static void LoadScene(int sceneName)
     {
+        singleTone.SceneNumManage = sceneName;
         nextScene = sceneName;
         SceneManager.LoadScene("LoadingScene");
     }
@@ -40,6 +40,7 @@ public class LoadingProgress : MonoBehaviour
 
         IEnumerator wait_text_num = Wait_Text_IEnum();
         StartCoroutine(wait_text_num);
+
 
         while (!op.isDone)
         {

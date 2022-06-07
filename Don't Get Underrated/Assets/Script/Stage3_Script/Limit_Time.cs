@@ -29,7 +29,7 @@ public class Limit_Time : MonoBehaviour // Á¦ÇÑ ½Ã°£¿¡ ´ëÇÑ ½ºÅ©¸³Æ®. °ÔÀÓÀÇ Á¾·
     {
         Limit_Time_Text = GetComponent<TextMeshProUGUI>();
         image = GameObject.Find("Flash_TimeOut").GetComponent<Image>();
-        if (GameObject.Find("Jebal") && GameObject.Find("Jebal").TryGetComponent(out SpriteColor s1))
+        if (GameObject.Find("Total_Sprite") && GameObject.Find("Total_Sprite").TryGetComponent(out SpriteColor s1))
             spriteColor = s1;
         flashOn = image.GetComponent<ImageColor>();
         flash_on = null;
@@ -57,6 +57,7 @@ public class Limit_Time : MonoBehaviour // Á¦ÇÑ ½Ã°£¿¡ ´ëÇÑ ½ºÅ©¸³Æ®. °ÔÀÓÀÇ Á¾·
             }
             if (wow_Time <= 0) // Á¦ÇÑ½Ã°£ÀÌ ´Ù µÆÀ» ¶§
             {
+                singleTone.Music_Decrease = false;
                 Player_Stage3 player_stage3;
 
                 if (GameObject.FindGameObjectWithTag("Player").TryGetComponent(out Player_Stage3 PC_S))
@@ -106,7 +107,10 @@ public class Limit_Time : MonoBehaviour // Á¦ÇÑ ½Ã°£¿¡ ´ëÇÑ ½ºÅ©¸³Æ®. °ÔÀÓÀÇ Á¾·
 
                 if (spriteColor != null)
                     yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
-                SceneManager.LoadScene("Final1");
+                
+                singleTone.Music_Decrease = true;
+                singleTone.SceneNumManage++;
+                SceneManager.LoadScene(singleTone.SceneNumManage);
                 yield break;
                 // ¾À ÀüÈ¯ 
             }

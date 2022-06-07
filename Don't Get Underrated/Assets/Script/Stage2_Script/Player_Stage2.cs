@@ -10,6 +10,8 @@ public class Player_Stage2 : Player_Info
 
     CircleCollider2D GumBounce;
 
+    AudioSource BounceAudioSource;
+
     Vector2 InitMousePos;
 
     Vector2 finMousePos;
@@ -35,6 +37,8 @@ public class Player_Stage2 : Player_Info
     public float MaxBallSpeedVector;
 
     public float weighedSpeed;
+
+    public float totalPlayTime; // 총 게임플레이 시간
     
     // Start is called before the first frame update
 
@@ -47,6 +51,8 @@ public class Player_Stage2 : Player_Info
             Camera = C;
         if (TryGetComponent(out CircleCollider2D CC2D))
             GumBounce = CC2D;
+        if (TryGetComponent(out AudioSource AS))
+            BounceAudioSource = AS;
     }
     void Start()
     {
@@ -104,6 +110,7 @@ public class Player_Stage2 : Player_Info
     private void OnCollisionEnter2D(Collision2D collision) // Check if the ball hit the object
     {
         ballHit = true;
+        BounceAudioSource.Play();
         clickNum = 0;
     }
 
