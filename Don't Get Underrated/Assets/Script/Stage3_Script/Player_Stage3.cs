@@ -205,7 +205,11 @@ public class Player_Stage3 : Player_Info
         if (Is_Fever)
             Effect_Sound_Play(2);
         else
+        {
+            animator.SetBool("IsWalk", false);
             Effect_Sound_Play(0);
+        }
+
         // 피버 타임일 때, 아닐 때의 효과음이 다르도록 설정
 
         while (true)

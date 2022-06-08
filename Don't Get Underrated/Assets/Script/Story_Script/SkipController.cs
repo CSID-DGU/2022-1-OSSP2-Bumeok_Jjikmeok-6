@@ -34,7 +34,6 @@ public class SkipController : MonoBehaviour
     IEnumerator SkipTime()
     {
         yield return new WaitForSeconds(SkipTimeInterval);
-        this.gameObject.SetActive(false);
     }
 
 }

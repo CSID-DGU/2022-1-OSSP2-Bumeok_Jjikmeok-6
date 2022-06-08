@@ -27,6 +27,8 @@ TagManager:
   - BoomItem
   - Jebal
   - Item
+  - gumItem
+  - MoveSceneObject
   layers:
   - Default
   - TransparentFX

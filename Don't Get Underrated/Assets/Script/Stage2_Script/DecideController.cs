@@ -19,13 +19,14 @@ public class DecideController : MonoBehaviour
 
     AudioSource HOFAudioSource;
 
+
     public int sceneNum = 0;
 
     float totalPlayTime; // 총 플레이 타임
 
     float updatePlayTime; // 플레이 타임 업데이트
 
-    bool GameDone = false;
+    public bool GameDone = false;
 
     private void Awake()
     {
@@ -52,6 +53,7 @@ public class DecideController : MonoBehaviour
             totalPlayTime = updatePlayTime;
             Lantern.totalPlayTime = this.totalPlayTime; // 총 플레이 타임을 플레이어에게 넘겨줌.
             //Debug.Log("Playtime: " + totalPlayTime);
+            singleTone.main_stage_2_score = (int)this.totalPlayTime;
             HOFAudioSource.Play();
             HOF_Board.SetActive(true);
             Time.timeScale = 0;
@@ -79,9 +81,8 @@ public class DecideController : MonoBehaviour
     IEnumerator NextStage()
     {
         yield return new WaitForSeconds(2f);
-        float fadeTime = GameObject.Find("Fading").GetComponent<Fading>().BeginFade(1);
-        yield return new WaitForSeconds(fadeTime);
-        sceneNum++;
-        SceneManager.LoadScene(sceneNum);
+
+        singleTone.SceneNumManage++;
+        SceneManager.LoadScene(singleTone.SceneNumManage);
     }
 }
