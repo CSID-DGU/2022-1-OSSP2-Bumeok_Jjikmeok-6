@@ -4608,6 +4608,7 @@ MonoBehaviour:
   distanceToGround: 0.78
   deathCount: 5
   GyoSu: {fileID: 971415101}
+  Is_User: 1
 --- !u!50 &1176409225
 Rigidbody2D:
   serializedVersion: 4

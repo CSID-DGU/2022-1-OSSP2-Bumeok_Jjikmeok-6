@@ -90,9 +90,9 @@ https://github.com/himajin-no-tameiki/i-wanna-be-himawari
 4. (3번에서 연이어 진행) mysql에 접속된 cmd 창에서 "source (clone 폴더 경로)\unity_server_main\DB_info.sql" 명령어를 입력하여 데이터베이스 초기 세팅 (ex. source C:\Users\hiwg08\Desktop\2022-1-OSSP2-Bumeok_Jjikmeok-6\unity_server_main\DB_info.sql) **(DB_info.sql 파일은 unity_server_main 폴더 안에 존재. 4번 과정을 진행하는 시점에서는 DB_info.sql이 위치한 드라이브 == mysql이 설치된 드라이브여야 함. clone한 폴더의 위치는 상관 없음.)**
 5. unity_server_main/DB_info 디렉토리에서 "secret_OSSW_DB.js" 파일을 새로 생성한 후, mysql을 설치하면서 설정했던 정보를 입력. secret_OSSW_DB.js의 양식은 다음과 같음 <br/> <br/>
 module.exports = { <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; host: 127.0.0.1, <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user: (mysql의 user 이름, 기본으로 설정되는 이름은 root), <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; password: (mysql에서 설정한 비밀번호), <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; host: "127.0.0.1", (기본 host는 localhost(==127.0.0.1)) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user: "root", (mysql의 user 이름, 기본으로 설정되는 이름은 root), <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; password: "mysql에서 설정한 비밀번호", (숫자여도 반드시 큰따옴표로 묶어야함) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; database: "OSSW", (DB이름은 OSSW 고정이므로 수정 X) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; port: (mysql의 port 넘버) <br/>
 }

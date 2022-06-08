@@ -246,18 +246,21 @@ public class Network_On : MonoBehaviour
     public void Show_Ranking_Detail(int Params)
     {
         StopAllCoroutines();
+        singleTone.ESC_On = false;
         Popup_Rank.SetActive(true);
         StartCoroutine(Show_Detail_Ranking_For_Login(Params)); // 상세 랭킹 (로그인 O --> 본인 것까지)
     }
     public void Show_Ranking_Total()
     {
         StopAllCoroutines();
+        singleTone.ESC_On = false;
         Popup_Rank.SetActive(true);
         StartCoroutine(Show_Total_Ranking_For_Login()); // 전체 랭킹 (로그인 O --> 본인 것까지)
     }
     public void Enter_X()
     {
         StopAllCoroutines();
+        singleTone.ESC_On = true;
         Scroll_View.SetActive(false);
         StartCoroutine(Network_Check_Infinite());
     }

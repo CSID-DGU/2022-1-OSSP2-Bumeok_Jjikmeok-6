@@ -107,28 +107,6 @@ exports.Set_Rank = async(req, res) => {
         return res.status(400).send(err.message)
     }
 }
-
-exports.Get_Rank_Total_Not_Login = async(req, res) => {
-    try
-    {
-        const connection = await pool_k.getConnection(async conn => conn)
-        try {
-            const [DB1] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id`)
-            
-            console.log(DB1)
-    
-            connection.release()
-            return res.status(200).send({rank_total: DB1})
-    
-        } catch(err){
-            connection.release()
-            return res.status(400).send(err.message)
-        }
-    } catch(err){
-        console.log("DB Error")
-        return res.status(400).send(err.message)
-    }
-}
 exports.Get_Rank_Total_Login = async(req, res) => {
     try
     {
@@ -142,9 +120,6 @@ exports.Get_Rank_Total_Login = async(req, res) => {
             const [DB_Mine] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
             
             const [DB_Total] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id`)
-            
-            if (DB_Total.length === 0 || DB_Mine.length === 0)
-                throw new Error("랭킹이 비었습니다.")
     
             connection.release()
             return res.status(200).send({rank_mine: DB_Mine, rank_total: DB_Total})
@@ -158,54 +133,6 @@ exports.Get_Rank_Total_Login = async(req, res) => {
         return res.status(400).send(err.message)
     }
     
-}
-
-exports.log_fail = async(req, res) => {
-    return res.status(400).send("회원 정보가 존재하지 않습니다")
-}
-
-exports.isNotLoggedIn = async(req, res, next) => {
-    if (!req.isAuthenticated())
-    {
-        next()
-    }
-    else
-    {
-        return res.status(400).send("이미 로그인 했습니다")
-    }
-}
-exports.isLoggedIn = async(req, res, next) => {
-    if (req.isAuthenticated())
-    {
-        next()
-    }
-    else
-    {
-        return res.status(400).send("로그인 없이는 아무것도 할 수 없습니다")
-    }
-}
-
-exports.connect_check = async(req, res, next) => {
-    try
-    {
-        const connection = await pool_k.getConnection(async conn => conn)
-        try {
-            const [DB_match_auth] = await connection.query(`select keycode from auth where id=?`, [req.user])
-        
-            if (DB_match_auth[0].keycode <= 0)
-                throw new Error("계정 정보가 올바르지 않습니다")
-    
-            connection.release()
-            return res.status(200).send({user_info: req.user, message: 'Successfully Connected' })
-        }
-        catch { 
-            connection.release()
-            return res.status(400).send(err.message)
-        }
-    }  catch(err){
-        console.log("DB Error")
-        return res.status(400).send(err.message)
-    }
 }
 exports.Get_Rank_Detail_Login = async(req, res, next) => {
     try
@@ -263,39 +190,45 @@ exports.Get_Rank_Detail_Login = async(req, res, next) => {
     }
    
 }
-exports.Get_Rank_Detail_Not_Login = async(req, res, next) => {
+exports.log_fail = async(req, res) => {
+    return res.status(400).send("회원 정보가 존재하지 않습니다")
+}
+
+exports.isNotLoggedIn = async(req, res, next) => {
+    if (!req.isAuthenticated())
+    {
+        next()
+    }
+    else
+    {
+        return res.status(400).send("이미 로그인 했습니다")
+    }
+}
+exports.isLoggedIn = async(req, res, next) => {
+    if (req.isAuthenticated())
+    {
+        next()
+    }
+    else
+    {
+        return res.status(400).send("로그인 없이는 아무것도 할 수 없습니다")
+    }
+}
+
+exports.connect_check = async(req, res, next) => {
     try
     {
         const connection = await pool_k.getConnection(async conn => conn)
         try {
-            console.log(req.body.identifier)
-    
-            let [DB_Total] = []
-            if (parseInt(req.body.identifier) === 0)
-            {
-                DB_Total = await connection.query(`select id, main_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 DESC`)
-            }
-            if (parseInt(req.body.identifier) === 1)
-            {
-                DB_Total = await connection.query(`select id, main_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
-            }
-            if (parseInt(req.body.identifier) === 2)
-            {
-                DB_Total = await connection.query(`select id, main_score_3 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
-            }
-            if (parseInt(req.body.identifier) === 3)
-            {
-                DB_Total = await connection.query(`select id, final_score_1 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
-            }
-            if (parseInt(req.body.identifier) === 4)
-            {
-                DB_Total = await connection.query(`select id, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
-            }
+            const [DB_match_auth] = await connection.query(`select keycode from auth where id=?`, [req.user])
+        
+            if (DB_match_auth[0].keycode <= 0)
+                throw new Error("계정 정보가 올바르지 않습니다")
     
             connection.release()
-            return res.status(200).send({rank_total: DB_Total[0]})
-    
-        } catch(err){
+            return res.status(200).send({user_info: req.user, message: 'Successfully Connected' })
+        }
+        catch { 
             connection.release()
             return res.status(400).send(err.message)
         }

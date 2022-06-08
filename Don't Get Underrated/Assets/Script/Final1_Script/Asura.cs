@@ -125,6 +125,9 @@ public class Asura : Boss_Info // 최종 (1)의 보스
 
     public override void OnDie()
     {
+        if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NEO))
+            NEO.StopAllCoroutines();
+
         singleTone.Music_Decrease = false;
         Effect_Sound_Stop();
         Effect_Sound_OneShot(16);

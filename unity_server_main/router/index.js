@@ -54,17 +54,11 @@ router.route('/sign_up')
 router.route('/get_rank_total_login')
 .get(router_func.isLoggedIn, router_func.Get_Rank_Total_Login)
 
-router.route('/get_rank_total_not_login')
-.get(router_func.Get_Rank_Total_Not_Login)
-
 router.route('/set_rank')
 .post(router_func.isLoggedIn, router_func.Set_Rank)
 
 router.route('/get_rank_detail_login')
 .post(router_func.isLoggedIn, router_func.Get_Rank_Detail_Login)
-
-router.route('/get_rank_detail_not_login')
-.post(router_func.Get_Rank_Detail_Not_Login)
 
 router.route('/log_fail')
 .get(router_func.log_fail)
