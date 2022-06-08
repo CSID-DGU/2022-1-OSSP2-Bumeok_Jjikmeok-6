@@ -177,7 +177,6 @@ public class Login : MonoBehaviour
                 LoadingProgress.LoadScene(3);
                 yield break;
             }
-
         }
         yield break;
     }

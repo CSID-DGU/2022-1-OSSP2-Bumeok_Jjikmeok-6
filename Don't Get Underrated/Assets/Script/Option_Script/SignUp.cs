@@ -32,6 +32,24 @@ public class SignUp : MonoBehaviour
     [SerializeField]
     Text Rank_Text;
 
+    [SerializeField]
+    Text ID;
+
+    [SerializeField]
+    Text Score_1;
+
+    [SerializeField]
+    Text Score_2;
+
+    [SerializeField]
+    Text Score_3;
+
+    [SerializeField]
+    Text Score_4;
+
+    [SerializeField]
+    Text Score_5;
+
     private void Awake()
     {
         Popup.SetActive(false);
@@ -165,10 +183,18 @@ public class SignUp : MonoBehaviour
             Popup_X.SetActive(true);
             infoText.text = "";
             Rank_Text.text = "";
+            ID.text = "";
+            Score_1.text = "";
+            Score_2.text = "";
+            Score_3.text = "";
+            Score_4.text = "";
+            Score_5.text = "";
             Ranking_Total_Up d = JsonUtility.FromJson<Ranking_Total_Up>(singleTone.request.downloadHandler.text);
 
             int Index = 0;
             int My_Rank = 0;
+
+
 
             foreach (var e in d.rank_total)
             {
@@ -179,22 +205,41 @@ public class SignUp : MonoBehaviour
                         My_Rank = Index;
                 }
             }
-
-            Rank_Text.text += "내 랭킹 \n";
-            Rank_Text.text += "아이디\t MAIN 1 \t MAIN 2 \t MAIN 3 \t FINAL 1 \t FINAL 2\n";
-
+            Rank_Text.text += "내 랭킹\n";
+            Rank_Text.text += "\n아이디\n";
+            Score_1.text += "\n\nMAIN 1\n";
+            Score_2.text += "\n\nMAIN 2\n";
+            Score_3.text += "\n\nMAIN 3\n";
+            Score_4.text += "\n\nFINAL 1\n";
+            Score_5.text += "\n\nFINAL 2\n";
             foreach (var e in d.rank_mine)
-                Rank_Text.text += e.id + '\t' + e.main_score_1 + '\t' + e.main_score_2 + '\t' + e.main_score_3 + '\t' + e.final_score_1 + '\t' + e.final_score_2 + '\n';
+            {
+                Rank_Text.text += e.id + '\n' + '\n';
+                Score_1.text += e.main_score_1.ToString() + '\n' + '\n';
+                Score_2.text += e.main_score_2.ToString() + '\n' + '\n';
+                Score_3.text += e.main_score_3.ToString() + '\n' + '\n';
+                Score_4.text += e.final_score_1.ToString() + '\n' + '\n';
+                Score_5.text += e.final_score_2.ToString() + '\n' + '\n';
+            }
+            
 
-            Index = 0;
+            Rank_Text.text += "전체 랭킹\n";
+            Rank_Text.text += "\n아이디\n";
+            Score_1.text += "\n\nMAIN 1\n";
+            Score_2.text += "\n\nMAIN 2\n";
+            Score_3.text += "\n\nMAIN 3\n";
+            Score_4.text += "\n\nFINAL 1\n";
+            Score_5.text += "\n\nFINAL 2\n";
 
-            Rank_Text.text += "\n전체 랭킹 \n";
-            Rank_Text.text += "아이디\t MAIN 1 \t MAIN 2 \t MAIN 3 \t FINAL 1 \t FINAL 2\n";
 
             foreach (var e in d.rank_total)
             {
-                Index++;
-                Rank_Text.text += e.id + '\t'  + e.main_score_1 + '\t' + e.main_score_2 + '\t' + e.main_score_3 + '\t' + e.final_score_1 + '\t' + e.final_score_2 + '\n';
+                Rank_Text.text += e.id + '\n';
+                Score_1.text += e.main_score_1.ToString() + '\n';
+                Score_2.text += e.main_score_2.ToString() + '\n';
+                Score_3.text += e.main_score_3.ToString() + '\n';
+                Score_4.text += e.final_score_1.ToString() + '\n';
+                Score_5.text += e.final_score_2.ToString() + '\n';
             }
         }
         yield break;
@@ -229,13 +274,17 @@ public class SignUp : MonoBehaviour
             Popup_X.SetActive(true);
             infoText.text = "";
             Rank_Text.text = "";
+            ID.text = "";
+            Score_1.text = "";
+            Score_2.text = "";
+            Score_3.text = "";
+            Score_4.text = "";
+            Score_5.text = "";
             Dictionary<string, int> dic = new Dictionary<string, int>();
             int My_Rank = 0;
             if (Params == 0)
             {
                 Ranking_Main_1_Up d = JsonUtility.FromJson<Ranking_Main_1_Up>(singleTone.request.downloadHandler.text);
-
-                //Debug.Log(singleTone.request.downloadHandler.text);
 
                 foreach (var u in d.rank_total)
                     dic.Add(u.id, u.main_score_1);
@@ -256,22 +305,33 @@ public class SignUp : MonoBehaviour
                     }
                 }
 
-                Rank_Text.text += "내 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t MAIN 1 (제한시간)\n";
-                foreach (var u in d.rank_mine)
-                    Rank_Text.text += My_Rank + " " + '\t' + u.id + '\t' + u.main_score_1 + '\n';
+                Rank_Text.text += "내 랭킹\n";
+                
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nMAIN 1 (제한 시간)\n";
+
+                foreach (var e in d.rank_mine)
+                {
+                    Rank_Text.text += My_Rank.ToString() + '\n' + '\n';
+                    ID.text += e.id + '\n' + '\n';
+                    Score_1.text += e.main_score_1.ToString() + '\n' + '\n';
+                }
+
+
+                Rank_Text.text += "전체 랭킹\n";
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nMAIN 1 (제한 시간)\n";
 
                 Index = 0;
 
-
-                Rank_Text.text += "\n전체 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t MAIN 1 (제한시간)\n";
-
-                foreach (var e in myList_Ollim)
+                foreach (var e in d.rank_total)
                 {
                     Index++;
-                    //Debug.Log(e.Key + " " + e.Value);
-                    Rank_Text.text += Index + " " + '\t' + e.Key + '\t' + e.Value + '\n';
+                    Rank_Text.text += Index.ToString() + '\n';
+                    ID.text += e.id + '\n';
+                    Score_1.text += e.main_score_1.ToString() + '\n';
                 }
             }
             if (Params == 1)
@@ -296,23 +356,35 @@ public class SignUp : MonoBehaviour
                     }
                 }
 
-                Rank_Text.text += "내 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t MAIN 2 (제한시간)\n";
-                foreach (var u in d.rank_mine)
-                    Rank_Text.text += My_Rank + " " + '\t' + u.id + '\t' + u.main_score_2 + '\n';
+                Rank_Text.text += "내 랭킹\n";
+
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nMAIN 2 (제한 시간)\n";
+                foreach (var e in d.rank_mine)
+                {
+                    Rank_Text.text += My_Rank.ToString() + '\n' + '\n';
+                    ID.text += e.id + '\n' + '\n';
+                    Score_1.text += e.main_score_2.ToString() + '\n' + '\n';
+                }
+
+
+
+                Rank_Text.text += "전체 랭킹\n";
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nMAIN 2 (제한 시간)\n";
 
                 Index = 0;
 
-
-                Rank_Text.text += "\n전체 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t MAIN 2 (제한시간)\n";
-
-                foreach (var e in myList_Ollim)
+                foreach (var e in d.rank_total)
                 {
                     Index++;
-                    //Debug.Log(e.Key + " " + e.Value);
-                    Rank_Text.text += Index + " " + '\t' + e.Key + '\t' + e.Value + '\n';
+                    Rank_Text.text += Index.ToString() + '\n';
+                    ID.text += e.id + '\n';
+                    Score_1.text += e.main_score_2.ToString() + '\n';
                 }
+
             }
             if (Params == 2)
             {
@@ -334,22 +406,32 @@ public class SignUp : MonoBehaviour
                             My_Rank = Index;
                     }
                 }
-                Rank_Text.text += "내 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t MAIN 3 (점수)\n";
-                foreach (var u in d.rank_mine)
-                    Rank_Text.text += My_Rank + " " + '\t' + u.id + '\t' + u.main_score_3 + '\n';
+
+                Rank_Text.text += "내 랭킹\n";
+
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nMAIN 3 (점수)\n";
+                foreach (var e in d.rank_mine)
+                {
+                    Rank_Text.text += My_Rank.ToString() + '\n' + '\n';
+                    ID.text += e.id + '\n' + '\n';
+                    Score_1.text += e.main_score_3.ToString() + '\n' + '\n';
+                }
+
+                Rank_Text.text += "전체 랭킹\n";
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nMAIN 3 (점수)\n";
 
                 Index = 0;
 
-
-                Rank_Text.text += "\n전체 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t MAIN 3 (점수)\n";
-
-                foreach (var e in myList_Ollim)
+                foreach (var e in d.rank_total)
                 {
                     Index++;
-                    //Debug.Log(e.Key + " " + e.Value);
-                    Rank_Text.text += Index + " " + '\t' + e.Key + '\t' + e.Value + '\n';
+                    Rank_Text.text += Index.ToString() + '\n';
+                    ID.text += e.id + '\n';
+                    Score_1.text += e.main_score_3.ToString() + '\n';
                 }
             }
             if (Params == 3)
@@ -375,22 +457,31 @@ public class SignUp : MonoBehaviour
                     }
                 }
 
-                Rank_Text.text += "내 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t FINAL 1 (데스 카운트)\n";
-                foreach (var u in d.rank_mine)
-                    Rank_Text.text += My_Rank + " " + '\t' + u.id + '\t' + u.final_score_1 + '\n';
+                Rank_Text.text += "내 랭킹\n";
+
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nFINAL 1 (데스 카운트)\n";
+                foreach (var e in d.rank_mine)
+                {
+                    Rank_Text.text += My_Rank.ToString() + '\n' + '\n';
+                    ID.text += e.id + '\n' + '\n';
+                    Score_1.text += e.final_score_1.ToString() + '\n' + '\n';
+                }
+
+                Rank_Text.text += "전체 랭킹\n";
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nFINAL 1 (데스 카운트)\n";
 
                 Index = 0;
 
-
-                Rank_Text.text += "\n전체 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t FINAL 1 (데스 카운트)\n";
-
-                foreach (var e in myList_Ollim)
+                foreach (var e in d.rank_total)
                 {
                     Index++;
-                    //Debug.Log(e.Key + " " + e.Value);
-                    Rank_Text.text += Index + " " + '\t' + e.Key + '\t' + e.Value + '\n';
+                    Rank_Text.text += Index.ToString() + '\n';
+                    ID.text += e.id + '\n';
+                    Score_1.text += e.final_score_1.ToString() + '\n';
                 }
             }
             if (Params == 4)
@@ -416,23 +507,33 @@ public class SignUp : MonoBehaviour
                     }
                 }
 
-                Rank_Text.text += "내 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t FINAL 2 (데스 카운트)\n";
-                foreach (var u in d.rank_mine)
-                    Rank_Text.text += My_Rank + " " + '\t' + u.id + '\t' + u.final_score_2 + '\n';
+                Rank_Text.text += "내 랭킹\n";
+
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nFINAL 2 (데스 카운트)\n";
+                foreach (var e in d.rank_mine)
+                {
+                    Rank_Text.text += My_Rank.ToString() + '\n' + '\n';
+                    ID.text += e.id + '\n' + '\n';
+                    Score_1.text += e.final_score_2.ToString() + '\n' + '\n';
+                }
+
+                Rank_Text.text += "전체 랭킹\n";
+                Rank_Text.text += "\n등수\n";
+                ID.text += "\n\n아이디\n";
+                Score_1.text += "\n\nFINAL 2 (데스 카운트)\n";
 
                 Index = 0;
 
-
-                Rank_Text.text += "\n전체 랭킹 \n";
-                Rank_Text.text += "등수 \t 아이디\t FINAL 2 (데스 카운트)\n";
-
-                foreach (var e in myList_Ollim)
+                foreach (var e in d.rank_total)
                 {
                     Index++;
-                    //Debug.Log(e.Key + " " + e.Value);
-                    Rank_Text.text += Index + " " + '\t' + e.Key + '\t' + e.Value + '\n';
+                    Rank_Text.text += Index.ToString() + '\n';
+                    ID.text += e.id + '\n';
+                    Score_1.text += e.final_score_2.ToString() + '\n';
                 }
+
             }
         }
         yield break;

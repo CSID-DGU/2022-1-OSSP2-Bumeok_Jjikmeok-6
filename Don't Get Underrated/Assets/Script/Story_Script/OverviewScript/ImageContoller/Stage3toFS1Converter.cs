@@ -33,4 +33,5 @@ public class Stage3toFS1Converter : MonoBehaviour
             recentImage = GameObject.Find("EmptyPanel").GetComponent<Stage3toFS1Text>().ImageNow;
         }
     }
+
 }

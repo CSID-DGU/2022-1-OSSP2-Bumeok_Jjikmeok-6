@@ -25,6 +25,12 @@ public class My_SJH_Script : MonoBehaviour
     [SerializeField]
     GameObject Button2;
 
+    [SerializeField]
+    GameObject Button3;
+
+    [SerializeField]
+    GameObject Button4;
+
     SpriteColor spriteColor;
 
     [System.Serializable]
@@ -63,13 +69,15 @@ public class My_SJH_Script : MonoBehaviour
         After_Rank.color = Color.clear;
         Button1.SetActive(false);
         Button2.SetActive(false);
+        Button3.SetActive(false);
+        Button4.SetActive(false);
         if (GameObject.Find("Network_Sprite") && GameObject.Find("Network_Sprite").TryGetComponent(out SpriteColor s1))
         {
             spriteColor = s1;
             spriteColor.Set_BG_Clear();
         }
     }
-
+    
     void Start()
     {
         StartCoroutine(Update_Rank());
@@ -123,6 +131,7 @@ public class My_SJH_Script : MonoBehaviour
                         Wait_text.color = Color.red;
                         Wait_text.text = "게임 내에서 로그인을 안 했군요!";
                         Button1.SetActive(true);
+                        Button3.SetActive(true);
                         yield break;
                     }
                 }
@@ -154,34 +163,58 @@ public class My_SJH_Script : MonoBehaviour
             }
         }
         Button1.SetActive(true);
+        Button3.SetActive(true);
         yield break;
     }
 
     public void Enter_End()
     {
         Button1.SetActive(false);
+        Button3.SetActive(false);
         Button2.SetActive(true);
         Before_Rank.color = Color.clear;
         After_Rank.color = Color.clear;
         Wait_text.color = Color.white;
-        Wait_text.text = "게임을 종료합니다.";
+        Wait_text.text = "게임을 종료합니다.(자동 로그아웃 됩니다.)";
     }
 
     public void Real_End()
     {
-        StartCoroutine(Fade_Out());
+        StopAllCoroutines();
+        StartCoroutine(Game_Exit_Fade_Out());
     }
-
-    IEnumerator Fade_Out()
+    public void Real_Login()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Back_To_Login_Fade_Out());
+    }
+    public void Back_To_Login()
+    {
+        Button1.SetActive(false);
+        Button3.SetActive(false);
+        Button4.SetActive(true);
+        Before_Rank.color = Color.clear;
+        After_Rank.color = Color.clear;
+        Wait_text.color = Color.white;
+        Wait_text.text = "메인 로비로 이동합니다.";
+    }
+    IEnumerator Game_Exit_Fade_Out()
     {
         if (spriteColor != null)
-        {
             yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
-            singleTone.SceneNumManage = 0;
-            SceneManager.LoadScene(singleTone.SceneNumManage);
-        }
-        else
-            yield return null;
+
+        singleTone.request = UnityWebRequest.Get("http://localhost:3000/log_out");
+        yield return singleTone.request.SendWebRequest();
+
+        Application.Quit();
+    }
+    IEnumerator Back_To_Login_Fade_Out()
+    {
+        if (spriteColor != null)
+            yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
+
+        singleTone.SceneNumManage = 0;
+        SceneManager.LoadScene(singleTone.SceneNumManage);
     }
     IEnumerator Wait_Text_IEnum(int Count)
     {
