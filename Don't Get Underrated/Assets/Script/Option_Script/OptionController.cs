@@ -39,14 +39,40 @@ public class OptionController : MonoBehaviour
     }
     public void Real_End()
     {
+        StopAllCoroutines();
         StartCoroutine(Fade_Out());
     }
 
     IEnumerator Fade_Out()
     {
+        if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NO))
+            NO.StopAllCoroutines();
+
         if (GameObject.Find("Network_Sprite") && GameObject.Find("Network_Sprite").TryGetComponent(out SpriteColor s1))
             yield return s1.StartCoroutine(s1.Change_Color_Real_Time(Color.black, 2));
+
+        singleTone.request = UnityWebRequest.Get("http://localhost:3000/log_out");
+        yield return singleTone.request.SendWebRequest();
+
         Time.timeScale = 1;
-        SceneManager.LoadScene(0);
+        Application.Quit();
+
+    }
+    public void Back_To_Login()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Back_To_Login_Fade_Out());
+    }
+    IEnumerator Back_To_Login_Fade_Out()
+    {
+        if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NO))
+            NO.StopAllCoroutines();
+
+        if (GameObject.Find("Network_Sprite") && GameObject.Find("Network_Sprite").TryGetComponent(out SpriteColor s1))
+            yield return s1.StartCoroutine(s1.Change_Color_Real_Time(Color.black, 2));
+
+        Time.timeScale = 1;
+        singleTone.SceneNumManage = 0;
+        SceneManager.LoadScene(singleTone.SceneNumManage);
     }
 }
