@@ -114,8 +114,6 @@ exports.Get_Rank_Total_Not_Login = async(req, res) => {
         const connection = await pool_k.getConnection(async conn => conn)
         try {
             const [DB1] = await connection.query(`select id, main_score_1, main_score_2, main_score_3, final_score_1, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id`)
-            if (DB1.length === 0)
-                throw new Error("랭킹이 비었습니다.")
             
             console.log(DB1)
     
@@ -248,9 +246,8 @@ exports.Get_Rank_Detail_Login = async(req, res, next) => {
                 DB_Mine = await connection.query(`select id, final_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id where id=?`, [req.user])
                 DB_Total = await connection.query(`select id, final_score_2 from auth inner join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
             }
-    
-            if (DB_Total.length === 0 || DB_Mine.length === 0)
-                throw new Error("랭킹을 불러올 수 없습니다")
+
+            console.log(DB_Total.length)
     
             connection.release()
             return res.status(200).send({rank_mine : DB_Mine[0], rank_total: DB_Total[0]})
@@ -294,9 +291,6 @@ exports.Get_Rank_Detail_Not_Login = async(req, res, next) => {
             {
                 DB_Total = await connection.query(`select id, final_score_2 from auth left join ranking on auth.keycode = ranking.Auth_id order by final_score_2 ASC`)
             }
-    
-            if (DB_Total.length === 0)
-                throw new Error("랭킹을 불러올 수 없습니다")
     
             connection.release()
             return res.status(200).send({rank_total: DB_Total[0]})

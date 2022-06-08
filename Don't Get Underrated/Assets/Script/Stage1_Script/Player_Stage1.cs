@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player_Stage1 : Player_Info
 {
@@ -26,6 +27,8 @@ public class Player_Stage1 : Player_Info
     float Power_jump = 2.0f;
 
     float speed = 3.5f;
+
+    float updatePlayTime = 0;
 
     Rigidbody2D rigid2D;
 
@@ -75,6 +78,7 @@ public class Player_Stage1 : Player_Info
         if (TryGetComponent(out Rigidbody2D RB2D))
             rigid2D = RB2D;
         My_Name.text = singleTone.id;
+        updatePlayTime = 0;
     }
     private void Update()
     {
@@ -138,6 +142,7 @@ public class Player_Stage1 : Player_Info
             Ready_to_Jump(x);
         }
         Prev_pos_y = rigid2D.transform.position.y;
+        updatePlayTime += Time.deltaTime;
     }
 
     private void OnDrawGizmos()
@@ -179,9 +184,17 @@ public class Player_Stage1 : Player_Info
         if (collision.gameObject == Wall&&isGrounded)
             rigid2D.velocity = Vector2.zero;
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject != null && collision.gameObject.CompareTag("MoveSceneObject"))
+        {
+            singleTone.main_stage_1_score = (int)updatePlayTime;
+            singleTone.SceneNumManage++;
+            SceneManager.LoadScene(singleTone.SceneNumManage);
+        }
+    }
     public void Jump(float y, float x)
     {
-        
         rigid2D.AddForce(Vector2.up * y * 1.25f, ForceMode2D.Impulse);
         Jump_start_position = gameObject.transform.position.y;
         isJumping = true;

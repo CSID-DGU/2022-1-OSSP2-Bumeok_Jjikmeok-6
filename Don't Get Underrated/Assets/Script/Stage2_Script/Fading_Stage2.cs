@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Fading : MonoBehaviour
+public class Fading_Stage2 : MonoBehaviour
 {
 
     public Texture2D fadeOutTexture;
@@ -29,11 +29,5 @@ public class Fading : MonoBehaviour
     {
         fadeDir = direction;
         return 1.0f / fadeSpeed;
-    }
-
-    void OnSceneLoaded()
-    {
-        // alpha = 1;
-       BeginFade(-1);
     }
 }
