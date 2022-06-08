@@ -57,6 +57,8 @@ public class Limit_Time : MonoBehaviour // 제한 시간에 대한 스크립트. 게임의 종�
             }
             if (wow_Time <= 0) // 제한시간이 다 됐을 때
             {
+                if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NEO))
+                    NEO.StopAllCoroutines();
                 singleTone.Music_Decrease = false;
                 Player_Stage3 player_stage3;
 

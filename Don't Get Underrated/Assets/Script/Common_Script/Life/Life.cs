@@ -217,7 +217,6 @@ public class Life : MonoBehaviour, Life_Of_Basic // 생명에 관련된 클래스
     protected IEnumerator Move_Circle(int Degree, int is_ClockWise_And_Speed, float Start_Degree, float x, float y, float start_x, float start_y, float time_persist)
     {
         // 각도, 시계/반시계 방향, x축 원, y축 원
-
         for (int th = 0; th < Degree; th++)
         {
             float rad = Mathf.Deg2Rad * (is_ClockWise_And_Speed * th + Start_Degree);

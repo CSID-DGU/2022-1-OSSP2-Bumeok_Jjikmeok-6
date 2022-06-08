@@ -534,9 +534,12 @@ public class SolGryn : Boss_Info
     {
         CurrentHP = 0;
         SolGryn_HP.SetActive(false);
+        player_final2.Is_User = false;
+
+        if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NEO))
+            NEO.StopAllCoroutines();
 
         singleTone.final_stage_2_score = player_final2.DeathCount;
-        //Debug.Log(singleTone.final_stage_2_score);
 
         Killed_All_Mine();
         Init_Back_And_Camera();

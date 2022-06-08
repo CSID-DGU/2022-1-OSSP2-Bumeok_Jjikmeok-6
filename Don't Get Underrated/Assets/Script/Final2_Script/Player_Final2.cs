@@ -51,8 +51,9 @@ public class Player_Final2 : Player_Info {
 	private int groundLayerMask;
 
 	private IEnumerator color_unbeatable, whilee;
-
 	public int DeathCount => deathCount;
+
+	public bool Is_User = true;
 
 	public bool IsMove
     {
@@ -80,6 +81,7 @@ public class Player_Final2 : Player_Info {
 		GyoSu.color = Color.clear;
 		Death_Count.text = "Death Count : " + deathCount;
 		My_Name.text = singleTone.id;
+		Is_User = true;
 		singleTone.EasterEgg = false;
 	}
 
@@ -103,7 +105,7 @@ public class Player_Final2 : Player_Info {
 			jump = true;
 			jumpCount += 1;
 		}
-		if (Input.GetKeyDown(KeyCode.Semicolon) && !singleTone.EasterEgg)
+		if (Input.GetKeyDown(KeyCode.Semicolon) && !singleTone.EasterEgg && Is_User)
         {
 			singleTone.EasterEgg = true;
 			GyoSu.color = Color.blue;
