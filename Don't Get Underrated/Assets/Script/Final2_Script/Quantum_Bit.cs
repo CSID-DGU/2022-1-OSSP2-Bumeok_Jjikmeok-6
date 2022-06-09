@@ -11,6 +11,8 @@ public class Quantum_Bit : Enemy_Info
 
     public int[,] Rand = new int[2, 8] { { -1, 0, 1, 0, 1, 1, -1, -1 }, { 0, 1, 0, -1, 1, -1, 1, -1 } };
 
+    private Sequence sequence;
+
     private new void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info HC))
@@ -37,19 +39,20 @@ public class Quantum_Bit : Enemy_Info
             solGryn = SG;
         if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
             EffectSource = AS1;
+        sequence = null;
     }
 
     private void Start()
     {
         float Solve = Mathf.Sign(transform.position.x);
-
-        DOTween.Sequence()
-        .Append(transform.DOMove(new Vector3(Solve * 7, 2, 0), 1f).SetEase(Ease.OutBounce))
-        .InsertCallback(0, () => Effect_Sound_OneShot(1))
-        .Append(transform.DOMove(new Vector3(0, 2, 0), 1f).SetEase(Ease.InExpo))
-        .Join(transform.DOScale(new Vector3(1.3f, 1.3f, 0), 1f).SetEase(Ease.InCirc))
-         .InsertCallback(1.6f, () => Effect_Sound_OneShot(2))
-        .OnComplete(() =>
+        sequence = null;
+        sequence = DOTween.Sequence();
+        sequence.Append(transform.DOMove(new Vector3(Solve * 7, 2, 0), 1f).SetEase(Ease.OutBounce));
+        sequence.InsertCallback(0, () => Effect_Sound_OneShot(1));
+        sequence.Append(transform.DOMove(new Vector3(0, 2, 0), 1f).SetEase(Ease.InExpo));
+        sequence.Join(transform.DOScale(new Vector3(1.3f, 1.3f, 0), 1f).SetEase(Ease.InCirc));
+        sequence.InsertCallback(1.6f, () => Effect_Sound_OneShot(2));
+        sequence.OnComplete(() =>
         {
             My_Color = Color.clear;
             if (Solve >= 0)
@@ -99,7 +102,7 @@ public class Quantum_Bit : Enemy_Info
     }
     private new void OnDestroy()
     {
-        DOTween.KillAll();
+        sequence.Kill();
         base.OnDestroy();
     }
 }

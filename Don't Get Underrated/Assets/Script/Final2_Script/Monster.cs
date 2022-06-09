@@ -15,6 +15,8 @@ public class Monster : Enemy_Info
 
     private Vector3 hima_Pos;
 
+    private Sequence sequence;
+
     private new void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null && collision.CompareTag("Player") && collision.TryGetComponent(out Player_Info HC))
@@ -40,20 +42,21 @@ public class Monster : Enemy_Info
             himaController = HC;
         if (GameObject.Find("Enemy_Effect_Sound") && GameObject.Find("Enemy_Effect_Sound").TryGetComponent(out AudioSource AS1))
             EffectSource = AS1;
+        sequence = null;
     }
     public void Start_Attack(Vector3 Monster_Pos, int Flag)
     {
         this.Monster_Pos = Monster_Pos;
-
+        sequence = null;
+        sequence = DOTween.Sequence();
         CHK_Flag = Flag;
         Effect_Sound_OneShot(0);
-        DOTween.Sequence()
-          .Append(transform.DOMove(Monster_Pos, 0.5f).SetEase(Ease.OutBounce))
-          .OnComplete(() =>
-          {
-              hima_Pos = himaController.transform.position;
-              animator.SetTrigger("hehe");
-          });
+        sequence.Append(transform.DOMove(Monster_Pos, 0.5f).SetEase(Ease.OutBounce));
+        sequence.OnComplete(() =>
+        {
+            hima_Pos = himaController.transform.position;
+            animator.SetTrigger("hehe");
+        });
     }
     public void OnLazor() // 애니메이션 진행 도중 해당 함수 호출 (즉, 참조가 0개여도 지우면 안됨)
     {
@@ -85,7 +88,7 @@ public class Monster : Enemy_Info
 
     private new void OnDestroy()
     {
-        DOTween.KillAll();
+        sequence.Kill();
         base.OnDestroy();
     }
 
