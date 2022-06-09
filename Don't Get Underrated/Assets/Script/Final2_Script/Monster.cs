@@ -82,6 +82,13 @@ public class Monster : Enemy_Info
         yield return null;
     }
 
+
+    private new void OnDestroy()
+    {
+        DOTween.KillAll();
+        base.OnDestroy();
+    }
+
     public override void OnDie()
     {
         base.OnDie();
