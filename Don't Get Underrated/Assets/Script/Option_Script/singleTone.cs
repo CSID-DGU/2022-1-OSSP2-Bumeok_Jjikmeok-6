@@ -9,9 +9,9 @@ public class singleTone
 
     public static UnityWebRequest request;
 
-    public static int main_stage_1_score, main_stage_2_score, main_stage_3_score, final_stage_1_score, final_stage_2_score;
+    public static int main_stage_1_score = 0, main_stage_2_score = 0, main_stage_3_score = 0, final_stage_1_score = 0, final_stage_2_score = 0;
 
-    public static string id;
+    public static string id = "";
 
     public static bool ESC_On = true;
 

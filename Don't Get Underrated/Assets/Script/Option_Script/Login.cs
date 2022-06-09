@@ -173,6 +173,7 @@ public class Login : MonoBehaviour
                 X_Button.SetActive(false);
                 infoText.color = Color.blue;
                 infoText.text = "게임을 시작합니다!";
+                singleTone.ESC_On = true;
                 yield return YieldInstructionCache.WaitForSeconds(1);
                 LoadingProgress.LoadScene(3);
                 yield break;

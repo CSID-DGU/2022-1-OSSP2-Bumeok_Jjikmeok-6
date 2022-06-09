@@ -39,15 +39,16 @@ public class OptionController : MonoBehaviour
     }
     public void Real_End()
     {
+        if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NO))
+            NO.StopAllCoroutines();
+
+        singleTone.ESC_On = false;
         StopAllCoroutines();
         StartCoroutine(Fade_Out());
     }
 
     IEnumerator Fade_Out()
     {
-        if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NO))
-            NO.StopAllCoroutines();
-
         if (GameObject.Find("Network_Sprite") && GameObject.Find("Network_Sprite").TryGetComponent(out SpriteColor s1))
             yield return s1.StartCoroutine(s1.Change_Color_Real_Time(Color.black, 2));
 
@@ -60,14 +61,15 @@ public class OptionController : MonoBehaviour
     }
     public void Back_To_Login()
     {
+        if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NO))
+            NO.StopAllCoroutines();
+
+        singleTone.ESC_On = false;
         StopAllCoroutines();
         StartCoroutine(Back_To_Login_Fade_Out());
     }
     IEnumerator Back_To_Login_Fade_Out()
     {
-        if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NO))
-            NO.StopAllCoroutines();
-
         if (GameObject.Find("Network_Sprite") && GameObject.Find("Network_Sprite").TryGetComponent(out SpriteColor s1))
             yield return s1.StartCoroutine(s1.Change_Color_Real_Time(Color.black, 2));
 

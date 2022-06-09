@@ -532,6 +532,7 @@ public class SolGryn : Boss_Info
     }
     public override void OnDie()
     {
+        singleTone.ESC_On = false;
         CurrentHP = 0;
         SolGryn_HP.SetActive(false);
         player_final2.Is_User = false;

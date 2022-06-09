@@ -53,6 +53,7 @@ public class Player_Stage2 : Player_Info
             GumBounce = CC2D;
         if (TryGetComponent(out AudioSource AS))
             BounceAudioSource = AS;
+        My_Name.text = singleTone.id;
     }
     void Start()
     {

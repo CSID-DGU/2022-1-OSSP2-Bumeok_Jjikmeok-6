@@ -188,6 +188,10 @@ public class Player_Stage1 : Player_Info
     {
         if (collision.gameObject != null && collision.gameObject.CompareTag("MoveSceneObject"))
         {
+            if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NO))
+            {
+                NO.StopAllCoroutines();
+            }
             singleTone.main_stage_1_score = (int)updatePlayTime;
             singleTone.SceneNumManage++;
             SceneManager.LoadScene(singleTone.SceneNumManage);
