@@ -107,9 +107,11 @@ public class Limit_Time : MonoBehaviour // 제한 시간에 대한 스크립트. 게임의 종�
                 Instantiate(Time_Over_Text, new Vector3(player_stage3.transform.position.x, player_stage3.transform.position.y + 2, 0), Quaternion.identity);
                 yield return YieldInstructionCache.WaitForSeconds(3f);
 
-                if (spriteColor != null)
-                    yield return spriteColor.StartCoroutine(spriteColor.Change_Color_Real_Time(Color.black, 2));
-                
+                if (flash_on != null)
+                    flashOn.StopCoroutine(flash_on);
+                flash_on = flashOn.Change_BG(Color.black, 2); // 0.4초 간 빨간색 배경으로 서서히 변환 후 원위치 
+                yield return flashOn.StartCoroutine(flash_on);
+
                 singleTone.Music_Decrease = true;
                 singleTone.SceneNumManage++;
                 SceneManager.LoadScene(singleTone.SceneNumManage);

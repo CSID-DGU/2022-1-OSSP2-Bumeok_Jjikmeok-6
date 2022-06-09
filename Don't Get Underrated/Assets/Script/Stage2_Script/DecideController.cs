@@ -49,6 +49,10 @@ public class DecideController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && GameDone == false)
         {
+            if (GameObject.Find("Network_Confirm") && GameObject.Find("Network_Confirm").TryGetComponent(out Network_On NO))
+            {
+                NO.StopAllCoroutines();
+            }
             GameDone = true;
             totalPlayTime = updatePlayTime;
             Lantern.totalPlayTime = this.totalPlayTime; // 총 플레이 타임을 플레이어에게 넘겨줌.
