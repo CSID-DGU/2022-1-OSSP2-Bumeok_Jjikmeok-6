@@ -30,12 +30,12 @@ align="left"/>
 ----------------------------
 ### 게임 구조
 <br>
-<img src="https://user-images.githubusercontent.com/91325459/172541168-0b5e5749-a847-4d5b-b605-7532a0c77ae9.png"/>
+<img src="https://user-images.githubusercontent.com/91325459/172748049-093bda8f-600a-4141-a491-4bff3dfa5838.png"/>
 <div align="center">[게임 플로우차트]</div>
 
 
 - 메인 로비
-  - 회원가입 및 로그인 후 게임을 시작
+  - 회원가입 및 로그인 후 게임 시작
   - 로그인 없이 게임 시작 불가능 
   - 로그인 유저에 한하여 랭킹 확인 제공
 - 스테이지
@@ -43,14 +43,16 @@ align="left"/>
   - 메인 스테이지 2 - 법학/만해관
   - 메인 스테이지 3 - 명진관
   - 최종 스테이지 (1),(2) - 팔정도
-- 모든 스테이지를 순차적으로 클리어 후 랭킹 자동 반영
+- 모든 스테이지를 순차적으로 클리어한 후 랭킹 자동 반영
 - 스토리, 오버뷰
   - 모든 스테이지 이동 시 스토리, 오버뷰 씬 존재
-- 옵션
-  - 모든 스테이지마다 옵션 창 존재
+- 설정
+  - 모든 스테이지마다 설정 창 존재
+  - ESC 키를 눌러 실행
     - 배경음 ON/OFF, 배경음 소리 조절
     - 랭킹 확인
-    - 게임 종료 - 메인 로비로 이동
+    - 게임 종료
+    - 메인 로비로 이동
 
 ----------------------------
 ### **게임 플레이 시 주의 사항**
@@ -83,22 +85,53 @@ https://github.com/himajin-no-tameiki/i-wanna-be-himawari
 4. DOTween (HOTween v2) 무료 버전 다운로드 (https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676) (유니티 에셋 스토어에서 제공)
 
 ----------------------------
-### 개발을 위한 서버 구동 방법
+### 개발을 위한 서버 구동 방법 (윈도우 기준)
 1. node.js 설치 (https://nodejs.org/en/, 공식 홈페이지)
-2. 본인 컴퓨터의 OS에 맞는 mysql 설치 (https://dev.mysql.com/downloads/mysql/, 공식 홈페이지)
-3. cmd 창을 열어 본인의 mysql에 접속 (mysql -uroot -p -> mysql을 설치하면서 설정한 비밀번호 입력)
-4. (3번에서 연이어 진행) mysql에 접속된 cmd 창에서 "source (clone 폴더 경로)\unity_server_main\DB_info.sql" 명령어를 입력하여 데이터베이스 초기 세팅 (ex. source C:\Users\hiwg08\Desktop\2022-1-OSSP2-Bumeok_Jjikmeok-6\unity_server_main\DB_info.sql) **(DB_info.sql 파일은 unity_server_main 폴더 안에 존재. 4번 과정을 진행하는 시점에서는 DB_info.sql이 위치한 드라이브 == mysql이 설치된 드라이브여야 함. clone한 폴더의 위치는 상관 없음.)**
-5. unity_server_main/DB_info 디렉토리에서 "secret_OSSW_DB.js" 파일을 새로 생성한 후, mysql을 설치하면서 설정했던 정보를 입력. secret_OSSW_DB.js의 양식은 다음과 같음 <br/> <br/>
+2. mysql 설치 (https://dev.mysql.com/downloads/mysql/, 공식 홈페이지)
+3. 설치가 완료되면 mysql을 설치한 드라이브 -> Program Files -> MYSQL -> MYSQL Server 8.0 -> bin 경로로 들어가 해당 주소를 복사
+<br> <br>
+<img src="https://user-images.githubusercontent.com/91325459/172746280-3e6d8cbb-c1c0-4d78-a8df-c900b293e9aa.png" align="center" />
+<div align="center">[3번 과정의 사진]</div>
+<br>
+
+4. 시스템 속성 -> 환경 변수 -> 시스템 변수 중 Path 변수 항목 더블 클릭
+<br> <br>
+<img src="https://user-images.githubusercontent.com/91325459/172746501-566bad45-f056-47e7-af18-5d33a4bacf4f.png" align="center" />
+<div align="center">[4번 과정의 사진]</div>
+<br>
+
+5. 환경 변수 편집 -> 새로 만들기 -> 3번 과정에서 복사한 주소 그대로 복사 & 붙여넣기
+<br> <br>
+<img src="https://user-images.githubusercontent.com/91325459/172746544-55423eaf-65a9-48d3-8421-5ce22fb919f3.png" align="center" />
+<div align="center">[5번 과정의 사진]</div>
+<br>
+
+6. **재부팅 후** cmd 창을 열어 본인의 mysql에 접속 (mysql -uroot -p -> mysql을 설치하면서 설정한 비밀번호 입력)
+7. (6번에서 연이어 진행) mysql에 접속된 cmd 창에서 "source (clone 폴더 경로)\unity_server_main\DB_info.sql" 명령어를 입력하여 데이터베이스 초기 세팅 (ex. source C:\Users\hiwg08\Desktop\2022-1-OSSP2-Bumeok_Jjikmeok-6\unity_server_main\DB_info.sql) **(DB_info.sql 파일은 unity_server_main 폴더 안에 존재. 4번 과정을 진행하는 시점에서는 DB_info.sql이 위치한 드라이브 == mysql이 설치된 드라이브여야 함. clone한 폴더의 위치는 상관 없음.)**
+<br> <br>
+<img src="https://user-images.githubusercontent.com/91325459/172746841-620baafe-0177-4b02-8a22-a50d9f11b5a3.png" align="center" />
+<div align="center">[6, 7번 과정의 사진]</div>
+<br>
+
+8. unity_server_main/DB_info 디렉토리에서 "secret_OSSW_DB.js" 파일을 새로 생성한 후, mysql을 설치하면서 설정했던 정보를 입력. secret_OSSW_DB.js의 양식은 다음과 같음 <br/> <br/>
 module.exports = { <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; host: "127.0.0.1", (기본 host는 localhost(==127.0.0.1)) <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user: "root", (mysql의 user 이름, 기본으로 설정되는 이름은 root), <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; host: "mysql에서 설정한 host 주소", (기본 host는 localhost(==127.0.0.1)) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user: "mysql에서 설정한 user 이름", (기본으로 설정되는 이름은 root), <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; password: "mysql에서 설정한 비밀번호", (숫자여도 반드시 큰따옴표로 묶어야함) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; database: "OSSW", (DB이름은 OSSW 고정이므로 수정 X) <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; port: (mysql의 port 넘버) <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; port: mysql의 port 넘버 (기본으로 설정되는 port 넘버는 3306) <br/>
 }
-<br><br>
-6. cmd 창에서 unity_server_main 폴더로 이동 후, npm install 명령어 입력(약간의 시간 소요)
-7. 6번에서의 cmd 창에서 npm start 명령어 입력(현재 port 넘버는 3000번이며, unity_server_main/server.js에서 port 넘버 변경 가능 (const port 부분에서 수정. cmd 창 대신 VSCode에서 편리하게 명령어 입력 가능)
+<br> <br>
+<img src="https://user-images.githubusercontent.com/91325459/172746919-04e1f6e4-7485-45ab-a2a9-f8378e18aa91.png" align="center" />
+<div align="center">[8번 과정의 예시 사진]</div>
+<br>
+
+9. cmd 창에서 unity_server_main 폴더로 이동 후, npm install 명령어 입력(약간의 시간 소요)
+10. 9번에서의 cmd 창에서 npm start 명령어 입력 (cmd 창 대신 VSCode에서 편리하게 명령어 입력 가능)
+<br> <br>
+<img src="https://user-images.githubusercontent.com/91325459/172747162-50c7fd24-8564-465b-be94-d2728dbad8ac.png" align="center" />
+<div align="center">[10번 과정의 사진 (VSCode로 실행한 화면)]</div>
+<br>
 
 ----------------------------
 ### 문의 사항

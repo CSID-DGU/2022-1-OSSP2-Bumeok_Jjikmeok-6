@@ -97,4 +97,9 @@ public class Quantum_Bit : Enemy_Info
         OnDie();
         yield return null;
     }
+    private new void OnDestroy()
+    {
+        DOTween.KillAll();
+        base.OnDestroy();
+    }
 }
