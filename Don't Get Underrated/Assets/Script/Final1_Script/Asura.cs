@@ -274,8 +274,17 @@ public class Asura : Boss_Info // 최종 (1)의 보스
         Launch_Weapon(ref Weapon[0], new Vector3(1, -0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, -60)), 12, My_Position);
         Launch_Weapon(ref Weapon[0], new Vector3(-1, 0.5714f, 0), Quaternion.Euler(new Vector3(0, 0, -60)), 12, My_Position);
         Launch_Weapon(ref Weapon[0], new Vector3(-1, -0.5714f, 0), Quaternion.identity, 12, My_Position);
-        
-        yield return YieldInstructionCache.WaitForSeconds(0.5f);
+
+        // 대각선 방면으로 번개 발사
+
+        Launch_Weapon(ref Weapon[0], Vector3.left, Quaternion.Euler(new Vector3(0, 0, -30)), 13, My_Position);
+        Launch_Weapon(ref Weapon[0], Vector3.down, Quaternion.Euler(new Vector3(0, 0, 60)), 13, My_Position);
+        Launch_Weapon(ref Weapon[0], Vector3.right, Quaternion.Euler(new Vector3(0, 0, -30)), 13, My_Position);
+        Launch_Weapon(ref Weapon[0], Vector3.up, Quaternion.Euler(new Vector3(0, 0, 60)), 13, My_Position);
+
+        // 십자가 모양으로 번개 발사
+
+        yield return YieldInstructionCache.WaitForSeconds(0.8f);
 
         Effect_Sound_Play(5);
         Run_Life_Act_And_Continue(ref change_boss_color, Change_My_Color_And_Back(Color.white, Color.black, 0.25f, true));
