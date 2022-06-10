@@ -10,17 +10,18 @@
 ----------------------------
 ### <동국대학교를 게임 내에서 체험해보세요!>
 
-<img src="https://user-images.githubusercontent.com/91325459/172173896-5a615380-3482-4964-82e7-3aa7a36e4418.gif" width="310" height="300" align="left"/>
-<img src="https://user-images.githubusercontent.com/91325459/172451264-f951ab74-cb98-4461-9015-5d4e6a9887a6.gif" width="310" height="300"
-align="left"/>
-<img src="https://user-images.githubusercontent.com/91325459/172175836-8c6cb236-2ee8-48f9-9d73-9d494819176a.gif" width="310" height="300" align="left"/>
-<img src="https://user-images.githubusercontent.com/91325459/172175879-73217b95-1c00-447d-94ad-3e86843997ba.gif" width="310" height="300" align="left"/>
-<img src="https://user-images.githubusercontent.com/91325459/172175910-71a90687-74d7-4539-abed-a04d49a17891.gif" width="310" height="300"
-align="left"/>
-<img src="https://user-images.githubusercontent.com/91325459/172451181-718eaa78-85e1-4176-b371-43fd7f907f36.gif" width="310" height="300"
-align="left"/>
-<img src="https://user-images.githubusercontent.com/91325459/172451036-2f0c8b59-70c2-4940-95e5-47bc9850b3a9.gif" width="310" height="300"/>
-
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/91325459/172173896-5a615380-3482-4964-82e7-3aa7a36e4418.gif" width="310" height="300" align="left"/>
+  <img src="https://user-images.githubusercontent.com/91325459/172451264-f951ab74-cb98-4461-9015-5d4e6a9887a6.gif" width="310" height="300"
+  align="left"/>
+  <img src="https://user-images.githubusercontent.com/91325459/172175836-8c6cb236-2ee8-48f9-9d73-9d494819176a.gif" width="310" height="300" align="left"/>
+  <img src="https://user-images.githubusercontent.com/91325459/172175879-73217b95-1c00-447d-94ad-3e86843997ba.gif" width="310" height="300" align="left"/>
+  <img src="https://user-images.githubusercontent.com/91325459/172175910-71a90687-74d7-4539-abed-a04d49a17891.gif" width="310" height="300"
+  align="left"/>
+  <img src="https://user-images.githubusercontent.com/91325459/172451181-718eaa78-85e1-4176-b371-43fd7f907f36.gif" width="310" height="300"
+  align="left"/>
+  <img src="https://user-images.githubusercontent.com/91325459/172451036-2f0c8b59-70c2-4940-95e5-47bc9850b3a9.gif" width="310" height="300"/>
+</p>
 
 
 <div align="center">[게임 내의 모습]</div>
@@ -30,7 +31,10 @@ align="left"/>
 ----------------------------
 ### 게임 구조
 <br>
+<p align="center">
 <img src="https://user-images.githubusercontent.com/91325459/172748049-093bda8f-600a-4141-a491-4bff3dfa5838.png"/>
+</p>
+
 <div align="center">[게임 플로우차트]</div>
 
 
@@ -43,7 +47,10 @@ align="left"/>
   - 메인 스테이지 2 - 법학/만해관
   - 메인 스테이지 3 - 명진관
   - 최종 스테이지 (1),(2) - 팔정도
-- 모든 스테이지를 순차적으로 클리어한 후 랭킹 자동 반영
+- 랭킹 반영
+  - 모든 스테이지를 순차적으로 클리어한 이후 랭킹 자동 반영
+  - 기존의 랭킹이 전부 최신화
+  - 게임 종료 (자동 로그아웃) / 메인 로비 이동 중 선택
 - 스토리, 오버뷰
   - 모든 스테이지 이동 시 스토리, 오버뷰 씬 존재
 - 설정
@@ -51,19 +58,19 @@ align="left"/>
   - ESC 키를 눌러 실행
     - 배경음 ON/OFF, 배경음 소리 조절
     - 랭킹 확인
-    - 게임 종료
+    - 게임 종료 (자동 로그아웃)
     - 메인 로비로 이동
 
 ----------------------------
 ### **게임 플레이 시 주의 사항**
 - 이 게임은 서버 및 데이터베이스를 구동시킨다는 전제 하에 플레이가 가능하니, 아래에 있는 서버 구동 방법에 있는 절차를 따라 서버를 실행시키세요. 
-- 이 게임은 광과민성 발작을 일으키는 요소가 상당히 많으니 주의하시기 바랍니다.
+- 이 게임은 광과민성 발작을 일으키는 요소가 많으니 주의하시기 바랍니다.
 
 ----------------------------
 ### 개발 환경
 <p>
   <img src = "https://img.shields.io/badge/logo-unity v.2020.3.33-green?logo=unity">
-  <img src = "https://img.shields.io/badge/logo-node.js-blue?logo=node.js">
+  <img src = "https://img.shields.io/badge/logo-express.js-blue?logo=express">
   <img src = "https://img.shields.io/badge/logo-mysql-violet?logo=mysql">
 </p>
 
@@ -85,52 +92,64 @@ https://github.com/himajin-no-tameiki/i-wanna-be-himawari
 4. DOTween (HOTween v2) 무료 버전 다운로드 (https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676) (유니티 에셋 스토어에서 제공)
 
 ----------------------------
-### 개발을 위한 서버 구동 방법 (윈도우 기준)
+### 개발 및 게임 실행을 위한 서버 구동 방법 (윈도우 기준)
 1. node.js 설치 (https://nodejs.org/en/, 공식 홈페이지)
 2. mysql 설치 (https://dev.mysql.com/downloads/mysql/, 공식 홈페이지)
 3. 설치가 완료되면 mysql을 설치한 드라이브 -> Program Files -> MYSQL -> MYSQL Server 8.0 -> bin 경로로 들어가 해당 주소를 복사
 <br> <br>
-<img src="https://user-images.githubusercontent.com/91325459/172746280-3e6d8cbb-c1c0-4d78-a8df-c900b293e9aa.png" align="center" />
+<p align="center">
+<img src="https://user-images.githubusercontent.com/91325459/172746280-3e6d8cbb-c1c0-4d78-a8df-c900b293e9aa.png" />
+</p>
 <div align="center">[3번 과정의 사진]</div>
 <br>
 
 4. 시스템 속성 -> 환경 변수 -> 시스템 변수 중 Path 변수 항목 더블 클릭
 <br> <br>
-<img src="https://user-images.githubusercontent.com/91325459/172746501-566bad45-f056-47e7-af18-5d33a4bacf4f.png" align="center" />
+<p align="center">
+<img src="https://user-images.githubusercontent.com/91325459/172746501-566bad45-f056-47e7-af18-5d33a4bacf4f.png" />
+</P>
 <div align="center">[4번 과정의 사진]</div>
 <br>
 
 5. 환경 변수 편집 -> 새로 만들기 -> 3번 과정에서 복사한 주소 그대로 복사 & 붙여넣기
 <br> <br>
-<img src="https://user-images.githubusercontent.com/91325459/172746544-55423eaf-65a9-48d3-8421-5ce22fb919f3.png" align="center" />
+<p align="center">
+<img src="https://user-images.githubusercontent.com/91325459/172746544-55423eaf-65a9-48d3-8421-5ce22fb919f3.png" />
+</p>
 <div align="center">[5번 과정의 사진]</div>
 <br>
 
 6. **재부팅 후** cmd 창을 열어 본인의 mysql에 접속 (mysql -uroot -p -> mysql을 설치하면서 설정한 비밀번호 입력)
 7. (6번에서 연이어 진행) mysql에 접속된 cmd 창에서 "source (clone 폴더 경로)\unity_server_main\DB_info.sql" 명령어를 입력하여 데이터베이스 초기 세팅 (ex. source C:\Users\hiwg08\Desktop\2022-1-OSSP2-Bumeok_Jjikmeok-6\unity_server_main\DB_info.sql) **(DB_info.sql 파일은 unity_server_main 폴더 안에 존재. 4번 과정을 진행하는 시점에서는 DB_info.sql이 위치한 드라이브 == mysql이 설치된 드라이브여야 함. clone한 폴더의 위치는 상관 없음.)**
 <br> <br>
-<img src="https://user-images.githubusercontent.com/91325459/172746841-620baafe-0177-4b02-8a22-a50d9f11b5a3.png" align="center" />
+<p align="center">
+<img src="https://user-images.githubusercontent.com/91325459/172746841-620baafe-0177-4b02-8a22-a50d9f11b5a3.png"/>
+</p>
 <div align="center">[6, 7번 과정의 사진]</div>
 <br>
 
 8. unity_server_main/DB_info 디렉토리에서 "secret_OSSW_DB.js" 파일을 새로 생성한 후, mysql을 설치하면서 설정했던 정보를 입력. secret_OSSW_DB.js의 양식은 다음과 같음 <br/> <br/>
 module.exports = { <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; host: "mysql에서 설정한 host 주소", (기본 host는 localhost(==127.0.0.1)) <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user: "mysql에서 설정한 user 이름", (기본으로 설정되는 이름은 root), <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user: "mysql에서 설정한 user 이름", (기본으로 설정되는 이름은 root) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; password: "mysql에서 설정한 비밀번호", (숫자여도 반드시 큰따옴표로 묶어야함) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; database: "OSSW", (DB이름은 OSSW 고정이므로 수정 X) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; port: mysql의 port 넘버 (기본으로 설정되는 port 넘버는 3306) <br/>
 }
 <br> <br>
-<img src="https://user-images.githubusercontent.com/91325459/172746919-04e1f6e4-7485-45ab-a2a9-f8378e18aa91.png" align="center" />
-<div align="center">[8번 과정의 예시 사진]</div>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/91325459/172746919-04e1f6e4-7485-45ab-a2a9-f8378e18aa91.png"/>
+</p>
+<div align="center">[8번 과정의 예시 사진 (VSCode 이용)]</div>
 <br>
 
 9. cmd 창에서 unity_server_main 폴더로 이동 후, npm install 명령어 입력(약간의 시간 소요)
-10. 9번에서의 cmd 창에서 npm start 명령어 입력 (cmd 창 대신 VSCode에서 편리하게 명령어 입력 가능)
+10. 9번에서의 cmd 창에서 npm start 명령어 입력 (cmd 창 대신 VSCode에서 편리하게 명령어를 입력할 수 있음)
 <br> <br>
-<img src="https://user-images.githubusercontent.com/91325459/172747162-50c7fd24-8564-465b-be94-d2728dbad8ac.png" align="center" />
-<div align="center">[10번 과정의 사진 (VSCode로 실행한 화면)]</div>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/91325459/172747162-50c7fd24-8564-465b-be94-d2728dbad8ac.png"/>
+</p>
+<div align="center">[10번 과정의 사진 (VSCode 이용)]</div>
 <br>
 
 ----------------------------
