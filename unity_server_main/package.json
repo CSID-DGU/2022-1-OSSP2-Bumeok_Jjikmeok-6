@@ -15,6 +15,7 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "express": "^4.17.3",
+    "express-body-parser-error-handler": "^1.0.4",
     "express-session": "^1.17.2",
     "mysql2": "^2.3.3",
     "passport": "^0.5.2",

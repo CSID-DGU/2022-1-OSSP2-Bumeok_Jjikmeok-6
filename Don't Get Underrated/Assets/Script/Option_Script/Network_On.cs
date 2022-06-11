@@ -421,7 +421,7 @@ public class Network_On : MonoBehaviour
 
                 Rank_Text.text += "\n등수\n";
                 ID.text += "\n\n아이디\n";
-                Score_1.text += "\n\nMAIN 1 (제한 시간)\n";
+                Score_1.text += "\n\nMAIN 1 (플레이 타임, 초)\n";
 
                 foreach (var e in d.rank_mine)
                 {
@@ -432,7 +432,7 @@ public class Network_On : MonoBehaviour
                 Rank_Text.text += "전체 랭킹\n";
                 Rank_Text.text += "\n등수\n";
                 ID.text += "\n\n아이디\n";
-                Score_1.text += "\n\nMAIN 1 (제한 시간)\n";
+                Score_1.text += "\n\nMAIN 1 (플레이 타임, 초)\n";
 
                 Index = 0;
 
@@ -469,7 +469,7 @@ public class Network_On : MonoBehaviour
 
                 Rank_Text.text += "\n등수\n";
                 ID.text += "\n\n아이디\n";
-                Score_1.text += "\n\nMAIN 2 (제한 시간)\n";
+                Score_1.text += "\n\nMAIN 2 (플레이 타임, 초)\n";
                 foreach (var e in d.rank_mine)
                 {
                     Rank_Text.text += My_Rank.ToString() + '\n' + '\n';
@@ -479,7 +479,7 @@ public class Network_On : MonoBehaviour
                 Rank_Text.text += "전체 랭킹\n";
                 Rank_Text.text += "\n등수\n";
                 ID.text += "\n\n아이디\n";
-                Score_1.text += "\n\nMAIN 2 (제한 시간)\n";
+                Score_1.text += "\n\nMAIN 2 (플레이 타임, 초)\n";
 
                 Index = 0;
 
