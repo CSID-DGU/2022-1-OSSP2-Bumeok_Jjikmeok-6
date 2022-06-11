@@ -36,6 +36,16 @@
 게임의 재미가 배가 되도록 동국대학교를 테마로 제작한 게임입니다. 재미있게 즐겨주세요!
 
 ----------------------------
+### 게임 다운로드
+- Easy Version : https://drive.google.com/file/d/1AsplEfdaz0BKxcnSJldcTR607D3mjvZF/view
+- Hard Version : https://drive.google.com/file/d/13csZH0tOkde_CmomO9QK2y0Z5iBEgwEu/view
+
+----------------------------
+### 게임 플레이 시 주의 사항
+- 이 게임은 인터넷 연결이 필수입니다. 플레이 전 인터넷에 연결해주세요.
+- 이 게임은 광과민성 발작을 일으키는 요소가 많으니 주의하시기 바랍니다.
+
+----------------------------
 ### 게임 구조
 <br>
 <p align="center">
@@ -68,10 +78,7 @@
     - 게임 종료 (자동 로그아웃)
     - 메인 로비로 이동
 
-----------------------------
-### **게임 플레이 시 주의 사항**
-- 이 게임은 서버 및 데이터베이스를 구동시킨다는 전제 하에 플레이가 가능하니, 아래에 있는 서버 구동 방법에 있는 절차를 따라 서버를 실행시키세요. 
-- 이 게임은 광과민성 발작을 일으키는 요소가 많으니 주의하시기 바랍니다.
+
 
 ----------------------------
 ### 개발 환경
@@ -93,13 +100,13 @@ https://github.com/himajin-no-tameiki/i-wanna-be-himawari
 
 ----------------------------
 ### 개발을 위한 유니티 세팅
-1. Unity Hub 설치 후, 2020.3.33 LTS 버전을 이어서 다운로드 (버전이 다르면 실행이 안될 가능성이 높음)
-2. cmd 창을 열고 해당 프로젝트 파일을 받고 싶은 폴더로 이동 후, 'git clone https://github.com/CSID-DGU/2022-1-OSSP2-Bumeok_Jjikmeok-6.git <폴더 이름 아무거나>' 입력
-3. Unity Hub에서 clone한 폴더 내부에 있는 게임 프로젝트 폴더인 'Don't Get Underrated' 실행
-4. DOTween (HOTween v2) 무료 버전 다운로드 (https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676) (유니티 에셋 스토어에서 제공)
-
+0. Unity Hub 설치 후, 2020.3.33 LTS 버전을 이어서 다운로드 (버전이 다르면 실행이 안될 가능성이 높음)
+1. cmd 창을 열고 해당 프로젝트 파일을 받고 싶은 폴더로 이동 후, 'git clone https://github.com/CSID-DGU/2022-1-OSSP2-Bumeok_Jjikmeok-6.git <폴더 이름 아무거나>' 입력
+2. Unity Hub에서 clone한 폴더 내부에 있는 게임 프로젝트 폴더인 'Don't Get Underrated' 실행
+3. DOTween (HOTween v2) 무료 버전 다운로드 (https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676) (유니티 에셋 스토어에서 제공)
+4. **실행된 유니티에서 게임을 실행하기 위해서는 서버와 데이터베이스 연결이 필수이므로, 아래에 있는 서버 구동 방법에 있는 절차에 따라 서버를 실행**
 ----------------------------
-### 개발 및 게임 실행을 위한 서버 구동 방법 (윈도우 기준)
+### 개발을 위한 서버 구동 방법 (윈도우 기준)
 1. node.js 설치 (https://nodejs.org/en/, 공식 홈페이지)
 2. mysql 설치 (https://dev.mysql.com/downloads/mysql/, 공식 홈페이지)
 3. 설치가 완료되면 mysql을 설치한 드라이브 -> Program Files -> MYSQL -> MYSQL Server 8.0 -> bin 경로로 들어가 해당 주소를 복사
