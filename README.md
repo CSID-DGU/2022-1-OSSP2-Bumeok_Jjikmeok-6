@@ -39,6 +39,7 @@
 ### 게임 다운로드
 - Easy Version : https://drive.google.com/file/d/1AsplEfdaz0BKxcnSJldcTR607D3mjvZF/view
 - Hard Version : https://drive.google.com/file/d/13csZH0tOkde_CmomO9QK2y0Z5iBEgwEu/view
+- 두 버전 모두 zip 파일이며, 압축을 푼 후 My project.exe 파일을 실행하여 게임 시작
 
 ----------------------------
 ### 게임 플레이 시 주의 사항
@@ -104,7 +105,7 @@ https://github.com/himajin-no-tameiki/i-wanna-be-himawari
 1. cmd 창을 열고 해당 프로젝트 파일을 받고 싶은 폴더로 이동 후, 'git clone https://github.com/CSID-DGU/2022-1-OSSP2-Bumeok_Jjikmeok-6.git <폴더 이름 아무거나>' 입력
 2. Unity Hub에서 clone한 폴더 내부에 있는 게임 프로젝트 폴더인 'Don't Get Underrated' 실행
 3. DOTween (HOTween v2) 무료 버전 다운로드 (https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676) (유니티 에셋 스토어에서 제공)
-4. **실행된 유니티에서 게임을 실행하기 위해서는 서버와 데이터베이스 연결이 필수이므로, 아래에 있는 서버 구동 방법에 있는 절차에 따라 서버를 실행**
+4. **현재 실행된 유니티에서 게임을 실행하기 위해서는 로컬 서버와 데이터베이스 연결이 필수이므로, 아래에 있는 서버 구동 방법에 있는 절차에 따라 서버를 실행**
 ----------------------------
 ### 개발을 위한 서버 구동 방법 (윈도우 기준)
 1. node.js 설치 (https://nodejs.org/en/, 공식 홈페이지)
