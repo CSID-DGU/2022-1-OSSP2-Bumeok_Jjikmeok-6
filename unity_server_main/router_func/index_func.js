@@ -5,7 +5,7 @@ const { debug } = require('console')
 
 const id_RE = /^(?=.*[a-z])(?=.*[0-9]).{5,20}$/ // 아이디 정규표현식
 
-const pwd_RE = /^(?=.*[a-zA-Z!@#$%])(?=.*[0-9]).{8,16}$/ // 비밀번호 정규표현식
+const pwd_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,16}/ // 비밀번호 정규표현식
 
 exports.log_in = async (req, res) => {
     try {
@@ -34,7 +34,7 @@ exports.sign_up = async(req, res) => {
                 throw new Error("회원 가입 시 아이디는 영문 소문자 + 숫자 조합 5~20자 이내만 가능합니다")
         
             if (!pwd_RE.test(req.body.pwd))
-                throw new Error("회원가입 시 비밀번호는 영문(대/소문자) + 숫자 + 특수문자 (!, @, #, $, %) 조합 8~16자 이내만 가능합니다")
+                throw new Error("회원가입 시 비밀번호는 영문(대/소문자) + 숫자 + 특수문자 조합 8~16자 이내만 가능합니다")
     
             if (req.body.pwd !== req.body.pwd_again)
                 throw new Error("재입력 비밀번호가 틀립니다")
