@@ -23,6 +23,8 @@ passport.use(new LocalStrategy(
         const [DB] = await connection.query(STRING, [id, hash_password])
         console.log(DB)
 
+        connection.release()
+
         if (Array.isArray(DB) && DB.length !== 0) {
             return done(null, DB)
         }
@@ -31,6 +33,7 @@ passport.use(new LocalStrategy(
         }
             
     } catch (err) {
+        connection.release()
         return done(err)
     } 
 }))
