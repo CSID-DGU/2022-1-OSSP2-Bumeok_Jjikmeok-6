@@ -37,8 +37,8 @@
 
 ----------------------------
 ### 게임 다운로드
-- Easy Version : https://drive.google.com/file/d/1AsplEfdaz0BKxcnSJldcTR607D3mjvZF/view
-- Hard Version : https://drive.google.com/file/d/13csZH0tOkde_CmomO9QK2y0Z5iBEgwEu/view
+- Easy Ver. : https://drive.google.com/file/d/1nxuAwMbKbGSKrN2uOG9-etWYhXHp0cFk/view?usp=sharing
+- Hard Ver. : https://drive.google.com/file/d/1qeArdlEMgljeplN93ifmJqn3gJddkJkA/view?usp=sharing
 - 두 버전 모두 zip 파일이며, 압축을 푼 후 My project.exe 파일을 실행하여 게임 시작
 
 ----------------------------
@@ -58,7 +58,7 @@
 
 - 메인 로비
   - 회원가입 및 로그인 후 게임 시작
-  - 로그인 없이 게임 시작 불가능 
+  - 로그인 없이 게임 시작 불가능
   - 로그인 유저에 한하여 랭킹 확인 제공
 - 스테이지
   - 메인 스테이지 1 - 신공학관
@@ -96,16 +96,16 @@
 
 ### 사용한 오픈 소스
 <p>
-https://github.com/himajin-no-tameiki/i-wanna-be-himawari
+https://github.com/himajin-no-tameiki/i-wanna-be-himawari - 최종 스테이지 (2)에서 사용
 </p>
 
 ----------------------------
 ### 개발을 위한 유니티 세팅
-0. Unity Hub 설치 후, 2020.3.33 LTS 버전을 이어서 다운로드 (버전이 다르면 실행이 안될 가능성이 높음)
-1. cmd 창을 열고 해당 프로젝트 파일을 받고 싶은 폴더로 이동 후, 'git clone https://github.com/CSID-DGU/2022-1-OSSP2-Bumeok_Jjikmeok-6.git <폴더 이름 아무거나>' 입력
-2. Unity Hub에서 clone한 폴더 내부에 있는 게임 프로젝트 폴더인 'Don't Get Underrated' 실행
-3. DOTween (HOTween v2) 무료 버전 다운로드 (https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676) (유니티 에셋 스토어에서 제공)
-4. **현재 실행된 유니티에서 게임을 실행하기 위해서는 로컬 서버와 데이터베이스 연결이 필수이므로, 아래에 있는 서버 구동 방법에 있는 절차에 따라 서버를 실행**
+1. Unity Hub 설치 후, 2020.3.33 LTS 버전을 이어서 다운로드 (버전이 다르면 실행이 안될 가능성이 높음)
+2. cmd 창을 열고 해당 프로젝트 파일을 받고 싶은 폴더로 이동 후, 'git clone https://github.com/CSID-DGU/2022-1-OSSP2-Bumeok_Jjikmeok-6.git <폴더 이름 아무거나>' 입력
+3. Unity Hub에서 clone한 폴더 내부에 있는 게임 프로젝트 폴더인 'Don't Get Underrated' 실행
+4. DOTween (HOTween v2) 무료 버전 다운로드 (https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676) (유니티 에셋 스토어에서 제공)
+5. **현재 실행된 유니티에서 게임을 실행하기 위해서는 로컬 서버와 데이터베이스 연결이 필수이므로, 아래에 있는 서버 구동 방법에 있는 절차에 따라 서버를 실행**
 ----------------------------
 ### 개발을 위한 서버 구동 방법 (윈도우 기준)
 1. node.js 설치 (https://nodejs.org/en/, 공식 홈페이지)
