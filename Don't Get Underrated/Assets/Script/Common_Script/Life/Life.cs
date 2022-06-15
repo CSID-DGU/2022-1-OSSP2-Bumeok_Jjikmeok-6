@@ -168,8 +168,8 @@ public class Life : MonoBehaviour, Life_Of_Basic // 생명에 관련된 클래스
 
     public virtual void Stop_When_Network_Stop()
     {
-        StopAllCoroutines(); 
-        Effect_Sound_Stop(); 
+        StopAllCoroutines();
+        Effect_Sound_Stop();
         BackGround_Sound_Stop();
     }
 
@@ -195,14 +195,14 @@ public class Life : MonoBehaviour, Life_Of_Basic // 생명에 관련된 클래스
     }
 
     public virtual void TakeDamage(float damage)  // 모든 생명은 데미지를 입는다. (생명이 실수치일 수도, 정수치일 수도 있으며, 이에 따른 함수를 하위 클래스에서
-        // 재정의 해야하기 때문에 상위 클래스에서는 데미지를 입었을 때 바로 죽는 것으로 설정)
+                                                  // 재정의 해야하기 때문에 상위 클래스에서는 데미지를 입었을 때 바로 죽는 것으로 설정)
     {
         if (When_Dead_Effect != null)
             Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
     public virtual void TakeDamage(int damage) // 모든 생명은 데미지를 입는다. (생명이 실수치일 수도, 정수치일 수도 있으며, 이에 따른 함수를 하위 클래스에서
-        // 재정의 해야하기 때문에 상위 클래스에서는 데미지를 입었을 때 바로 죽는 것으로 설정)
+                                               // 재정의 해야하기 때문에 상위 클래스에서는 데미지를 입었을 때 바로 죽는 것으로 설정)
     {
         if (When_Dead_Effect != null)
             Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
