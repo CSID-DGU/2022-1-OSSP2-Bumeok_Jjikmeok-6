@@ -395,7 +395,7 @@ public class Asura : Boss_Info // 최종 (1)의 보스
         Effect_Sound_OneShot(9);
         yield return Move_Straight(Vector3.zero, new Vector3(0, 3, 0), 1, declineCurve);
 
-        yield return Move_Circle(270, -1, 0, 7, 3, 0, 0, 1);
+        yield return Move_Circle(270, -2.5f, 7, 3, 0, 3);
     }
     IEnumerator Pattern04() // 패턴 4
     {
