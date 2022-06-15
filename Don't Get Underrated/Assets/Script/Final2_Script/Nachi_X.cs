@@ -54,7 +54,7 @@ public class Nachi_X : Enemy_Info
     {
         trailRenderer.enabled = true;
         Effect_Sound_OneShot(0);
-        yield return Move_Circle(360, flag * 13, 0.3f, 0.3f, My_Position.x, My_Position.y);
+        yield return Move_Circle(360.0f, flag * 13, 0.3f, 0.3f, My_Position.x, My_Position.y);
 
         Effect_Sound_OneShot(1);
         Run_Life_Act(My_Rotate_Dec(Quaternion.identity, Quaternion.Euler(new Vector3(0, 0, 120 * -flag)), 0.8f, declineCurve));

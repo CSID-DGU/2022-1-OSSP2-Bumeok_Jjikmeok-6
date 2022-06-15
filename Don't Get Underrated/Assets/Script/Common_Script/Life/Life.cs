@@ -214,12 +214,13 @@ public class Life : MonoBehaviour, Life_Of_Basic // 생명에 관련된 클래스
             Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
-    protected IEnumerator Move_Circle(int Degree, float is_ClockWise_And_Speed, float x, float y, float start_x, float start_y)
+    protected IEnumerator Move_Circle(float Degree, float is_ClockWise_And_Speed, float x, float y, float start_x, float start_y)
     {
         // 각도, 시계/반시계 방향, x축 원, y축 원
-        float runningTime = 0;
         if (Degree <= 0 || is_ClockWise_And_Speed == 0 || x == 0 || y == 0)
             yield break;
+
+        float runningTime = 0;
         while (Mathf.Abs(runningTime * Mathf.Rad2Deg) <= Degree)
         {
             runningTime += Time.deltaTime * is_ClockWise_And_Speed;
