@@ -37,8 +37,8 @@
 
 ----------------------------
 ### 게임 다운로드
-- Easy Ver. : https://drive.google.com/file/d/1nxuAwMbKbGSKrN2uOG9-etWYhXHp0cFk/view?usp=sharing
-- Hard Ver. : https://drive.google.com/file/d/1qeArdlEMgljeplN93ifmJqn3gJddkJkA/view?usp=sharing
+- Easy Ver. : https://drive.google.com/file/d/1F4tmrG4gQmmOI9N_S_SVRt_wY_erRe1G/view?usp=sharing
+- Hard Ver. : https://drive.google.com/file/d/1QniBfGC50WCSU67oU7MxmKNbqh1m2JhG/view?usp=sharing
 - 두 버전 모두 zip 파일이며, 압축을 푼 후 My project.exe 파일을 실행하여 게임 시작
 
 ----------------------------
