@@ -225,7 +225,7 @@ public class SolGryn : Boss_Info
         yield return Trail_Color_Change_And_Back(Color.red, Color.green, 0.33f, 2);
 
         GameObject nachi_x_g_1 = Instantiate(Weapon[6], new Vector3(6.3f, 1.87f, 0), Quaternion.identity);
-        GameObject nachi_x_g_2 = Instantiate(Weapon[6], new Vector3(-5.61f, 1.64f, 0), Quaternion.identity);
+        GameObject nachi_x_g_2 = Instantiate(Weapon[6], new Vector3(-6.3f, 1.87f, 0), Quaternion.identity);
 
         Run_Life_Act(Blink_Bullet());
 

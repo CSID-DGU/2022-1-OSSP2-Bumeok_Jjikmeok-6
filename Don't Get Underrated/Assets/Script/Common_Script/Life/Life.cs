@@ -214,20 +214,26 @@ public class Life : MonoBehaviour, Life_Of_Basic // 생명에 관련된 클래스
             Instantiate(When_Dead_Effect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
-    protected IEnumerator Move_Circle(int Degree, int is_ClockWise_And_Speed, float Start_Degree, float x, float y, float start_x, float start_y, float time_persist)
+    protected IEnumerator Move_Circle(int Degree, float is_ClockWise_And_Speed, float x, float y, float start_x, float start_y)
     {
         // 각도, 시계/반시계 방향, x축 원, y축 원
-        for (int th = 0; th < Degree; th++)
+        float runningTime = 0;
+        if (Degree <= 0 || is_ClockWise_And_Speed == 0 || x == 0 || y == 0)
+            yield break;
+        while (Mathf.Abs(runningTime * Mathf.Rad2Deg) <= Degree)
         {
-            float rad = Mathf.Deg2Rad * (is_ClockWise_And_Speed * th + Start_Degree);
-
-            float rad_x = x * Mathf.Sin(rad);
-            float rad_y = y * Mathf.Cos(rad);
-
-            transform.position = new Vector3(start_x + rad_x, start_y + rad_y, 0);
-            yield return YieldInstructionCache.WaitForSeconds(Time.deltaTime * time_persist);
+            runningTime += Time.deltaTime * is_ClockWise_And_Speed;
+            float rad_x = x * Mathf.Sin(runningTime);
+            float rad_y = y * Mathf.Cos(runningTime);
+            Vector3 new_Pos = new Vector3(start_x + rad_x, start_y - y + rad_y, 0);
+            My_Position = new_Pos;
+            yield return null;
         }
+
+        runningTime = Mathf.Deg2Rad * Degree * Mathf.Sign(is_ClockWise_And_Speed);
+        My_Position = new Vector3(start_x + x * Mathf.Sin(runningTime), start_y - y + y * Mathf.Cos(runningTime), 0);
         yield return null;
+
     }
     // 반지름 (x, y)으로 형성되는 타원 및 원을 시작 위치 (start_x, start_y), 시작 각도(Start_Degree)에서 원하는 각도(Degree) 만큼 반시계/시계(is_ClockWise_And_Speed) 운동하며,
     // time_persist(초) 동안 이동하는 원운동
