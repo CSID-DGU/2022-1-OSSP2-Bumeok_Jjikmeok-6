@@ -224,15 +224,15 @@ public class SolGryn : Boss_Info
         Run_Life_Act(Change_My_Color(My_Color, new Color(1, 1, 1, 0), 0.4f, 0, DisAppear_Effect_1));
         yield return Trail_Color_Change_And_Back(Color.red, Color.green, 0.33f, 2);
 
-        GameObject nachi_x_g_1 = Instantiate(Weapon[6], new Vector3(6.3f, 1.87f, 0), Quaternion.identity);
-        GameObject nachi_x_g_2 = Instantiate(Weapon[6], new Vector3(-6.3f, 1.87f, 0), Quaternion.identity);
+        GameObject man_x_1 = Instantiate(Weapon[6], new Vector3(6.3f, 1.87f, 0), Quaternion.identity);
+        GameObject man_x_2 = Instantiate(Weapon[6], new Vector3(-6.3f, 1.87f, 0), Quaternion.identity);
 
         Run_Life_Act(Blink_Bullet());
 
-        if (nachi_x_g_1.TryGetComponent(out Nachi_X NX_1) && nachi_x_g_2.TryGetComponent(out Nachi_X NX_2))
+        if (man_x_1.TryGetComponent(out Man_X MX_1) && man_x_2.TryGetComponent(out Man_X MX_2))
         {
-            NX_1.StartCoroutine(NX_1.Move(-1));
-            yield return NX_2.StartCoroutine(NX_2.Move(1));
+            MX_1.StartCoroutine(MX_1.Move(-1));
+            yield return MX_2.StartCoroutine(MX_2.Move(1));
         }
         yield return Trail_Color_Change(Color.red, Color.clear, 0.5f);
 
@@ -294,7 +294,6 @@ public class SolGryn : Boss_Info
                 Effect_Sound_OneShot(1);
                 SC1.Shake_Act(); SC2.Shake_Act();
                 yield return Shake_Act(0.2f, 0.2f, 0.5f, false);
-                
                 Effect_Sound_OneShot(14);
                 int Rand = Random.Range(0, 3);
                 if (Rand == 0)
@@ -341,7 +340,6 @@ public class SolGryn : Boss_Info
             Flash(Color.white, 0.1f, 0.5f);
 
         Run_Life_Act_And_Continue(ref change_color, Change_My_Color(Color.white, Color.clear, Peanut_Launch_Num * Peanut_Launch_Interval + Straw_Lot_time_persist, 0, DisAppear_Effect_1));
-       
         for (int i = 0; i < Peanut_Launch_Num; i++)
         {
             if (Straw_Lot == Quaternion.identity)
@@ -425,7 +423,6 @@ public class SolGryn : Boss_Info
         for (int i = 11; i < 14; i++)
         {
             GameObject W1 = Instantiate(Weapon[i], Vector3.zero, Quaternion.identity);
-            
             if (i == 13)
             {
                 Flash(new Color(1, 1, 1, 0.8f), 0, 1.8f);
@@ -498,7 +495,7 @@ public class SolGryn : Boss_Info
         } // 제4분면 (7, 4), (-7, 4), (-7, -4), (7, -4)에서 동시에 나와 플레이어에게 공격 (3번 반복, 1.5초 간격)
 
         yield return YieldInstructionCache.WaitForSeconds(1);
-        
+
         for (int i = 0; i < Pattern06_Monster_Move.Count; i++)
         {
             Player_Or_None = Random.Range(0, 2);
@@ -519,7 +516,7 @@ public class SolGryn : Boss_Info
 
     private IEnumerator HP_Decrease()
     {
-        while(true)
+        while (true)
         {
             CurrentHP -= 5;
             if (CurrentHP <= 10)
