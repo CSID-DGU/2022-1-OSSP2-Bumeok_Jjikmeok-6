@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/91325459/172175910-71a90687-74d7-4539-abed-a04d49a17891.gif" width="310" height="300"/>
+  <img src="https://user-images.githubusercontent.com/91325459/176866702-db8e733a-3238-41b1-a075-cf1868e93e76.gif" width="310" height="300"/>
   <img src="https://user-images.githubusercontent.com/91325459/172451181-718eaa78-85e1-4176-b371-43fd7f907f36.gif" width="310" height="300"/>
 </p>
 
@@ -39,7 +39,7 @@
 ### 게임 다운로드
 - Easy ver. : https://drive.google.com/file/d/1ekOw5SGV6LVApIzfBKQ-kaWngmcPgNfa/view?usp=sharing
 - Hard ver. : https://drive.google.com/file/d/199ymSPnCaJ_sh_MA8x5WR7pTYZebG7Cn/view?usp=sharing
-- 두 버전 모두 zip 파일이며, 압축을 푼 후 My project.exe 파일을 실행하여 게임 시작
+- 두 버전 모두 zip 파일이며, 압축을 푼 후 My project.exe 파일을 실행하여 게임 시작 (2023.4.30 이후로 서버 호스팅 종료 예정)
 
 ----------------------------
 ### 게임 플레이 시 주의 사항
@@ -107,7 +107,7 @@ https://github.com/himajin-no-tameiki/i-wanna-be-himawari - 최종 스테이지 
 4. DOTween (HOTween v2) 무료 버전 다운로드 (https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676) (유니티 에셋 스토어에서 제공)
 5. **현재 실행된 유니티에서 게임을 실행하기 위해서는 로컬 서버와 데이터베이스 연결이 필수이므로, 아래에 있는 서버 구동 방법에 있는 절차에 따라 서버를 실행**
 ----------------------------
-### 개발을 위한 서버 구동 방법 (윈도우 기준)
+### 개발을 위한 서버 구동 방법 - 일반적인 방법, 윈도우 기준
 1. node.js 설치 (https://nodejs.org/en/, 공식 홈페이지)
 2. mysql 설치 (https://dev.mysql.com/downloads/mysql/, 공식 홈페이지)
 3. 설치가 완료되면 mysql을 설치한 드라이브 -> Program Files -> MYSQL -> MYSQL Server 8.0 -> bin 경로로 들어가 해당 주소를 복사
@@ -135,7 +135,7 @@ https://github.com/himajin-no-tameiki/i-wanna-be-himawari - 최종 스테이지 
 <br>
 
 6. **재부팅 후** cmd 창을 열어 본인의 mysql에 접속 (mysql -uroot -p -> mysql을 설치하면서 설정한 비밀번호 입력)
-7. (6번에서 연이어 진행) mysql에 접속된 cmd 창에서 "source (clone 폴더 경로)\unity_server_main\DB_info.sql" 명령어를 입력하여 데이터베이스 초기 세팅 (ex. source C:\Users\hiwg08\Desktop\2022-1-OSSP2-Bumeok_Jjikmeok-6\unity_server_main\DB_info.sql) **(DB_info.sql 파일은 unity_server_main 폴더 안에 존재. 4번 과정을 진행하는 시점에서는 DB_info.sql이 위치한 드라이브 == mysql이 설치된 드라이브여야 함. clone한 폴더의 위치는 상관 없음.)**
+7. (6번에서 연이어 진행) mysql에 접속된 cmd 창에서 "source (clone 폴더 경로)\Unity_Server_general\DB_info.sql" 명령어를 입력하여 데이터베이스 초기 세팅 (ex. source C:\Users\hiwg08\Desktop\2022-1-OSSP2-Bumeok_Jjikmeok-6\Unity_Server_general\DB_info.sql) **(DB_info.sql 파일은 Unity Server (general) 폴더 안에 존재. 4번 과정을 진행하는 시점에서는 DB_info.sql이 위치한 드라이브 == mysql이 설치된 드라이브여야 함. clone한 폴더의 위치는 상관 없음.)**
 <br> <br>
 <p align="center">
 <img src="https://user-images.githubusercontent.com/91325459/172746841-620baafe-0177-4b02-8a22-a50d9f11b5a3.png"/>
@@ -143,7 +143,7 @@ https://github.com/himajin-no-tameiki/i-wanna-be-himawari - 최종 스테이지 
 <div align="center">[6, 7번 과정의 사진]</div>
 <br>
 
-8. unity_server_main/DB_info 디렉토리에서 "secret_OSSW_DB.js" 파일을 새로 생성한 후, mysql을 설치하면서 설정했던 정보를 입력. secret_OSSW_DB.js의 양식은 다음과 같음 <br/> <br/>
+8. Unity_Server_general/DB_info 디렉토리에서 "secret_OSSW_DB.js" 파일을 새로 생성한 후, mysql을 설치하면서 설정했던 정보를 입력. secret_OSSW_DB.js의 양식은 다음과 같음 <br/> <br/>
 module.exports = { <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; host: "mysql에서 설정한 host 주소", (기본 host는 localhost(==127.0.0.1)) <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; user: "mysql에서 설정한 user 이름", (기본으로 설정되는 이름은 root) <br/>
@@ -158,15 +158,26 @@ module.exports = { <br/>
 <div align="center">[8번 과정의 예시 사진 (VSCode 이용)]</div>
 <br>
 
-9. cmd 창에서 unity_server_main 폴더로 이동 후, npm install 명령어 입력(약간의 시간 소요)
+9. cmd 창에서 Unity_Server_general 폴더로 이동 후, npm install 명령어 입력(약간의 시간 소요)
 10. 9번에서의 cmd 창에서 npm start 명령어 입력 (cmd 창 대신 VSCode에서 편리하게 명령어를 입력할 수 있음)
 <br> <br>
 <p align="center">
-<img src="https://user-images.githubusercontent.com/91325459/172747162-50c7fd24-8564-465b-be94-d2728dbad8ac.png"/>
+<img src="https://user-images.githubusercontent.com/91325459/176899527-852c0531-8396-4722-ac34-5dad2c4d2ce1.png"/>
 </p>
 <div align="center">[10번 과정의 사진 (VSCode 이용)]</div>
 <br>
 
 ----------------------------
+### 개발을 위한 서버 구동 방법 - 도커 이용 (모든 OS 이용 가능)
+1. 도커 설치 (각 OS마다 도커 설치 방법이 다르며, 설치해야 하는 부가 요소들이 상이하므로 주의)
+2. Unity_Server_docker 폴더에 위치한 후 (cd Unity_Server_docker), docker compose up 명령어 입력
+<br> <br>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/91325459/176903211-148c003b-9bd2-404b-a3e7-6a1b02c07003.png"/>
+</p>
+<div align="center">[2번 과정의 사진 (VSCode 이용)]</div>
+<br>
+
+----------------------------
 ### 문의 사항
-lateson6@gmail.com
+hiwg08@gmail.com
